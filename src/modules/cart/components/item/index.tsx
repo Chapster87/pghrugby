@@ -14,6 +14,11 @@ import Spinner from "@modules/common/icons/spinner"
 import Thumbnail from "@modules/products/components/thumbnail"
 import { useState } from "react"
 
+type MetadataItem = {
+  displayName: string
+  value: string
+}
+
 type ItemProps = {
   item: HttpTypes.StoreCartLineItem
   type?: "full" | "preview"
@@ -70,6 +75,19 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
           {item.product_title}
         </Text>
         <LineItemOptions variant={item.variant} data-testid="product-variant" />
+        {/* {JSON.stringify(item.metadata)} */}
+        {item.metadata && (
+          <ul>
+            {Object.keys(item.metadata).map((key) => {
+              const metaValue = item.metadata?.[key] as MetadataItem | undefined
+              return (
+                <li key={key}>
+                  {metaValue?.displayName}: {metaValue?.value}
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </Table.Cell>
 
       {type === "full" && (

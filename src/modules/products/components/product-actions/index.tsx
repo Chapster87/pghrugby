@@ -11,6 +11,7 @@ import { useParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
+import GolfOutingForm from "@modules/products/components/product-forms/golf-outing"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -33,6 +34,7 @@ export default function ProductActions({
 }: ProductActionsProps) {
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
+  const [meta, setMeta] = useState<Record<string, any>>({})
   const countryCode = useParams().countryCode as string
 
   // If there is only 1 variant, preselect the options
@@ -98,6 +100,19 @@ export default function ProductActions({
 
   const inView = useIntersection(actionsRef, "0px")
 
+  interface Meta {
+    [key: string]: string
+  }
+
+  interface HandleChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
+
+  const handleChange = (e: HandleChangeEvent) => {
+    setMeta({
+      ...meta,
+      [e.target.name]: { displayName: e.target.title, value: e.target.value },
+    })
+  }
+
   // add the selected variant to the cart
   const handleAddToCart = async () => {
     if (!selectedVariant?.id) return null
@@ -108,6 +123,7 @@ export default function ProductActions({
       variantId: selectedVariant.id,
       quantity: 1,
       countryCode,
+      metadata: meta,
     })
 
     setIsAdding(false)
@@ -137,8 +153,11 @@ export default function ProductActions({
             </div>
           )}
         </div>
-
         <ProductPrice product={product} variant={selectedVariant} />
+
+        {product.handle === "golf-outing" && (
+          <GolfOutingForm meta={meta} changeForm={handleChange} />
+        )}
 
         <Button
           onClick={handleAddToCart}
