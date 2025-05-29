@@ -28,6 +28,20 @@ const Item = ({ item, currencyCode }: ItemProps) => {
           {item.product_title}
         </Text>
         <LineItemOptions variant={item.variant} data-testid="product-variant" />
+        {item.metadata && Object.keys(item.metadata).length > 0 && (
+          <ul className="list-disc pl-5">
+            {Object.keys(item.metadata).map((key) => {
+              const metaValue = item.metadata?.[key] as
+                | { displayName?: string; value?: any }
+                | undefined
+              return (
+                <li key={key} className="mb-1">
+                  <strong>{metaValue?.displayName}:</strong> {metaValue?.value}
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </Table.Cell>
 
       <Table.Cell className="!pr-0">
