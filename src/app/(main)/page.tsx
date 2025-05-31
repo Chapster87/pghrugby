@@ -15,18 +15,11 @@ export default async function Home(props: {
   params: Promise<{ countryCode: string }>
 }) {
   const params = await props.params
-
   const { countryCode } = params
-
   const region = await getRegion(countryCode)
-
-  console.log("region", region)
-
   const { collections } = await listCollections({
     fields: "id, handle, title",
   })
-
-  console.log("collections", collections)
 
   if (!collections || !region) {
     return null

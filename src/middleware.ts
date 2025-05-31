@@ -72,7 +72,7 @@ async function getCountryCode(
   regionMap: Map<string, HttpTypes.StoreRegion | number>
 ) {
   try {
-    let countryCode
+    let countryCode = "us" // Default to 'us'
 
     const vercelCountryCode = request.headers
       .get("x-vercel-ip-country")
@@ -87,7 +87,7 @@ async function getCountryCode(
     } else if (regionMap.has(DEFAULT_REGION)) {
       countryCode = DEFAULT_REGION
     } else if (regionMap.keys().next().value) {
-      countryCode = regionMap.keys().next().value
+      countryCode = regionMap.keys().next().value ?? "us"
     }
 
     return countryCode
@@ -120,15 +120,17 @@ export async function middleware(request: NextRequest) {
     countryCode && request.nextUrl.pathname.split("/")[1].includes(countryCode)
 
   // if the url is from sanity studio OR one of the country codes is in the url and the cache id is set, return next
-  if (
-    request.nextUrl.pathname.startsWith("/studio") ||
-    (urlHasCountryCode && cacheIdCookie)
-  ) {
+  // if (
+  //   request.nextUrl.pathname.startsWith("/studio") ||
+  //   (urlHasCountryCode && cacheIdCookie)
+  // ) {
+  if (request.nextUrl.pathname.startsWith("/studio") || cacheIdCookie) {
     return NextResponse.next()
   }
 
   // if one of the country codes is in the url and the cache id is not set, set the cache id and redirect
-  if (urlHasCountryCode && !cacheIdCookie) {
+  // if (urlHasCountryCode && !cacheIdCookie) {
+  if (!cacheIdCookie) {
     response.cookies.set("_medusa_cache_id", cacheId, {
       maxAge: 60 * 60 * 24,
     })
@@ -147,10 +149,10 @@ export async function middleware(request: NextRequest) {
   const queryString = request.nextUrl.search ? request.nextUrl.search : ""
 
   // If no country code is set, we redirect to the relevant region.
-  if (!urlHasCountryCode && countryCode) {
-    redirectUrl = `${request.nextUrl.origin}/${countryCode}${redirectPath}${queryString}`
-    response = NextResponse.redirect(`${redirectUrl}`, 307)
-  }
+  // if (!urlHasCountryCode && countryCode) {
+  //   redirectUrl = `${request.nextUrl.origin}/${countryCode}${redirectPath}${queryString}`
+  //   response = NextResponse.redirect(`${redirectUrl}`, 307)
+  // }
 
   return response
 }
