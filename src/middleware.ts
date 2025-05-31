@@ -119,8 +119,11 @@ export async function middleware(request: NextRequest) {
   const urlHasCountryCode =
     countryCode && request.nextUrl.pathname.split("/")[1].includes(countryCode)
 
-  // if one of the country codes is in the url and the cache id is set, return next
-  if (urlHasCountryCode && cacheIdCookie) {
+  // if the url is from sanity studio OR one of the country codes is in the url and the cache id is set, return next
+  if (
+    request.nextUrl.pathname.startsWith("/studio") ||
+    (urlHasCountryCode && cacheIdCookie)
+  ) {
     return NextResponse.next()
   }
 
