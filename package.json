@@ -23,6 +23,7 @@
     "@sanity/vision": "^3.90.0",
     "@stripe/react-stripe-js": "^1.16.5",
     "@stripe/stripe-js": "^1.54.2",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.15.0",
     "lodash": "^4.17.21",
     "next": "^15.3.1",
