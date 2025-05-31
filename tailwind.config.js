@@ -1,6 +1,7 @@
+import { heroui } from "@heroui/react"
 const path = require("path")
 
-module.exports = {
+const config = {
   darkMode: "class",
   presets: [require("@medusajs/ui-preset")],
   content: [
@@ -9,6 +10,7 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx}",
     "./src/modules/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -158,5 +160,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-radix")()],
+  darkMode: "class",
+  plugins: [heroui()],
 }
+
+export default config
