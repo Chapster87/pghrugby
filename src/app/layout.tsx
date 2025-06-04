@@ -13,10 +13,12 @@ export const metadata: Metadata = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-mode="light">
+    <html lang="en">
       <body>
         <Providers>
-          <main className="relative">{props.children}</main>
+          <main className="relative light text-foreground bg-background">
+            {props.children}
+          </main>
         </Providers>
         {(await draftMode()).isEnabled && (
           <>
