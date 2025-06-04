@@ -1,5 +1,3 @@
-// src/app/actions.ts
-
 "use server"
 
 import { draftMode } from "next/headers"
