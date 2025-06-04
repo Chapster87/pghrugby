@@ -56,7 +56,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
           href={`/products/${item.product_handle}`}
           className={clx("flex", {
             "w-16": type === "preview",
-            "small:w-24 w-12": type === "full",
+            "sm:w-24 w-12": type === "full",
           })}
         >
           <Thumbnail
@@ -123,7 +123,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
       )}
 
       {type === "full" && (
-        <Table.Cell className="hidden small:table-cell">
+        <Table.Cell className="hidden sm:table-cell">
           <LineItemUnitPrice
             item={item}
             style="tight"

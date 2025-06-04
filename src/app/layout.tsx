@@ -3,6 +3,7 @@ import { Metadata } from "next"
 import "styles/globals.css"
 import { Providers } from "./providers"
 
+import BreakpointIndicator from "@components/BreakpointIndicator"
 import { VisualEditing } from "next-sanity"
 import { draftMode } from "next/headers"
 import { DisableDraftMode } from "../components/DisableDraftMode"
@@ -17,6 +18,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       <body>
         <Providers>
           <main className="relative light text-foreground bg-background">
+            <BreakpointIndicator />
             {props.children}
           </main>
         </Providers>

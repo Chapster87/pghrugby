@@ -9,7 +9,7 @@ const SkeletonCartPage = () => {
   return (
     <div className="py-12">
       <div className="content-container">
-        <div className="grid grid-cols-1 small:grid-cols-[1fr_360px] gap-x-40">
+        <div className="grid grid-cols-1 sm:grid-cols-[1fr_360px] gap-x-40">
           <div className="flex flex-col bg-white p-6 gap-y-6">
             <div className="bg-white flex items-start justify-between">
               <div className="flex flex-col gap-y-2">
