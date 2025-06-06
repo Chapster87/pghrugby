@@ -1,0 +1,20 @@
+.skyline {
+  .cls1,
+  .cls2,
+  .cls3,
+  .cls4 {
+    fill-rule: evenodd;
+  }
+  .cls1 {
+    fill: var(--color-skyline-1, hsl(var(--heroui-primary-200)));
+  }
+  .cls2 {
+    fill: var(--color-skyline-2, hsl(var(--heroui-primary-400)));
+  }
+  .cls3 {
+    fill: var(--color-skyline-3, hsl(var(--heroui-primary-600)));
+  }
+  .cls4 {
+    fill: var(--color-skyline-4, hsl(var(--heroui-primary-700)));
+  }
+}

@@ -19,7 +19,8 @@
       "@components/*": ["components/*"],
       "@lib/*": ["lib/*"],
       "@modules/*": ["modules/*"],
-      "@pages/*": ["pages/*"]
+      "@pages/*": ["pages/*"],
+      "@svg/*": ["svg/*"]
     },
     "plugins": [
       {
