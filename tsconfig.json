@@ -19,7 +19,6 @@
       "@components/*": ["./src/components/*"],
       "@lib/*": ["./src/lib/*"],
       "@modules/*": ["./src/modules/*"],
-      "@sanity/*": ["./src/sanity/*"],
       "@styles/*": ["./src/styles/*"],
       "@svg/*": ["./src/svg/*"]
     },
