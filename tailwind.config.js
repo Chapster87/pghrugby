@@ -13,10 +13,15 @@ const config = {
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      xs: "480px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+    },
     extend: {
-      screens: {
-        xs: "480px",
-      },
       fontSize: {
         "3xl": "2rem",
       },
@@ -27,20 +32,6 @@ const config = {
     require("@tailwindcss/typography"),
     require("tailwind-bootstrap-grid")({
       generateContainer: false,
-      container_max_widths: [
-        "xs",
-        "480px",
-        "sm",
-        "600px",
-        "md",
-        "768px",
-        "lg",
-        "1024px",
-        "xl",
-        "1280px",
-        "2xl",
-        "1440px",
-      ],
       gridGutterWidth: "2rem",
       gridGutters: {
         1: "0.25rem",
