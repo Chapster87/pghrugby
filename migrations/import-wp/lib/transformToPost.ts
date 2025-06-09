@@ -110,18 +110,10 @@ export async function transformToPost(
           wpDoc.title.rendered,
           client,
           existingImages,
-          wpDoc.content.raw // <-- ensure this is a string
+          wpDoc.content.raw
         )
       : undefined
   }
-
-  // if (wpDoc.content) {
-  //   doc.content = await htmlToBlockContent(
-  //     wpDoc.content.rendered,
-  //     client,
-  //     existingImages
-  //   )
-  // }
 
   return doc
 }

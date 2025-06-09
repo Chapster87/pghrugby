@@ -87,6 +87,26 @@ function elementToBlock(node: Element): Block | null {
       caption: undefined,
     };
   }
+  // Add this block for <li> support
+  if (tag === "li") {
+    const children = Array.from(node.childNodes)
+      .map((child) => {
+        if (child.nodeType === 3) {
+          return textNodeToSpan(child.textContent || "");
+        } else if (child.nodeType === 1) {
+          return inlineElementToSpan(child as Element);
+        }
+        return null;
+      })
+      .filter(Boolean);
+    return {
+      _type: "block",
+      _key: uuid(),
+      style: "normal",
+      children,
+      markDefs: [],
+    };
+  }
   return null;
 }
 

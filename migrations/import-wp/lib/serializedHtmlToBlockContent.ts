@@ -35,7 +35,6 @@ export async function serializedHtmlToBlockContent(
     if (
       wpBlock.blockName === "core/heading" ||
       wpBlock.blockName === "core/image" ||
-      wpBlock.blockName === "core/list" ||
       wpBlock.blockName === "core/paragraph" ||
       wpBlock.blockName === "core/separator" ||
       wpBlock.blockName === "core/quote" ||
@@ -51,6 +50,44 @@ export async function serializedHtmlToBlockContent(
       )
       blocks.push(...block)
       // console.log(`Block type: ${wpBlock.blockName} - Completed`)
+      successCounter++
+    } else if (wpBlock.blockName === "core/list") {
+      // Determine list type
+      const listType = wpBlock.attrs?.ordered ? "number" : "bullet"
+      // Each list item is a core/list-item block in innerBlocks
+      for (const item of wpBlock.innerBlocks) {
+        // Convert the <li> HTML to Portable Text blocks
+        const itemBlocks = await htmlToBlockContent(
+          item.innerHTML,
+          client,
+          imageCache
+        )
+        // Set listItem and style on each block
+        for (const block of itemBlocks) {
+          if (block._type === "block") {
+            block.listItem = listType
+            block.style = "normal"
+          }
+        }
+        blocks.push(...itemBlocks)
+      }
+      successCounter++
+    } else if (wpBlock.blockName === "core/list-item") {
+      // Handle standalone list-item blocks (not inside a core/list)
+      // Default to bullet if not specified
+      const listType = wpBlock.attrs?.ordered ? "number" : "bullet"
+      const itemBlocks = await htmlToBlockContent(
+        wpBlock.innerHTML,
+        client,
+        imageCache
+      )
+      for (const block of itemBlocks) {
+        if (block._type === "block") {
+          block.listItem = listType
+          block.style = "normal"
+        }
+      }
+      blocks.push(...itemBlocks)
       successCounter++
     } else if (wpBlock.blockName === "core/columns") {
       const columnBlock = { _type: "columns", columns: [] as TypedObject[] }
@@ -110,25 +147,22 @@ export async function serializedHtmlToBlockContent(
       })
       successCounter++
     } else if (!wpBlock.blockName) {
-      // console.log(`Raw HTML block skipped`)
-      // if (wpBlock.innerHTML.trim() !== "") {
-      // console.log("content:", wpBlock.innerHTML)
+      console.log(`No block name: ${name}`)
+      console.log(wpBlock)
       rawBlocksCounter++
-      // }
     } else {
-      // console.log(`Unhandled block type: ${wpBlock.blockName}`)
       unhandledBlocksCounter++
     }
   }
 
-  // if (rawBlocksCounter > 0 || unhandledBlocksCounter > 0) {
-  //   console.log(`${name}: `)
+  if (rawBlocksCounter > 0 || unhandledBlocksCounter > 0) {
+    // console.log(`${name}: `)
 
-  //   // console.log(`${successCounter} blocks processed successfully`)
-  //   console.log(`${rawBlocksCounter} raw HTML blocks skipped`)
-  //   console.log(`${unhandledBlocksCounter} unhandled blocks encountered`)
-  //   console.log("Total blocks processed:", blocks.length)
-  // }
+    // console.log(`${successCounter} blocks processed successfully`)
+    console.log(`${rawBlocksCounter} raw HTML blocks skipped`)
+    console.log(`${unhandledBlocksCounter} unhandled blocks encountered`)
+    console.log("Total blocks processed:", blocks.length)
+  }
 
   return blocks
 }
