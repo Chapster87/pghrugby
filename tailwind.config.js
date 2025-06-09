@@ -24,6 +24,7 @@ const config = {
   },
   darkMode: "class",
   plugins: [
+    require("@tailwindcss/typography"),
     require("tailwind-bootstrap-grid")({
       generateContainer: false,
       container_max_widths: [
