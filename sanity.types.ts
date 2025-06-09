@@ -128,8 +128,28 @@ export type PortableText = Array<
     }
   | ({
       _key: string
+    } & MediaText)
+  | ({
+      _key: string
     } & Columns)
 >
+
+export type MediaText = {
+  _type: "mediaText"
+  image?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  text?: PortableText
+}
 
 export type ImageWithCaption = {
   _type: "imageWithCaption"
@@ -422,6 +442,7 @@ export type AllSanitySchemaTypes =
   | Settings
   | Product
   | PortableText
+  | MediaText
   | ImageWithCaption
   | Tag
   | Post

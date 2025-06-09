@@ -6,6 +6,7 @@ import { categoryType } from "./categoryType"
 import { columnsType } from "./columnsType"
 import { columnType } from "./columnType"
 import { imageWithCaptionType } from "./imageWithCaptionType"
+import { mediaTextType } from "./mediaTextType"
 import { pageType } from "./pageType"
 import { postType } from "./postType"
 import { tagType } from "./tagType"
@@ -21,6 +22,7 @@ export const schema: SchemaPluginOptions = {
     postType,
     tagType,
     imageWithCaptionType,
+    mediaTextType,
     portableTextType,
     productSchema,
     settingsSchema,

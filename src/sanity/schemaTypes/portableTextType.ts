@@ -7,6 +7,7 @@ export const portableTextType = defineField({
     { type: "block" },
     { type: "image" },
     { type: "imageWithCaption" },
+    { type: "mediaText" },
     { type: "columns" },
   ],
 })

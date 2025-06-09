@@ -22,6 +22,9 @@ export async function transformToPost(
     _id: `post-${wpDoc.id}`,
     _type: "post",
   }
+
+  // console.log("wpDoc", wpDoc)
+
   doc.title = decode(wpDoc.title.rendered).trim()
 
   if (wpDoc.slug) {
@@ -37,14 +40,28 @@ export async function transformToPost(
   }
 
   // @TODO: Handle tags
+  if (Array.isArray(wpDoc.tags) && wpDoc.tags.length) {
+    doc.tags = wpDoc.tags.map((tagId) => ({
+      _key: uuid(),
+      _type: "reference",
+      _ref: `tag-${tagId}`,
+    }))
+  }
 
-  // Broken, also disable firewall rule
+  // Disable firewall rule to use, but user reference does not match _id in sanity and wont' assign automatically.
+  // Need to build map to reassign author IDs to sanity IDs
   // if (wpDoc.author) {
   //   doc.author = {
   //     _type: "reference",
   //     _ref: `author-${wpDoc.author}`,
   //   }
   // }
+
+  // Set all posts to Pittsburgh Forge Author by default
+  doc.author = {
+    _type: "reference",
+    _ref: `author-19`,
+  }
 
   if (wpDoc.date) {
     doc.date = wpDoc.date
@@ -91,9 +108,9 @@ export async function transformToPost(
     doc.content = wpDoc.content.raw
       ? await serializedHtmlToBlockContent(
           wpDoc.title.rendered,
-          wpDoc.content.raw,
           client,
-          existingImages
+          existingImages,
+          wpDoc.content.raw // <-- ensure this is a string
         )
       : undefined
   }
