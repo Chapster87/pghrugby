@@ -1,66 +1,119 @@
-import { Suspense } from "react"
+"use client"
 
-import { listRegions } from "@lib/data/regions"
-import { StoreRegion } from "@medusajs/types"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import CartButton from "@modules/layout/components/cart-button"
-import SideMenu from "@modules/layout/components/side-menu"
-import { client } from "../../../../sanity/lib/client"
+import { Suspense, useState } from "react"
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  Link,
+} from "@heroui/react"
+import { HttpTypes } from "@medusajs/types"
+import CartDropdown from "../../components/cart-dropdown"
+import { Menu, X } from "lucide-react"
 
-const settingsQuery = `*[_type == "settings"] | order(publishedAt desc)[0] {
-  title
-}`
+export const AcmeLogo = () => {
+  return (
+    <svg fill="none" height="36" viewBox="0 0 32 32" width="36">
+      <path
+        clipRule="evenodd"
+        d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
+        fill="currentColor"
+        fillRule="evenodd"
+      />
+    </svg>
+  )
+}
 
-export default async function Nav() {
-  const regions = await listRegions().then((regions: StoreRegion[]) => regions)
-  const settings = await client.fetch(settingsQuery)
+interface NavProps {
+  siteTitle: string
+  cart: HttpTypes.StoreCart | null
+}
+
+export default function Nav({ siteTitle, cart }: NavProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const menuItems = [
+    "Profile",
+    "Dashboard",
+    "Activity",
+    "Analytics",
+    "System",
+    "Deployments",
+    "My Settings",
+    "Team Settings",
+    "Help & Feedback",
+    "Log Out",
+  ]
 
   return (
-    <div className="sticky top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
-        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
-          <div className="flex-1 basis-0 h-full flex items-center">
-            <div className="h-full">
-              <SideMenu regions={regions} />
-            </div>
-          </div>
+    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="2xl">
+      <NavbarContent className="px-0">
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close site menu" : "Open site menu"}
+          className="sm:hidden"
+          icon={isMenuOpen ? <X /> : <Menu />}
+        />
+        <NavbarBrand>
+          <Link href="/" color="foreground">
+            {/* <AcmeLogo /> */}
+            {siteTitle}
+          </Link>
+        </NavbarBrand>
+      </NavbarContent>
 
-          <div className="flex items-center h-full">
-            <LocalizedClientLink
-              href="/"
-              className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
-              data-testid="nav-store-link"
-            >
-              {settings?.title || "Pittsburgh Forge Rugby"}
-            </LocalizedClientLink>
-          </div>
-
-          <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
-            <div className="hidden sm:flex items-center gap-x-6 h-full">
-              <LocalizedClientLink
-                className="hover:text-ui-fg-base"
-                href="/account"
-                data-testid="nav-account-link"
-              >
-                Account
-              </LocalizedClientLink>
-            </div>
-            <Suspense
-              fallback={
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
-                  href="/cart"
-                  data-testid="nav-cart-link"
-                >
-                  Cart (0)
-                </LocalizedClientLink>
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <NavbarItem>
+          <Link href="/store" color="foreground">
+            Store
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarContent justify="end">
+        <NavbarItem className="hidden lg:flex">
+          <Link
+            href="/account"
+            color="foreground"
+            data-testid="nav-account-link"
+          >
+            Account
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Suspense
+            fallback={
+              <Link href="/cart" color="foreground" data-testid="nav-cart-link">
+                Cart (0)
+              </Link>
+            }
+          >
+            <CartDropdown cart={cart} />
+          </Suspense>
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarMenu>
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item}-${index}`}>
+            <Link
+              className="w-full"
+              color={
+                index === 2
+                  ? "primary"
+                  : index === menuItems.length - 1
+                  ? "danger"
+                  : "foreground"
               }
+              href="#"
+              size="lg"
             >
-              <CartButton />
-            </Suspense>
-          </div>
-        </nav>
-      </header>
-    </div>
+              {item}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
+    </Navbar>
   )
 }

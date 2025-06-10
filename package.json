@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
+    "@heroui/navbar": "^2.2.19",
     "@heroui/react": "^2.7.8",
     "@medusajs/js-sdk": "latest",
     "@medusajs/ui": "latest",
@@ -27,6 +28,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.15.0",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.513.0",
     "next": "^15.3.1",
     "next-sanity": "^9.12.0",
     "pg": "^8.13.1",
