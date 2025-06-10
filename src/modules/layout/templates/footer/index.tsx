@@ -13,7 +13,7 @@ export default async function Footer() {
 
   return (
     <footer className="border-t border-ui-border-base w-full">
-      <div className="container flex flex-col w-full">
+      <div className="2xl:container px-[12] flex flex-col w-full">
         <div className="flex flex-col gap-y-6 xsm:flex-row items-start justify-between py-40">
           <div>
             <LocalizedClientLink

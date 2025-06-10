@@ -38,7 +38,7 @@ export default function CategoryTemplate({
 
   return (
     <div
-      className="flex flex-col sm:flex-row sm:items-start py-6 container"
+      className="2xl:container px-[12] flex flex-col sm:flex-row sm:items-start py-6"
       data-testid="category-container"
     >
       <RefinementList sortBy={sort} data-testid="sort-by-container" />

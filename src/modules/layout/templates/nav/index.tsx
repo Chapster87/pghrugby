@@ -50,7 +50,11 @@ export default function Nav({ siteTitle, cart }: NavProps) {
   ]
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="2xl">
+    <Navbar
+      onMenuOpenChange={setIsMenuOpen}
+      maxWidth="2xl"
+      classNames={{ wrapper: "px-[12]" }}
+    >
       <NavbarContent className="px-0">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close site menu" : "Open site menu"}

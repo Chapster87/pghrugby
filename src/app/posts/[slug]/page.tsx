@@ -71,7 +71,7 @@ export default async function PostPage(props: Props) {
 
   return (
     <>
-      <div className="container prose lg:prose-xl">
+      <div className="2xl:container px-[12] prose lg:prose-xl">
         <h2>{post.title}</h2>
         <ul>
           <li>
