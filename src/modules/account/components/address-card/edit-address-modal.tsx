@@ -74,7 +74,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
       >
         <div className="flex flex-col">
           <Heading
-            className="text-left text-base-semi"
+            className="text-left text-sm leading-6 font-semibold"
             data-testid="address-name"
           >
             {address.first_name} {address.last_name}
@@ -87,7 +87,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
               {address.company}
             </Text>
           )}
-          <Text className="flex flex-col text-left text-base-regular mt-2">
+          <Text className="flex flex-col text-left mt-2">
             <span data-testid="address-address">
               {address.address_1}
               {address.address_2 && <span>, {address.address_2}</span>}
@@ -103,7 +103,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
         </div>
         <div className="flex items-center gap-x-4">
           <button
-            className="text-small-regular text-ui-fg-base flex items-center gap-x-2"
+            className="text-ui-fg-base flex items-center gap-x-2"
             onClick={open}
             data-testid="address-edit-button"
           >
@@ -111,7 +111,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
             Edit
           </button>
           <button
-            className="text-small-regular text-ui-fg-base flex items-center gap-x-2"
+            className="text-ui-fg-base flex items-center gap-x-2"
             onClick={removeAddress}
             data-testid="address-delete-button"
           >
@@ -211,9 +211,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
               />
             </div>
             {formState.error && (
-              <div className="text-rose-500 text-small-regular py-2">
-                {formState.error}
-              </div>
+              <div className="text-rose-500 py-2">{formState.error}</div>
             )}
           </Modal.Body>
           <Modal.Footer>

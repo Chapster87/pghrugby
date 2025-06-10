@@ -11,7 +11,7 @@ type ModalProps = {
   size?: "small" | "medium" | "large"
   search?: boolean
   children: React.ReactNode
-  'data-testid'?: string
+  "data-testid"?: string
 }
 
 const Modal = ({
@@ -20,7 +20,7 @@ const Modal = ({
   size = "medium",
   search = false,
   children,
-  'data-testid': dataTestId
+  "data-testid": dataTestId,
 }: ModalProps) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -96,7 +96,7 @@ const Title: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const Description: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <Dialog.Description className="flex text-small-regular text-ui-fg-base items-center justify-center pt-2 pb-4 h-full">
+    <Dialog.Description className="flex text-ui-fg-base items-center justify-center pt-2 pb-4 h-full">
       {children}
     </Dialog.Description>
   )

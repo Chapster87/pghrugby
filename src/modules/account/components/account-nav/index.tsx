@@ -30,7 +30,7 @@ const AccountNav = ({
         {route !== `/${countryCode}/account` ? (
           <LocalizedClientLink
             href="/account"
-            className="flex items-center gap-x-2 text-small-regular py-2"
+            className="flex items-center gap-x-2 py-2"
             data-testid="account-main-link"
           >
             <>
@@ -43,7 +43,7 @@ const AccountNav = ({
             <div className="text-xl-semi mb-4 px-8">
               Hello {customer?.first_name}
             </div>
-            <div className="text-base-regular">
+            <div>
               <ul>
                 <li>
                   <LocalizedClientLink
@@ -110,9 +110,9 @@ const AccountNav = ({
       <div className="hidden sm:block" data-testid="account-nav">
         <div>
           <div className="pb-4">
-            <h3 className="text-base-semi">Account</h3>
+            <h3>Account</h3>
           </div>
-          <div className="text-base-regular">
+          <div>
             <ul className="flex mb-0 justify-start items-start flex-col gap-y-4">
               <li>
                 <AccountNavLink

@@ -34,7 +34,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
   return (
     <>
       <div
-        className="content-container flex flex-col sm:flex-row sm:items-start py-6 relative"
+        className="container flex flex-col sm:flex-row sm:items-start py-6 relative"
         data-testid="product-container"
       >
         <div className="flex flex-col sm:sticky sm:top-48 sm:py-0 sm:max-w-[300px] w-full py-8 gap-y-6">
@@ -60,7 +60,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
         </div>
       </div>
       <div
-        className="content-container my-16 sm:my-32"
+        className="container my-16 sm:my-32"
         data-testid="related-products-container"
       >
         <Suspense fallback={<SkeletonRelatedProducts />}>

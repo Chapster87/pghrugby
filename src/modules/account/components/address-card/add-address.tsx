@@ -53,7 +53,7 @@ const AddAddress = ({
         onClick={open}
         data-testid="add-address-button"
       >
-        <span className="text-base-semi">New address</span>
+        <span className="text-sm leading-6 font-semibold">New address</span>
         <Plus />
       </button>
 
@@ -136,10 +136,7 @@ const AddAddress = ({
               />
             </div>
             {formState.error && (
-              <div
-                className="text-rose-500 text-small-regular py-2"
-                data-testid="address-error"
-              >
+              <div className="text-rose-500 py-2" data-testid="address-error">
                 {formState.error}
               </div>
             )}

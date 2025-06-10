@@ -10,10 +10,10 @@ export default function CheckoutLayout({
   return (
     <div className="w-full bg-white relative sm:min-h-screen">
       <div className="h-16 bg-white border-b ">
-        <nav className="flex h-full items-center content-container justify-between">
+        <nav className="flex h-full items-center container justify-between">
           <LocalizedClientLink
             href="/cart"
-            className="text-small-semi text-ui-fg-base flex items-center gap-x-2 uppercase flex-1 basis-0"
+            className="text-ui-fg-base flex items-center gap-x-2 uppercase flex-1 basis-0"
             data-testid="back-to-cart-link"
           >
             <ChevronDown className="rotate-90" size={16} />

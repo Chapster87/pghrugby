@@ -12,8 +12,8 @@ import { Button } from "@medusajs/ui"
 import DeleteButton from "@modules/common/components/delete-button"
 import LineItemOptions from "@modules/common/components/line-item-options"
 import LineItemPrice from "@modules/common/components/line-item-price"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "@modules/products/components/thumbnail"
+import { Link } from "@heroui/react"
 import { usePathname } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
 
@@ -81,11 +81,11 @@ const CartDropdown = ({
     >
       <Popover className="relative h-full">
         <PopoverButton className="h-full">
-          <LocalizedClientLink
-            className="hover:text-ui-fg-base"
+          <Link
             href="/cart"
+            color="foreground"
             data-testid="nav-cart-link"
-          >{`Cart (${totalItems})`}</LocalizedClientLink>
+          >{`Cart (${totalItems})`}</Link>
         </PopoverButton>
         <Transition
           show={cartDropdownOpen}
@@ -120,7 +120,7 @@ const CartDropdown = ({
                         key={item.id}
                         data-testid="cart-item"
                       >
-                        <LocalizedClientLink
+                        <Link
                           href={`/products/${item.product_handle}`}
                           className="w-24"
                         >
@@ -129,18 +129,18 @@ const CartDropdown = ({
                             images={item.variant?.product?.images}
                             size="square"
                           />
-                        </LocalizedClientLink>
+                        </Link>
                         <div className="flex flex-col justify-between flex-1">
                           <div className="flex flex-col flex-1">
                             <div className="flex items-start justify-between">
                               <div className="flex flex-col overflow-ellipsis whitespace-nowrap mr-4 w-[180px]">
-                                <h3 className="text-base-regular overflow-hidden text-ellipsis">
-                                  <LocalizedClientLink
+                                <h3 className="overflow-hidden text-ellipsis">
+                                  <Link
                                     href={`/products/${item.product_handle}`}
                                     data-testid="product-link"
                                   >
                                     {item.title}
-                                  </LocalizedClientLink>
+                                  </Link>
                                 </h3>
                                 <LineItemOptions
                                   variant={item.variant}
@@ -191,7 +191,7 @@ const CartDropdown = ({
                       })}
                     </span>
                   </div>
-                  <LocalizedClientLink href="/cart" passHref>
+                  <Link href="/cart" passHref>
                     <Button
                       className="w-full"
                       size="large"
@@ -199,23 +199,23 @@ const CartDropdown = ({
                     >
                       Go to cart
                     </Button>
-                  </LocalizedClientLink>
+                  </Link>
                 </div>
               </>
             ) : (
               <div>
                 <div className="flex py-16 flex-col gap-y-4 items-center justify-center">
-                  <div className="bg-gray-900 text-small-regular flex items-center justify-center w-6 h-6 rounded-full text-white">
+                  <div className="bg-gray-900 flex items-center justify-center w-6 h-6 rounded-full text-white">
                     <span>0</span>
                   </div>
                   <span>Your shopping bag is empty.</span>
                   <div>
-                    <LocalizedClientLink href="/store">
+                    <Link href="/store">
                       <>
                         <span className="sr-only">Go to all products page</span>
                         <Button onClick={close}>Explore products</Button>
                       </>
-                    </LocalizedClientLink>
+                    </Link>
                   </div>
                 </div>
               </div>

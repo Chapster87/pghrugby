@@ -28,9 +28,7 @@ const OrderOverview = ({ orders }: { orders: HttpTypes.StoreOrder[] }) => {
       data-testid="no-orders-container"
     >
       <h2 className="text-large-semi">Nothing to see here</h2>
-      <p className="text-base-regular">
-        You don&apos;t have any orders yet, let us change that {":)"}
-      </p>
+      <p>You don&apos;t have any orders yet, let us change that {":)"}</p>
       <div className="mt-4">
         <LocalizedClientLink href="/" passHref>
           <Button data-testid="continue-shopping-button">

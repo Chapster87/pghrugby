@@ -18,7 +18,7 @@ const Overview = ({ customer, orders }: OverviewProps) => {
           <span data-testid="welcome-message" data-value={customer?.first_name}>
             Hello {customer?.first_name}
           </span>
-          <span className="text-small-regular text-ui-fg-base">
+          <span className="text-ui-fg-base">
             Signed in as:{" "}
             <span
               className="font-semibold"
@@ -42,9 +42,7 @@ const Overview = ({ customer, orders }: OverviewProps) => {
                   >
                     {getProfileCompletion(customer)}%
                   </span>
-                  <span className="uppercase text-base-regular text-ui-fg-subtle">
-                    Completed
-                  </span>
+                  <span className="uppercase text-ui-fg-subtle">Completed</span>
                 </div>
               </div>
 
@@ -58,9 +56,7 @@ const Overview = ({ customer, orders }: OverviewProps) => {
                   >
                     {customer?.addresses?.length || 0}
                   </span>
-                  <span className="uppercase text-base-regular text-ui-fg-subtle">
-                    Saved
-                  </span>
+                  <span className="uppercase text-ui-fg-subtle">Saved</span>
                 </div>
               </div>
             </div>
@@ -85,7 +81,7 @@ const Overview = ({ customer, orders }: OverviewProps) => {
                           href={`/account/orders/details/${order.id}`}
                         >
                           <Container className="bg-gray-50 flex justify-between items-center p-4">
-                            <div className="grid grid-cols-3 grid-rows-2 text-small-regular gap-x-4 flex-1">
+                            <div className="grid grid-cols-3 grid-rows-2 gap-x-4 flex-1">
                               <span className="font-semibold">Date placed</span>
                               <span className="font-semibold">
                                 Order number

@@ -13,7 +13,7 @@ export default async function Footer() {
 
   return (
     <footer className="border-t border-ui-border-base w-full">
-      <div className="content-container flex flex-col w-full">
+      <div className="container flex flex-col w-full">
         <div className="flex flex-col gap-y-6 xsm:flex-row items-start justify-between py-40">
           <div>
             <LocalizedClientLink
@@ -23,7 +23,7 @@ export default async function Footer() {
               Medusa Store
             </LocalizedClientLink>
           </div>
-          <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3">
+          <div className="gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3">
             {productCategories && productCategories?.length > 0 && (
               <div className="flex flex-col gap-y-2">
                 <span className="txt-small-plus txt-ui-fg-base">

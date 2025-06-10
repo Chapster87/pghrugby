@@ -211,7 +211,7 @@ const Shipping: React.FC<ShippingProps> = ({
                       value={PICKUP_OPTION_ON}
                       data-testid="delivery-option-radio"
                       className={clx(
-                        "flex items-center justify-between text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
+                        "flex items-center justify-between cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
                         {
                           "border-ui-border-interactive":
                             showPickupOptions === PICKUP_OPTION_ON,
@@ -222,9 +222,7 @@ const Shipping: React.FC<ShippingProps> = ({
                         <MedusaRadio
                           checked={showPickupOptions === PICKUP_OPTION_ON}
                         />
-                        <span className="text-base-regular">
-                          Pick up your order
-                        </span>
+                        <span>Pick up your order</span>
                       </div>
                       <span className="justify-self-end text-ui-fg-base">
                         -
@@ -249,7 +247,7 @@ const Shipping: React.FC<ShippingProps> = ({
                         data-testid="delivery-option-radio"
                         disabled={isDisabled}
                         className={clx(
-                          "flex items-center justify-between text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
+                          "flex items-center justify-between cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
                           {
                             "border-ui-border-interactive":
                               option.id === shippingMethodId,
@@ -262,9 +260,7 @@ const Shipping: React.FC<ShippingProps> = ({
                           <MedusaRadio
                             checked={option.id === shippingMethodId}
                           />
-                          <span className="text-base-regular">
-                            {option.name}
-                          </span>
+                          <span>{option.name}</span>
                         </div>
                         <span className="justify-self-end text-ui-fg-base">
                           {option.price_type === "flat" ? (
@@ -315,7 +311,7 @@ const Shipping: React.FC<ShippingProps> = ({
                           disabled={option.insufficient_inventory}
                           data-testid="delivery-option-radio"
                           className={clx(
-                            "flex items-center justify-between text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
+                            "flex items-center justify-between cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
                             {
                               "border-ui-border-interactive":
                                 option.id === shippingMethodId,
@@ -329,10 +325,8 @@ const Shipping: React.FC<ShippingProps> = ({
                               checked={option.id === shippingMethodId}
                             />
                             <div className="flex flex-col">
-                              <span className="text-base-regular">
-                                {option.name}
-                              </span>
-                              <span className="text-base-regular text-ui-fg-muted">
+                              <span>{option.name}</span>
+                              <span className="text-ui-fg-muted">
                                 {formatAddress(
                                   option.service_zone?.fulfillment_set?.location
                                     ?.address
