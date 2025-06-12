@@ -2,6 +2,11 @@
 
 import { Suspense, useState } from "react"
 import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -13,7 +18,7 @@ import {
 } from "@heroui/react"
 import { HttpTypes } from "@medusajs/types"
 import CartDropdown from "../../components/cart-dropdown"
-import { Menu, X } from "lucide-react"
+import { ChevronDown, Menu, X } from "lucide-react"
 
 export const AcmeLogo = () => {
   return (
@@ -37,23 +42,27 @@ export default function Nav({ siteTitle, cart }: NavProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
+    { id: "about", label: "About Us", url: "/about" },
+    { id: "womens-rugby", label: "Women's Rugby", url: "/womens-rugby" },
+    { id: "mens-rugby", label: "Men's Rugby", url: "/mens-rugby" },
+    {
+      id: "events",
+      label: "Events",
+      url: "/events",
+      submenu: [
+        { id: "store", label: "Store", url: "/store" },
+        { id: "", label: "Upcoming Matches", url: "/events/upcoming" },
+      ],
+    },
+    { id: "contact", label: "Contact Us", url: "/contact" },
+    { id: "merchandise", label: "Merchandise", url: "/merchandise" },
   ]
 
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="2xl"
-      classNames={{ wrapper: "px-[12]" }}
+      classNames={{ base: "bg-primary", wrapper: "px-[12]" }}
     >
       <NavbarContent className="px-0">
         <NavbarMenuToggle
@@ -68,13 +77,46 @@ export default function Nav({ siteTitle, cart }: NavProps) {
           </Link>
         </NavbarBrand>
       </NavbarContent>
-
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link href="/store" color="foreground">
-            Store
-          </Link>
-        </NavbarItem>
+      <NavbarContent className="hidden sm:flex gap-2" justify="center">
+        {menuItems.map((item, index) =>
+          item.submenu ? (
+            <Dropdown key={`${item.id}-${index}`}>
+              <NavbarItem>
+                <DropdownTrigger>
+                  <Button
+                    disableRipple
+                    disableAnimation
+                    className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+                    endContent={<ChevronDown />}
+                    size="lg"
+                  >
+                    {item.label}
+                  </Button>
+                </DropdownTrigger>
+              </NavbarItem>
+              <DropdownMenu
+                aria-label={`${item.label} submenu`}
+                itemClasses={{
+                  base: "gap-2",
+                }}
+              >
+                {item.submenu.map((sub, subIdx) => (
+                  <DropdownItem key={subIdx}>
+                    <Link href={sub.url} color="foreground">
+                      {sub.label}
+                    </Link>
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
+          ) : (
+            <NavbarItem key={`${item.id}-${index}`}>
+              <Link href={item.url} color="foreground">
+                {item.label}
+              </Link>
+            </NavbarItem>
+          )
+        )}
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
@@ -100,7 +142,7 @@ export default function Nav({ siteTitle, cart }: NavProps) {
       </NavbarContent>
       <NavbarMenu>
         {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
+          <NavbarMenuItem key={`${item.id}-${index}`}>
             <Link
               className="w-full"
               color={
@@ -113,7 +155,7 @@ export default function Nav({ siteTitle, cart }: NavProps) {
               href="#"
               size="lg"
             >
-              {item}
+              {item.label}
             </Link>
           </NavbarMenuItem>
         ))}
