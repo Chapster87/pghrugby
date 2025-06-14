@@ -1,0 +1,20 @@
+.siteLogo {
+  position: relative;
+  top: 30px;
+}
+
+.crest {
+  width: 220px;
+  height: auto;
+  transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
+}
+
+.stuck {
+  .siteLogo {
+    top: 23px;
+  }
+
+  .crest {
+    width: 105px;
+  }
+}

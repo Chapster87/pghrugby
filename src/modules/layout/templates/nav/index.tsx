@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import {
   Button,
   Dropdown,
@@ -19,6 +19,8 @@ import {
 import { HttpTypes } from "@medusajs/types"
 import CartDropdown from "../../components/cart-dropdown"
 import { ChevronDown, Menu, X } from "lucide-react"
+import Crest from "@svg/Crest"
+import s from "./style.module.css"
 
 export const AcmeLogo = () => {
   return (
@@ -38,31 +40,53 @@ interface NavProps {
   cart: HttpTypes.StoreCart | null
 }
 
+const MENU = [
+  { id: "about", label: "About Us", url: "/about" },
+  { id: "womens-rugby", label: "Women's Rugby", url: "/womens-rugby" },
+  { id: "mens-rugby", label: "Men's Rugby", url: "/mens-rugby" },
+  {
+    id: "events",
+    label: "Events",
+    url: "/events",
+    submenu: [
+      { id: "store", label: "Store", url: "/store" },
+      { id: "", label: "Upcoming Matches", url: "/events/upcoming" },
+    ],
+  },
+  { id: "contact", label: "Contact Us", url: "/contact" },
+  { id: "merchandise", label: "Merchandise", url: "/merchandise" },
+]
+
 export default function Nav({ siteTitle, cart }: NavProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const menuItems = [
-    { id: "about", label: "About Us", url: "/about" },
-    { id: "womens-rugby", label: "Women's Rugby", url: "/womens-rugby" },
-    { id: "mens-rugby", label: "Men's Rugby", url: "/mens-rugby" },
-    {
-      id: "events",
-      label: "Events",
-      url: "/events",
-      submenu: [
-        { id: "store", label: "Store", url: "/store" },
-        { id: "", label: "Upcoming Matches", url: "/events/upcoming" },
-      ],
-    },
-    { id: "contact", label: "Contact Us", url: "/contact" },
-    { id: "merchandise", label: "Merchandise", url: "/merchandise" },
-  ]
+  // Move useEffect here
+  useEffect(() => {
+    const header = document.querySelector(".header")
+    if (!header) return
+
+    const observer = new IntersectionObserver(
+      ([e]) => e.target.classList.toggle(`${s.stuck}`, e.intersectionRatio < 1),
+      { threshold: [1] }
+    )
+
+    observer.observe(header)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   return (
     <Navbar
+      className="mt-[50px]"
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="2xl"
-      classNames={{ base: "bg-primary", wrapper: "px-[12]" }}
+      classNames={{
+        base: "bg-primary",
+        wrapper: `${s.header} header top-[-1px] px-[12]`,
+        brand: `${s.siteLogo}`,
+      }}
     >
       <NavbarContent className="px-0">
         <NavbarMenuToggle
@@ -71,14 +95,14 @@ export default function Nav({ siteTitle, cart }: NavProps) {
           icon={isMenuOpen ? <X /> : <Menu />}
         />
         <NavbarBrand>
-          <Link href="/" color="foreground">
-            {/* <AcmeLogo /> */}
-            {siteTitle}
+          <Link href="/" color="foreground" aria-label="View Homepage">
+            <Crest className={s.crest} />
+            <div className="sr-only">{siteTitle}</div>
           </Link>
         </NavbarBrand>
       </NavbarContent>
       <NavbarContent className="hidden sm:flex gap-2" justify="center">
-        {menuItems.map((item, index) =>
+        {MENU.map((item, index) =>
           item.submenu ? (
             <Dropdown key={`${item.id}-${index}`}>
               <NavbarItem>
@@ -141,14 +165,14 @@ export default function Nav({ siteTitle, cart }: NavProps) {
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>
-        {menuItems.map((item, index) => (
+        {MENU.map((item, index) => (
           <NavbarMenuItem key={`${item.id}-${index}`}>
             <Link
               className="w-full"
               color={
                 index === 2
                   ? "primary"
-                  : index === menuItems.length - 1
+                  : index === MENU.length - 1
                   ? "danger"
                   : "foreground"
               }

@@ -3,6 +3,14 @@
 @import "tailwindcss/utilities";
 @plugin "@tailwindcss/typography";
 
+*,
+:before,
+:after,
+::backdrop {
+  --heroui-hover-opacity: 1;
+  --heroui-disabled-opacity: 1;
+}
+
 @layer utilities {
   input:focus ~ label,
   input:not(:placeholder-shown) ~ label {
