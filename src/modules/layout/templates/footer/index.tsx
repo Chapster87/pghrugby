@@ -4,6 +4,7 @@ import { Text, clx } from "@medusajs/ui"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
+import Skyline from "@svg/skyline/Skyline"
 
 export default async function Footer() {
   const { collections } = await listCollections({
@@ -12,7 +13,8 @@ export default async function Footer() {
   const productCategories = await listCategories()
 
   return (
-    <footer className="border-t border-ui-border-base w-full">
+    <footer className="relative border-t border-ui-border-base w-full">
+      <Skyline className="absolute bottom-0 z-[-1]" />
       <div className="2xl:container px-[12] flex flex-col w-full">
         <div className="flex flex-col gap-y-6 xsm:flex-row items-start justify-between py-40">
           <div>
