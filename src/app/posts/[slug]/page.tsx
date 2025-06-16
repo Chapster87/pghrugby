@@ -70,74 +70,72 @@ export default async function PostPage(props: Props) {
   console.log("Post data:", post)
 
   return (
-    <>
-      <div className="2xl:container px-[12] prose lg:prose-xl">
-        <h2>{post.title}</h2>
-        <ul>
-          <li>
-            <strong>Slug:</strong> {post.slug}
-          </li>
-          <li>
-            <strong>Date:</strong> {post.date}
-          </li>
-          <li>
-            <strong>Modified:</strong> {post.modified}
-          </li>
-          <li>
-            <strong>Status:</strong> {post.status}
-          </li>
-          <li>
-            <strong>Content:</strong>
-            {post.content?.length ? (
-              <PortableText value={post.content as PortableTextBlock[]} />
-            ) : (
-              <span>None</span>
-            )}
-          </li>
-          <li>
-            <strong>Excerpt:</strong>
-            {post.excerpt?.length ? (
-              <PortableText value={post.excerpt as PortableTextBlock[]} />
-            ) : (
-              <span>None</span>
-            )}
-          </li>
-          <li>
-            <strong>Featured Media:</strong>
-            {post.featuredMedia ? (
-              <CoverImage image={post.featuredMedia} priority />
-            ) : (
-              <span>None</span>
-            )}
-          </li>
-          <li>
-            <strong>Sticky:</strong> {post.sticky ? "Yes" : "No"}
-          </li>
-          <li>
-            <strong>Author:</strong>{" "}
-            {post.author?._ref ||
-              post.author?._id ||
-              JSON.stringify(post.author) ||
-              "None"}
-          </li>
-          <li>
-            <strong>Categories:</strong>{" "}
-            {Array.isArray(post.categories) && post.categories.length > 0
-              ? post.categories
-                  .map((cat: any) => cat._ref || cat._id || JSON.stringify(cat))
-                  .join(", ")
-              : "None"}
-          </li>
-          <li>
-            <strong>Tags:</strong>{" "}
-            {Array.isArray(post.tags) && post.tags.length > 0
-              ? post.tags
-                  .map((tag: any) => tag._ref || tag._id || JSON.stringify(tag))
-                  .join(", ")
-              : "None"}
-          </li>
-        </ul>
-      </div>
-    </>
+    <div className="2xl:container px-[12] prose">
+      <h2>{post.title}</h2>
+      <ul>
+        <li>
+          <strong>Slug:</strong> {post.slug}
+        </li>
+        <li>
+          <strong>Date:</strong> {post.date}
+        </li>
+        <li>
+          <strong>Modified:</strong> {post.modified}
+        </li>
+        <li>
+          <strong>Status:</strong> {post.status}
+        </li>
+        <li>
+          <strong>Content:</strong>
+          {post.content?.length ? (
+            <PortableText value={post.content as PortableTextBlock[]} />
+          ) : (
+            <span>None</span>
+          )}
+        </li>
+        <li>
+          <strong>Excerpt:</strong>
+          {post.excerpt?.length ? (
+            <PortableText value={post.excerpt as PortableTextBlock[]} />
+          ) : (
+            <span>None</span>
+          )}
+        </li>
+        <li>
+          <strong>Featured Media:</strong>
+          {post.featuredMedia ? (
+            <CoverImage image={post.featuredMedia} priority />
+          ) : (
+            <span>None</span>
+          )}
+        </li>
+        <li>
+          <strong>Sticky:</strong> {post.sticky ? "Yes" : "No"}
+        </li>
+        <li>
+          <strong>Author:</strong>{" "}
+          {post.author?._ref ||
+            post.author?._id ||
+            JSON.stringify(post.author) ||
+            "None"}
+        </li>
+        <li>
+          <strong>Categories:</strong>{" "}
+          {Array.isArray(post.categories) && post.categories.length > 0
+            ? post.categories
+                .map((cat: any) => cat._ref || cat._id || JSON.stringify(cat))
+                .join(", ")
+            : "None"}
+        </li>
+        <li>
+          <strong>Tags:</strong>{" "}
+          {Array.isArray(post.tags) && post.tags.length > 0
+            ? post.tags
+                .map((tag: any) => tag._ref || tag._id || JSON.stringify(tag))
+                .join(", ")
+            : "None"}
+        </li>
+      </ul>
+    </div>
   )
 }

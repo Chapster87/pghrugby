@@ -3,6 +3,7 @@ import pLimit from "p-limit"
 import { createOrReplace, defineMigration } from "sanity/migrate"
 import type {
   WP_REST_API_Post,
+  WP_REST_API_Page,
   WP_REST_API_Term,
   WP_REST_API_User,
 } from "wp-types"
@@ -10,6 +11,7 @@ import type {
 import { getDataTypes } from "./lib/getDataTypes"
 import { sanityFetchImages } from "./lib/sanityFetchImages"
 import { transformToPost } from "./lib/transformToPost"
+import { transformToPage } from "./lib/transformToPage"
 import { wpDataTypeFetch } from "./lib/wpDataTypeFetch"
 
 const limit = pLimit(5)
@@ -42,7 +44,9 @@ export default defineMigration({
                 const doc = await transformToPost(wpDoc, client, existingImages)
                 return doc
               } else if (wpType === "pages") {
-                wpDoc = wpDoc as WP_REST_API_Post
+                wpDoc = wpDoc as WP_REST_API_Page
+                const doc = await transformToPage(wpDoc, client, existingImages)
+                return doc
               } else if (wpType === "categories") {
                 wpDoc = wpDoc as WP_REST_API_Term
               } else if (wpType === "tags") {

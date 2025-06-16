@@ -19,50 +19,88 @@ export async function serializedHtmlToBlockContent(
   imageCache: Record<string, string>,
   html: string
 ) {
-  // Parse content.raw HTML into WordPress blocks
   const parsed = parse(html)
 
   let blocks = []
-  let successCounter: number = 0
-  let rawBlocksCounter: number = 0
-  let unhandledBlocksCounter: number = 0
+  let successCounter = 0
+  let rawBlocksCounter = 0
+  let unhandledBlocksCounter = 0
 
-  // Add concurrency limit for uploads
   const limit = pLimit(2)
 
+  // Helper to recursively process innerBlocks
+  async function processInnerBlocks(innerBlocks, client, imageCache) {
+    let result: TypedObject[] = []
+    if (Array.isArray(innerBlocks)) {
+      for (const block of innerBlocks) {
+        // Recursively process nested innerBlocks if present
+        if (block.innerBlocks && block.innerBlocks.length > 0) {
+          const nested = await processInnerBlocks(
+            block.innerBlocks,
+            client,
+            imageCache
+          )
+          result.push({
+            _type: "blockGroup",
+            children: nested,
+          })
+        } else if (block.innerHTML) {
+          const content = await htmlToBlockContent(
+            block.innerHTML,
+            client,
+            imageCache
+          )
+          result.push(...content)
+        }
+      }
+    }
+    return result
+  }
+
   for (const wpBlock of parsed) {
-    // Convert inner HTML to Portable Text blocks
-    if (
-      wpBlock.blockName === "core/heading" ||
-      wpBlock.blockName === "core/image" ||
-      wpBlock.blockName === "core/paragraph" ||
-      wpBlock.blockName === "core/separator" ||
-      wpBlock.blockName === "core/quote" ||
-      wpBlock.blockName === "core/table" ||
-      wpBlock.blockName === "core/html" ||
-      wpBlock.blockName === "core/button" ||
-      wpBlock.blockName === "core/buttons"
-    ) {
-      const block = await htmlToBlockContent(
-        wpBlock.innerHTML,
-        client,
-        imageCache
-      )
-      blocks.push(...block)
-      // console.log(`Block type: ${wpBlock.blockName} - Completed`)
-      successCounter++
-    } else if (wpBlock.blockName === "core/list") {
-      // Determine list type
-      const listType = wpBlock.attrs?.ordered ? "number" : "bullet"
-      // Each list item is a core/list-item block in innerBlocks
-      for (const item of wpBlock.innerBlocks) {
-        // Convert the <li> HTML to Portable Text blocks
-        const itemBlocks = await htmlToBlockContent(
-          item.innerHTML,
+    switch (wpBlock.blockName) {
+      case "core/heading":
+      case "core/image":
+      case "core/paragraph":
+      case "core/separator":
+      case "core/quote":
+      case "core/table":
+      case "core/html": {
+        const block = await htmlToBlockContent(
+          wpBlock.innerHTML,
           client,
           imageCache
         )
-        // Set listItem and style on each block
+        blocks.push(...block)
+        successCounter++
+        break
+      }
+      case "core/list": {
+        const listType = wpBlock.attrs?.ordered ? "number" : "bullet"
+        for (const item of wpBlock.innerBlocks) {
+          const itemBlocks = await htmlToBlockContent(
+            item.innerHTML,
+            client,
+            imageCache
+          )
+          for (const block of itemBlocks) {
+            if (block._type === "block") {
+              block.listItem = listType
+              block.style = "normal"
+            }
+          }
+          blocks.push(...itemBlocks)
+        }
+        successCounter++
+        break
+      }
+      case "core/list-item": {
+        const listType = wpBlock.attrs?.ordered ? "number" : "bullet"
+        const itemBlocks = await htmlToBlockContent(
+          wpBlock.innerHTML,
+          client,
+          imageCache
+        )
         for (const block of itemBlocks) {
           if (block._type === "block") {
             block.listItem = listType
@@ -70,95 +108,131 @@ export async function serializedHtmlToBlockContent(
           }
         }
         blocks.push(...itemBlocks)
+        successCounter++
+        break
       }
-      successCounter++
-    } else if (wpBlock.blockName === "core/list-item") {
-      // Handle standalone list-item blocks (not inside a core/list)
-      // Default to bullet if not specified
-      const listType = wpBlock.attrs?.ordered ? "number" : "bullet"
-      const itemBlocks = await htmlToBlockContent(
-        wpBlock.innerHTML,
-        client,
-        imageCache
-      )
-      for (const block of itemBlocks) {
-        if (block._type === "block") {
-          block.listItem = listType
-          block.style = "normal"
+      case "core/columns": {
+        const columnBlock = { _type: "columns", columns: [] as TypedObject[] }
+        for (const column of wpBlock.innerBlocks) {
+          const columnContent = []
+          for (const columnBlockInner of column.innerBlocks) {
+            const content = await htmlToBlockContent(
+              columnBlockInner.innerHTML,
+              client,
+              imageCache
+            )
+            columnContent.push(...content)
+          }
+          columnBlock.columns.push({
+            _type: "column",
+            content: columnContent,
+          })
         }
+        blocks.push(columnBlock)
+        successCounter++
+        break
       }
-      blocks.push(...itemBlocks)
-      successCounter++
-    } else if (wpBlock.blockName === "core/columns") {
-      const columnBlock = { _type: "columns", columns: [] as TypedObject[] }
-      for (const column of wpBlock.innerBlocks) {
-        const columnContent = []
-        for (const columnBlock of column.innerBlocks) {
+      case "core/media-text": {
+        const dom = new JSDOM(wpBlock.innerHTML)
+        const img = dom.window.document.querySelector("figure img")
+        let imageAsset
+
+        if (img && (img as HTMLImageElement).src) {
+          const asset = await limit(() =>
+            sanityUploadFromUrl((img as HTMLImageElement).src, client, {})
+          )
+          if (asset && asset._id) {
+            imageCache[(img as HTMLImageElement).src] = asset._id
+            imageAsset = {
+              _type: "image",
+              asset: { _type: "reference", _ref: asset._id },
+            }
+          }
+        }
+
+        let textBlocks: TypedObject[] = []
+        for (const inner of wpBlock.innerBlocks) {
           const content = await htmlToBlockContent(
-            columnBlock.innerHTML,
+            inner.innerHTML,
             client,
             imageCache
           )
-          columnContent.push(...content)
+          textBlocks.push(...content)
         }
-        columnBlock.columns.push({
-          _type: "column",
-          content: columnContent,
+
+        blocks.push({
+          _type: "mediaText",
+          image: imageAsset,
+          text: textBlocks,
         })
+        successCounter++
+        break
       }
-      blocks.push(columnBlock)
-      // console.log(`Block type: ${wpBlock.blockName} - Completed`)
-      successCounter++
-    } else if (wpBlock.blockName === "core/media-text") {
-      // Extract image URL from innerHTML (figure > img)
-      const dom = new JSDOM(wpBlock.innerHTML)
-      const img = dom.window.document.querySelector("figure img")
-      let imageAsset
-
-      if (img && (img as HTMLImageElement).src) {
-        // Use p-limit for concurrent uploads
-        const asset = await limit(() =>
-          sanityUploadFromUrl((img as HTMLImageElement).src, client, {})
-        )
-        if (asset && asset._id) {
-          imageCache[(img as HTMLImageElement).src] = asset._id
-          imageAsset = {
-            _type: "image",
-            asset: { _type: "reference", _ref: asset._id },
-          }
-        }
-      }
-
-      // Convert innerBlocks (text content) to Portable Text
-      let textBlocks: TypedObject[] = []
-      for (const inner of wpBlock.innerBlocks) {
-        const content = await htmlToBlockContent(
-          inner.innerHTML,
+      case "core/button": {
+        const buttonBlocks = await htmlToBlockContent(
+          wpBlock.innerHTML,
           client,
           imageCache
         )
-        textBlocks.push(...content)
+        blocks.push(...buttonBlocks)
+        successCounter++
+        break
       }
-
-      blocks.push({
-        _type: "mediaText",
-        image: imageAsset,
-        text: textBlocks,
-      })
-      successCounter++
-    } else if (!wpBlock.blockName) {
-      console.log(`No block name: ${name}`)
-      console.log(wpBlock)
-      rawBlocksCounter++
-    } else {
-      unhandledBlocksCounter++
+      case "core/buttons": {
+        for (const button of wpBlock.innerBlocks) {
+          const buttonBlocks = await htmlToBlockContent(
+            button.innerHTML,
+            client,
+            imageCache
+          )
+          blocks.push(...buttonBlocks)
+        }
+        successCounter++
+        break
+      }
+      case "core/group": {
+        let groupBlocks: TypedObject[] = []
+        if (
+          Array.isArray(wpBlock.innerBlocks) &&
+          wpBlock.innerBlocks.length > 0
+        ) {
+          groupBlocks = await processInnerBlocks(
+            wpBlock.innerBlocks,
+            client,
+            imageCache
+          )
+        } else if (wpBlock.innerHTML) {
+          const content = await htmlToBlockContent(
+            wpBlock.innerHTML,
+            client,
+            imageCache
+          )
+          groupBlocks.push(...content)
+        }
+        blocks.push({
+          _type: "blockGroup",
+          children: groupBlocks,
+        })
+        successCounter++
+        break
+      }
+      default: {
+        if (!wpBlock.blockName) {
+          if (wpBlock.innerHTML !== "\n\n") {
+            console.log(`No block name: ${name}`)
+            console.log(wpBlock)
+            rawBlocksCounter++
+          }
+        } else {
+          console.log(`Unhandled block type: ${wpBlock.blockName} in ${name}`)
+          console.log("Inner HTML:", wpBlock.innerHTML)
+          unhandledBlocksCounter++
+        }
+      }
     }
   }
 
   if (rawBlocksCounter > 0 || unhandledBlocksCounter > 0) {
-    // console.log(`${name}: `)
-
-    // console.log(`${successCounter} blocks processed successfully`)
     console.log(`${rawBlocksCounter} raw HTML blocks skipped`)
     console.log(`${unhandledBlocksCounter} unhandled blocks encountered`)
     console.log("Total blocks processed:", blocks.length)

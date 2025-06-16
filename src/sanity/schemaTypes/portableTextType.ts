@@ -5,9 +5,12 @@ export const portableTextType = defineField({
   type: "array",
   of: [
     { type: "block" },
+    { type: "blockGroup" },
     { type: "image" },
     { type: "imageWithCaption" },
     { type: "mediaText" },
     { type: "columns" },
+    { type: "button" },
+    { type: "buttonGroup" },
   ],
 })

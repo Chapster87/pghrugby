@@ -1,23 +1,41 @@
 // ./src/app/[slug]/page.tsx
 
+import { notFound } from "next/navigation"
 import { defineQuery } from "next-sanity"
 import { draftMode } from "next/headers"
 import { client } from "../../sanity/client"
+import PortableText from "@/components/PortableText"
 
-const query = defineQuery(
-  `*[_type == "page" && slug.current == $slug][0]{title}`
+const pageQuery = defineQuery(
+  `*[_type == "page" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    modified,
+    status,
+    content,
+    excerpt,
+    featuredMedia{
+      asset->{
+        url
+      },
+      alt
+    },
+    author->{name}
+  }`
 )
 
-export default async function Page({
-  params,
-}: {
+type Props = {
   params: Promise<{ slug: string }>
-}) {
-  const { slug } = await params
+}
+
+export default async function Page(props: Props) {
+  const { slug } = await props.params
   const { isEnabled } = await draftMode()
 
   const data = await client.fetch(
-    query,
+    pageQuery,
     { slug },
     isEnabled
       ? {
@@ -28,5 +46,58 @@ export default async function Page({
       : undefined
   )
 
-  return <h1>{data.title}</h1>
+  if (!data?._id) {
+    return notFound()
+  }
+
+  return (
+    <div className="2xl:container px-[12] prose">
+      <h2>{data.title}</h2>
+      <ul>
+        <li>
+          <strong>Slug:</strong> {data.slug}
+        </li>
+        <li>
+          <strong>Date:</strong> {data.date}
+        </li>
+        <li>
+          <strong>Modified:</strong> {data.modified}
+        </li>
+        <li>
+          <strong>Status:</strong> {data.status}
+        </li>
+        <li>
+          <strong>Content:</strong>
+          {data.content?.length ? (
+            <PortableText value={data.content} />
+          ) : (
+            <span>None</span>
+          )}
+        </li>
+        <li>
+          <strong>Excerpt:</strong>
+          {data.excerpt?.length ? (
+            <PortableText value={data.excerpt} />
+          ) : (
+            <span>None</span>
+          )}
+        </li>
+        <li>
+          <strong>Featured Media:</strong>
+          {data.featuredMedia?.asset?.url ? (
+            <img
+              src={data.featuredMedia.asset.url}
+              alt={data.featuredMedia.alt || data.title}
+              style={{ maxWidth: "400px" }}
+            />
+          ) : (
+            <span>None</span>
+          )}
+        </li>
+        <li>
+          <strong>Author:</strong> {data.author?.name || "None"}
+        </li>
+      </ul>
+    </div>
+  )
 }

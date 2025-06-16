@@ -14,8 +14,8 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
-  Link,
 } from "@heroui/react"
+import Link from "next/link"
 import { HttpTypes } from "@medusajs/types"
 import CartDropdown from "../../components/cart-dropdown"
 import { ChevronDown, Menu, X } from "lucide-react"

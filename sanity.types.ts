@@ -13,6 +13,24 @@
  */
 
 // Source: schema.json
+export type ButtonGroup = {
+  _type: "buttonGroup"
+  buttons?: Array<
+    {
+      _key: string
+    } & Button
+  >
+}
+
+export type Button = {
+  _type: "button"
+  text?: string
+  url?: string
+  style?: string
+  target?: "_self" | "_blank"
+  rel?: string
+}
+
 export type Settings = {
   _id: string
   _type: "settings"
@@ -99,6 +117,9 @@ export type PortableText = Array<
       _type: "block"
       _key: string
     }
+  | ({
+      _key: string
+    } & BlockGroup)
   | {
       asset?: {
         _ref: string
@@ -132,6 +153,12 @@ export type PortableText = Array<
   | ({
       _key: string
     } & Columns)
+  | ({
+      _key: string
+    } & Button)
+  | ({
+      _key: string
+    } & ButtonGroup)
 >
 
 export type MediaText = {
@@ -296,6 +323,66 @@ export type Category = {
   slug?: Slug
 }
 
+export type BlockGroup = {
+  _type: "blockGroup"
+  children?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: "span"
+          _key: string
+        }>
+        style?:
+          | "normal"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "blockquote"
+        listItem?: "bullet" | "number"
+        markDefs?: Array<{
+          href?: string
+          _type: "link"
+          _key: string
+        }>
+        level?: number
+        _type: "block"
+        _key: string
+      }
+    | {
+        asset?: {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+        }
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        _type: "image"
+        _key: string
+      }
+    | ({
+        _key: string
+      } & ImageWithCaption)
+    | ({
+        _key: string
+      } & MediaText)
+    | ({
+        _key: string
+      } & Columns)
+    | ({
+        _key: string
+      } & Button)
+    | ({
+        _key: string
+      } & ButtonGroup)
+  >
+}
+
 export type Author = {
   _id: string
   _type: "author"
@@ -439,6 +526,8 @@ export type SanityAssetSourceData = {
 }
 
 export type AllSanitySchemaTypes =
+  | ButtonGroup
+  | Button
   | Settings
   | Product
   | PortableText
@@ -450,6 +539,7 @@ export type AllSanitySchemaTypes =
   | Column
   | Columns
   | Category
+  | BlockGroup
   | Author
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -470,10 +560,202 @@ export type QueryResult = {
   title: string | null
 } | null
 
+// Source: ./src/app/posts/[slug]/posts.query.ts
+// Variable: postQuery
+// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "post": post->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture},  }
+export type PostQueryResult = {
+  content: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: "span"
+          _key: string
+        }>
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal"
+        listItem?: "bullet" | "number"
+        markDefs: Array<{
+          href?: string
+          _type: "link"
+          _key: string
+          post: null
+        }> | null
+        level?: number
+        _type: "block"
+        _key: string
+      }
+    | {
+        _key: string
+        _type: "blockGroup"
+        children?: Array<
+          | ({
+              _key: string
+            } & Button)
+          | ({
+              _key: string
+            } & ButtonGroup)
+          | ({
+              _key: string
+            } & Columns)
+          | ({
+              _key: string
+            } & ImageWithCaption)
+          | ({
+              _key: string
+            } & MediaText)
+          | {
+              children?: Array<{
+                marks?: Array<string>
+                text?: string
+                _type: "span"
+                _key: string
+              }>
+              style?:
+                | "blockquote"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "normal"
+              listItem?: "bullet" | "number"
+              markDefs?: Array<{
+                href?: string
+                _type: "link"
+                _key: string
+              }>
+              level?: number
+              _type: "block"
+              _key: string
+            }
+          | {
+              asset?: {
+                _ref: string
+                _type: "reference"
+                _weak?: boolean
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+              }
+              media?: unknown
+              hotspot?: SanityImageHotspot
+              crop?: SanityImageCrop
+              _type: "image"
+              _key: string
+            }
+        >
+        markDefs: null
+      }
+    | {
+        _key: string
+        _type: "button"
+        text?: string
+        url?: string
+        style?: string
+        target?: "_blank" | "_self"
+        rel?: string
+        markDefs: null
+      }
+    | {
+        _key: string
+        _type: "buttonGroup"
+        buttons?: Array<
+          {
+            _key: string
+          } & Button
+        >
+        markDefs: null
+      }
+    | {
+        _key: string
+        _type: "columns"
+        columns?: Array<
+          {
+            _key: string
+          } & Column
+        >
+        markDefs: null
+      }
+    | {
+        asset?: {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+        }
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        _type: "image"
+        _key: string
+        markDefs: null
+      }
+    | {
+        asset?: {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+        }
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        caption?: string
+        _type: "imageWithCaption"
+        _key: string
+        markDefs: null
+      }
+    | {
+        _key: string
+        _type: "mediaText"
+        image?: {
+          asset?: {
+            _ref: string
+            _type: "reference"
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+          }
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          _type: "image"
+        }
+        text?: PortableText
+        markDefs: null
+      }
+  > | null
+  _id: string
+  status: "draft" | "published"
+  title: string | "Untitled"
+  slug: string | null
+  excerpt: PortableText | null
+  coverImage: null
+  date: string
+  author: {
+    firstName: null
+    lastName: null
+    picture: null
+  } | null
+} | null
+// Variable: postPagesSlugs
+// Query: *[_type == "post" && defined(slug.current)]  {"slug": slug.current}
+export type PostPagesSlugsResult = Array<{
+  slug: string | null
+}>
+
 // Query TypeMap
 import "@sanity/client"
 declare module "@sanity/client" {
   interface SanityQueries {
     '*[_type == "page" && slug.current == $slug][0]{title}': QueryResult
+    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
+    '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
   }
 }
