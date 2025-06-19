@@ -143,7 +143,7 @@ function elementToBlock(node: Element): Block | null {
     case "img":
       if (node.getAttribute("src")) {
         return {
-          _type: "imageWithCaption",
+          _type: "image",
           _key: uuid(),
           url: node.getAttribute("src"),
           caption: undefined,

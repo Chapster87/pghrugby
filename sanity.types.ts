@@ -352,6 +352,9 @@ export type BlockGroup = {
         _type: "block"
         _key: string
       }
+    | ({
+        _key: string
+      } & BlockGroup)
     | {
         asset?: {
           _ref: string
@@ -554,10 +557,35 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
 export declare const internalGroqTypeReferenceTo: unique symbol
 // Source: ./src/app/[slug]/page.tsx
-// Variable: query
-// Query: *[_type == "page" && slug.current == $slug][0]{title}
-export type QueryResult = {
+// Variable: pageQuery
+// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    date,    modified,    status,    content,    excerpt,    featuredMedia{      asset->{        url      },      alt    },    author->{name}  }
+export type PageQueryResult = {
+  _id: string
   title: string | null
+  slug: string | null
+  date: string | null
+  modified: string | null
+  status:
+    | "auto-draft"
+    | "draft"
+    | "future"
+    | "inherit"
+    | "pending"
+    | "private"
+    | "publish"
+    | "trash"
+    | null
+  content: PortableText | null
+  excerpt: PortableText | null
+  featuredMedia: {
+    asset: {
+      url: string | null
+    } | null
+    alt: null
+  } | null
+  author: {
+    name: string | null
+  } | null
 } | null
 
 // Source: ./src/app/posts/[slug]/posts.query.ts
@@ -596,6 +624,9 @@ export type PostQueryResult = {
         _key: string
         _type: "blockGroup"
         children?: Array<
+          | ({
+              _key: string
+            } & BlockGroup)
           | ({
               _key: string
             } & Button)
@@ -754,7 +785,7 @@ export type PostPagesSlugsResult = Array<{
 import "@sanity/client"
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "page" && slug.current == $slug][0]{title}': QueryResult
+    '*[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    date,\n    modified,\n    status,\n    content,\n    excerpt,\n    featuredMedia{\n      asset->{\n        url\n      },\n      alt\n    },\n    author->{name}\n  }': PageQueryResult
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
   }
