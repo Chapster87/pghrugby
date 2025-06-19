@@ -1,33 +1,81 @@
-// ./src/app/[slug]/page.tsx
-
+import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
 import { defineQuery } from "next-sanity"
 import { draftMode } from "next/headers"
 import { client } from "../../sanity/client"
 import PortableText from "@/components/PortableText"
+import { sanityFetch } from "@/sanity/lib/live"
+import { pagesSlugs, pageQuery } from "./pages.query"
+import { resolveOpenGraphImage } from "@/sanity/lib/utils"
 
-const pageQuery = defineQuery(
-  `*[_type == "page" && slug.current == $slug][0]{
-    _id,
-    title,
-    "slug": slug.current,
-    date,
-    modified,
-    status,
-    content,
-    excerpt,
-    featuredMedia{
-      asset->{
-        url
-      },
-      alt
-    },
-    author->{name}
-  }`
-)
+// const pageQuery = defineQuery(
+//   `*[_type == "page" && slug.current == $slug][0]{
+//     _id,
+//     title,
+//     "slug": slug.current,
+//     date,
+//     modified,
+//     status,
+//     content,
+//     excerpt,
+//     featuredMedia{
+//       asset->{
+//         url
+//       },
+//       alt
+//     },
+//     author->{name}
+//   }`
+// )
 
 type Props = {
   params: Promise<{ slug: string }>
+}
+
+/**
+ * Generate the static params for the page.
+ * Always use published content here.
+ */
+export async function generateStaticParams() {
+  const { data } = await sanityFetch({
+    query: pagesSlugs,
+    perspective: "published",
+    stega: false,
+  })
+  return data
+}
+
+/**
+ * Generate metadata for the page.
+ */
+export async function generateMetadata(
+  props: { params: { slug: string } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { isEnabled } = await draftMode()
+  const { slug } = await props.params
+  const data = await client.fetch(
+    pageQuery,
+    { slug },
+    {
+      perspective: isEnabled ? "previewDrafts" : "published",
+      stega: false,
+    }
+  )
+  const previousImages = (await parent).openGraph?.images || []
+  const ogImage = resolveOpenGraphImage(data?.coverImage)
+
+  return {
+    authors:
+      data?.author?.firstName && data?.author?.lastName
+        ? [{ name: `${data.author.firstName} ${data.author.lastName}` }]
+        : [],
+    title: data?.title,
+    description: data?.excerpt,
+    openGraph: {
+      images: ogImage ? [ogImage, ...previousImages] : previousImages,
+    },
+  } satisfies Metadata
 }
 
 export default async function Page(props: Props) {

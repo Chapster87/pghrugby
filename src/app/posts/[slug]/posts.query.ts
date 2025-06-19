@@ -8,6 +8,7 @@ const postFields = /* groq */ `
   excerpt,
   coverImage,
   "date": coalesce(date, _updatedAt),
+  "modified": coalesce(date, _updatedAt),
   "author": author->{firstName, lastName, picture},
 `
 

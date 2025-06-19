@@ -6,13 +6,6 @@ import pLimit from "p-limit"
 import { htmlToBlockContent } from "./htmlToBlockContent"
 import { sanityUploadFromUrl } from "./sanityUploadFromUrl"
 
-// Define a type for the mediaText block
-type MediaTextBlock = {
-  _type: "mediaText"
-  image?: { asset: any; caption: string }
-  text: TypedObject[]
-}
-
 export async function serializedHtmlToBlockContent(
   name: string,
   client: SanityClient,

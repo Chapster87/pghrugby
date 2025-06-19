@@ -135,6 +135,7 @@ function elementToBlock(node: Element): Block | null {
           _key: uuid(),
           url: img.src, // Will be replaced with asset ref after upload
           caption: figcaption ? figcaption.textContent?.trim() : undefined,
+          alt: img.getAttribute("alt") || undefined, // <-- added to preserve alt tag
         }
       }
       break
@@ -147,6 +148,7 @@ function elementToBlock(node: Element): Block | null {
           _key: uuid(),
           url: node.getAttribute("src"),
           caption: undefined,
+          alt: node.getAttribute("alt") || undefined, // <-- added to preserve alt tag
         }
       }
       break

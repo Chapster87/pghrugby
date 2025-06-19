@@ -1,5 +1,7 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
+import { draftMode } from "next/headers"
+import { client } from "../../../sanity/client"
 import { type PortableTextBlock } from "next-sanity"
 
 import CoverImage from "@/components/CoverImage"
@@ -8,18 +10,13 @@ import { sanityFetch } from "@/sanity/lib/live"
 import { postPagesSlugs, postQuery } from "./posts.query"
 import { resolveOpenGraphImage } from "@/sanity/lib/utils"
 
-type Props = {
-  params: Promise<{ slug: string }>
-}
-
 /**
  * Generate the static params for the page.
- * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-static-params
+ * Always use published content here.
  */
 export async function generateStaticParams() {
   const { data } = await sanityFetch({
     query: postPagesSlugs,
-    // Use the published perspective in generateStaticParams
     perspective: "published",
     stega: false,
   })
@@ -28,109 +25,120 @@ export async function generateStaticParams() {
 
 /**
  * Generate metadata for the page.
- * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
  */
 export async function generateMetadata(
-  props: Props,
+  props: { params: { slug: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const params = await props.params
-  const { data: post } = await sanityFetch({
-    query: postQuery,
-    params,
-    // Metadata should never contain stega
-    stega: false,
-  })
+  const { isEnabled } = await draftMode()
+  const { slug } = await props.params
+  const data = await client.fetch(
+    postQuery,
+    { slug },
+    {
+      perspective: isEnabled ? "previewDrafts" : "published",
+      stega: false,
+    }
+  )
   const previousImages = (await parent).openGraph?.images || []
-  const ogImage = resolveOpenGraphImage(post?.coverImage)
+  const ogImage = resolveOpenGraphImage(data?.coverImage)
 
   return {
     authors:
-      post?.author?.firstName && post?.author?.lastName
-        ? [{ name: `${post.author.firstName} ${post.author.lastName}` }]
+      data?.author?.firstName && data?.author?.lastName
+        ? [{ name: `${data.author.firstName} ${data.author.lastName}` }]
         : [],
-    title: post?.title,
-    description: post?.excerpt,
+    title: data?.title,
+    description: data?.excerpt,
     openGraph: {
       images: ogImage ? [ogImage, ...previousImages] : previousImages,
     },
   } satisfies Metadata
 }
 
-export default async function PostPage(props: Props) {
-  const params = await props.params
-  const [{ data: post }] = await Promise.all([
-    sanityFetch({ query: postQuery, params }),
-  ])
+export default async function PostPage(props: { params: { slug: string } }) {
+  const { isEnabled } = await draftMode()
+  const { slug } = await props.params
+  const data = await client.fetch(
+    postQuery,
+    { slug },
+    isEnabled
+      ? {
+          perspective: "previewDrafts",
+          useCdn: false,
+          stega: true,
+        }
+      : undefined
+  )
 
-  if (!post?._id) {
+  if (!data?._id) {
     return notFound()
   }
 
-  console.log("Post data:", post)
+  console.log("Post data:", data)
 
   return (
     <div className="2xl:container px-[12] prose">
-      <h2>{post.title}</h2>
+      <h2>{data.title}</h2>
       <ul>
         <li>
-          <strong>Slug:</strong> {post.slug}
+          <strong>Slug:</strong> {data.slug}
         </li>
         <li>
-          <strong>Date:</strong> {post.date}
+          <strong>Date:</strong> {data.date}
         </li>
         <li>
-          <strong>Modified:</strong> {post.modified}
+          <strong>Modified:</strong> {data.modified}
         </li>
         <li>
-          <strong>Status:</strong> {post.status}
+          <strong>Status:</strong> {data.status}
         </li>
         <li>
           <strong>Content:</strong>
-          {post.content?.length ? (
-            <PortableText value={post.content as PortableTextBlock[]} />
+          {data.content?.length ? (
+            <PortableText value={data.content as PortableTextBlock[]} />
           ) : (
             <span>None</span>
           )}
         </li>
         <li>
           <strong>Excerpt:</strong>
-          {post.excerpt?.length ? (
-            <PortableText value={post.excerpt as PortableTextBlock[]} />
+          {data.excerpt?.length ? (
+            <PortableText value={data.excerpt as PortableTextBlock[]} />
           ) : (
             <span>None</span>
           )}
         </li>
         <li>
           <strong>Featured Media:</strong>
-          {post.featuredMedia ? (
-            <CoverImage image={post.featuredMedia} priority />
+          {data.featuredMedia ? (
+            <CoverImage image={data.featuredMedia} priority />
           ) : (
             <span>None</span>
           )}
         </li>
         <li>
-          <strong>Sticky:</strong> {post.sticky ? "Yes" : "No"}
+          <strong>Sticky:</strong> {data.sticky ? "Yes" : "No"}
         </li>
         <li>
           <strong>Author:</strong>{" "}
-          {post.author?._ref ||
-            post.author?._id ||
-            JSON.stringify(post.author) ||
+          {data.author?._ref ||
+            data.author?._id ||
+            JSON.stringify(data.author) ||
             "None"}
         </li>
         <li>
           <strong>Categories:</strong>{" "}
-          {Array.isArray(post.categories) && post.categories.length > 0
-            ? post.categories
+          {Array.isArray(data.categories) && data.categories.length > 0
+            ? data.categories
                 .map((cat: any) => cat._ref || cat._id || JSON.stringify(cat))
                 .join(", ")
             : "None"}
         </li>
         <li>
           <strong>Tags:</strong>{" "}
-          {Array.isArray(post.tags) && post.tags.length > 0
-            ? post.tags
+          {Array.isArray(data.tags) && data.tags.length > 0
+            ? data.tags
                 .map((tag: any) => tag._ref || tag._id || JSON.stringify(tag))
                 .join(", ")
             : "None"}
