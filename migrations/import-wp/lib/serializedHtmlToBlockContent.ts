@@ -60,7 +60,6 @@ export async function serializedHtmlToBlockContent(
   for (const wpBlock of parsed) {
     switch (wpBlock.blockName) {
       case "core/heading":
-      case "core/image":
       case "core/paragraph":
       case "core/separator":
       case "core/quote":
@@ -129,6 +128,57 @@ export async function serializedHtmlToBlockContent(
           })
         }
         blocks.push(columnBlock)
+        successCounter++
+        break
+      }
+      case "core/image": {
+        const dom = new JSDOM(wpBlock.innerHTML)
+        const figure = dom.window.document.querySelector("figure")
+        let img: HTMLImageElement | null = null
+        let caption = ""
+
+        if (figure) {
+          img = figure.querySelector("img")
+          const figcaption = figure.querySelector("figcaption")
+          if (figcaption) {
+            caption = figcaption.textContent?.trim() || ""
+          }
+        } else {
+          img = dom.window.document.querySelector("img")
+        }
+
+        let asset = null
+        if (img && img.src) {
+          asset = await limit(() => sanityUploadFromUrl(img!.src, client, {}))
+          if (asset && asset._id) {
+            imageCache[img.src] = asset._id
+          }
+        }
+
+        if (asset && asset._id) {
+          if (figure) {
+            // Use imageWithCaption for figure
+            blocks.push({
+              _type: "imageWithCaption",
+              asset: { _type: "reference", _ref: asset._id },
+              caption,
+            })
+          } else {
+            // Use image for img
+            blocks.push({
+              _type: "image",
+              asset: { _type: "reference", _ref: asset._id },
+            })
+          }
+        } else {
+          // fallback to htmlToBlockContent if no image found
+          const block = await htmlToBlockContent(
+            wpBlock.innerHTML,
+            client,
+            imageCache
+          )
+          blocks.push(...block)
+        }
         successCounter++
         break
       }

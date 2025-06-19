@@ -50,6 +50,8 @@ export default async function Page(props: Props) {
     return notFound()
   }
 
+  console.log("Page data:", data)
+
   return (
     <div className="2xl:container px-[12] prose">
       <h2>{data.title}</h2>

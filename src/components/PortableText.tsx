@@ -11,16 +11,27 @@ import Image from "next/image"
 // import ImageWithCaption from "./ImageWithCaption"
 // import Columns from "./Columns"
 
+// Helper to convert Sanity image asset._ref to CDN URL
+function sanityImageUrl(ref: string, width = 800, height = 600) {
+  if (!ref) return ""
+  // Example ref: "image-abc123-800x600-png"
+  const [, id, size, format] = ref.split("-")
+  return `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/production/${id}-${size}.${format}?w=${width}&h=${height}&fit=max`
+}
+
 // MediaText: renders an image and rich text side by side
 function MediaText({ value }: { value: any }) {
   if (!value) return null
+  const imageUrl = value.image?.asset?._ref
+    ? sanityImageUrl(value.image.asset._ref, 400, 300)
+    : value.image?.asset?.url
   return (
     <div className="flex flex-col md:flex-row gap-4 items-start my-4">
-      {value.image?.asset && value.image.asset.url && (
+      {imageUrl && (
         <div className="max-w-xs w-full">
           <Image
-            src={value.image.asset.url}
-            alt={value.image.alt || ""}
+            src={imageUrl}
+            alt={value.image?.alt || ""}
             width={400}
             height={300}
             className="object-contain w-full h-auto"
@@ -70,11 +81,15 @@ function ButtonGroup({ value }: { value: any }) {
 
 // ImageWithCaption: renders an image with an optional caption
 function ImageWithCaption({ value }: { value: any }) {
-  if (!value?.asset?.url) return null
+  if (!value) return null
+  const imageUrl = value.asset?._ref
+    ? sanityImageUrl(value.asset._ref, value.width || 800, value.height || 600)
+    : value.url
+  if (!imageUrl) return null
   return (
     <figure className="my-6">
       <Image
-        src={value.asset.url}
+        src={imageUrl}
         alt={value.alt || value.caption || ""}
         width={value.width || 800}
         height={value.height || 600}
@@ -100,16 +115,20 @@ const components: PortableTextComponents = {
     mediaText: MediaText,
     imageWithCaption: ImageWithCaption,
     // columns: Columns,
-    image: ({ value }) =>
-      value?.asset?.url ? (
+    image: ({ value }) => {
+      const imageUrl = value?.asset?._ref
+        ? sanityImageUrl(value.asset._ref, 800, 600)
+        : value?.asset?.url
+      return imageUrl ? (
         <Image
-          src={value.asset.url}
+          src={imageUrl}
           alt={value.alt || ""}
           width={800}
           height={600}
           style={{ maxWidth: "100%", height: "auto" }}
         />
-      ) : null,
+      ) : null
+    },
   },
   // You can also customize marks, block, list, etc. here
 }

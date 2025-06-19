@@ -80,6 +80,7 @@ export default function Nav({ siteTitle, cart }: NavProps) {
   return (
     <Navbar
       className="mt-[50px]"
+      height="72px"
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="2xl"
       classNames={{
