@@ -1,14 +1,32 @@
-import { Metadata } from "next"
+import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
 
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 import { client } from "@/sanity/lib/client"
 
-export const metadata: Metadata = {
-  title: "Medusa Next.js Starter Template",
-  description:
-    "A performant frontend ecommerce starter template with Next.js 15 and Medusa.",
+/**
+ * Generate metadata for the page.
+ */
+export async function generateMetadata(
+  props: { params: { slug: string } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // Build canonical URL using current URL and slug
+  const url = new URL((await parent).metadataBase || "https://pghrugby.com")
+  url.pathname = `/sitemap`
+
+  return {
+    title: "Sitemap | Pittsburgh Forge Rugby Club",
+    description:
+      "Welcome to the Pittsburgh Forge Rugby Club, where we celebrate the spirit of rugby in the Steel City. Join us for matches, events, and community engagement.",
+    alternates: {
+      canonical: url.toString(),
+    },
+    openGraph: {
+      url: url.toString(),
+    },
+  } satisfies Metadata
 }
 
 const staticRoutes = [

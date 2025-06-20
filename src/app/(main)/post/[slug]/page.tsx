@@ -52,7 +52,7 @@ export async function generateMetadata(
       data?.author?.firstName && data?.author?.lastName
         ? [{ name: `${data.author.firstName} ${data.author.lastName}` }]
         : [],
-    title: data?.title,
+    title: `${data?.title} | Pittsburgh Forge Rugby Club`,
     description: data?.excerpt,
     alternates: {
       canonical: url.toString(),
