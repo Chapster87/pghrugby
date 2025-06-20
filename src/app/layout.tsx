@@ -18,7 +18,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en">
       <body>
         <Providers>
-          <main className="relative light text-foreground bg-background">
+          <main className="relative">
             <BreakpointIndicator />
             <SiteBackground />
             <div className="relative z-[1]">{props.children}</div>

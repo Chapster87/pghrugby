@@ -16,24 +16,12 @@ import {
   NavbarMenuItem,
 } from "@heroui/react"
 import Link from "next/link"
+import { ThemeSwitcher } from "@/components/ThemeSwitcher"
 import { HttpTypes } from "@medusajs/types"
 import CartDropdown from "../../components/cart-dropdown"
 import { ChevronDown, Menu, X } from "lucide-react"
 import Crest from "@svg/Crest"
 import s from "./style.module.css"
-
-export const AcmeLogo = () => {
-  return (
-    <svg fill="none" height="36" viewBox="0 0 32 32" width="36">
-      <path
-        clipRule="evenodd"
-        d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-        fill="currentColor"
-        fillRule="evenodd"
-      />
-    </svg>
-  )
-}
 
 interface NavProps {
   siteTitle: string
@@ -185,6 +173,9 @@ export default function Nav({ siteTitle, cart }: NavProps) {
           </NavbarMenuItem>
         ))}
       </NavbarMenu>
+      <div className="hidden sm:block">
+        <ThemeSwitcher />
+      </div>
     </Navbar>
   )
 }
