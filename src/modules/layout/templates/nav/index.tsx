@@ -166,7 +166,6 @@ export default function Nav({ siteTitle, cart }: NavProps) {
                   : "foreground"
               }
               href="#"
-              size="lg"
             >
               {item.label}
             </Link>
