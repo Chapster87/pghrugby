@@ -1,7 +1,7 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
-import { client } from "../../../sanity/client"
+import { client } from "../../../../sanity/client"
 import { type PortableTextBlock } from "next-sanity"
 
 import CoverImage from "@/components/CoverImage"
@@ -43,6 +43,10 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || []
   const ogImage = resolveOpenGraphImage(data?.coverImage)
 
+  // Build canonical URL using current URL and slug
+  const url = new URL((await parent).metadataBase || "https://pghrugby.com")
+  url.pathname = `/${slug}`
+
   return {
     authors:
       data?.author?.firstName && data?.author?.lastName
@@ -50,6 +54,9 @@ export async function generateMetadata(
         : [],
     title: data?.title,
     description: data?.excerpt,
+    alternates: {
+      canonical: url.toString(),
+    },
     openGraph: {
       images: ogImage ? [ogImage, ...previousImages] : previousImages,
     },

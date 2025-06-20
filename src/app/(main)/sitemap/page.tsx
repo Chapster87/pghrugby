@@ -80,7 +80,7 @@ export default async function SiteMap(props: {
           <ul className="ml-4 list-disc">
             {blogPosts.map((post: any) => (
               <li key={post.slug}>
-                <Link href={`/posts/${post.slug}`}>
+                <Link href={`/post/${post.slug}`}>
                   {post.title || post.slug}
                 </Link>
               </li>
