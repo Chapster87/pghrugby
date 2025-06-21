@@ -8,6 +8,7 @@ import SiteBackground from "@components/site-background"
 import { VisualEditing } from "next-sanity"
 import { draftMode } from "next/headers"
 import { DisableDraftMode } from "../components/DisableDraftMode"
+import { SanityLive } from "@/sanity/lib/live"
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
@@ -24,6 +25,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             <div className="relative z-[1]">{props.children}</div>
           </main>
         </Providers>
+        <SanityLive />
         {(await draftMode()).isEnabled && (
           <>
             <VisualEditing />
