@@ -16,17 +16,13 @@ import {
   NavbarMenuItem,
 } from "@heroui/react"
 import Link from "next/link"
-import { ThemeSwitcher } from "@/components/ThemeSwitcher"
 import { HttpTypes } from "@medusajs/types"
 import CartDropdown from "../../components/cart-dropdown"
 import { ChevronDown, Menu, X } from "lucide-react"
 import Crest from "@svg/Crest"
 import s from "./style.module.css"
-
-interface NavProps {
-  siteTitle: string
-  cart: HttpTypes.StoreCart | null
-}
+import type { Cart } from "@medusajs/types"
+import type { NavItem } from "../header" // You may need to create or adjust this import
 
 const MENU = [
   { id: "about", label: "About Us", url: "/about" },
@@ -45,10 +41,22 @@ const MENU = [
   { id: "merchandise", label: "Merchandise", url: "/merchandise" },
 ]
 
-export default function Nav({ siteTitle, cart }: NavProps) {
+interface NavProps {
+  formattedNavData: {
+    settings?: {
+      siteTitle?: string
+    }
+    cart?: Cart | null
+    navigation?: NavItem[]
+  }
+}
+
+export default function Nav({ formattedNavData }: NavProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  // Move useEffect here
+  const { settings, cart, navigation } = formattedNavData
+  const siteTitle = settings?.siteTitle || "Pittsburgh Rugby"
+
   useEffect(() => {
     const header = document.querySelector(".header")
     if (!header) return
@@ -67,14 +75,14 @@ export default function Nav({ siteTitle, cart }: NavProps) {
 
   return (
     <Navbar
-      className="mt-[50px]"
       height="72px"
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="2xl"
       classNames={{
-        base: "bg-primary",
+        base: `${s.headerWrap} light`,
         wrapper: `${s.header} header top-[-1px] px-[12]`,
         brand: `${s.siteLogo}`,
+        content: `gap-7`,
       }}
     >
       <NavbarContent className="px-0">
@@ -84,58 +92,59 @@ export default function Nav({ siteTitle, cart }: NavProps) {
           icon={isMenuOpen ? <X /> : <Menu />}
         />
         <NavbarBrand>
-          <Link href="/" color="foreground" aria-label="View Homepage">
+          <Link href="/" aria-label="View Homepage">
             <Crest className={s.crest} />
             <div className="sr-only">{siteTitle}</div>
           </Link>
         </NavbarBrand>
       </NavbarContent>
-      <NavbarContent className="hidden sm:flex gap-2" justify="center">
-        {MENU.map((item, index) =>
-          item.submenu ? (
-            <Dropdown key={`${item.id}-${index}`}>
-              <NavbarItem>
-                <DropdownTrigger>
-                  <Button
-                    disableRipple
-                    disableAnimation
-                    className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-                    endContent={<ChevronDown />}
-                    size="lg"
-                  >
-                    {item.label}
-                  </Button>
-                </DropdownTrigger>
+      <NavbarContent className="hidden sm:flex" justify="center">
+        {navigation &&
+          navigation.map((item, index) =>
+            item.submenu ? (
+              <Dropdown key={`${item.id}-${index}`}>
+                <NavbarItem>
+                  <DropdownTrigger>
+                    <Button
+                      disableRipple
+                      disableAnimation
+                      className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+                      endContent={<ChevronDown />}
+                      size="lg"
+                    >
+                      <span className={s.navLink}>{item.label}</span>
+                    </Button>
+                  </DropdownTrigger>
+                </NavbarItem>
+                <DropdownMenu
+                  aria-label={`${item.label} submenu`}
+                  itemClasses={{
+                    base: "gap-2",
+                  }}
+                >
+                  {item.submenu.map((sub, subIdx) => (
+                    <DropdownItem key={subIdx}>
+                      <Link href={sub.url} className={s.navLink}>
+                        {sub.label}
+                      </Link>
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            ) : (
+              <NavbarItem key={`${item.id}-${index}`}>
+                <Link href={item.url} className={s.navLink}>
+                  {item.label}
+                </Link>
               </NavbarItem>
-              <DropdownMenu
-                aria-label={`${item.label} submenu`}
-                itemClasses={{
-                  base: "gap-2",
-                }}
-              >
-                {item.submenu.map((sub, subIdx) => (
-                  <DropdownItem key={subIdx}>
-                    <Link href={sub.url} color="foreground">
-                      {sub.label}
-                    </Link>
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-          ) : (
-            <NavbarItem key={`${item.id}-${index}`}>
-              <Link href={item.url} color="foreground">
-                {item.label}
-              </Link>
-            </NavbarItem>
-          )
-        )}
+            )
+          )}
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
           <Link
             href="/account"
-            color="foreground"
+            className={s.navLink}
             data-testid="nav-account-link"
           >
             Account
@@ -144,7 +153,11 @@ export default function Nav({ siteTitle, cart }: NavProps) {
         <NavbarItem>
           <Suspense
             fallback={
-              <Link href="/cart" color="foreground" data-testid="nav-cart-link">
+              <Link
+                href="/cart"
+                className={s.navLink}
+                data-testid="nav-cart-link"
+              >
                 Cart (0)
               </Link>
             }
@@ -154,27 +167,25 @@ export default function Nav({ siteTitle, cart }: NavProps) {
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>
-        {MENU.map((item, index) => (
-          <NavbarMenuItem key={`${item.id}-${index}`}>
-            <Link
-              className="w-full"
-              color={
-                index === 2
-                  ? "primary"
-                  : index === MENU.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
-              href="#"
-            >
-              {item.label}
-            </Link>
-          </NavbarMenuItem>
-        ))}
+        {navigation &&
+          navigation.map((item, index) => (
+            <NavbarMenuItem key={`${item.id}-${index}`}>
+              <Link
+                className="w-full"
+                color={
+                  index === 2
+                    ? "primary"
+                    : index === MENU.length - 1
+                    ? "danger"
+                    : "foreground"
+                }
+                href="#"
+              >
+                {item.label}
+              </Link>
+            </NavbarMenuItem>
+          ))}
       </NavbarMenu>
-      <div className="hidden sm:block">
-        <ThemeSwitcher />
-      </div>
     </Navbar>
   )
 }

@@ -1,6 +1,7 @@
 import { SchemaPluginOptions } from "sanity"
 import productSchema from "./documents/product"
 import settingsSchema from "./singletons/settings"
+import navigationSchema from "./singletons/navigation"
 import { authorType } from "./authorType"
 import { blockGroupType } from "./blockGroupType"
 import { categoryType } from "./categoryType"
@@ -30,6 +31,7 @@ export const schema: SchemaPluginOptions = {
     portableTextType,
     productSchema,
     settingsSchema,
+    navigationSchema,
     buttonBlockType,
     buttonGroupType,
   ],

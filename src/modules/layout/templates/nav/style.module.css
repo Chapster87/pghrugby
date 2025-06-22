@@ -1,3 +1,11 @@
+.headerWrap {
+  background-color: hsl(var(--heroui-primary));
+  background-image: url("/images/low-contrast-linen.png");
+  background-repeat: repeat;
+  background-blend-mode: difference;
+  box-shadow: 0 10px 15px -12px rgba(0, 0, 0, 0.4);
+}
+
 .siteLogo {
   position: relative;
   top: 30px;
@@ -17,4 +25,8 @@
   .crest {
     width: 105px;
   }
+}
+
+.navLink {
+  @apply text-foreground font-bold text-[18px];
 }
