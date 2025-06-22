@@ -3,6 +3,11 @@
 @import "tailwindcss/utilities";
 @plugin "@tailwindcss/typography";
 
+:root {
+  --font-lato: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-oswald: "Oswald", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 *,
 :before,
 :after,
@@ -23,6 +28,26 @@
 }
 
 @layer components {
+  h1,
+  .h1,
+  h2,
+  .h2,
+  h3,
+  .h3,
+  h4,
+  .h4,
+  h5,
+  .h5,
+  h6,
+  .h6 {
+    font-family: var(--font-oswald);
+    font-weight: 500;
+
+    a {
+      text-decoration: none;
+    }
+  }
+
   .text-large-regular {
     @apply text-base leading-6 font-normal;
   }

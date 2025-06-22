@@ -85,7 +85,7 @@ export default async function PostPage(props: { params: { slug: string } }) {
   console.log("Post data:", data)
 
   return (
-    <div className="2xl:container px-[12] prose">
+    <div className="2xl:container px-[12] prose dark:prose-invert">
       <h2>{data.title}</h2>
       <ul>
         <li>

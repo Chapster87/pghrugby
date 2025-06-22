@@ -1,5 +1,6 @@
 import { getBaseURL } from "@lib/util/env"
 import { Metadata } from "next"
+import { Lato, Oswald } from "next/font/google"
 import "@styles/globals.css"
 import { Providers } from "./providers"
 
@@ -10,13 +11,19 @@ import { draftMode } from "next/headers"
 import { DisableDraftMode } from "../components/DisableDraftMode"
 import { SanityLive } from "@/sanity/lib/live"
 
+const lato = Lato({ subsets: ["latin"], weight: ["400"] })
+const oswald = Oswald({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+})
+
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${lato.className}`}>
       <body>
         <Providers>
           <main className="relative">

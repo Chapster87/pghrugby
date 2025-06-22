@@ -31,6 +31,97 @@ export type Button = {
   rel?: string
 }
 
+export type Navigation = {
+  _id: string
+  _type: "navigation"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  mainNav?: Array<{
+    item?:
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "page"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "post"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "product"
+        }
+    customLink?: string
+    overrideTitle?: string
+    submenu?: Array<{
+      item?:
+        | {
+            _ref: string
+            _type: "reference"
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: "page"
+          }
+        | {
+            _ref: string
+            _type: "reference"
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: "post"
+          }
+        | {
+            _ref: string
+            _type: "reference"
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: "product"
+          }
+      customLink?: string
+      overrideTitle?: string
+      openInNewTab?: boolean
+      _key: string
+    }>
+    openInNewTab?: boolean
+    _key: string
+  }>
+  footerNav?: Array<{
+    item?:
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "page"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "post"
+        }
+    customLink?: string
+    overrideTitle?: string
+    submenu?: Array<
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "page"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "post"
+        }
+    >
+    openInNewTab?: boolean
+    _key: string
+  }>
+}
+
 export type Settings = {
   _id: string
   _type: "settings"
@@ -531,6 +622,7 @@ export type SanityAssetSourceData = {
 export type AllSanitySchemaTypes =
   | ButtonGroup
   | Button
+  | Navigation
   | Settings
   | Product
   | PortableText
@@ -556,9 +648,9 @@ export type AllSanitySchemaTypes =
   | Slug
   | SanityAssetSourceData
 export declare const internalGroqTypeReferenceTo: unique symbol
-// Source: ./src/app/[slug]/page.tsx
+// Source: ./src/app/(main)/[slug]/pages.query.ts
 // Variable: pageQuery
-// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    date,    modified,    status,    content,    excerpt,    featuredMedia{      asset->{        url      },      alt    },    author->{name}  }
+// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    date,    modified,    status,    content,    excerpt,    coverImage,    featuredMedia{      asset->{        url      },      alt    },    author->{name}  }
 export type PageQueryResult = {
   _id: string
   title: string | null
@@ -577,6 +669,7 @@ export type PageQueryResult = {
     | null
   content: PortableText | null
   excerpt: PortableText | null
+  coverImage: null
   featuredMedia: {
     asset: {
       url: string | null
@@ -587,10 +680,15 @@ export type PageQueryResult = {
     name: string | null
   } | null
 } | null
+// Variable: pagesSlugs
+// Query: *[_type == "page" && defined(slug.current)]  {"slug": slug.current}
+export type PagesSlugsResult = Array<{
+  slug: string | null
+}>
 
-// Source: ./src/app/posts/[slug]/posts.query.ts
+// Source: ./src/app/(main)/post/[slug]/posts.query.ts
 // Variable: postQuery
-// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "post": post->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture},  }
+// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "post": post->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "modified": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture},  }
 export type PostQueryResult = {
   content: Array<
     | {
@@ -769,6 +867,7 @@ export type PostQueryResult = {
   excerpt: PortableText | null
   coverImage: null
   date: string
+  modified: string
   author: {
     firstName: null
     lastName: null
@@ -781,12 +880,69 @@ export type PostPagesSlugsResult = Array<{
   slug: string | null
 }>
 
+// Source: ./src/modules/layout/templates/header/nav.query.ts
+// Variable: navQuery
+// Query: *[_type == "navigation"] | order(publishedAt desc)[0] {    mainNav[] {      item->{_id, title, slug},      customLink,      overrideTitle,      openInNewTab,      submenu[]{        item->{_id, title, slug},        customLink,        overrideTitle,        openInNewTab      }    },    footerNav[] {      item->{_id, title, slug},      customLink,      overrideTitle,      openInNewTab,      submenu[]{        _type == "reference" => @->{_id, title, slug},        _type == "object" => {          item->{_id, title, slug},          customLink,          overrideTitle,          openInNewTab        }      }    }  }
+export type NavQueryResult = {
+  mainNav: Array<{
+    item:
+      | {
+          _id: string
+          title: string | null
+          slug: null
+        }
+      | {
+          _id: string
+          title: string | null
+          slug: Slug | null
+        }
+      | null
+    customLink: string | null
+    overrideTitle: string | null
+    openInNewTab: boolean | null
+    submenu: Array<{
+      item:
+        | {
+            _id: string
+            title: string | null
+            slug: null
+          }
+        | {
+            _id: string
+            title: string | null
+            slug: Slug | null
+          }
+        | null
+      customLink: string | null
+      overrideTitle: string | null
+      openInNewTab: boolean | null
+    }> | null
+  }> | null
+  footerNav: Array<{
+    item: {
+      _id: string
+      title: string | null
+      slug: Slug | null
+    } | null
+    customLink: string | null
+    overrideTitle: string | null
+    openInNewTab: boolean | null
+    submenu: Array<{
+      _id: string
+      title: string | null
+      slug: Slug | null
+    }> | null
+  }> | null
+} | null
+
 // Query TypeMap
 import "@sanity/client"
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    date,\n    modified,\n    status,\n    content,\n    excerpt,\n    featuredMedia{\n      asset->{\n        url\n      },\n      alt\n    },\n    author->{name}\n  }': PageQueryResult
-    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
+    '*[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    date,\n    modified,\n    status,\n    content,\n    excerpt,\n    coverImage,\n    featuredMedia{\n      asset->{\n        url\n      },\n      alt\n    },\n    author->{name}\n  }': PageQueryResult
+    '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
+    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "modified": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
+    '*[_type == "navigation"] | order(publishedAt desc)[0] {\n    mainNav[] {\n      item->{_id, title, slug},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      submenu[]{\n        item->{_id, title, slug},\n        customLink,\n        overrideTitle,\n        openInNewTab\n      }\n    },\n    footerNav[] {\n      item->{_id, title, slug},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      submenu[]{\n        _type == "reference" => @->{_id, title, slug},\n        _type == "object" => {\n          item->{_id, title, slug},\n          customLink,\n          overrideTitle,\n          openInNewTab\n        }\n      }\n    }\n  }': NavQueryResult
   }
 }

@@ -85,6 +85,7 @@ const CartDropdown = ({
             href="/cart"
             color="foreground"
             data-testid="nav-cart-link"
+            className="text-foreground font-bold text-[18px]"
           >{`Cart (${totalItems})`}</Link>
         </PopoverButton>
         <Transition
@@ -191,7 +192,7 @@ const CartDropdown = ({
                       })}
                     </span>
                   </div>
-                  <Link href="/cart" passHref>
+                  <Link href="/cart">
                     <Button
                       className="w-full"
                       size="large"
