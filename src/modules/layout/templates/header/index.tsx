@@ -1,5 +1,5 @@
 import HeaderTop from "./header-top"
-import Nav from "@/modules/layout/templates/nav"
+import Nav from "./nav"
 import { client } from "@/sanity/lib/client"
 import { navQuery } from "./nav.query"
 import { retrieveCart } from "@lib/data/cart"
@@ -32,23 +32,24 @@ export default async function Header() {
   const formattedNavData: FormattedNavData = {
     settings,
     cart,
-    navigation: navigation.mainNav.map((menu: any): NavItem => {
-      return {
-        label: menu.overrideTitle || menu.item?.title,
-        url: menu.item?.slug?.current ? `/${menu.item.slug.current}` : "#",
-        openInNewTab: menu.openInNewTab || false,
-        submenu:
-          menu.submenu?.map(
-            (subItem: any): SubMenuItem => ({
-              label: menu.overrideTitle || subItem.item?.title,
-              url: subItem.item?.slug?.current
-                ? `/${subItem.item.slug.current}`
-                : "#",
-              openInNewTab: subItem.openInNewTab || false,
-            })
-          ) || [],
-      }
-    }),
+    navigation:
+      navigation?.mainNav?.map((menu: any): NavItem => {
+        return {
+          label: menu.overrideTitle || menu.item?.title,
+          url: menu.item?.slug?.current ? `/${menu.item.slug.current}` : "#",
+          openInNewTab: menu.openInNewTab || false,
+          submenu:
+            menu.submenu?.map(
+              (subItem: any): SubMenuItem => ({
+                label: menu.overrideTitle || subItem.item?.title,
+                url: subItem.item?.slug?.current
+                  ? `/${subItem.item.slug.current}`
+                  : "#",
+                openInNewTab: subItem.openInNewTab || false,
+              })
+            ) || [],
+        }
+      }) || [],
   }
 
   return (

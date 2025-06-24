@@ -1,0 +1,6 @@
+.headerTop {
+  @apply flex h-[50px] w-full;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(5px);
+  border-bottom: 2px solid hsl(var(--heroui-content3));
+}

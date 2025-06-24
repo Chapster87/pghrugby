@@ -17,12 +17,12 @@ import {
 } from "@heroui/react"
 import Link from "next/link"
 import { HttpTypes } from "@medusajs/types"
-import CartDropdown from "../../components/cart-dropdown"
+import CartDropdown from "../../../components/cart-dropdown"
 import { ChevronDown, Menu, X } from "lucide-react"
 import Crest from "@svg/Crest"
 import s from "./style.module.css"
 import type { Cart } from "@medusajs/types"
-import type { NavItem } from "../header" // You may need to create or adjust this import
+import type { NavItem } from ".." // You may need to create or adjust this import
 
 const MENU = [
   { id: "about", label: "About Us", url: "/about" },
@@ -79,13 +79,13 @@ export default function Nav({ formattedNavData }: NavProps) {
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="2xl"
       classNames={{
-        base: `${s.headerWrap} light`,
+        base: `${s.headerWrap}`,
         wrapper: `${s.header} header top-[-1px] px-[12]`,
         brand: `${s.siteLogo}`,
-        content: `gap-7`,
+        content: `gap-9`,
       }}
     >
-      <NavbarContent className="px-0">
+      <NavbarContent className="px-0 !flex-grow-0 mr-[30]">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close site menu" : "Open site menu"}
           className="sm:hidden"
