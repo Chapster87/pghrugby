@@ -23,10 +23,10 @@ importers:
         version: 2.7.8(framer-motion@12.15.0(@emotion/is-prop-valid@1.2.2)(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106))(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(tailwindcss@3.4.16)(types-react@19.0.0-rc.1)
       '@medusajs/js-sdk':
         specifier: latest
-        version: 2.8.4(awilix@8.0.1)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1))
+        version: 2.8.5(awilix@8.0.1)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1))
       '@medusajs/ui':
         specifier: latest
-        version: 4.0.14(@types/react-dom@19.1.6(types-react@19.0.0-rc.1))(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(typescript@5.7.2)
+        version: 4.0.15(@types/react-dom@19.1.6(types-react@19.0.0-rc.1))(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(typescript@5.7.2)
       '@sanity/icons':
         specifier: ^3.7.0
         version: 3.7.0(react@19.0.0-rc-66855b96-20241106)
@@ -99,10 +99,10 @@ importers:
         version: 3.0.0(postcss@8.4.49)
       '@medusajs/types':
         specifier: latest
-        version: 2.8.4(awilix@8.0.1)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1))
+        version: 2.8.5(awilix@8.0.1)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1))
       '@medusajs/ui-preset':
         specifier: latest
-        version: 2.8.4(tailwindcss@3.4.16)
+        version: 2.8.5(tailwindcss@3.4.16)
       '@portabletext/block-tools':
         specifier: ^1.1.28
         version: 1.1.28(@sanity/types@3.90.0(debug@4.4.0)(types-react@19.0.0-rc.1))(types-react@19.0.0-rc.1)
@@ -2382,17 +2382,17 @@ packages:
   '@marijn/find-cluster-break@1.0.2':
     resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
 
-  '@medusajs/icons@2.8.4':
-    resolution: {integrity: sha512-g6Hc+8eRH4HTlYpW3tyNPdQ6Iym1Lvul/7MVD6ANYn9LCNchVU2HFhYz9m6M+tC96/gMDWRExiVWaW/hexvPTg==}
+  '@medusajs/icons@2.8.5':
+    resolution: {integrity: sha512-ljs+jfgYk7tuJW4kQoCamd+8uHQnpexxS0FGajd6Q1XvwVk+dGMOojyyOnXMqRQE29ezWmeVXSEc/WXJwGW0LA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
 
-  '@medusajs/js-sdk@2.8.4':
-    resolution: {integrity: sha512-G2B/NpXrQl/sry0FotFs4qRpsEaIK2VGQQL5fs49lk1Nt0khWLYc10NtfcEyaSbb2jQI9ese3rocIqQP0McJ1A==}
+  '@medusajs/js-sdk@2.8.5':
+    resolution: {integrity: sha512-p1ZHbNlqVeZ0l0e4CJRZzi7Rc79CZOWz8jG1fsONSm08hrHGJEuU9yTT2mqrTooLEg4dUYuBGqrY3kwFfyWhAg==}
     engines: {node: '>=20'}
 
-  '@medusajs/types@2.8.4':
-    resolution: {integrity: sha512-AMl9XmbMOXk09jwrV2Df1pRVW/Qz74vN2AS0UNFbEBC3YhcFDqTrt4nZpZZrLtckOOcMrR/xG6GgcWvb0vKimw==}
+  '@medusajs/types@2.8.5':
+    resolution: {integrity: sha512-M+hsmU2oVpZtFuG9ZgwY+VenHuafDThlLRyV7Yu9OPO5KcqAblixgTgJtXTqgXiicJV3ElBZ9jFrlgeR9C3dtw==}
     engines: {node: '>=20'}
     peerDependencies:
       awilix: ^8.0.1
@@ -2404,13 +2404,13 @@ packages:
       vite:
         optional: true
 
-  '@medusajs/ui-preset@2.8.4':
-    resolution: {integrity: sha512-6eOuuaPcwyKmNEREiZuyj9lt6aD2gg3as+Utt9UqdsUQH1G5jXuFhiNUbuf/F+ELi+Gfq090p1x/C0BneLFSfw==}
+  '@medusajs/ui-preset@2.8.5':
+    resolution: {integrity: sha512-LVKq/siV8ml0tOOiyu48Ce5FaKBww9E+BnFRQ423YvzgNG7SBXUKHAv1ykILrnHoCJY2qx/9GVodnIxssq8pTg==}
     peerDependencies:
       tailwindcss: '>=3.0.0'
 
-  '@medusajs/ui@4.0.14':
-    resolution: {integrity: sha512-2Abq8r9X/xlzSk3uotiVlHD9ZtfnysNS3e/vpToqGvQeqkyPwLMbqQIIj1WzfnkiI9fKMFhPsgyxwyokQjpjeg==}
+  '@medusajs/ui@4.0.15':
+    resolution: {integrity: sha512-62jLU5OTKbwFt97anvocmbV5lk+ZZYcn3OlRwCjPIHLuYhc14744sxc09Nee1QwoGtqyk7c/sCrr70pxDEv5sQ==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
       react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
@@ -12257,13 +12257,13 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.2': {}
 
-  '@medusajs/icons@2.8.4(react@19.0.0-rc-66855b96-20241106)':
+  '@medusajs/icons@2.8.5(react@19.0.0-rc-66855b96-20241106)':
     dependencies:
       react: 19.0.0-rc-66855b96-20241106
 
-  '@medusajs/js-sdk@2.8.4(awilix@8.0.1)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1))':
+  '@medusajs/js-sdk@2.8.5(awilix@8.0.1)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1))':
     dependencies:
-      '@medusajs/types': 2.8.4(awilix@8.0.1)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1))
+      '@medusajs/types': 2.8.5(awilix@8.0.1)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1))
       fetch-event-stream: 0.1.5
       qs: 6.13.1
     transitivePeerDependencies:
@@ -12271,22 +12271,22 @@ snapshots:
       - ioredis
       - vite
 
-  '@medusajs/types@2.8.4(awilix@8.0.1)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1))':
+  '@medusajs/types@2.8.5(awilix@8.0.1)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1))':
     dependencies:
       awilix: 8.0.1
       bignumber.js: 9.1.2
     optionalDependencies:
       vite: 6.3.5(@types/node@22.15.29)(jiti@1.21.6)(terser@5.37.0)(yaml@2.6.1)
 
-  '@medusajs/ui-preset@2.8.4(tailwindcss@3.4.16)':
+  '@medusajs/ui-preset@2.8.5(tailwindcss@3.4.16)':
     dependencies:
       '@tailwindcss/forms': 0.5.9(tailwindcss@3.4.16)
       tailwindcss: 3.4.16
       tailwindcss-animate: 1.0.7(tailwindcss@3.4.16)
 
-  '@medusajs/ui@4.0.14(@types/react-dom@19.1.6(types-react@19.0.0-rc.1))(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(typescript@5.7.2)':
+  '@medusajs/ui@4.0.15(@types/react-dom@19.1.6(types-react@19.0.0-rc.1))(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(typescript@5.7.2)':
     dependencies:
-      '@medusajs/icons': 2.8.4(react@19.0.0-rc-66855b96-20241106)
+      '@medusajs/icons': 2.8.5(react@19.0.0-rc-66855b96-20241106)
       '@tanstack/react-table': 8.20.5(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
       clsx: 1.2.1
       copy-to-clipboard: 3.3.3

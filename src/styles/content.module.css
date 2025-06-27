@@ -1,0 +1,6 @@
+.contentMain {
+  margin-top: 20px;
+  border-radius: 8px;
+  padding: 30px 20px 20px;
+  @apply bg-white;
+}

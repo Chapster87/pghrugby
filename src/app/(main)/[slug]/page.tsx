@@ -1,11 +1,13 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
+import Image from "next/image"
 import { client } from "../../../sanity/client"
 import PortableText from "@/components/PortableText"
 import { sanityFetch } from "@/sanity/lib/live"
 import { pagesSlugs, pageQuery } from "./pages.query"
 import { resolveOpenGraphImage } from "@/sanity/lib/utils"
+import contentStyles from "@/styles/content.module.css"
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -41,6 +43,11 @@ export async function generateMetadata(
       stega: false,
     }
   )
+
+  if (!data?._id) {
+    return {}
+  }
+
   const previousImages = (await parent).openGraph?.images || []
   const ogImage = resolveOpenGraphImage(data?.coverImage)
 
@@ -48,21 +55,83 @@ export async function generateMetadata(
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
   url.pathname = `/${slug}`
 
+  // Format date for structured data if available
+  const publishDate = data?.date ? new Date(data.date).toISOString() : undefined
+  const modifiedDate = data?.modified
+    ? new Date(data.modified).toISOString()
+    : undefined
+
   return {
+    title: data?.title
+      ? `${data.title} | Pittsburgh Forge Rugby Club`
+      : "Pittsburgh Forge Rugby Club",
+    description:
+      data?.excerpt ||
+      "Pittsburgh Forge Rugby Club - Developing athletes and building community through the sport of rugby",
     authors:
       data?.author?.firstName && data?.author?.lastName
         ? [{ name: `${data.author.firstName} ${data.author.lastName}` }]
         : [],
-    title: `${data?.title} | Pittsburgh Forge Rugby Club`,
-    description: data?.excerpt,
     alternates: {
       canonical: url.toString(),
     },
     openGraph: {
+      title: data?.title || "Pittsburgh Forge Rugby Club",
+      description:
+        data?.excerpt ||
+        "Pittsburgh Forge Rugby Club - Rugby news, matches and community",
+      type: "article",
+      publishedTime: publishDate,
+      modifiedTime: modifiedDate,
+      authors:
+        data?.author?.firstName && data?.author?.lastName
+          ? [`${data.author.firstName} ${data.author.lastName}`]
+          : [],
       images: ogImage ? [ogImage, ...previousImages] : previousImages,
       url: url.toString(),
     },
+    twitter: {
+      card: "summary_large_image",
+      title: data?.title || "Pittsburgh Forge Rugby Club",
+      description:
+        data?.excerpt ||
+        "Pittsburgh Forge Rugby Club - Rugby news, matches and community",
+      images: ogImage ? [ogImage] : undefined,
+    },
   } satisfies Metadata
+}
+
+// JSON-LD schema.org structured data
+function generateStructuredData(data: any) {
+  if (!data) return null
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: data.title,
+    description: data.excerpt || "",
+    image: data.featuredMedia?.asset?.url || "",
+    datePublished: data.date || "",
+    dateModified: data.modified || data.date || "",
+    author: data.author?.name
+      ? {
+          "@type": "Person",
+          name: data.author.name,
+        }
+      : undefined,
+    publisher: {
+      "@type": "Organization",
+      name: "Pittsburgh Forge Rugby Club",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://pghrugby.com/logo.png", // Update with actual logo URL
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://pghrugby.com/${data.slug}`,
+    },
+  }
 }
 
 export default async function Page(props: Props) {
@@ -85,56 +154,77 @@ export default async function Page(props: Props) {
     return notFound()
   }
 
-  console.log("Page data:", data)
+  const structuredData = generateStructuredData(data)
 
   return (
-    <div className="2xl:container px-[12] prose dark:prose-invert">
-      <h2>{data.title}</h2>
-      <ul>
-        <li>
-          <strong>Slug:</strong> {data.slug}
-        </li>
-        <li>
-          <strong>Date:</strong> {data.date}
-        </li>
-        <li>
-          <strong>Modified:</strong> {data.modified}
-        </li>
-        <li>
-          <strong>Status:</strong> {data.status}
-        </li>
-        <li>
-          <strong>Content:</strong>
+    <article
+      className={`${contentStyles.contentMain} light 2xl:container px-4 py-6 mx-auto`}
+    >
+      <div className="prose max-w-none">
+        {/* Structured data for SEO */}
+        {structuredData && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          />
+        )}
+
+        {/* Featured image with proper alt text */}
+        {data.featuredMedia?.asset?.url && (
+          <div className="mb-6 relative aspect-video w-full">
+            <Image
+              src={data.featuredMedia.asset.url}
+              alt={data.featuredMedia.alt || data.title || "Featured image"}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
+              className="object-cover rounded-lg"
+            />
+          </div>
+        )}
+
+        <header className="mb-8">
+          <h1>{data.title}</h1>
+
+          {data.excerpt && (
+            <div className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
+              <PortableText value={data.excerpt} />
+            </div>
+          )}
+
+          <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
+            {data.date && (
+              <time dateTime={new Date(data.date).toISOString()}>
+                Published: {new Date(data.date).toLocaleDateString()}
+              </time>
+            )}
+
+            {data.modified && data.date !== data.modified && (
+              <time dateTime={new Date(data.modified).toISOString()}>
+                Updated: {new Date(data.modified).toLocaleDateString()}
+              </time>
+            )}
+
+            {data.author?.name && (
+              <address className="not-italic">By: {data.author.name}</address>
+            )}
+
+            {data.status && (
+              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded text-xs">
+                {data.status}
+              </span>
+            )}
+          </div>
+        </header>
+
+        <div className="">
           {data.content?.length ? (
             <PortableText value={data.content} />
           ) : (
-            <span>None</span>
+            <p>No content available.</p>
           )}
-        </li>
-        <li>
-          <strong>Excerpt:</strong>
-          {data.excerpt?.length ? (
-            <PortableText value={data.excerpt} />
-          ) : (
-            <span>None</span>
-          )}
-        </li>
-        <li>
-          <strong>Featured Media:</strong>
-          {data.featuredMedia?.asset?.url ? (
-            <img
-              src={data.featuredMedia.asset.url}
-              alt={data.featuredMedia.alt || data.title}
-              style={{ maxWidth: "400px" }}
-            />
-          ) : (
-            <span>None</span>
-          )}
-        </li>
-        <li>
-          <strong>Author:</strong> {data.author?.name || "None"}
-        </li>
-      </ul>
-    </div>
+        </div>
+      </div>
+    </article>
   )
 }
