@@ -10,7 +10,7 @@ const EmptyCartMessage = () => {
     >
       <Heading
         level="h1"
-        className="flex flex-row text-3xl-regular gap-x-2 items-baseline"
+        className="flex flex-row text-[32px] leading-[44px] font-normal gap-x-2 items-baseline"
       >
         Cart
       </Heading>

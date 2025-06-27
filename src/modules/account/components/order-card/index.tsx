@@ -25,7 +25,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
 
   return (
     <div className="bg-white flex flex-col" data-testid="order-card">
-      <div className="uppercase text-large-semi mb-1">
+      <div className="uppercase text-base leading-6 font-semibold mb-1">
         #<span data-testid="order-display-id">{order.display_id}</span>
       </div>
       <div className="flex items-center divide-x divide-gray-200 text-ui-fg-base">

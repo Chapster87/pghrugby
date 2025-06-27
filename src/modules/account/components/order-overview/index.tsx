@@ -27,7 +27,7 @@ const OrderOverview = ({ orders }: { orders: HttpTypes.StoreOrder[] }) => {
       className="w-full flex flex-col items-center gap-y-4"
       data-testid="no-orders-container"
     >
-      <h2 className="text-large-semi">Nothing to see here</h2>
+      <h2 className="text-base leading-6 font-semibold">Nothing to see here</h2>
       <p>You don&apos;t have any orders yet, let us change that {":)"}</p>
       <div className="mt-4">
         <LocalizedClientLink href="/" passHref>

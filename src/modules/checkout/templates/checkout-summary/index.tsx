@@ -12,7 +12,7 @@ const CheckoutSummary = ({ cart }: { cart: any }) => {
         <Divider className="my-6 sm:hidden" />
         <Heading
           level="h2"
-          className="flex flex-row text-3xl-regular items-baseline"
+          className="flex flex-row text-[32px] leading-[44px] font-normal items-baseline"
         >
           In your Cart
         </Heading>

@@ -11,7 +11,10 @@ type ShippingDetailsProps = {
 const ShippingDetails = ({ order }: ShippingDetailsProps) => {
   return (
     <div>
-      <Heading level="h2" className="flex flex-row text-3xl-regular my-6">
+      <Heading
+        level="h2"
+        className="flex flex-row text-[32px] leading-[44px] font-normal my-6"
+      >
         Delivery
       </Heading>
       <div className="flex items-start gap-x-8">

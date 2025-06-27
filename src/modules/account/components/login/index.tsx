@@ -17,7 +17,9 @@ const Login = ({ setCurrentView }: Props) => {
       className="max-w-sm w-full flex flex-col items-center"
       data-testid="login-page"
     >
-      <h1 className="text-large-semi uppercase mb-6">Welcome back</h1>
+      <h1 className="text-base leading-6 font-semibold uppercase mb-6">
+        Welcome back
+      </h1>
       <p className="text-center text-ui-fg-base mb-8">
         Sign in to access an enhanced shopping experience.
       </p>

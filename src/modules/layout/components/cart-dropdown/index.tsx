@@ -104,7 +104,7 @@ const CartDropdown = ({
             data-testid="nav-cart-dropdown"
           >
             <div className="p-4 flex items-center justify-center">
-              <h3 className="text-large-semi">Cart</h3>
+              <h3 className="text-base leading-6 font-semibold">Cart</h3>
             </div>
             {cartState && cartState.items?.length ? (
               <>
@@ -182,7 +182,7 @@ const CartDropdown = ({
                       <span className="font-normal">(excl. taxes)</span>
                     </span>
                     <span
-                      className="text-large-semi"
+                      className="text-base leading-6 font-semibold"
                       data-testid="cart-subtotal"
                       data-value={subtotal}
                     >

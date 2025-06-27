@@ -20,7 +20,7 @@ const Register = ({ setCurrentView }: Props) => {
       className="max-w-sm flex flex-col items-center"
       data-testid="register-page"
     >
-      <h1 className="text-large-semi uppercase mb-6">
+      <h1 className="text-base leading-6 font-semibold uppercase mb-6">
         Become a Medusa Store Member
       </h1>
       <p className="text-center text-ui-fg-base mb-4">
