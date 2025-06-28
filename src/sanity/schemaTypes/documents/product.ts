@@ -42,6 +42,13 @@ const productSchema: DocumentDefinition = {
       name: "addons",
       type: "object",
     },
+    {
+      name: "form",
+      title: "Form",
+      type: "reference",
+      to: [{ type: "formType" }],
+      description: "Attach a form to this product (optional)",
+    },
   ],
   name: "product",
   preview: {
@@ -53,7 +60,7 @@ const productSchema: DocumentDefinition = {
   type: "document",
   groups: [
     {
-      default: true,
+      default: false,
       // @ts-ignore
       icon: ComposeIcon,
       name: "content",

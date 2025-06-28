@@ -12,7 +12,8 @@ import { useParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
-import GolfOutingForm from "@modules/products/components/product-forms/golf-outing"
+import ProductForm from "@modules/products/components/product-form"
+import GolfOutingForm from "@modules/products/components/product-form/golf-outing"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -36,6 +37,7 @@ export default function ProductActions({
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
   const [meta, setMeta] = useState<Record<string, any>>({})
+  const [formValid, setFormValid] = useState(true)
   const countryCode = useParams().countryCode as string
 
   // If there is only 1 variant, preselect the options
@@ -156,9 +158,16 @@ export default function ProductActions({
         </div>
         <ProductPrice product={product} variant={selectedVariant} />
 
-        {product.handle === "golf-outing" && (
+        <ProductForm
+          productId={product.id}
+          meta={meta}
+          changeForm={handleChange}
+          setFormValid={setFormValid}
+        />
+
+        {/* {product.handle === "golf-outing" && (
           <GolfOutingForm meta={meta} changeForm={handleChange} />
-        )}
+        )} */}
 
         <Button
           onPress={handleAddToCart}
@@ -167,7 +176,8 @@ export default function ProductActions({
             !selectedVariant ||
             !!disabled ||
             isAdding ||
-            !isValidVariant
+            !isValidVariant ||
+            !formValid
           }
           color="primary"
           className="w-full h-10"
@@ -178,6 +188,8 @@ export default function ProductActions({
             ? "Select variant"
             : !inStock || !isValidVariant
             ? "Out of stock"
+            : !formValid
+            ? "Complete required fields"
             : "Add to cart"}
         </Button>
         <MobileActions

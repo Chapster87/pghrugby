@@ -15,6 +15,8 @@ import { tagType } from "./tagType"
 import { portableTextType } from "./portableTextType"
 import { buttonBlockType } from "./buttonBlockType"
 import { buttonGroupType } from "./buttonGroupType"
+import formType from "./formType"
+import formFieldType from "./formFieldType"
 
 export const schema: SchemaPluginOptions = {
   types: [
@@ -34,6 +36,8 @@ export const schema: SchemaPluginOptions = {
     navigationSchema,
     buttonBlockType,
     buttonGroupType,
+    formType,
+    formFieldType,
   ],
   templates: (templates) =>
     templates.filter((template) => template.schemaType !== "product"),
