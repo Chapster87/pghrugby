@@ -1,6 +1,6 @@
 import { defineType } from "sanity"
 
-export const buttonGroupType = defineType({
+export const buttonGroup = defineType({
   name: "buttonGroup",
   title: "Button Group",
   type: "object",

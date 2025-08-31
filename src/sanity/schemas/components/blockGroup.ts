@@ -1,6 +1,6 @@
 import { defineType } from "sanity"
 
-export const blockGroupType = defineType({
+export const blockGroup = defineType({
   name: "blockGroup",
   title: "Block Group",
   type: "object",

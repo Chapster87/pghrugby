@@ -1,17 +1,36 @@
 import { ComposeIcon } from "@sanity/icons"
-import { DocumentDefinition } from "sanity"
+import { defineField, defineType } from "sanity"
 
-const productSchema: DocumentDefinition = {
-  fields: [
+export const product = defineType({
+  name: "product",
+  title: "Product Page",
+  type: "document",
+  groups: [
     {
+      default: false,
+      icon: ComposeIcon,
+      name: "content",
+      title: "Content",
+    },
+  ],
+  fields: [
+    defineField({
       name: "title",
       type: "string",
-    },
-    {
+    }),
+    defineField({
+      name: "slug",
+      type: "slug",
+      readOnly: true,
+    }),
+    defineField({
       group: "content",
       name: "specs",
+      type: "array",
       of: [
         {
+          name: "spec",
+          type: "object",
           fields: [
             { name: "lang", title: "Language", type: "string" },
             { name: "title", title: "Title", type: "string" },
@@ -22,51 +41,34 @@ const productSchema: DocumentDefinition = {
               type: "text",
             },
           ],
-          name: "spec",
-          type: "object",
         },
       ],
-      type: "array",
-    },
-    {
+    }),
+    defineField({
+      name: "addons",
+      type: "object",
       fields: [
         { name: "title", title: "Title", type: "string" },
         {
           name: "products",
-          of: [{ to: [{ type: "product" }], type: "reference" }],
           title: "Addons",
           type: "array",
+          of: [{ type: "reference", to: [{ type: "product" }] }],
           validation: (Rule) => Rule.max(3),
         },
       ],
-      name: "addons",
-      type: "object",
-    },
-    {
+    }),
+    defineField({
       name: "form",
       title: "Form",
       type: "reference",
       to: [{ type: "formType" }],
       description: "Attach a form to this product (optional)",
-    },
+    }),
   ],
-  name: "product",
   preview: {
     select: {
       title: "title",
     },
   },
-  title: "Product Page",
-  type: "document",
-  groups: [
-    {
-      default: false,
-      // @ts-ignore
-      icon: ComposeIcon,
-      name: "content",
-      title: "Content",
-    },
-  ],
-}
-
-export default productSchema
+})

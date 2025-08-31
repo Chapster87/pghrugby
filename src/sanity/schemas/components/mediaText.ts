@@ -1,6 +1,6 @@
 import { defineType } from "sanity"
 
-export const mediaTextType = defineType({
+export const mediaText = defineType({
   name: "mediaText",
   title: "Media & Text",
   type: "object",

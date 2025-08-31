@@ -1,7 +1,7 @@
 import { DocumentsIcon } from "@sanity/icons"
 import { defineField, defineType } from "sanity"
 
-const navigationSchema = defineType({
+export const navigation = defineType({
   name: "navigation",
   title: "Navigation",
   type: "document",
@@ -219,5 +219,3 @@ const navigationSchema = defineType({
     },
   },
 })
-
-export default navigationSchema

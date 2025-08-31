@@ -1,6 +1,6 @@
 // Sanity schema for a formField type with various HTML input props
 
-export default {
+export const formField = {
   name: "formFieldType",
   title: "Form Field",
   type: "object",

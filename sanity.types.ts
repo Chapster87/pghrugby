@@ -13,6 +13,138 @@
  */
 
 // Source: schema.json
+export type PortableText = Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>
+        text?: string
+        _type: "span"
+        _key: string
+      }>
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote"
+      listItem?: "bullet" | "number"
+      markDefs?: Array<{
+        href?: string
+        _type: "link"
+        _key: string
+      }>
+      level?: number
+      _type: "block"
+      _key: string
+    }
+  | ({
+      _key: string
+    } & BlockGroup)
+  | {
+      asset?: {
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      _type: "image"
+      _key: string
+    }
+  | {
+      asset?: {
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      caption?: string
+      _type: "imageWithCaption"
+      _key: string
+    }
+  | ({
+      _key: string
+    } & MediaText)
+  | ({
+      _key: string
+    } & Columns)
+  | ({
+      _key: string
+    } & Button)
+  | ({
+      _key: string
+    } & ButtonGroup)
+>
+
+export type MediaText = {
+  _type: "mediaText"
+  image?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  text?: PortableText
+}
+
+export type ImageWithCaption = {
+  _type: "imageWithCaption"
+  asset?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+  }
+  media?: unknown
+  hotspot?: SanityImageHotspot
+  crop?: SanityImageCrop
+  caption?: string
+}
+
+export type FormFieldType = {
+  _type: "formFieldType"
+  label?: string
+  name?: string
+  type?:
+    | "text"
+    | "email"
+    | "password"
+    | "number"
+    | "textarea"
+    | "select"
+    | "checkbox"
+    | "radio"
+    | "date"
+  placeholder?: string
+  required?: boolean
+  options?: Array<string>
+  defaultValue?: string
+  helpText?: string
+  minLength?: number
+  maxLength?: number
+  pattern?: string
+}
+
+export type Column = {
+  _type: "column"
+  content?: PortableText
+}
+
+export type Columns = {
+  _type: "columns"
+  columns?: Array<
+    {
+      _key: string
+    } & Column
+  >
+}
+
 export type ButtonGroup = {
   _type: "buttonGroup"
   buttons?: Array<
@@ -29,6 +161,157 @@ export type Button = {
   style?: string
   target?: "_self" | "_blank"
   rel?: string
+}
+
+export type BlockGroup = {
+  _type: "blockGroup"
+  children?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: "span"
+          _key: string
+        }>
+        style?:
+          | "normal"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "blockquote"
+        listItem?: "bullet" | "number"
+        markDefs?: Array<{
+          href?: string
+          _type: "link"
+          _key: string
+        }>
+        level?: number
+        _type: "block"
+        _key: string
+      }
+    | ({
+        _key: string
+      } & BlockGroup)
+    | {
+        asset?: {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+        }
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        _type: "image"
+        _key: string
+      }
+    | ({
+        _key: string
+      } & ImageWithCaption)
+    | ({
+        _key: string
+      } & MediaText)
+    | ({
+        _key: string
+      } & Columns)
+    | ({
+        _key: string
+      } & Button)
+    | ({
+        _key: string
+      } & ButtonGroup)
+  >
+}
+
+export type Match = {
+  _id: string
+  _type: "match"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  eventDateTime?: string
+  league?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "league"
+  }
+  division?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "division"
+  }
+  matchType?: "competitive" | "friendly"
+  homeTeam?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "team"
+  }
+  awayTeam?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "team"
+  }
+}
+
+export type Team = {
+  _id: string
+  _type: "team"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  teamName?: string
+  teamLogo?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  league?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "league"
+  }
+  division?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "division"
+  }
+}
+
+export type Division = {
+  _id: string
+  _type: "division"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
+}
+
+export type League = {
+  _id: string
+  _type: "league"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
 }
 
 export type Navigation = {
@@ -170,6 +453,7 @@ export type Product = {
   _updatedAt: string
   _rev: string
   title?: string
+  slug?: Slug
   specs?: Array<{
     lang?: string
     title?: string
@@ -187,74 +471,111 @@ export type Product = {
       [internalGroqTypeReferenceTo]?: "product"
     }>
   }
+  form?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "formType"
+  }
 }
 
-export type PortableText = Array<
-  | {
-      children?: Array<{
-        marks?: Array<string>
-        text?: string
-        _type: "span"
-        _key: string
-      }>
-      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote"
-      listItem?: "bullet" | "number"
-      markDefs?: Array<{
-        href?: string
-        _type: "link"
-        _key: string
-      }>
-      level?: number
-      _type: "block"
-      _key: string
-    }
-  | ({
-      _key: string
-    } & BlockGroup)
-  | {
-      asset?: {
-        _ref: string
-        _type: "reference"
-        _weak?: boolean
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-      }
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      _type: "image"
-      _key: string
-    }
-  | {
-      asset?: {
-        _ref: string
-        _type: "reference"
-        _weak?: boolean
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-      }
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      caption?: string
-      _type: "imageWithCaption"
-      _key: string
-    }
-  | ({
-      _key: string
-    } & MediaText)
-  | ({
-      _key: string
-    } & Columns)
-  | ({
-      _key: string
-    } & Button)
-  | ({
-      _key: string
-    } & ButtonGroup)
->
+export type FormType = {
+  _id: string
+  _type: "formType"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  formFields?: Array<{
+    label?: string
+    fieldType?: "text" | "email" | "textarea" | "select" | "checkbox"
+    required?: boolean
+    options?: Array<string>
+    fieldName?: string
+    placeholder?: string
+    _type: "formField"
+    _key: string
+  }>
+}
 
-export type MediaText = {
-  _type: "mediaText"
-  image?: {
+export type Tag = {
+  _id: string
+  _type: "tag"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
+}
+
+export type Calendar = {
+  _type: "calendar"
+  title?: string
+  events?: Array<{
+    name?: string
+    eventDateTime?: string
+    league?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "league"
+    }
+    division?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "division"
+    }
+    matchType?: "competitive" | "friendly"
+    homeTeam?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "team"
+    }
+    awayTeam?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "team"
+    }
+    _type: "match"
+    _key: string
+  }>
+}
+
+export type Category = {
+  _id: string
+  _type: "category"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
+}
+
+export type Page = {
+  _id: string
+  _type: "page"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  slug?: Slug
+  date?: string
+  modified?: string
+  status?:
+    | "publish"
+    | "future"
+    | "draft"
+    | "pending"
+    | "private"
+    | "trash"
+    | "auto-draft"
+    | "inherit"
+  content?: PortableText
+  excerpt?: PortableText
+  featuredMedia?: {
     asset?: {
       _ref: string
       _type: "reference"
@@ -266,31 +587,12 @@ export type MediaText = {
     crop?: SanityImageCrop
     _type: "image"
   }
-  text?: PortableText
-}
-
-export type ImageWithCaption = {
-  _type: "imageWithCaption"
-  asset?: {
+  author?: {
     _ref: string
     _type: "reference"
     _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    [internalGroqTypeReferenceTo]?: "author"
   }
-  media?: unknown
-  hotspot?: SanityImageHotspot
-  crop?: SanityImageCrop
-  caption?: string
-}
-
-export type Tag = {
-  _id: string
-  _type: "tag"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: string
-  slug?: Slug
 }
 
 export type Post = {
@@ -347,134 +649,6 @@ export type Post = {
     _key: string
     [internalGroqTypeReferenceTo]?: "tag"
   }>
-}
-
-export type Page = {
-  _id: string
-  _type: "page"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  date?: string
-  modified?: string
-  status?:
-    | "publish"
-    | "future"
-    | "draft"
-    | "pending"
-    | "private"
-    | "trash"
-    | "auto-draft"
-    | "inherit"
-  content?: PortableText
-  excerpt?: PortableText
-  featuredMedia?: {
-    asset?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: "image"
-  }
-  author?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "author"
-  }
-}
-
-export type Column = {
-  _type: "column"
-  content?: PortableText
-}
-
-export type Columns = {
-  _type: "columns"
-  columns?: Array<
-    {
-      _key: string
-    } & Column
-  >
-}
-
-export type Category = {
-  _id: string
-  _type: "category"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: string
-  slug?: Slug
-}
-
-export type BlockGroup = {
-  _type: "blockGroup"
-  children?: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: "span"
-          _key: string
-        }>
-        style?:
-          | "normal"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "blockquote"
-        listItem?: "bullet" | "number"
-        markDefs?: Array<{
-          href?: string
-          _type: "link"
-          _key: string
-        }>
-        level?: number
-        _type: "block"
-        _key: string
-      }
-    | ({
-        _key: string
-      } & BlockGroup)
-    | {
-        asset?: {
-          _ref: string
-          _type: "reference"
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-        }
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        _type: "image"
-        _key: string
-      }
-    | ({
-        _key: string
-      } & ImageWithCaption)
-    | ({
-        _key: string
-      } & MediaText)
-    | ({
-        _key: string
-      } & Columns)
-    | ({
-        _key: string
-      } & Button)
-    | ({
-        _key: string
-      } & ButtonGroup)
-  >
 }
 
 export type Author = {
@@ -620,21 +794,28 @@ export type SanityAssetSourceData = {
 }
 
 export type AllSanitySchemaTypes =
-  | ButtonGroup
-  | Button
-  | Navigation
-  | Settings
-  | Product
   | PortableText
   | MediaText
   | ImageWithCaption
-  | Tag
-  | Post
-  | Page
+  | FormFieldType
   | Column
   | Columns
-  | Category
+  | ButtonGroup
+  | Button
   | BlockGroup
+  | Match
+  | Team
+  | Division
+  | League
+  | Navigation
+  | Settings
+  | Product
+  | FormType
+  | Tag
+  | Calendar
+  | Category
+  | Page
+  | Post
   | Author
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -885,34 +1066,20 @@ export type PostPagesSlugsResult = Array<{
 // Query: *[_type == "navigation"] | order(publishedAt desc)[0] {    mainNav[] {      item->{_id, title, slug},      customLink,      overrideTitle,      openInNewTab,      submenu[]{        item->{_id, title, slug},        customLink,        overrideTitle,        openInNewTab      }    },    footerNav[] {      item->{_id, title, slug},      customLink,      overrideTitle,      openInNewTab,      submenu[]{        _type == "reference" => @->{_id, title, slug},        _type == "object" => {          item->{_id, title, slug},          customLink,          overrideTitle,          openInNewTab        }      }    }  }
 export type NavQueryResult = {
   mainNav: Array<{
-    item:
-      | {
-          _id: string
-          title: string | null
-          slug: null
-        }
-      | {
-          _id: string
-          title: string | null
-          slug: Slug | null
-        }
-      | null
+    item: {
+      _id: string
+      title: string | null
+      slug: Slug | null
+    } | null
     customLink: string | null
     overrideTitle: string | null
     openInNewTab: boolean | null
     submenu: Array<{
-      item:
-        | {
-            _id: string
-            title: string | null
-            slug: null
-          }
-        | {
-            _id: string
-            title: string | null
-            slug: Slug | null
-          }
-        | null
+      item: {
+        _id: string
+        title: string | null
+        slug: Slug | null
+      } | null
       customLink: string | null
       overrideTitle: string | null
       openInNewTab: boolean | null

@@ -1,14 +1,16 @@
-export default {
+import { defineField, defineType } from "sanity"
+
+export const form = defineType({
   name: "formType",
   title: "Form",
   type: "document",
   fields: [
-    {
+    defineField({
       name: "title",
       title: "Title",
       type: "string",
-    },
-    {
+    }),
+    defineField({
       name: "formFields",
       title: "Form Fields",
       type: "array",
@@ -18,13 +20,13 @@ export default {
           name: "formField",
           title: "Form Field",
           fields: [
-            {
+            defineField({
               name: "label",
               title: "Label",
               type: "string",
               validation: (Rule: any) => Rule.required(),
-            },
-            {
+            }),
+            defineField({
               name: "fieldType",
               title: "Field Type",
               type: "string",
@@ -37,38 +39,38 @@ export default {
                   { title: "Checkbox", value: "checkbox" },
                 ],
               },
-            },
-            {
+            }),
+            defineField({
               name: "required",
               title: "Required",
               type: "boolean",
-            },
-            {
+            }),
+            defineField({
               name: "options",
               title: "Options",
               type: "array",
               of: [{ type: "string" }],
               hidden: (context: { parent: any }) =>
                 context?.parent?.fieldType !== "select",
-            },
-            {
+            }),
+            defineField({
               name: "fieldName",
               title: "Field Name",
               type: "string",
               description: "The input name attribute.",
               validation: (Rule: any) => Rule.required(),
-            },
-            {
+            }),
+            defineField({
               name: "placeholder",
               title: "Placeholder",
               type: "string",
               description:
                 "Optional. Placeholder text for the input. If left blank, will default to 'Enter' and the Field label.",
-            },
+            }),
           ],
         },
       ],
-    },
+    }),
   ],
   preview: {
     select: {
@@ -84,4 +86,4 @@ export default {
       }
     },
   },
-}
+})

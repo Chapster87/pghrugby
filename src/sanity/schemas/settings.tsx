@@ -63,7 +63,7 @@ const demo = {
  * Learn more: https://www.sanity.io/docs/create-a-link-to-a-single-edit-page-in-your-main-document-type-list
  */
 
-const settingsSchema = defineType({
+export const settings = defineType({
   name: "settings",
   title: "Settings",
   type: "document",
@@ -118,9 +118,6 @@ const settingsSchema = defineType({
       description: "Displayed on social cards and search engine results.",
       options: {
         hotspot: true,
-        aiAssist: {
-          imageDescriptionField: "alt",
-        },
       },
       fields: [
         defineField({
@@ -160,5 +157,3 @@ const settingsSchema = defineType({
     },
   },
 })
-
-export default settingsSchema

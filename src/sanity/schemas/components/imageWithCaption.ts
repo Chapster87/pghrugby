@@ -1,6 +1,6 @@
 import { defineType } from "sanity"
 
-export const imageWithCaptionType = defineType({
+export const imageWithCaption = defineType({
   name: "imageWithCaption",
   title: "Image (with caption)",
   type: "image",
