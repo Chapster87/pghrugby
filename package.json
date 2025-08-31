@@ -20,6 +20,7 @@
     "@heroui/react": "^2.7.8",
     "@medusajs/js-sdk": "latest",
     "@medusajs/ui": "latest",
+    "@radix-ui/react-navigation-menu": "^1.2.13",
     "@sanity/icons": "^3.7.0",
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^3.90.0",

@@ -1,27 +1,14 @@
 "use client"
 
 import { Suspense, useEffect, useState } from "react"
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
-} from "@heroui/react"
+import * as NavigationMenu from "@radix-ui/react-navigation-menu"
 import Link from "next/link"
 import { HttpTypes } from "@medusajs/types"
 import CartDropdown from "../../../components/cart-dropdown"
 import { ChevronDown, Menu, X } from "lucide-react"
 import Crest from "@svg/Crest"
 import s from "./style.module.css"
-import type { Cart } from "@medusajs/types"
+
 import type { NavItem } from ".." // You may need to create or adjust this import
 
 const MENU = [
@@ -46,7 +33,7 @@ interface NavProps {
     settings?: {
       siteTitle?: string
     }
-    cart?: Cart | null
+    cart?: any
     navigation?: NavItem[]
   }
 }
@@ -74,83 +61,69 @@ export default function Nav({ formattedNavData }: NavProps) {
   }, [])
 
   return (
-    <Navbar
-      height="72px"
-      onMenuOpenChange={setIsMenuOpen}
-      maxWidth="2xl"
-      classNames={{
-        base: `${s.headerWrap}`,
-        wrapper: `${s.header} header top-[-1px] px-[12]`,
-        brand: `${s.siteLogo}`,
-        content: `gap-9`,
-      }}
-    >
-      <NavbarContent className="px-0 !flex-grow-0 mr-[30]">
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close site menu" : "Open site menu"}
-          className="sm:hidden"
-          icon={isMenuOpen ? <X /> : <Menu />}
-        />
-        <NavbarBrand>
-          <Link href="/" aria-label="View Homepage">
-            <Crest className={s.crest} />
-            <div className="sr-only">{siteTitle}</div>
-          </Link>
-        </NavbarBrand>
-      </NavbarContent>
-      <NavbarContent className="hidden sm:flex" justify="center">
-        {navigation &&
-          navigation.map((item, index) =>
-            item.submenu ? (
-              <Dropdown key={`${item.id}-${index}`}>
-                <NavbarItem>
-                  <DropdownTrigger>
-                    <Button
-                      disableRipple
-                      disableAnimation
-                      className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-                      endContent={<ChevronDown />}
-                      size="lg"
+    <nav className={s.headerWrap}>
+      <div
+        className={`${s.header} header top-[-1px] px-[12] flex items-center justify-between`}
+      >
+        <Link href="/" aria-label="View Homepage" className={s.siteLogo}>
+          <Crest className={s.crest} />
+          <div className="sr-only">{siteTitle}</div>
+        </Link>
+        <NavigationMenu.Root className="hidden sm:flex gap-9 flex-1 justify-center">
+          <NavigationMenu.List className="flex gap-6">
+            {navigation &&
+              navigation.map((item, index) =>
+                item.submenu && item.submenu.length > 0 ? (
+                  <NavigationMenu.Item
+                    key={`${item.label}-${index}`}
+                    className="relative"
+                  >
+                    <NavigationMenu.Trigger
+                      className={s.navLink + " flex items-center gap-1 group"}
                     >
-                      <span className={s.navLink}>{item.label}</span>
-                    </Button>
-                  </DropdownTrigger>
-                </NavbarItem>
-                <DropdownMenu
-                  aria-label={`${item.label} submenu`}
-                  itemClasses={{
-                    base: "gap-2",
-                  }}
-                >
-                  {item.submenu.map((sub, subIdx) => (
-                    <DropdownItem key={subIdx}>
-                      <Link href={sub.url} className={s.navLink}>
-                        {sub.label}
+                      {item.label}
+                      <span className="transition-transform duration-200 ml-1 group-data-[state=open]:rotate-180">
+                        <ChevronDown className="w-4 h-4" />
+                      </span>
+                    </NavigationMenu.Trigger>
+                    <NavigationMenu.Content className="absolute left-0 top-full bg-black shadow-lg rounded-md mt-2 z-10 min-w-[180px]">
+                      <ul className="flex flex-col gap-2 p-2">
+                        {item.submenu.map((sub, subIdx) => (
+                          <li key={subIdx}>
+                            <Link
+                              href={sub.url}
+                              className={
+                                s.navLink +
+                                " block w-full px-3 py-2 hover:bg-gray-100 rounded"
+                              }
+                            >
+                              {sub.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenu.Content>
+                  </NavigationMenu.Item>
+                ) : (
+                  <NavigationMenu.Item key={`${item.label}-${index}}`}>
+                    <NavigationMenu.Link asChild>
+                      <Link href={item.url} className={s.navLink}>
+                        {item.label}
                       </Link>
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-            ) : (
-              <NavbarItem key={`${item.id}-${index}`}>
-                <Link href={item.url} className={s.navLink}>
-                  {item.label}
-                </Link>
-              </NavbarItem>
-            )
-          )}
-      </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
+                    </NavigationMenu.Link>
+                  </NavigationMenu.Item>
+                )
+              )}
+          </NavigationMenu.List>
+        </NavigationMenu.Root>
+        <div className="flex items-center gap-4">
           <Link
             href="/account"
-            className={s.navLink}
+            className={s.navLink + " hidden lg:inline-block"}
             data-testid="nav-account-link"
           >
             Account
           </Link>
-        </NavbarItem>
-        <NavbarItem>
           <Suspense
             fallback={
               <Link
@@ -164,28 +137,104 @@ export default function Nav({ formattedNavData }: NavProps) {
           >
             <CartDropdown cart={cart} />
           </Suspense>
-        </NavbarItem>
-      </NavbarContent>
-      <NavbarMenu>
-        {navigation &&
-          navigation.map((item, index) => (
-            <NavbarMenuItem key={`${item.id}-${index}`}>
+        </div>
+      </div>
+      {/* Mobile menu toggle and menu */}
+      <div className="sm:hidden flex items-center justify-between px-4 py-2">
+        <button
+          aria-label={isMenuOpen ? "Close site menu" : "Open site menu"}
+          onClick={() => setIsMenuOpen((v) => !v)}
+          className="p-2 rounded focus:outline-none"
+        >
+          {isMenuOpen ? <X /> : <Menu />}
+        </button>
+        <Link href="/" aria-label="View Homepage" className={s.siteLogo}>
+          <Crest className={s.crest} />
+        </Link>
+      </div>
+      {isMenuOpen && (
+        <div className="sm:hidden bg-white shadow-lg px-4 py-4">
+          <ul className="flex flex-col gap-4">
+            {navigation &&
+              navigation.map((item, index) =>
+                item.submenu ? (
+                  <li key={`${item.label}-${index}`} className="relative">
+                    <details>
+                      <summary
+                        className={
+                          s.navLink +
+                          " flex items-center gap-1 cursor-pointer select-none group"
+                        }
+                      >
+                        {item.label}
+                        <span className="transition-transform duration-200 ml-1 group-open:rotate-180">
+                          <ChevronDown className="w-4 h-4" />
+                        </span>
+                      </summary>
+                      <ul className="flex flex-col gap-2 pl-4 mt-2">
+                        {item.submenu.map((sub, subIdx) => (
+                          <li key={subIdx}>
+                            <Link
+                              href={sub.url}
+                              className={
+                                s.navLink +
+                                " block w-full px-3 py-2 hover:bg-gray-100 rounded"
+                              }
+                            >
+                              {sub.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  </li>
+                ) : (
+                  <li key={`${item.label}-${index}}`}>
+                    <Link
+                      href={item.url}
+                      className={
+                        s.navLink +
+                        " block w-full px-3 py-2 hover:bg-gray-100 rounded"
+                      }
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                )
+              )}
+            <li>
               <Link
-                className="w-full"
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === MENU.length - 1
-                    ? "danger"
-                    : "foreground"
+                href="/account"
+                className={
+                  s.navLink +
+                  " block w-full px-3 py-2 hover:bg-gray-100 rounded"
                 }
-                href="#"
+                data-testid="nav-account-link"
               >
-                {item.label}
+                Account
               </Link>
-            </NavbarMenuItem>
-          ))}
-      </NavbarMenu>
-    </Navbar>
+            </li>
+            <li>
+              <Suspense
+                fallback={
+                  <Link
+                    href="/cart"
+                    className={
+                      s.navLink +
+                      " block w-full px-3 py-2 hover:bg-gray-100 rounded"
+                    }
+                    data-testid="nav-cart-link"
+                  >
+                    Cart (0)
+                  </Link>
+                }
+              >
+                <CartDropdown cart={cart} />
+              </Suspense>
+            </li>
+          </ul>
+        </div>
+      )}
+    </nav>
   )
 }

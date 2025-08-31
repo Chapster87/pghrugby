@@ -41,7 +41,7 @@ export default async function Header() {
           submenu:
             menu.submenu?.map(
               (subItem: any): SubMenuItem => ({
-                label: menu.overrideTitle || subItem.item?.title,
+                label: subItem.overrideTitle || subItem.item?.title,
                 url: subItem.item?.slug?.current
                   ? `/${subItem.item.slug.current}`
                   : "#",
