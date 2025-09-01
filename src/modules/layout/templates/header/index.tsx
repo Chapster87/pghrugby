@@ -1,5 +1,6 @@
-import HeaderTop from "./header-top"
-import Nav from "./nav"
+import HeaderTop from "./top"
+import HeaderMain from "./main"
+import { MainNav, MobileNav } from "./nav"
 import { client } from "@/sanity/lib/client"
 import { navQuery } from "./nav.query"
 import { retrieveCart } from "@lib/data/cart"
@@ -19,8 +20,6 @@ export interface NavItem extends SubMenuItem {
 }
 
 interface FormattedNavData {
-  settings: any
-  cart: any
   navigation: NavItem[]
 }
 
@@ -28,10 +27,8 @@ export default async function Header() {
   const settings = await client.fetch(settingsQuery)
   const navigation = await client.fetch(navQuery)
   const cart = await retrieveCart().catch(() => null)
-
+  const siteTitle = settings?.title || "Pittsburgh Rugby"
   const formattedNavData: FormattedNavData = {
-    settings,
-    cart,
     navigation:
       navigation?.mainNav?.map((menu: any): NavItem => {
         return {
@@ -55,7 +52,12 @@ export default async function Header() {
   return (
     <>
       <HeaderTop />
-      <Nav formattedNavData={formattedNavData} />
+      <HeaderMain
+        title={siteTitle}
+        mainNav={<MainNav formattedNavData={formattedNavData} />}
+        mobileNav={<MobileNav formattedNavData={formattedNavData} />}
+        cart={cart}
+      />
     </>
   )
 }

@@ -26,11 +26,11 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en" className={`${lato.className}`}>
       <body>
         <Providers>
-          <main className="relative">
+          <div className="relative">
             <BreakpointIndicator />
             <SiteBackground />
             <div className="relative z-[1]">{props.children}</div>
-          </main>
+          </div>
         </Providers>
         <SanityLive />
         {(await draftMode()).isEnabled && (

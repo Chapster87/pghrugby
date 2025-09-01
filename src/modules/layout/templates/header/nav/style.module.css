@@ -1,37 +1,86 @@
-.headerWrap {
-  /* background-color: hsl(var(--heroui-primary));
-  background-image: url("/images/low-contrast-linen.png");
-  background-repeat: repeat;
-  background-blend-mode: difference;
-  box-shadow: 0 10px 15px -12px rgba(0, 0, 0, 0.4); */
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(5px);
-  border-bottom: 2px solid hsl(var(--heroui-primary));
-}
-
-.siteLogo {
-  position: relative;
-  /* top: 30px; */
-  top: 0;
-}
-
-.crest {
-  /* width: 220px; */
-  width: 164px;
-  height: auto;
-  transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
-}
-
-.stuck {
-  .siteLogo {
-    top: 23px;
-  }
-
-  .crest {
-    width: 105px;
-  }
-}
-
 .navLink {
-  @apply text-foreground text-[18px];
+  @apply flex text-foreground text-[18px];
+  padding: 20px;
+}
+
+.navSubLink {
+  @apply flex text-foreground text-[18px];
+}
+
+.navContent {
+  @apply bg-black shadow-lg rounded-md mt-2 min-w-[180px];
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
+
+.mobileNavButton {
+  padding: 8px;
+  border-radius: 4px;
+  outline: none;
+}
+
+.mobileNavOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.mobileNavContent {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  outline: none;
+  z-index: 101;
+}
+
+.mobileNavHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.mobileNavList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mobileNavItem {
+  position: relative;
+}
+
+.mobileNavSummary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mobileNavSubList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 16px;
+  margin-top: 8px;
+}
+
+.mobileNavLink {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.mobileNavLink:hover {
+  background-color: #f3f4f6;
 }
