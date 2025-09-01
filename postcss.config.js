@@ -3,9 +3,9 @@ module.exports = {
     tailwindcss: {},
     autoprefixer: {},
     "postcss-flexbugs-fixes": {},
-    // "@csstools/postcss-global-data": {
-    //   files: ["./src/styles/custom-media.css"],
-    // },
+    "@csstools/postcss-global-data": {
+      files: ["./src/styles/custom-media.css"],
+    },
     "postcss-preset-env": {
       stage: 3,
       browsers: ["defaults"],
