@@ -4,6 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog"
 import Link from "next/link"
 import { ChevronDown, Menu, X } from "lucide-react"
 import s from "./style.module.css"
+import { useEffect, useState } from "react"
 
 import type { NavItem } from ".." // You may need to create or adjust this import
 
@@ -66,12 +67,30 @@ export function MainNav({ formattedNavData }: NavProps) {
 
 export function MobileNav({ formattedNavData }: NavProps) {
   const { navigation } = formattedNavData
+  const [isOpen, setIsOpen] = useState(false) // State to manage dialog open state
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setIsOpen(false) // Close the dialog when resizing beyond tablet breakpoint
+      }
+    }
+
+    window.addEventListener("resize", handleResize)
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <div className={s.mobileNavHeader}>
         <Dialog.Trigger asChild>
-          <button aria-label="Open site menu" className={s.mobileNavButton}>
+          <button
+            aria-label="Open site menu"
+            className={s.mobileNavButton}
+            onClick={() => setIsOpen(true)} // Open the dialog
+          >
             <Menu />
           </button>
         </Dialog.Trigger>
@@ -84,6 +103,7 @@ export function MobileNav({ formattedNavData }: NavProps) {
               <button
                 aria-label="Close site menu"
                 className={s.mobileNavButton}
+                onClick={() => setIsOpen(false)} // Close the dialog
               >
                 <X />
               </button>

@@ -45,6 +45,10 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+
+  @media (--viewport-lg-up) {
+    display: none;
+  }
 }
 
 .mobileNavList {

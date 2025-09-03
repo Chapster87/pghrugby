@@ -42,7 +42,7 @@ export default function HeaderMain({
   return (
     <header ref={headerRef} className={s.header}>
       <div
-        className={`${s.headerInner} px-[12] flex items-center justify-between`}
+        className={`lg:container lg:mx-auto ${s.headerInner} px-[12] flex items-center justify-between`}
       >
         {mobileNav}
         <Link href="/" aria-label="View Homepage" className={s.siteLogo}>
