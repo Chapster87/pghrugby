@@ -1,17 +1,24 @@
-import {
-  BlockContentIcon,
-  CalendarIcon,
-  ComposeIcon,
-  CogIcon,
-  DocumentsIcon,
-  FilterIcon,
-  PackageIcon,
-  StarIcon,
-  TagIcon,
-  UserIcon,
-  UsersIcon,
-} from "@sanity/icons"
 import type { StructureBuilder, StructureResolver } from "sanity/structure"
+import {
+  FaBox,
+  FaBuilding,
+  FaBuildingColumns,
+  FaCalendarDays,
+  FaFile,
+  FaFilePen,
+  FaFilter,
+  FaFolderTree,
+  FaGear,
+  FaGears,
+  FaImages,
+  FaMedal,
+  FaMoneyBill1Wave,
+  FaPenToSquare,
+  FaPeopleGroup,
+  FaRegCircleUser,
+  FaTag,
+  FaUserGroup,
+} from "react-icons/fa6"
 import pluralize from "pluralize-esm"
 
 /**
@@ -21,21 +28,23 @@ import pluralize from "pluralize-esm"
  */
 
 const DISABLED_TYPES = [
-  "settings",
-  "navigation",
   "assist.instruction.context",
-  "product",
-  "formType",
-  "page",
-  "post",
-  "event",
   "author",
   "category",
-  "tag",
-  "match",
-  "team",
-  "league",
   "division",
+  "event",
+  "formType",
+  "league",
+  "match",
+  "navigation",
+  "page",
+  "post",
+  "product",
+  "settings",
+  "sponsor",
+  "sponsorBar",
+  "tag",
+  "team",
 ]
 
 export const structure: StructureResolver = (S: StructureBuilder) =>
@@ -43,56 +52,86 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
     .title("Site Management")
     .items([
       S.listItem()
+        .title("Navigation")
+        .icon(FaFolderTree)
+        .child(
+          S.document().schemaType("navigation").documentId("navigationSettings")
+        ),
+      S.listItem()
         .title("Content")
-        .icon(BlockContentIcon)
+        .icon(FaFilePen)
         .child(
           S.list()
             .title("Content")
             .items([
-              S.documentTypeListItem("page").title("Pages").icon(DocumentsIcon),
-              S.documentTypeListItem("post").title("Posts").icon(ComposeIcon),
+              S.documentTypeListItem("page").title("Pages").icon(FaFile),
+              S.documentTypeListItem("post").title("Posts").icon(FaPenToSquare),
               S.divider(),
-              S.documentTypeListItem("author").title("Authors").icon(UserIcon),
+              S.documentTypeListItem("author")
+                .title("Authors")
+                .icon(FaRegCircleUser),
               S.documentTypeListItem("category")
                 .title("Categories")
-                .icon(FilterIcon),
-              S.documentTypeListItem("tag").title("Tags").icon(TagIcon),
+                .icon(FaFilter),
+              S.documentTypeListItem("tag").title("Tags").icon(FaTag),
             ])
         ),
       S.listItem()
         .title("Products")
-        .icon(PackageIcon)
+        .icon(FaBox)
         .child(
           S.list()
             .title("Products")
             .items([
               S.documentTypeListItem("product")
                 .title("Product Pages")
-                .icon(DocumentsIcon),
+                .icon(FaFile),
               S.documentTypeListItem("formType")
                 .title("Forms")
-                .icon(ComposeIcon),
+                .icon(FaPenToSquare),
             ])
         ),
       S.listItem()
         .title("Competition")
-        .icon(StarIcon)
+        .icon(FaMedal)
         .child(
           S.list()
             .title("Competition")
             .items([
               S.documentTypeListItem("match")
                 .title("Matches")
-                .icon(CalendarIcon),
-              S.documentTypeListItem("team").title("Teams").icon(UsersIcon),
-              S.documentTypeListItem("league").title("Leagues"),
-              S.documentTypeListItem("division").title("Divisions"),
+                .icon(FaCalendarDays),
+              S.documentTypeListItem("team").title("Teams").icon(FaPeopleGroup),
+              S.documentTypeListItem("league")
+                .title("Leagues")
+                .icon(FaBuildingColumns),
+              S.documentTypeListItem("division")
+                .title("Divisions")
+                .icon(FaBuilding),
+            ])
+        ),
+      S.listItem()
+        .title("Sponsorship")
+        .icon(FaMoneyBill1Wave)
+        .child(
+          S.list()
+            .title("Sponsorship")
+            .items([
+              S.documentTypeListItem("sponsor")
+                .title("Sponsors")
+                .icon(FaUserGroup),
+              S.listItem()
+                .title("Sponsor Bar")
+                .icon(FaImages)
+                .child(
+                  S.document().schemaType("sponsorBar").documentId("sponsorBar")
+                ),
             ])
         ),
       S.divider(),
       S.listItem()
         .title("Settings")
-        .icon(CogIcon)
+        .icon(FaGears)
         .child(
           S.list()
             .title("Settings")
@@ -102,16 +141,8 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                 .child(
                   S.document().schemaType("settings").documentId("siteSettings")
                 )
-                .icon(CogIcon),
+                .icon(FaGear),
               S.divider(),
-              S.listItem()
-                .title("Navigation Settings")
-                .child(
-                  S.document()
-                    .schemaType("navigation")
-                    .documentId("navigationSettings")
-                )
-                .icon(DocumentsIcon),
             ])
         ),
       // The rest of the document types, filtered to exclude what we've manually placed

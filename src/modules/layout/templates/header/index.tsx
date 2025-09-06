@@ -26,7 +26,6 @@ interface FormattedNavData {
 export default async function Header() {
   const settings = await client.fetch(settingsQuery)
   const navigation = await client.fetch(navQuery)
-  console.log(navigation)
   const cart = await retrieveCart().catch(() => null)
   const siteTitle = settings?.title || "Pittsburgh Rugby"
   const formattedNavData: FormattedNavData = {
