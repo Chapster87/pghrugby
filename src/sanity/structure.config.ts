@@ -45,6 +45,7 @@ const DISABLED_TYPES = [
   "sponsorBar",
   "tag",
   "team",
+  "media.tag",
 ]
 
 export const structure: StructureResolver = (S: StructureBuilder) =>
@@ -126,6 +127,18 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                 .child(
                   S.document().schemaType("sponsorBar").documentId("sponsorBar")
                 ),
+            ])
+        ),
+      S.listItem()
+        .title("Media Tags") // Changed Media Tags to a list with grouped items
+        .icon(FaTag)
+        .child(
+          S.list()
+            .title("Media Tags")
+            .items([
+              S.documentTypeListItem("media.tag")
+                .title("Media Tags")
+                .icon(FaTag),
             ])
         ),
       S.divider(),
