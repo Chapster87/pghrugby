@@ -41,6 +41,18 @@ export const sponsor = defineType({
       description: "Open the link in a new tab",
       initialValue: false,
     }),
+    defineField({
+      name: "width",
+      title: "Width",
+      type: "number",
+      description: "Optional width for the sponsor logo",
+    }),
+    defineField({
+      name: "height",
+      title: "Height",
+      type: "number",
+      description: "Optional height for the sponsor logo",
+    }),
   ],
   preview: {
     select: {

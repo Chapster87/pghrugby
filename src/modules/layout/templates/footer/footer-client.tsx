@@ -8,7 +8,13 @@ import Skyline from "@svg/skyline/Skyline"
 import clsx from "clsx"
 import s from "./style.module.css"
 
-export default function FooterClient({ serverData }: { serverData?: any }) {
+export default function FooterClient({
+  serverData,
+  sponsorBar,
+}: {
+  serverData?: any
+  sponsorBar?: React.ReactNode
+}) {
   const { collections, productCategories } = serverData || {}
 
   const { theme } = useTheme() // Get the current global theme
@@ -21,7 +27,7 @@ export default function FooterClient({ serverData }: { serverData?: any }) {
 
   return (
     <>
-      <div className={s.sponsorBar}></div>
+      {sponsorBar}
       <footer className={clsx(footerClass, s.footer)}>
         <Skyline className="absolute bottom-0 z-[1]" />
         <div className="relative 2xl:container px-[12] flex flex-col w-full z-[2]">

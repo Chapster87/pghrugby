@@ -3,6 +3,7 @@
 import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
 import FooterClient from "./footer-client"
+import SponsorBar from "@components/sponsor-bar"
 
 export default async function Footer() {
   const { collections } = await listCollections({
@@ -15,5 +16,5 @@ export default async function Footer() {
     productCategories,
   }
 
-  return <FooterClient serverData={serverData} />
+  return <FooterClient serverData={serverData} sponsorBar={<SponsorBar />} />
 }

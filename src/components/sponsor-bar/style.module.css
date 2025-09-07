@@ -1,0 +1,24 @@
+.sponsorBar {
+  background-color: black;
+}
+
+.sponsorRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding: 20px;
+
+  @media (--viewport-lg-up) {
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+}
+
+.sponsorLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}

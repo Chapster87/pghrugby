@@ -29,6 +29,21 @@ export const sponsorBar = defineType({
               validation: (Rule) => Rule.required(),
             }),
           ],
+          preview: {
+            select: {
+              title: "sponsor.sponsorName",
+              media: "sponsor.sponsorLogo",
+              subtitle: "sponsor.url",
+            },
+            prepare(selection) {
+              const { title, media, subtitle } = selection
+              return {
+                title,
+                media,
+                subtitle: subtitle || "No URL provided",
+              }
+            },
+          },
         }),
       ],
     }),

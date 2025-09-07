@@ -1,8 +1,3 @@
-.sponsorBar {
-  background-color: black;
-  padding: 20px;
-}
-
 .footer {
   --color-skyline-1: hsl(var(--heroui-default-500));
   --color-skyline-2: hsl(var(--heroui-default-600));
