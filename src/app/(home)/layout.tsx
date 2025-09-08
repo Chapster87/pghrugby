@@ -5,7 +5,7 @@ import { retrieveCustomer } from "@lib/data/customer"
 import { getBaseURL } from "@lib/util/env"
 import { StoreCartShippingOption } from "@medusajs/types"
 import CartMismatchBanner from "@modules/layout/components/cart-mismatch-banner"
-import Header from "@/modules/layout/templates/header"
+import Header from "@/components/header"
 import Footer from "@modules/layout/templates/footer"
 import FreeShippingPriceNudge from "@modules/shipping/components/free-shipping-price-nudge"
 
@@ -25,7 +25,7 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
   }
 
   return (
-    <>
+    <div className="relative z-[1]" data-page="home">
       <Header />
       {customer && cart && (
         <CartMismatchBanner customer={customer} cart={cart} />
@@ -40,6 +40,6 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
       )}
       {props.children}
       <Footer />
-    </>
+    </div>
   )
 }

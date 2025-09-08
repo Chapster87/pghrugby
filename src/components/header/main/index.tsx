@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef } from "react"
 import Link from "next/link"
-import CartDropdown from "../../../components/cart-dropdown"
+import CartDropdown from "@/modules/layout/components/cart-dropdown"
 import Crest from "@svg/Crest"
 import s from "./style.module.css"
 

@@ -29,7 +29,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           <div className="relative">
             <BreakpointIndicator />
             <SiteBackground />
-            <div className="relative z-[1]">{props.children}</div>
+            {props.children}
           </div>
         </Providers>
         <SanityLive />

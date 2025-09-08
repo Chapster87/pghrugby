@@ -24,13 +24,27 @@
 
 .crest {
   width: 100%;
-  max-width: 90px;
   height: auto;
   aspect-ratio: 1 / 1;
   transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
+  max-width: 90px;
 
   @media (--viewport-lg-up) {
-    max-width: 220px;
+    max-width: 150px;
+  }
+}
+
+[data-page="home"] {
+  .siteLogo {
+    @media (--viewport-lg-up) {
+      top: -45px;
+    }
+  }
+
+  .crest {
+    @media (--viewport-lg-up) {
+      max-width: 220px;
+    }
   }
 }
 
