@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
 import Image from "next/image"
 import { client } from "../../../../sanity/client"
-import { type PortableTextBlock } from "next-sanity"
+import { type PortableTextBlock } from "@portabletext/types"
 
 import PortableText from "@/components/PortableText"
 import CoverImage from "@/components/CoverImage"
@@ -11,6 +11,7 @@ import { sanityFetch } from "@/sanity/lib/live"
 import { postPagesSlugs, postQuery } from "./posts.query"
 import { resolveOpenGraphImage } from "@/sanity/lib/utils"
 import contentStyles from "@/styles/content.module.css"
+import { extractPlainText, isPortableText } from "@/lib/util/portableTextUtils"
 
 /**
  * Generate the static params for the page.
@@ -65,7 +66,7 @@ export async function generateMetadata(
       ? `${data.title} | Pittsburgh Forge Rugby Club`
       : "Pittsburgh Forge Rugby Club",
     description:
-      data?.excerpt ||
+      extractPlainText(data?.excerpt) ||
       "Pittsburgh Forge Rugby Club - Developing athletes and building community through the sport of rugby",
     authors:
       data?.author?.firstName && data?.author?.lastName
@@ -77,7 +78,7 @@ export async function generateMetadata(
     openGraph: {
       title: data?.title || "Pittsburgh Forge Rugby Club",
       description:
-        data?.excerpt ||
+        extractPlainText(data?.excerpt) ||
         "Pittsburgh Forge Rugby Club - Rugby news, matches and community",
       type: "article",
       publishedTime: publishDate,
@@ -93,7 +94,7 @@ export async function generateMetadata(
       card: "summary_large_image",
       title: data?.title || "Pittsburgh Forge Rugby Club",
       description:
-        data?.excerpt ||
+        extractPlainText(data?.excerpt) ||
         "Pittsburgh Forge Rugby Club - Rugby news, matches and community",
       images: ogImage ? [ogImage] : undefined,
     },
@@ -114,7 +115,7 @@ function generateStructuredData(data: any) {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: data.title,
-    description: data.excerpt || "",
+    description: extractPlainText(data.excerpt) || "",
     image: data.featuredMedia?.asset?.url || "",
     datePublished: data.date || "",
     dateModified: data.modified || data.date || "",
@@ -170,105 +171,105 @@ export default async function PostPage(props: { params: { slug: string } }) {
     <article
       className={`${contentStyles.contentMain} light 2xl:container px-4 py-6 mx-auto `}
     >
-      <div className="prose max-w-none">
-        {/* Structured data for SEO */}
-        {structuredData && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-          />
-        )}
+      {/* <div className="prose max-w-none"> */}
+      {/* Structured data for SEO */}
+      {structuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      )}
 
-        {/* Featured image */}
-        {data.featuredMedia && (
+      {/* Featured image */}
+      {/* {data.featuredMedia && (
           <div className="mb-6 relative aspect-video w-full">
             <CoverImage image={data.featuredMedia} priority />
           </div>
+        )} */}
+
+      <header className="mb-8">
+        <h1>{data.title}</h1>
+
+        {isPortableText(data.excerpt) && (
+          <div className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
+            <PortableText value={data.excerpt} />
+          </div>
         )}
 
-        <header className="mb-8">
-          <h1>{data.title}</h1>
-
-          {data.excerpt && (
-            <div className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
-              <PortableText value={data.excerpt as PortableTextBlock[]} />
-            </div>
+        <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
+          {data.date && (
+            <time dateTime={new Date(data.date).toISOString()}>
+              Published: {new Date(data.date).toLocaleDateString()}
+            </time>
           )}
 
-          <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
-            {data.date && (
-              <time dateTime={new Date(data.date).toISOString()}>
-                Published: {new Date(data.date).toLocaleDateString()}
-              </time>
-            )}
-
-            {data.modified && data.date !== data.modified && (
-              <time dateTime={new Date(data.modified).toISOString()}>
-                Updated: {new Date(data.modified).toLocaleDateString()}
-              </time>
-            )}
-
-            {data.author?.firstName && data.author?.lastName && (
-              <address className="not-italic">
-                By: {`${data.author.firstName} ${data.author.lastName}`}
-              </address>
-            )}
-
-            {data.status && (
-              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded text-xs">
-                {data.status}
-              </span>
-            )}
-
-            {data.sticky && (
-              <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900 rounded text-xs">
-                Featured
-              </span>
-            )}
-          </div>
-
-          {/* Categories and Tags */}
-          {Array.isArray(data.categories) && data.categories.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2">
-              <span className="text-sm text-gray-600 dark:text-gray-300">
-                Categories:
-              </span>
-              {data.categories.map((cat: any, index: number) => (
-                <span
-                  key={index}
-                  className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded"
-                >
-                  {cat.title || cat._ref || ""}
-                </span>
-              ))}
-            </div>
+          {data.modified && data.date !== data.modified && (
+            <time dateTime={new Date(data.modified).toISOString()}>
+              Updated: {new Date(data.modified).toLocaleDateString()}
+            </time>
           )}
 
-          {Array.isArray(data.tags) && data.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2">
-              <span className="text-sm text-gray-600 dark:text-gray-300">
-                Tags:
-              </span>
-              {data.tags.map((tag: any, index: number) => (
-                <span
-                  key={index}
-                  className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded"
-                >
-                  {tag.title || tag._ref || ""}
-                </span>
-              ))}
-            </div>
+          {data.author?.firstName && data.author?.lastName && (
+            <address className="not-italic">
+              By: {`${data.author.firstName} ${data.author.lastName}`}
+            </address>
           )}
-        </header>
 
-        <div className="">
-          {data.content?.length ? (
-            <PortableText value={data.content as PortableTextBlock[]} />
-          ) : (
-            <p>No content available.</p>
+          {data.status && (
+            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded text-xs">
+              {data.status}
+            </span>
+          )}
+
+          {data.sticky && (
+            <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900 rounded text-xs">
+              Featured
+            </span>
           )}
         </div>
+
+        {/* Categories and Tags */}
+        {Array.isArray(data.categories) && data.categories.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            <span className="text-sm text-gray-600 dark:text-gray-300">
+              Categories:
+            </span>
+            {data.categories.map((cat: any, index: number) => (
+              <span
+                key={index}
+                className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded"
+              >
+                {cat.title || cat._ref || ""}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {Array.isArray(data.tags) && data.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            <span className="text-sm text-gray-600 dark:text-gray-300">
+              Tags:
+            </span>
+            {data.tags.map((tag: any, index: number) => (
+              <span
+                key={index}
+                className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded"
+              >
+                {tag.title || tag._ref || ""}
+              </span>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <div className="">
+        {isPortableText(data.content) ? (
+          <PortableText value={data.content} />
+        ) : (
+          <p>No content available.</p>
+        )}
       </div>
+      {/* </div> */}
     </article>
   )
 }
