@@ -24,7 +24,7 @@ export const sponsor = defineType({
       type: "url",
       validation: (Rule) =>
         Rule.uri({
-          scheme: ["http", "https"],
+          allowRelative: true, // Allow relative URLs
         }),
     }),
     defineField({

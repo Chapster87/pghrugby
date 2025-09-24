@@ -1,50 +1,24 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-@plugin "@tailwindcss/typography";
+
+@import "./custom-media.css";
+@import "./typography.css";
 
 :root {
   --font-lato: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-oswald: "Oswald", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-*,
-:before,
-:after,
-::backdrop {
-  --heroui-hover-opacity: 1;
-  --heroui-disabled-opacity: 1;
+body {
+  color: #000;
 }
 
-@layer utilities {
-  input:focus ~ label,
-  input:not(:placeholder-shown) ~ label {
-    @apply -translate-y-2;
-  }
-
-  input:focus ~ label {
-    @apply left-0;
-  }
+input:focus ~ label,
+input:not(:placeholder-shown) ~ label {
+  @apply -translate-y-2;
 }
 
-@layer components {
-  h1,
-  .h1,
-  h2,
-  .h2,
-  h3,
-  .h3,
-  h4,
-  .h4,
-  h5,
-  .h5,
-  h6,
-  .h6 {
-    font-family: var(--font-oswald);
-    font-weight: 500;
-
-    a {
-      text-decoration: none;
-    }
-  }
+input:focus ~ label {
+  @apply left-0;
 }
