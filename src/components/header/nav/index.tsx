@@ -14,7 +14,11 @@ interface NavProps {
   }
 }
 
-function cleanUrl(url) {
+interface CleanUrlFn {
+  (url: string): string
+}
+
+function cleanUrl(url: string): string {
   return url.endsWith("#") ? url.slice(0, -1) : url
 }
 
@@ -57,7 +61,10 @@ export function MainNav({ formattedNavData }: NavProps) {
             ) : (
               <NavigationMenu.Item key={`${item.label}-${index}}`}>
                 <NavigationMenu.Link asChild>
-                  <Link href={cleanUrl(item.route || item.url)} className={s.navLink}>
+                  <Link
+                    href={cleanUrl(item.route || item.url)}
+                    className={s.navLink}
+                  >
                     {item.label}
                   </Link>
                 </NavigationMenu.Link>
@@ -144,7 +151,10 @@ export function MobileNav({ formattedNavData }: NavProps) {
                   </li>
                 ) : (
                   <li key={`${item.label}-${index}}`}>
-                    <Link href={cleanUrl(item.route || item.url)} className={s.mobileNavLink}>
+                    <Link
+                      href={cleanUrl(item.route || item.url)}
+                      className={s.mobileNavLink}
+                    >
                       {item.label}
                     </Link>
                   </li>
