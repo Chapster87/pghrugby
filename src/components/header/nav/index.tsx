@@ -14,6 +14,10 @@ interface NavProps {
   }
 }
 
+function cleanUrl(url) {
+  return url.endsWith("#") ? url.slice(0, -1) : url
+}
+
 export function MainNav({ formattedNavData }: NavProps) {
   const { navigation } = formattedNavData
 
@@ -40,7 +44,7 @@ export function MainNav({ formattedNavData }: NavProps) {
                     {item.submenu.map((sub, subIdx) => (
                       <li key={subIdx}>
                         <Link
-                          href={sub.url}
+                          href={cleanUrl(sub.route || sub.url)}
                           className={s.navSubLink + " w-full px-3 py-2"}
                         >
                           {sub.label}
@@ -53,7 +57,7 @@ export function MainNav({ formattedNavData }: NavProps) {
             ) : (
               <NavigationMenu.Item key={`${item.label}-${index}}`}>
                 <NavigationMenu.Link asChild>
-                  <Link href={item.url} className={s.navLink}>
+                  <Link href={cleanUrl(item.route || item.url)} className={s.navLink}>
                     {item.label}
                   </Link>
                 </NavigationMenu.Link>
@@ -127,7 +131,10 @@ export function MobileNav({ formattedNavData }: NavProps) {
                       <ul className={s.mobileNavSubList}>
                         {item.submenu.map((sub, subIdx) => (
                           <li key={subIdx}>
-                            <Link href={sub.url} className={s.mobileNavLink}>
+                            <Link
+                              href={cleanUrl(sub.route || sub.url)}
+                              className={s.mobileNavLink}
+                            >
                               {sub.label}
                             </Link>
                           </li>
@@ -137,7 +144,7 @@ export function MobileNav({ formattedNavData }: NavProps) {
                   </li>
                 ) : (
                   <li key={`${item.label}-${index}}`}>
-                    <Link href={item.url} className={s.mobileNavLink}>
+                    <Link href={cleanUrl(item.route || item.url)} className={s.mobileNavLink}>
                       {item.label}
                     </Link>
                   </li>

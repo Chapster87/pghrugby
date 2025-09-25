@@ -76,6 +76,13 @@ export const navigation = defineType({
                         "If checked, the link will open in a new browser tab.",
                       initialValue: false,
                     },
+                    {
+                      name: "route",
+                      type: "string",
+                      title: "App Router Path",
+                      description:
+                        "Specify the relative path for App Router pages (e.g., /about, /contact). Overrides other links if set.",
+                    },
                   ],
                   preview: {
                     select: {
@@ -115,6 +122,13 @@ export const navigation = defineType({
               description:
                 "If checked, the link will open in a new browser tab.",
               initialValue: false,
+            },
+            {
+              name: "route",
+              type: "string",
+              title: "App Router Path",
+              description:
+                "Specify the relative path for App Router pages (e.g., /about, /contact). Overrides other links if set.",
             },
           ],
           preview: {

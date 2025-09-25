@@ -13,6 +13,102 @@
  */
 
 // Source: schema.json
+export type Tag = {
+  _id: string
+  _type: "tag"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
+}
+
+export type SponsorBar = {
+  _id: string
+  _type: "sponsorBar"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  items?: Array<{
+    sponsor?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sponsor"
+    }
+    _type: "sponsorItem"
+    _key: string
+  }>
+}
+
+export type Sponsor = {
+  _id: string
+  _type: "sponsor"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  sponsorName?: string
+  sponsorLogo?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  url?: string
+  nofollow?: boolean
+  openInNewTab?: boolean
+  width?: number
+  height?: number
+}
+
+export type Settings = {
+  _id: string
+  _type: "settings"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  description?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: "span"
+      _key: string
+    }>
+    style?: "normal"
+    listItem?: never
+    markDefs?: Array<{
+      href?: string
+      _type: "link"
+      _key: string
+    }>
+    level?: number
+    _type: "block"
+    _key: string
+  }>
+  ogImage?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    metadataBase?: string
+    _type: "image"
+  }
+}
+
 export type PortableText = Array<
   | {
       children?: Array<{
@@ -76,6 +172,229 @@ export type PortableText = Array<
     } & ButtonGroup)
 >
 
+export type Navigation = {
+  _id: string
+  _type: "navigation"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  mainNav?: Array<{
+    item?:
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "page"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "post"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "product"
+        }
+    customLink?: string
+    overrideTitle?: string
+    submenu?: Array<{
+      item?:
+        | {
+            _ref: string
+            _type: "reference"
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: "page"
+          }
+        | {
+            _ref: string
+            _type: "reference"
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: "post"
+          }
+        | {
+            _ref: string
+            _type: "reference"
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: "product"
+          }
+      customLink?: string
+      overrideTitle?: string
+      openInNewTab?: boolean
+      route?: string
+      _key: string
+    }>
+    openInNewTab?: boolean
+    route?: string
+    _key: string
+  }>
+  footerNav?: Array<{
+    item?:
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "page"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "post"
+        }
+    customLink?: string
+    overrideTitle?: string
+    submenu?: Array<
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "page"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "post"
+        }
+    >
+    openInNewTab?: boolean
+    _key: string
+  }>
+}
+
+export type Product = {
+  _id: string
+  _type: "product"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  slug?: Slug
+  specs?: Array<{
+    lang?: string
+    title?: string
+    content?: string
+    _type: "spec"
+    _key: string
+  }>
+  addons?: {
+    title?: string
+    products?: Array<{
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      _key: string
+      [internalGroqTypeReferenceTo]?: "product"
+    }>
+  }
+  form?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "formType"
+  }
+}
+
+export type Post = {
+  _id: string
+  _type: "post"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  slug?: Slug
+  date?: string
+  modified?: string
+  status?:
+    | "publish"
+    | "future"
+    | "draft"
+    | "pending"
+    | "private"
+    | "trash"
+    | "auto-draft"
+    | "inherit"
+  content?: PortableText
+  excerpt?: PortableText
+  featuredMedia?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  sticky?: boolean
+  author?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "author"
+  }
+  categories?: Array<{
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    _key: string
+    [internalGroqTypeReferenceTo]?: "category"
+  }>
+  tags?: Array<{
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    _key: string
+    [internalGroqTypeReferenceTo]?: "tag"
+  }>
+}
+
+export type Page = {
+  _id: string
+  _type: "page"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  slug?: Slug
+  date?: string
+  modified?: string
+  status?:
+    | "publish"
+    | "future"
+    | "draft"
+    | "pending"
+    | "private"
+    | "trash"
+    | "auto-draft"
+    | "inherit"
+  content?: PortableText
+  excerpt?: PortableText
+  featuredMedia?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  author?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "author"
+  }
+}
+
 export type MediaText = {
   _type: "mediaText"
   image?: {
@@ -91,6 +410,84 @@ export type MediaText = {
     _type: "image"
   }
   text?: PortableText
+}
+
+export type Match = {
+  _id: string
+  _type: "match"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  eventDateTime?: string
+  league?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "league"
+  }
+  division?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "division"
+  }
+  matchType?: "competitive" | "friendly"
+  homeTeam?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "team"
+  }
+  awayTeam?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "team"
+  }
+}
+
+export type Team = {
+  _id: string
+  _type: "team"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  teamName?: string
+  teamLogo?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  league?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "league"
+  }
+  division?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "division"
+  }
+}
+
+export type League = {
+  _id: string
+  _type: "league"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
 }
 
 export type ImageWithCaption = {
@@ -131,9 +528,33 @@ export type FormFieldType = {
   pattern?: string
 }
 
-export type Column = {
-  _type: "column"
-  content?: PortableText
+export type FormType = {
+  _id: string
+  _type: "formType"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  formFields?: Array<{
+    label?: string
+    fieldType?: "text" | "email" | "textarea" | "select" | "checkbox"
+    required?: boolean
+    options?: Array<string>
+    fieldName?: string
+    placeholder?: string
+    _type: "formField"
+    _key: string
+  }>
+}
+
+export type Division = {
+  _id: string
+  _type: "division"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
 }
 
 export type Columns = {
@@ -143,6 +564,57 @@ export type Columns = {
       _key: string
     } & Column
   >
+}
+
+export type Column = {
+  _type: "column"
+  content?: PortableText
+}
+
+export type Category = {
+  _id: string
+  _type: "category"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
+}
+
+export type Calendar = {
+  _type: "calendar"
+  title?: string
+  events?: Array<{
+    name?: string
+    eventDateTime?: string
+    league?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "league"
+    }
+    division?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "division"
+    }
+    matchType?: "competitive" | "friendly"
+    homeTeam?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "team"
+    }
+    awayTeam?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "team"
+    }
+    _type: "match"
+    _key: string
+  }>
 }
 
 export type ButtonGroup = {
@@ -226,431 +698,6 @@ export type BlockGroup = {
   >
 }
 
-export type Match = {
-  _id: string
-  _type: "match"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: string
-  eventDateTime?: string
-  league?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "league"
-  }
-  division?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "division"
-  }
-  matchType?: "competitive" | "friendly"
-  homeTeam?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "team"
-  }
-  awayTeam?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "team"
-  }
-}
-
-export type Team = {
-  _id: string
-  _type: "team"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  teamName?: string
-  teamLogo?: {
-    asset?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: "image"
-  }
-  league?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "league"
-  }
-  division?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "division"
-  }
-}
-
-export type Division = {
-  _id: string
-  _type: "division"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: string
-  slug?: Slug
-}
-
-export type League = {
-  _id: string
-  _type: "league"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: string
-  slug?: Slug
-}
-
-export type Navigation = {
-  _id: string
-  _type: "navigation"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  mainNav?: Array<{
-    item?:
-      | {
-          _ref: string
-          _type: "reference"
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: "page"
-        }
-      | {
-          _ref: string
-          _type: "reference"
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: "post"
-        }
-      | {
-          _ref: string
-          _type: "reference"
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: "product"
-        }
-    customLink?: string
-    overrideTitle?: string
-    submenu?: Array<{
-      item?:
-        | {
-            _ref: string
-            _type: "reference"
-            _weak?: boolean
-            [internalGroqTypeReferenceTo]?: "page"
-          }
-        | {
-            _ref: string
-            _type: "reference"
-            _weak?: boolean
-            [internalGroqTypeReferenceTo]?: "post"
-          }
-        | {
-            _ref: string
-            _type: "reference"
-            _weak?: boolean
-            [internalGroqTypeReferenceTo]?: "product"
-          }
-      customLink?: string
-      overrideTitle?: string
-      openInNewTab?: boolean
-      _key: string
-    }>
-    openInNewTab?: boolean
-    _key: string
-  }>
-  footerNav?: Array<{
-    item?:
-      | {
-          _ref: string
-          _type: "reference"
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: "page"
-        }
-      | {
-          _ref: string
-          _type: "reference"
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: "post"
-        }
-    customLink?: string
-    overrideTitle?: string
-    submenu?: Array<
-      | {
-          _ref: string
-          _type: "reference"
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: "page"
-        }
-      | {
-          _ref: string
-          _type: "reference"
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: "post"
-        }
-    >
-    openInNewTab?: boolean
-    _key: string
-  }>
-}
-
-export type Settings = {
-  _id: string
-  _type: "settings"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  description?: Array<{
-    children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: "span"
-      _key: string
-    }>
-    style?: "normal"
-    listItem?: never
-    markDefs?: Array<{
-      href?: string
-      _type: "link"
-      _key: string
-    }>
-    level?: number
-    _type: "block"
-    _key: string
-  }>
-  ogImage?: {
-    asset?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt?: string
-    metadataBase?: string
-    _type: "image"
-  }
-}
-
-export type Product = {
-  _id: string
-  _type: "product"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  specs?: Array<{
-    lang?: string
-    title?: string
-    content?: string
-    _type: "spec"
-    _key: string
-  }>
-  addons?: {
-    title?: string
-    products?: Array<{
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      _key: string
-      [internalGroqTypeReferenceTo]?: "product"
-    }>
-  }
-  form?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "formType"
-  }
-}
-
-export type FormType = {
-  _id: string
-  _type: "formType"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  formFields?: Array<{
-    label?: string
-    fieldType?: "text" | "email" | "textarea" | "select" | "checkbox"
-    required?: boolean
-    options?: Array<string>
-    fieldName?: string
-    placeholder?: string
-    _type: "formField"
-    _key: string
-  }>
-}
-
-export type Tag = {
-  _id: string
-  _type: "tag"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: string
-  slug?: Slug
-}
-
-export type Calendar = {
-  _type: "calendar"
-  title?: string
-  events?: Array<{
-    name?: string
-    eventDateTime?: string
-    league?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "league"
-    }
-    division?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "division"
-    }
-    matchType?: "competitive" | "friendly"
-    homeTeam?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "team"
-    }
-    awayTeam?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "team"
-    }
-    _type: "match"
-    _key: string
-  }>
-}
-
-export type Category = {
-  _id: string
-  _type: "category"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: string
-  slug?: Slug
-}
-
-export type Page = {
-  _id: string
-  _type: "page"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  date?: string
-  modified?: string
-  status?:
-    | "publish"
-    | "future"
-    | "draft"
-    | "pending"
-    | "private"
-    | "trash"
-    | "auto-draft"
-    | "inherit"
-  content?: PortableText
-  excerpt?: PortableText
-  featuredMedia?: {
-    asset?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: "image"
-  }
-  author?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "author"
-  }
-}
-
-export type Post = {
-  _id: string
-  _type: "post"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  date?: string
-  modified?: string
-  status?:
-    | "publish"
-    | "future"
-    | "draft"
-    | "pending"
-    | "private"
-    | "trash"
-    | "auto-draft"
-    | "inherit"
-  content?: PortableText
-  excerpt?: PortableText
-  featuredMedia?: {
-    asset?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: "image"
-  }
-  sticky?: boolean
-  author?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "author"
-  }
-  categories?: Array<{
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    _key: string
-    [internalGroqTypeReferenceTo]?: "category"
-  }>
-  tags?: Array<{
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    _key: string
-    [internalGroqTypeReferenceTo]?: "tag"
-  }>
-}
-
 export type Author = {
   _id: string
   _type: "author"
@@ -673,6 +720,15 @@ export type Author = {
     crop?: SanityImageCrop
     _type: "image"
   }
+}
+
+export type MediaTag = {
+  _id: string
+  _type: "media.tag"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: Slug
 }
 
 export type SanityImagePaletteSwatch = {
@@ -794,29 +850,32 @@ export type SanityAssetSourceData = {
 }
 
 export type AllSanitySchemaTypes =
+  | Tag
+  | SponsorBar
+  | Sponsor
+  | Settings
   | PortableText
+  | Navigation
+  | Product
+  | Post
+  | Page
   | MediaText
+  | Match
+  | Team
+  | League
   | ImageWithCaption
   | FormFieldType
-  | Column
+  | FormType
+  | Division
   | Columns
+  | Column
+  | Category
+  | Calendar
   | ButtonGroup
   | Button
   | BlockGroup
-  | Match
-  | Team
-  | Division
-  | League
-  | Navigation
-  | Settings
-  | Product
-  | FormType
-  | Tag
-  | Calendar
-  | Category
-  | Page
-  | Post
   | Author
+  | MediaTag
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -869,7 +928,7 @@ export type PagesSlugsResult = Array<{
 
 // Source: ./src/app/(main)/post/[slug]/posts.query.ts
 // Variable: postQuery
-// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "post": post->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "modified": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture},  }
+// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "post": post->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  featuredMedia,  sticky,  categories[]->{title},  tags[]->{title},  "date": coalesce(date, _updatedAt),  "modified": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture},  }
 export type PostQueryResult = {
   content: Array<
     | {
@@ -1047,6 +1106,25 @@ export type PostQueryResult = {
   slug: string | null
   excerpt: PortableText | null
   coverImage: null
+  featuredMedia: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  } | null
+  sticky: boolean | null
+  categories: Array<{
+    title: null
+  }> | null
+  tags: Array<{
+    title: null
+  }> | null
   date: string
   modified: string
   author: {
@@ -1061,44 +1139,122 @@ export type PostPagesSlugsResult = Array<{
   slug: string | null
 }>
 
-// Source: ./src/modules/layout/templates/header/nav.query.ts
+// Source: ./src/components/header/nav.query.ts
 // Variable: navQuery
-// Query: *[_type == "navigation"] | order(publishedAt desc)[0] {    mainNav[] {      item->{_id, title, slug},      customLink,      overrideTitle,      openInNewTab,      submenu[]{        item->{_id, title, slug},        customLink,        overrideTitle,        openInNewTab      }    },    footerNav[] {      item->{_id, title, slug},      customLink,      overrideTitle,      openInNewTab,      submenu[]{        _type == "reference" => @->{_id, title, slug},        _type == "object" => {          item->{_id, title, slug},          customLink,          overrideTitle,          openInNewTab        }      }    }  }
+// Query: *[_type == "navigation"] | order(publishedAt desc)[0] {    mainNav[] {      item->{_id, title, slug, _type},      customLink,      overrideTitle,      openInNewTab,      submenu[]{        item->{_id, title, slug, _type},        customLink,        overrideTitle,        openInNewTab      }    },    footerNav[] {      item->{_id, title, slug, _type},      customLink,      overrideTitle,      openInNewTab,      submenu[]{        _type == "reference" => @->{_id, title, slug, _type},        _type == "object" => {          item->{_id, title, slug, _type},          customLink,          overrideTitle,          openInNewTab        }      }    }  }
 export type NavQueryResult = {
   mainNav: Array<{
-    item: {
-      _id: string
-      title: string | null
-      slug: Slug | null
-    } | null
+    item:
+      | {
+          _id: string
+          title: string | null
+          slug: Slug | null
+          _type: "page"
+        }
+      | {
+          _id: string
+          title: string | null
+          slug: Slug | null
+          _type: "post"
+        }
+      | {
+          _id: string
+          title: string | null
+          slug: Slug | null
+          _type: "product"
+        }
+      | null
     customLink: string | null
     overrideTitle: string | null
     openInNewTab: boolean | null
     submenu: Array<{
-      item: {
-        _id: string
-        title: string | null
-        slug: Slug | null
-      } | null
+      item:
+        | {
+            _id: string
+            title: string | null
+            slug: Slug | null
+            _type: "page"
+          }
+        | {
+            _id: string
+            title: string | null
+            slug: Slug | null
+            _type: "post"
+          }
+        | {
+            _id: string
+            title: string | null
+            slug: Slug | null
+            _type: "product"
+          }
+        | null
       customLink: string | null
       overrideTitle: string | null
       openInNewTab: boolean | null
     }> | null
   }> | null
   footerNav: Array<{
-    item: {
-      _id: string
-      title: string | null
-      slug: Slug | null
-    } | null
+    item:
+      | {
+          _id: string
+          title: string | null
+          slug: Slug | null
+          _type: "page"
+        }
+      | {
+          _id: string
+          title: string | null
+          slug: Slug | null
+          _type: "post"
+        }
+      | null
     customLink: string | null
     overrideTitle: string | null
     openInNewTab: boolean | null
-    submenu: Array<{
+    submenu: Array<
+      | {
+          _id: string
+          title: string | null
+          slug: Slug | null
+          _type: "page"
+        }
+      | {
+          _id: string
+          title: string | null
+          slug: Slug | null
+          _type: "post"
+        }
+    > | null
+  }> | null
+} | null
+
+// Source: ./src/components/sponsor-bar/sponsor.query.ts
+// Variable: sponsorQuery
+// Query: *[_type == "sponsorBar"] | order(publishedAt desc)[0] {    title,    items[] {      sponsor-> {        _id,        sponsorName,        sponsorLogo,        url,        nofollow,        openInNewTab,        width,        height      }    }  }
+export type SponsorQueryResult = {
+  title: string | null
+  items: Array<{
+    sponsor: {
       _id: string
-      title: string | null
-      slug: Slug | null
-    }> | null
+      sponsorName: string | null
+      sponsorLogo: {
+        asset?: {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+        }
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        _type: "image"
+      } | null
+      url: string | null
+      nofollow: boolean | null
+      openInNewTab: boolean | null
+      width: number | null
+      height: number | null
+    } | null
   }> | null
 } | null
 
@@ -1108,8 +1264,9 @@ declare module "@sanity/client" {
   interface SanityQueries {
     '*[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    date,\n    modified,\n    status,\n    content,\n    excerpt,\n    coverImage,\n    featuredMedia{\n      asset->{\n        url\n      },\n      alt\n    },\n    author->{name}\n  }': PageQueryResult
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
-    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "modified": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
+    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  featuredMedia,\n  sticky,\n  categories[]->{title},\n  tags[]->{title},\n  "date": coalesce(date, _updatedAt),\n  "modified": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
-    '*[_type == "navigation"] | order(publishedAt desc)[0] {\n    mainNav[] {\n      item->{_id, title, slug},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      submenu[]{\n        item->{_id, title, slug},\n        customLink,\n        overrideTitle,\n        openInNewTab\n      }\n    },\n    footerNav[] {\n      item->{_id, title, slug},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      submenu[]{\n        _type == "reference" => @->{_id, title, slug},\n        _type == "object" => {\n          item->{_id, title, slug},\n          customLink,\n          overrideTitle,\n          openInNewTab\n        }\n      }\n    }\n  }': NavQueryResult
+    '*[_type == "navigation"] | order(publishedAt desc)[0] {\n    mainNav[] {\n      item->{_id, title, slug, _type},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      submenu[]{\n        item->{_id, title, slug, _type},\n        customLink,\n        overrideTitle,\n        openInNewTab\n      }\n    },\n    footerNav[] {\n      item->{_id, title, slug, _type},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      submenu[]{\n        _type == "reference" => @->{_id, title, slug, _type},\n        _type == "object" => {\n          item->{_id, title, slug, _type},\n          customLink,\n          overrideTitle,\n          openInNewTab\n        }\n      }\n    }\n  }': NavQueryResult
+    '*[_type == "sponsorBar"] | order(publishedAt desc)[0] {\n    title,\n    items[] {\n      sponsor-> {\n        _id,\n        sponsorName,\n        sponsorLogo,\n        url,\n        nofollow,\n        openInNewTab,\n        width,\n        height\n      }\n    }\n  }': SponsorQueryResult
   }
 }

@@ -12,6 +12,7 @@ const settingsQuery = `*[_type == "settings"] | order(publishedAt desc)[0] {
 interface SubMenuItem {
   label: string
   url: string
+  route?: string // Added route property
   openInNewTab: boolean
 }
 
@@ -42,6 +43,7 @@ export default async function Header() {
               ? `/post/${menu.item.slug.current}`
               : `/${menu.item.slug.current}`
             : "#",
+          route: menu.route || undefined, // Added route handling
           openInNewTab: menu.openInNewTab || false,
           submenu:
             menu.submenu?.map((subItem: any): SubMenuItem => {
@@ -56,6 +58,7 @@ export default async function Header() {
                     ? `/post/${subItem.item.slug.current}`
                     : `/${subItem.item.slug.current}`
                   : "#",
+                route: subItem.route || undefined, // Added route handling
                 openInNewTab: subItem.openInNewTab || false,
               }
             }) || [],

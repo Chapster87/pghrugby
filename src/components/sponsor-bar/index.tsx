@@ -28,8 +28,6 @@ interface SponsorBarData {
 
 export default async function SponsorBar() {
   const sponsors: SponsorBarData = await client.fetch(sponsorQuery)
-
-  console.log("Sponsors:", sponsors)
   return (
     <div className={s.sponsorBar}>
       <div className={`lg:container ${s.sponsorRow}`}>
