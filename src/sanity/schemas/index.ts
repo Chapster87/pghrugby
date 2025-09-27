@@ -23,6 +23,7 @@ import { sponsor } from "./sponsor"
 import { sponsorBar } from "./sponsorBar"
 import { tag } from "./tag"
 import { team } from "./team"
+import { season } from "./season"
 
 export const schema: SchemaPluginOptions = {
   types: [
@@ -46,6 +47,7 @@ export const schema: SchemaPluginOptions = {
     portableText,
     post,
     product,
+    season,
     settings,
     sponsor,
     sponsorBar,

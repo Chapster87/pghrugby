@@ -21,5 +21,16 @@ export const division = defineType({
       },
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: "shortName",
+      title: "Short Name",
+      type: "string",
+    }),
   ],
+  preview: {
+    select: {
+      title: "name",
+      subtitle: "shortName",
+    },
+  },
 })

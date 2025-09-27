@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity"
 import { CalendarIcon } from "@sanity/icons"
+import EventNameInput from "../components/EventNameInput"
 
 export const match = defineType({
   name: "match",
@@ -7,14 +8,6 @@ export const match = defineType({
   type: "document",
   icon: CalendarIcon,
   fields: [
-    defineField({
-      name: "name",
-      title: "Event Name",
-      type: "string",
-      description:
-        'A descriptive name for the event, e.g., "Men\'s D1 vs. Cleveland Rovers"',
-      validation: (Rule) => Rule.required(),
-    }),
     defineField({
       name: "eventDateTime",
       title: "Event Date and Time",
@@ -38,6 +31,12 @@ export const match = defineType({
       to: [{ type: "division" }],
     }),
     defineField({
+      name: "season",
+      title: "Season",
+      type: "reference",
+      to: [{ type: "season" }],
+    }),
+    defineField({
       name: "matchType",
       title: "Match Type",
       type: "string",
@@ -53,14 +52,95 @@ export const match = defineType({
       title: "Home Team",
       type: "reference",
       to: [{ type: "team" }],
-      validation: (Rule) => Rule.required(),
+      readOnly: ({ document }) => {
+        const doc = document as {
+          division?: { _ref: string }
+          league?: { _ref: string }
+        }
+        return !doc?.division?._ref || !doc?.league?._ref
+      },
+      options: {
+        filter: ({ document }) => {
+          const doc = document as {
+            division?: { _ref: string }
+            league?: { _ref: string }
+          }
+          const divisionRef = doc?.division?._ref
+          const leagueRef = doc?.league?._ref
+
+          if (!divisionRef || !leagueRef) {
+            return {
+              filter: "_id == $nothing",
+              params: { nothing: "" },
+            }
+          }
+
+          return {
+            filter:
+              "division._ref == $divisionRef && league._ref == $leagueRef",
+            params: { divisionRef, leagueRef },
+          }
+        },
+      },
     }),
     defineField({
       name: "awayTeam",
       title: "Away Team",
       type: "reference",
       to: [{ type: "team" }],
+      readOnly: ({ document }) => {
+        const doc = document as {
+          division?: { _ref: string }
+          league?: { _ref: string }
+        }
+        return !doc?.division?._ref || !doc?.league?._ref
+      },
+      options: {
+        filter: ({ document }) => {
+          const doc = document as {
+            division?: { _ref: string }
+            league?: { _ref: string }
+          }
+          const divisionRef = doc?.division?._ref
+          const leagueRef = doc?.league?._ref
+
+          if (!divisionRef || !leagueRef) {
+            return {
+              filter: "_id == $nothing",
+              params: { nothing: "" },
+            }
+          }
+
+          return {
+            filter:
+              "division._ref == $divisionRef && league._ref == $leagueRef",
+            params: { divisionRef, leagueRef },
+          }
+        },
+      },
+    }),
+    defineField({
+      name: "name",
+      title: "Event Name",
+      type: "string",
+      description:
+        'A descriptive name for the event, e.g., "Men\'s D1 vs. Cleveland Rovers"',
       validation: (Rule) => Rule.required(),
+      components: {
+        input: EventNameInput,
+      },
+    }),
+    defineField({
+      name: "homeTeamScore",
+      title: "Home Team Score",
+      type: "number",
+      validation: (Rule) => Rule.min(0).integer(),
+    }),
+    defineField({
+      name: "awayTeamScore",
+      title: "Away Team Score",
+      type: "number",
+      validation: (Rule) => Rule.min(0).integer(),
     }),
   ],
   preview: {
@@ -83,7 +163,7 @@ export const match = defineType({
       const subtitle = `${home || "TBD"} vs ${away || "TBD"}`
       return {
         title: title,
-        subtitle: `${subtitle} on ${displayDate}`,
+        subtitle: `${displayDate}`,
       }
     },
   },

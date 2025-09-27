@@ -30,20 +30,26 @@ export const team = defineType({
       type: "reference",
       to: [{ type: "division" }],
     }),
+    defineField({
+      name: "shortName",
+      title: "Short Name",
+      type: "string",
+    }),
   ],
   preview: {
     select: {
       title: "teamName",
       media: "teamLogo",
-      league: "league.name",
-      division: "division.name",
+      league: "league.shortName",
+      division: "division.shortName",
+      shortName: "shortName",
     },
-    prepare({ title, media, league, division }) {
+    prepare({ title, media, league, division, shortName }) {
       const subtitle = `${league || "TBD"} - ${division || "TBD"}`
       return {
         media: media,
         title: title,
-        subtitle: `${subtitle}`,
+        subtitle: `${subtitle} ${shortName ? "- " + shortName : ""}`,
       }
     },
   },

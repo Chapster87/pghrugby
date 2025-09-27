@@ -418,7 +418,6 @@ export type Match = {
   _createdAt: string
   _updatedAt: string
   _rev: string
-  name?: string
   eventDateTime?: string
   league?: {
     _ref: string
@@ -431,6 +430,12 @@ export type Match = {
     _type: "reference"
     _weak?: boolean
     [internalGroqTypeReferenceTo]?: "division"
+  }
+  season?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "season"
   }
   matchType?: "competitive" | "friendly"
   homeTeam?: {
@@ -445,6 +450,9 @@ export type Match = {
     _weak?: boolean
     [internalGroqTypeReferenceTo]?: "team"
   }
+  name?: string
+  homeTeamScore?: number
+  awayTeamScore?: number
 }
 
 export type Team = {
@@ -478,6 +486,17 @@ export type Team = {
     _weak?: boolean
     [internalGroqTypeReferenceTo]?: "division"
   }
+  shortName?: string
+}
+
+export type Season = {
+  _id: string
+  _type: "season"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  year?: number
+  season?: "Fall" | "Spring"
 }
 
 export type League = {
@@ -488,6 +507,7 @@ export type League = {
   _rev: string
   name?: string
   slug?: Slug
+  shortName?: string
 }
 
 export type ImageWithCaption = {
@@ -555,6 +575,7 @@ export type Division = {
   _rev: string
   name?: string
   slug?: Slug
+  shortName?: string
 }
 
 export type Columns = {
@@ -585,7 +606,6 @@ export type Calendar = {
   _type: "calendar"
   title?: string
   events?: Array<{
-    name?: string
     eventDateTime?: string
     league?: {
       _ref: string
@@ -598,6 +618,12 @@ export type Calendar = {
       _type: "reference"
       _weak?: boolean
       [internalGroqTypeReferenceTo]?: "division"
+    }
+    season?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "season"
     }
     matchType?: "competitive" | "friendly"
     homeTeam?: {
@@ -612,6 +638,9 @@ export type Calendar = {
       _weak?: boolean
       [internalGroqTypeReferenceTo]?: "team"
     }
+    name?: string
+    homeTeamScore?: number
+    awayTeamScore?: number
     _type: "match"
     _key: string
   }>
@@ -862,6 +891,7 @@ export type AllSanitySchemaTypes =
   | MediaText
   | Match
   | Team
+  | Season
   | League
   | ImageWithCaption
   | FormFieldType

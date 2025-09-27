@@ -40,6 +40,7 @@ const DISABLED_TYPES = [
   "page",
   "post",
   "product",
+  "season",
   "settings",
   "sponsor",
   "sponsorBar",
@@ -109,6 +110,9 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
               S.documentTypeListItem("division")
                 .title("Divisions")
                 .icon(FaBuilding),
+              S.documentTypeListItem("season") // Added season schema
+                .title("Seasons")
+                .icon(FaCalendarDays),
             ])
         ),
       S.listItem()
