@@ -7,11 +7,13 @@ export const navQuery = defineQuery(
       customLink,
       overrideTitle,
       openInNewTab,
+      route,
       submenu[]{
         item->{_id, title, slug, _type},
         customLink,
         overrideTitle,
-        openInNewTab
+        openInNewTab,
+        route
       }
     },
     footerNav[] {
@@ -19,13 +21,15 @@ export const navQuery = defineQuery(
       customLink,
       overrideTitle,
       openInNewTab,
+      route,
       submenu[]{
         _type == "reference" => @->{_id, title, slug, _type},
         _type == "object" => {
           item->{_id, title, slug, _type},
           customLink,
           overrideTitle,
-          openInNewTab
+          openInNewTab,
+          route
         }
       }
     }

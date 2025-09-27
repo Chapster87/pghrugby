@@ -69,19 +69,19 @@ export const navigation = defineType({
                         "Optional: Use this to override the page or post title in the navigation.",
                     },
                     {
+                      name: "route",
+                      type: "string",
+                      title: "App Router Path",
+                      description:
+                        "Specify the relative path for App Router pages (e.g., /about, /contact). Overrides other links if set.",
+                    },
+                    {
                       name: "openInNewTab",
                       type: "boolean",
                       title: "Open in new tab",
                       description:
                         "If checked, the link will open in a new browser tab.",
                       initialValue: false,
-                    },
-                    {
-                      name: "route",
-                      type: "string",
-                      title: "App Router Path",
-                      description:
-                        "Specify the relative path for App Router pages (e.g., /about, /contact). Overrides other links if set.",
                     },
                   ],
                   preview: {
@@ -90,17 +90,25 @@ export const navigation = defineType({
                       overrideTitle: "overrideTitle",
                       refTitle: "item.title",
                       customLink: "customLink",
+                      route: "route",
                     },
                     prepare(selection) {
-                      const { title, refTitle, customLink, overrideTitle } =
-                        selection
+                      const {
+                        title,
+                        refTitle,
+                        customLink,
+                        overrideTitle,
+                        route,
+                      } = selection
                       let displayTitle =
                         overrideTitle ||
                         title ||
                         refTitle ||
                         customLink ||
                         "Submenu Item"
-                      let subtitle = customLink
+                      let subtitle = route
+                        ? `Route: ${route}`
+                        : customLink
                         ? "Custom Link"
                         : refTitle
                         ? "Linked Page/Post"
@@ -116,6 +124,13 @@ export const navigation = defineType({
               description: "Optional submenu items for this menu item",
             },
             {
+              name: "route",
+              type: "string",
+              title: "App Router Path",
+              description:
+                "Specify the relative path for App Router pages (e.g., /about, /contact). Overrides other links if set.",
+            },
+            {
               name: "openInNewTab",
               type: "boolean",
               title: "Open in new tab",
@@ -123,29 +138,25 @@ export const navigation = defineType({
                 "If checked, the link will open in a new browser tab.",
               initialValue: false,
             },
-            {
-              name: "route",
-              type: "string",
-              title: "App Router Path",
-              description:
-                "Specify the relative path for App Router pages (e.g., /about, /contact). Overrides other links if set.",
-            },
           ],
           preview: {
             select: {
               title: "item.title",
               submenu: "submenu",
               overrideTitle: "overrideTitle",
+              route: "route",
             },
             prepare(selection) {
-              const { title, submenu, overrideTitle } = selection
+              const { title, submenu, overrideTitle, route } = selection
               const submenuCount = submenu ? submenu.length : 0
+              const subtitle = route
+                ? `Route: ${route}`
+                : submenuCount > 0
+                ? `${submenuCount} submenu item(s)`
+                : "No submenu"
               return {
                 title: overrideTitle || title || "Menu Item",
-                subtitle:
-                  submenuCount > 0
-                    ? `${submenuCount} submenu item(s)`
-                    : "No submenu",
+                subtitle,
               }
             },
           },

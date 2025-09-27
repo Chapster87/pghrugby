@@ -19,6 +19,10 @@ interface CleanUrlFn {
 }
 
 function cleanUrl(url: string): string {
+  // Ensure the URL is not altered if it's a valid route
+  if (url.startsWith("/")) {
+    return url
+  }
   return url.endsWith("#") ? url.slice(0, -1) : url
 }
 
@@ -48,7 +52,7 @@ export function MainNav({ formattedNavData }: NavProps) {
                     {item.submenu.map((sub, subIdx) => (
                       <li key={subIdx}>
                         <Link
-                          href={cleanUrl(sub.route || sub.url)}
+                          href={cleanUrl(sub.route || sub.url)} // Ensure route is prioritized
                           className={s.navSubLink + " w-full px-3 py-2"}
                         >
                           {sub.label}
@@ -62,7 +66,7 @@ export function MainNav({ formattedNavData }: NavProps) {
               <NavigationMenu.Item key={`${item.label}-${index}}`}>
                 <NavigationMenu.Link asChild>
                   <Link
-                    href={cleanUrl(item.route || item.url)}
+                    href={cleanUrl(item.route || item.url)} // Ensure route is prioritized
                     className={s.navLink}
                   >
                     {item.label}
@@ -139,7 +143,7 @@ export function MobileNav({ formattedNavData }: NavProps) {
                         {item.submenu.map((sub, subIdx) => (
                           <li key={subIdx}>
                             <Link
-                              href={cleanUrl(sub.route || sub.url)}
+                              href={cleanUrl(sub.route || sub.url)} // Ensure route is prioritized
                               className={s.mobileNavLink}
                             >
                               {sub.label}
@@ -152,7 +156,7 @@ export function MobileNav({ formattedNavData }: NavProps) {
                 ) : (
                   <li key={`${item.label}-${index}}`}>
                     <Link
-                      href={cleanUrl(item.route || item.url)}
+                      href={cleanUrl(item.route || item.url)} // Ensure route is prioritized
                       className={s.mobileNavLink}
                     >
                       {item.label}
