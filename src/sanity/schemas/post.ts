@@ -56,8 +56,16 @@ export const post = defineType({
   preview: {
     select: {
       title: "title",
-      subtitle: "author.name",
+      slug: "slug.current",
       media: "featuredMedia",
+    },
+    prepare(selection) {
+      const { title, slug } = selection
+      return {
+        title,
+        subtitle: `/${slug}`,
+        media: selection.media,
+      }
     },
   },
 })
