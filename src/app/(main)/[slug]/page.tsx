@@ -8,8 +8,8 @@ import { sanityFetch } from "@/sanity/lib/live"
 import { pagesSlugs, pageQuery } from "./pages.query"
 import { resolveOpenGraphImage } from "@/sanity/lib/utils"
 import contentStyles from "@/styles/content.module.css"
-import { PortableTextBlock } from "@portabletext/types"
 import { extractPlainText, isPortableText } from "@/lib/util/portableTextUtils"
+import Example from "./(example)/page"
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -151,6 +151,10 @@ export default async function Page(props: Props) {
   }
 
   const structuredData = generateStructuredData(data)
+
+  if (slug === "example") {
+    return <Example data={data} />
+  }
 
   return (
     <article
