@@ -12,7 +12,7 @@ h6,
 .h6 {
   font-family: var(--font-oswald);
   font-weight: 500;
-  text-rendering: optimizelegibility;
+  text-rendering: optimizeLegibility;
 
   a {
     text-decoration: none;
@@ -45,4 +45,12 @@ h5,
 .h5 {
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+p,
+ul,
+ol,
+pre,
+blockquote {
+  margin: 0 0 16px;
 }

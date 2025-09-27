@@ -11,10 +11,11 @@ import { draftMode } from "next/headers"
 import { DisableDraftMode } from "../components/DisableDraftMode"
 import { SanityLive } from "@/sanity/lib/live"
 
-const lato = Lato({ subsets: ["latin"], weight: ["400"] })
+const lato = Lato({ subsets: ["latin"], weight: ["400"], display: "swap" })
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -23,8 +24,8 @@ export const metadata: Metadata = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${lato.className}`}>
-      <body>
+    <html lang="en">
+      <body className={`${lato.className}`}>
         <Providers>
           <div className="relative">
             <BreakpointIndicator />
