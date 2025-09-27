@@ -3,14 +3,14 @@
   top: 0;
   z-index: 20;
   border-top: 1px solid transparent;
-  /* background-color: hsl(var(--heroui-primary));
+  /* background-color: var(--color-gold);
   background-image: url("/images/low-contrast-linen.png");
   background-repeat: repeat;
   background-blend-mode: difference;
   box-shadow: 0 10px 15px -12px rgba(0, 0, 0, 0.4); */
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(5px);
-  border-bottom: 2px solid hsl(var(--heroui-primary));
+  border-bottom: 2px solid var(--color-gold);
 }
 
 .siteLogo {

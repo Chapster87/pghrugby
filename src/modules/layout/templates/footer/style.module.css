@@ -1,11 +1,11 @@
 .footer {
-  --color-skyline-1: hsl(var(--heroui-default-500));
-  --color-skyline-2: hsl(var(--heroui-default-600));
-  --color-skyline-3: hsl(var(--heroui-default-700));
-  --color-skyline-4: hsl(var(--heroui-default-900));
-  background-color: hsl(var(--heroui-primary));
+  --color-skyline-1: var(--color-grey-400);
+  --color-skyline-2: var(--color-grey-500);
+  --color-skyline-3: var(--color-grey-600);
+  --color-skyline-4: var(--color-grey-800);
+  background-color: var(--color-gold);
   background-image: url("/images/low-contrast-linen.png");
   background-repeat: repeat;
   /* background-blend-mode: difference; */
-  border-top: 2px solid hsl(var(--heroui-secondary));
+  border-top: 2px solid var(--color-red);
 }

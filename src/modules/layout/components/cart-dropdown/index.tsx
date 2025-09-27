@@ -13,7 +13,7 @@ import DeleteButton from "@modules/common/components/delete-button"
 import LineItemOptions from "@modules/common/components/line-item-options"
 import LineItemPrice from "@modules/common/components/line-item-price"
 import Thumbnail from "@modules/products/components/thumbnail"
-import { Link } from "@heroui/react"
+import Link from "@components/link"
 import { usePathname } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
 
@@ -85,7 +85,7 @@ const CartDropdown = ({
             href="/cart"
             color="foreground"
             data-testid="nav-cart-link"
-            className="text-foreground text-[18px]"
+            className="text-[18px]"
           >{`Cart (${totalItems})`}</Link>
         </PopoverButton>
         <Transition

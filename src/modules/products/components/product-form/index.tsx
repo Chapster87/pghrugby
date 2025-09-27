@@ -1,6 +1,6 @@
+import * as Form from "@radix-ui/react-form"
 import { useEffect, useState } from "react"
 import { client } from "@/sanity/client"
-import { Form, Input } from "@heroui/react"
 import NativeSelect from "@modules/common/components/native-select"
 import CheckboxWithLabel from "@modules/common/components/checkbox"
 
@@ -63,7 +63,7 @@ export default function ProductForm({
   }
 
   return (
-    <Form className="w-full max-w-xs">
+    <Form.Root className="w-full max-w-xs">
       <h3 className="font-bold mb-2">{form.title}</h3>
       {form.formFields?.map((field: any, idx: number) => {
         const fieldValue = meta?.[field.fieldName]?.value
@@ -72,46 +72,62 @@ export default function ProductForm({
           case "text":
           case "email":
             return (
-              <Input
-                key={idx}
-                className="w-full mb-4"
-                type={field.fieldType}
-                name={field.fieldName}
-                label={field.label}
-                title={field.label}
-                placeholder={placeholder}
-                isRequired={field.required}
-                errorMessage={
-                  field.required
-                    ? `Please enter ${field.label.toLowerCase()}`
-                    : undefined
-                }
-                labelPlacement="outside"
-                value={typeof fieldValue === "string" ? fieldValue : ""}
-                onChange={changeForm}
-              />
+              <Form.Field key={idx} name={field.fieldName} className="mb-4">
+                <div className="flex justify-between">
+                  <Form.Label className="font-medium text-sm">
+                    {field.label}
+                  </Form.Label>
+                  {field.required && (
+                    <Form.Message
+                      match="valueMissing"
+                      className="text-red-500 text-xs"
+                    >
+                      Please enter {field.label.toLowerCase()}
+                    </Form.Message>
+                  )}
+                </div>
+                <Form.Control asChild>
+                  <input
+                    type={field.fieldType}
+                    name={field.fieldName}
+                    placeholder={placeholder}
+                    required={field.required}
+                    value={typeof fieldValue === "string" ? fieldValue : ""}
+                    onChange={changeForm}
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </Form.Control>
+              </Form.Field>
             )
           case "textarea":
             return (
-              <div key={idx} className="mb-2">
-                <Input
-                  as="textarea"
-                  name={field.fieldName}
-                  label={field.label}
-                  title={field.label}
-                  placeholder={placeholder}
-                  isRequired={field.required}
-                  errorMessage={
-                    field.required
-                      ? `Please enter ${field.label.toLowerCase()}`
-                      : undefined
-                  }
-                  labelPlacement="outside"
-                  className="w-full"
-                  value={typeof fieldValue === "string" ? fieldValue : ""}
-                  onChange={changeForm}
-                />
-              </div>
+              <Form.Field key={idx} name={field.fieldName} className="mb-4">
+                <div className="flex justify-between">
+                  <Form.Label className="font-medium text-sm">
+                    {field.label}
+                  </Form.Label>
+                  {field.required && (
+                    <Form.Message
+                      match="valueMissing"
+                      className="text-red-500 text-xs"
+                    >
+                      Please enter {field.label.toLowerCase()}
+                    </Form.Message>
+                  )}
+                </div>
+                <Form.Control asChild>
+                  <textarea
+                    name={field.fieldName}
+                    placeholder={placeholder}
+                    required={field.required}
+                    value={typeof fieldValue === "string" ? fieldValue : ""}
+                    onChange={
+                      changeForm as unknown as React.ChangeEventHandler<HTMLTextAreaElement>
+                    }
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </Form.Control>
+              </Form.Field>
             )
           case "select":
             return (
@@ -158,6 +174,6 @@ export default function ProductForm({
         }
       })}
       {/* Add a submit button or handler as needed */}
-    </Form>
+    </Form.Root>
   )
 }

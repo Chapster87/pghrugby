@@ -3,8 +3,8 @@
 import Back from "@modules/common/icons/back"
 import FastDelivery from "@modules/common/icons/fast-delivery"
 import Refresh from "@modules/common/icons/refresh"
+import * as Accordion from "@radix-ui/react-accordion"
 
-import { Accordion, AccordionItem } from "@heroui/react"
 import { HttpTypes } from "@medusajs/types"
 
 type ProductTabsProps = {
@@ -25,13 +25,20 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
 
   return (
     <div className="w-full">
-      <Accordion>
+      <Accordion.Root type="single" collapsible>
         {tabs.map((tab, i) => (
-          <AccordionItem key={i} aria-label={tab.label} title={tab.label}>
-            {tab.component}
-          </AccordionItem>
+          <Accordion.Item key={i} value={`item-${i}`}>
+            <Accordion.Header>
+              <Accordion.Trigger className="font-medium text-left w-full">
+                {tab.label}
+              </Accordion.Trigger>
+            </Accordion.Header>
+            <Accordion.Content className="pt-2">
+              {tab.component}
+            </Accordion.Content>
+          </Accordion.Item>
         ))}
-      </Accordion>
+      </Accordion.Root>
     </div>
   )
 }

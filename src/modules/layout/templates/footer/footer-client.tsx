@@ -21,7 +21,7 @@ export default function FooterClient({
 
   // Set classes based on the footer theme
   const footerClass = clsx(
-    "relative border-t border-ui-border-base w-full text-foreground bg-background",
+    "relative border-t border-ui-border-base w-full",
     theme === "dark" ? "light" : "dark"
   )
 

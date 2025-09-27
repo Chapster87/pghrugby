@@ -6,15 +6,15 @@
     fill-rule: evenodd;
   }
   .cls1 {
-    fill: var(--color-skyline-1, hsl(var(--heroui-primary-200)));
+    fill: var(--color-skyline-1, var(--color-gold-800));
   }
   .cls2 {
-    fill: var(--color-skyline-2, hsl(var(--heroui-primary-400)));
+    fill: var(--color-skyline-2, var(--color-gold-600));
   }
   .cls3 {
-    fill: var(--color-skyline-3, hsl(var(--heroui-primary-600)));
+    fill: var(--color-skyline-3, var(--color-gold-400));
   }
   .cls4 {
-    fill: var(--color-skyline-4, hsl(var(--heroui-primary-700)));
+    fill: var(--color-skyline-4, var(--color-gold-300));
   }
 }

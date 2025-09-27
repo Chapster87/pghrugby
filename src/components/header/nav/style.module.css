@@ -1,10 +1,22 @@
 .navLink {
-  @apply flex text-foreground text-[18px];
+  @apply flex text-[18px];
   padding: 20px;
+
+  color: var(--color-white);
+
+  @media (prefers-color-scheme: light) {
+    color: var(--color-black);
+  }
 }
 
 .navSubLink {
-  @apply flex text-foreground text-[18px];
+  @apply flex text-[18px];
+
+  color: var(--color-white);
+
+  @media (prefers-color-scheme: light) {
+    color: var(--color-black);
+  }
 }
 
 .navContent {

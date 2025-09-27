@@ -1,0 +1,39 @@
+import React from "react"
+import NextLink from "next/link"
+import clsx from "clsx"
+import buttonStyles from "../button/styles.module.css"
+import s from "./styles.module.css"
+
+type LinkProps = {
+  children: React.ReactNode
+  href: string
+  variant?: "primary" | "secondary"
+  size?: "small" | "large"
+  className?: string
+  buttonStyle?: boolean
+} & React.AnchorHTMLAttributes<HTMLAnchorElement>
+
+const Link: React.FC<LinkProps> = ({
+  children,
+  href,
+  variant = "primary",
+  size = "large",
+  className,
+  buttonStyle = false,
+  ...props
+}) => {
+  const classes = clsx(
+    buttonStyle
+      ? [buttonStyles.base, buttonStyles[variant], buttonStyles[size]]
+      : s.link,
+    className
+  )
+
+  return (
+    <NextLink href={href} className={classes} {...props}>
+      {children}
+    </NextLink>
+  )
+}
+
+export default Link
