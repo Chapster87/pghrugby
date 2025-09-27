@@ -222,12 +222,12 @@ export type Navigation = {
           }
       customLink?: string
       overrideTitle?: string
-      openInNewTab?: boolean
       route?: string
+      openInNewTab?: boolean
       _key: string
     }>
-    openInNewTab?: boolean
     route?: string
+    openInNewTab?: boolean
     _key: string
   }>
   footerNav?: Array<{
@@ -260,6 +260,172 @@ export type Navigation = {
           [internalGroqTypeReferenceTo]?: "post"
         }
     >
+    openInNewTab?: boolean
+    _key: string
+  }>
+}
+
+export type MediaText = {
+  _type: "mediaText"
+  image?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  text?: PortableText
+}
+
+export type Match = {
+  _id: string
+  _type: "match"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  eventDateTime?: string
+  league?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "league"
+  }
+  division?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "division"
+  }
+  season?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "season"
+  }
+  matchType?: "competitive" | "friendly"
+  homeTeam?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "team"
+  }
+  awayTeam?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "team"
+  }
+  name?: string
+  homeTeamScore?: number
+  awayTeamScore?: number
+}
+
+export type Team = {
+  _id: string
+  _type: "team"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  teamName?: string
+  teamLogo?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  league?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "league"
+  }
+  division?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "division"
+  }
+  shortName?: string
+}
+
+export type Season = {
+  _id: string
+  _type: "season"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  year?: number
+  season?: "Fall" | "Spring"
+}
+
+export type Linktree = {
+  _id: string
+  _type: "linktree"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  primaryGroupTitle?: string
+  primaryLinks?: Array<{
+    label?: string
+    internalLink?:
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "page"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "post"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "product"
+        }
+    customLink?: string
+    route?: string
+    openInNewTab?: boolean
+    _key: string
+  }>
+  secondaryGroupTitle?: string
+  secondaryLinks?: Array<{
+    label?: string
+    internalLink?:
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "page"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "post"
+        }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "product"
+        }
+    customLink?: string
+    route?: string
     openInNewTab?: boolean
     _key: string
   }>
@@ -393,110 +559,6 @@ export type Page = {
     _weak?: boolean
     [internalGroqTypeReferenceTo]?: "author"
   }
-}
-
-export type MediaText = {
-  _type: "mediaText"
-  image?: {
-    asset?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: "image"
-  }
-  text?: PortableText
-}
-
-export type Match = {
-  _id: string
-  _type: "match"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  eventDateTime?: string
-  league?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "league"
-  }
-  division?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "division"
-  }
-  season?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "season"
-  }
-  matchType?: "competitive" | "friendly"
-  homeTeam?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "team"
-  }
-  awayTeam?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "team"
-  }
-  name?: string
-  homeTeamScore?: number
-  awayTeamScore?: number
-}
-
-export type Team = {
-  _id: string
-  _type: "team"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  teamName?: string
-  teamLogo?: {
-    asset?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: "image"
-  }
-  league?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "league"
-  }
-  division?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "division"
-  }
-  shortName?: string
-}
-
-export type Season = {
-  _id: string
-  _type: "season"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  year?: number
-  season?: "Fall" | "Spring"
 }
 
 export type League = {
@@ -885,13 +947,14 @@ export type AllSanitySchemaTypes =
   | Settings
   | PortableText
   | Navigation
-  | Product
-  | Post
-  | Page
   | MediaText
   | Match
   | Team
   | Season
+  | Linktree
+  | Product
+  | Post
+  | Page
   | League
   | ImageWithCaption
   | FormFieldType
@@ -1171,7 +1234,7 @@ export type PostPagesSlugsResult = Array<{
 
 // Source: ./src/components/header/nav.query.ts
 // Variable: navQuery
-// Query: *[_type == "navigation"] | order(publishedAt desc)[0] {    mainNav[] {      item->{_id, title, slug, _type},      customLink,      overrideTitle,      openInNewTab,      submenu[]{        item->{_id, title, slug, _type},        customLink,        overrideTitle,        openInNewTab      }    },    footerNav[] {      item->{_id, title, slug, _type},      customLink,      overrideTitle,      openInNewTab,      submenu[]{        _type == "reference" => @->{_id, title, slug, _type},        _type == "object" => {          item->{_id, title, slug, _type},          customLink,          overrideTitle,          openInNewTab        }      }    }  }
+// Query: *[_type == "navigation"] | order(publishedAt desc)[0] {    mainNav[] {      item->{_id, title, slug, _type},      customLink,      overrideTitle,      openInNewTab,      route,      submenu[]{        item->{_id, title, slug, _type},        customLink,        overrideTitle,        openInNewTab,        route      }    },    footerNav[] {      item->{_id, title, slug, _type},      customLink,      overrideTitle,      openInNewTab,      route,      submenu[]{        _type == "reference" => @->{_id, title, slug, _type},        _type == "object" => {          item->{_id, title, slug, _type},          customLink,          overrideTitle,          openInNewTab,          route        }      }    }  }
 export type NavQueryResult = {
   mainNav: Array<{
     item:
@@ -1197,6 +1260,7 @@ export type NavQueryResult = {
     customLink: string | null
     overrideTitle: string | null
     openInNewTab: boolean | null
+    route: string | null
     submenu: Array<{
       item:
         | {
@@ -1221,6 +1285,7 @@ export type NavQueryResult = {
       customLink: string | null
       overrideTitle: string | null
       openInNewTab: boolean | null
+      route: string | null
     }> | null
   }> | null
   footerNav: Array<{
@@ -1241,6 +1306,7 @@ export type NavQueryResult = {
     customLink: string | null
     overrideTitle: string | null
     openInNewTab: boolean | null
+    route: null
     submenu: Array<
       | {
           _id: string
@@ -1296,7 +1362,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  featuredMedia,\n  sticky,\n  categories[]->{title},\n  tags[]->{title},\n  "date": coalesce(date, _updatedAt),\n  "modified": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
-    '*[_type == "navigation"] | order(publishedAt desc)[0] {\n    mainNav[] {\n      item->{_id, title, slug, _type},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      submenu[]{\n        item->{_id, title, slug, _type},\n        customLink,\n        overrideTitle,\n        openInNewTab\n      }\n    },\n    footerNav[] {\n      item->{_id, title, slug, _type},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      submenu[]{\n        _type == "reference" => @->{_id, title, slug, _type},\n        _type == "object" => {\n          item->{_id, title, slug, _type},\n          customLink,\n          overrideTitle,\n          openInNewTab\n        }\n      }\n    }\n  }': NavQueryResult
+    '*[_type == "navigation"] | order(publishedAt desc)[0] {\n    mainNav[] {\n      item->{_id, title, slug, _type},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      route,\n      submenu[]{\n        item->{_id, title, slug, _type},\n        customLink,\n        overrideTitle,\n        openInNewTab,\n        route\n      }\n    },\n    footerNav[] {\n      item->{_id, title, slug, _type},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      route,\n      submenu[]{\n        _type == "reference" => @->{_id, title, slug, _type},\n        _type == "object" => {\n          item->{_id, title, slug, _type},\n          customLink,\n          overrideTitle,\n          openInNewTab,\n          route\n        }\n      }\n    }\n  }': NavQueryResult
     '*[_type == "sponsorBar"] | order(publishedAt desc)[0] {\n    title,\n    items[] {\n      sponsor-> {\n        _id,\n        sponsorName,\n        sponsorLogo,\n        url,\n        nofollow,\n        openInNewTab,\n        width,\n        height\n      }\n    }\n  }': SponsorQueryResult
   }
 }

@@ -157,9 +157,7 @@ export default async function Page(props: Props) {
   }
 
   return (
-    <article
-      className={`${contentStyles.contentMain} light 2xl:container px-4 py-6 mx-auto`}
-    >
+    <article className={`${contentStyles.contentMain}`}>
       {/* <div className="prose max-w-none"> */}
       {/* Structured data for SEO */}
       {structuredData && (

@@ -42,6 +42,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/social-links",
+        destination: "/links",
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

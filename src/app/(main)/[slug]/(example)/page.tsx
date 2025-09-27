@@ -39,9 +39,7 @@ function generateStructuredData(data: any) {
 export default function Example({ data }: { data: any }) {
   const structuredData = generateStructuredData(data)
   return (
-    <article
-      className={`${contentStyles.contentMain} light 2xl:container px-4 py-6 mx-auto`}
-    >
+    <article className={`${contentStyles.contentMain}`}>
       {/* <div className="prose max-w-none"> */}
       {/* Structured data for SEO */}
       {structuredData && (

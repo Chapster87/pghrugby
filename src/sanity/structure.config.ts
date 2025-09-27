@@ -18,6 +18,7 @@ import {
   FaRegCircleUser,
   FaTag,
   FaUserGroup,
+  FaLink,
 } from "react-icons/fa6"
 import pluralize from "pluralize-esm"
 
@@ -35,7 +36,9 @@ const DISABLED_TYPES = [
   "event",
   "formType",
   "league",
+  "linktree",
   "match",
+  "media.tag",
   "navigation",
   "page",
   "post",
@@ -46,7 +49,6 @@ const DISABLED_TYPES = [
   "sponsorBar",
   "tag",
   "team",
-  "media.tag",
 ]
 
 export const structure: StructureResolver = (S: StructureBuilder) =>
@@ -144,6 +146,12 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                 .title("Media Tags")
                 .icon(FaTag),
             ])
+        ),
+      S.listItem()
+        .title("Link Tree")
+        .icon(FaLink)
+        .child(
+          S.document().schemaType("linktree").documentId("linkTreeSettings")
         ),
       S.divider(),
       S.listItem()

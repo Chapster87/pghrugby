@@ -78,9 +78,7 @@ export default function CalendarClient({
   }
 
   return (
-    <div
-      className={`${contentStyles.contentMain} light 2xl:container px-4 py-6 mx-auto `}
-    >
+    <div className={`${contentStyles.contentMain}`}>
       <h1 className="text-2xl font-bold mb-4">Event Calendar</h1>
       <div className="flex justify-between mb-4">
         <button

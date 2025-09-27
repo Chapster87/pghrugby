@@ -168,9 +168,7 @@ export default async function PostPage(props: { params: { slug: string } }) {
   const structuredData = generateStructuredData(data)
 
   return (
-    <article
-      className={`${contentStyles.contentMain} light 2xl:container px-4 py-6 mx-auto `}
-    >
+    <article className={`${contentStyles.contentMain}`}>
       {/* <div className="prose max-w-none"> */}
       {/* Structured data for SEO */}
       {structuredData && (
