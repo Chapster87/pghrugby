@@ -9,9 +9,14 @@ export const imageWithCaption = defineType({
       name: "caption",
       title: "Caption",
       type: "string",
-      options: {
-        isHighlighted: true,
-      },
+      fieldset: "captionFieldset",
+    },
+  ],
+  fieldsets: [
+    {
+      name: "captionFieldset",
+      title: "Caption Settings",
+      options: { collapsible: true, collapsed: true },
     },
   ],
 })
