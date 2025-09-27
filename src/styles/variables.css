@@ -1,0 +1,42 @@
+:root {
+  --font-lato: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-oswald: "Oswald", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --color-white: #ffffff;
+  --color-grey-100: #f8f9fa;
+  --color-grey-200: #e9ecef;
+  --color-grey-300: #dee2e6;
+  --color-grey-400: #ced4da;
+  --color-grey-500: #adb5bd;
+  --color-grey-600: #6c757d;
+  --color-grey-700: #495057;
+  --color-grey-800: #343a40;
+  --color-grey-900: #222222;
+  --color-black: #000000;
+
+  --color-gold-100: #fff7e0;
+  --color-gold-200: #ffecb5;
+  --color-gold-300: #ffe289;
+  --color-gold-400: #ffd75e;
+  --color-gold-500: #ffcc32;
+  --color-gold-600: #ffc107;
+  --color-gold-700: #d29f06;
+  --color-gold-800: #a67d05;
+  --color-gold-900: #795c03;
+
+  --color-gold: #ffb81c;
+
+  --color-red: #c60c30;
+  --color-green: #198754;
+  --color-blue: #377cfb;
+
+  --color-success: var(--color-green);
+  --color-warning: var(--color-yellow);
+  --color-danger: var(--color-red);
+  --color-info: var(--color-blue);
+
+  --color-foreground-dark: var(--color-white);
+  --color-background-dark: var(--color-grey-900);
+  --color-foreground-light: var(--color-black);
+  --color-background-light: var(--color-white);
+}

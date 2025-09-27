@@ -1,5 +1,3 @@
-const path = require("path")
-
 const config = {
   darkMode: "class",
   presets: [require("@medusajs/ui-preset")],
