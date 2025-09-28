@@ -94,7 +94,7 @@ export default function ProductForm({
                     required={field.required}
                     value={typeof fieldValue === "string" ? fieldValue : ""}
                     onChange={changeForm}
-                    className="w-full border rounded px-2 py-1"
+                    className="w-full border rounded-sm px-2 py-1"
                   />
                 </Form.Control>
               </Form.Field>
@@ -124,7 +124,7 @@ export default function ProductForm({
                     onChange={
                       changeForm as unknown as React.ChangeEventHandler<HTMLTextAreaElement>
                     }
-                    className="w-full border rounded px-2 py-1"
+                    className="w-full border rounded-sm px-2 py-1"
                   />
                 </Form.Control>
               </Form.Field>

@@ -8,7 +8,7 @@ export default function CheckoutLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="relative z-[1]" data-page="checkout">
+    <div className="relative z-1" data-page="checkout">
       <div className="w-full bg-white relative sm:min-h-screen">
         <div className="h-16 bg-white border-b ">
           <nav className="flex h-full items-center 2xl:container px-[12] justify-between">

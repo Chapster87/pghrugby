@@ -83,9 +83,8 @@ const CartDropdown = ({
         <PopoverButton className="h-full">
           <Link
             href="/cart"
-            color="foreground"
             data-testid="nav-cart-link"
-            className="text-[18px]"
+            className="text-[18px] text-white font-semibold"
           >{`Cart (${totalItems})`}</Link>
         </PopoverButton>
         <Transition
@@ -134,7 +133,7 @@ const CartDropdown = ({
                         <div className="flex flex-col justify-between flex-1">
                           <div className="flex flex-col flex-1">
                             <div className="flex items-start justify-between">
-                              <div className="flex flex-col overflow-ellipsis whitespace-nowrap mr-4 w-[180px]">
+                              <div className="flex flex-col text-ellipsis whitespace-nowrap mr-4 w-[180px]">
                                 <h3 className="overflow-hidden text-ellipsis">
                                   <Link
                                     href={`/product/${item.product_handle}`}

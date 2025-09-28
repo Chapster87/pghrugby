@@ -25,7 +25,7 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="relative z-[1]" data-page="default">
+    <div className="relative z-1" data-page="default">
       <Header />
       {customer && cart && (
         <CartMismatchBanner customer={customer} cart={cart} />

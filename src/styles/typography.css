@@ -47,10 +47,44 @@ h5,
   letter-spacing: 1px;
 }
 
-p,
-ul,
+p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+address {
+  margin-bottom: 16px;
+  font-style: normal;
+  line-height: inherit;
+}
+
 ol,
-pre,
+ul {
+  padding-left: 32px;
+}
+
+ol,
+ul,
+dl {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+ol ol,
+ul ul,
+ol ul,
+ul ol {
+  margin-bottom: 0;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
 blockquote {
-  margin: 0 0 16px;
+  margin: 0 0 1rem;
 }

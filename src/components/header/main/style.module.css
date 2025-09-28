@@ -59,3 +59,15 @@
     }
   }
 }
+
+.navLink {
+  display: flex;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 20px 12px;
+  color: var(--color-white);
+
+  @media (prefers-color-scheme: light) {
+    color: var(--color-black);
+  }
+}

@@ -14,10 +14,6 @@ interface NavProps {
   }
 }
 
-interface CleanUrlFn {
-  (url: string): string
-}
-
 function cleanUrl(url: string): string {
   // Ensure the URL is not altered if it's a valid route
   if (url.startsWith("/")) {
@@ -31,16 +27,16 @@ export function MainNav({ formattedNavData }: NavProps) {
 
   return (
     <NavigationMenu.Root className="hidden sm:flex gap-9 flex-1 justify-center">
-      <NavigationMenu.List className="flex gap-6">
+      <NavigationMenu.List className={s.navList}>
         {navigation &&
           navigation.map((item, index) =>
             item.submenu && item.submenu.length > 0 ? (
               <NavigationMenu.Item
                 key={`${item.label}-${index}`}
-                className="relative"
+                className={s.navItem}
               >
                 <NavigationMenu.Trigger
-                  className={s.navLink + " flex items-center gap-1 group"}
+                  className={`${s.navLink} flex items-center gap-1 group`}
                 >
                   {item.label}
                   <span className="transition-transform duration-200 ml-1 group-data-[state=open]:rotate-180">
@@ -48,12 +44,12 @@ export function MainNav({ formattedNavData }: NavProps) {
                   </span>
                 </NavigationMenu.Trigger>
                 <NavigationMenu.Content className={s.navContent}>
-                  <ul className="flex flex-col gap-2 p-2">
+                  <ul className={s.subNavList}>
                     {item.submenu.map((sub, subIdx) => (
-                      <li key={subIdx}>
+                      <li key={subIdx} className={s.navSubItem}>
                         <Link
                           href={cleanUrl(sub.route || sub.url)} // Ensure route is prioritized
-                          className={s.navSubLink + " w-full px-3 py-2"}
+                          className={s.navSubLink}
                         >
                           {sub.label}
                         </Link>

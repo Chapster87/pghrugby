@@ -29,8 +29,8 @@ export default function FooterClient({
     <>
       {sponsorBar}
       <footer className={clsx(footerClass, s.footer)}>
-        <Skyline className="absolute bottom-0 z-[1]" />
-        <div className="relative 2xl:container px-[12] flex flex-col w-full z-[2]">
+        <Skyline className="absolute bottom-0 z-1" />
+        <div className="relative 2xl:container px-[12] flex flex-col w-full z-2">
           <div className="flex flex-col gap-y-6 xsm:flex-row items-start justify-between py-40">
             <div>
               <Link

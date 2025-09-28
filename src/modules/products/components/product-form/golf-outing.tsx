@@ -28,7 +28,7 @@ export default function GolfOutingForm({
             required
             value={meta?.email?.value || ""}
             onChange={changeForm}
-            className="w-full border rounded px-2 py-1"
+            className="w-full border rounded-sm px-2 py-1"
           />
         </Form.Control>
       </Form.Field>
@@ -56,7 +56,7 @@ export default function GolfOutingForm({
                 required
                 value={meta?.[fieldName]?.value || ""}
                 onChange={changeForm}
-                className="w-full border rounded px-2 py-1"
+                className="w-full border rounded-sm px-2 py-1"
               />
             </Form.Control>
           </Form.Field>

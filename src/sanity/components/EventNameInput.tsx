@@ -71,7 +71,7 @@ const EventNameInput: React.FC<StringInputProps> = (props) => {
       <button
         type="button"
         onClick={generateEventName}
-        className="bg-transparent hover:bg-gray-100 text-blue-500 font-semibold py-2 px-4 border border-blue-500 rounded shadow"
+        className="bg-transparent hover:bg-gray-100 text-blue-500 font-semibold py-2 px-4 border border-blue-500 rounded-sm shadow-sm"
       >
         Generate Name
       </button>

@@ -214,13 +214,13 @@ export default async function PostPage(props: { params: { slug: string } }) {
           )}
 
           {data.status && (
-            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded text-xs">
+            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded-sm text-xs">
               {data.status}
             </span>
           )}
 
           {data.sticky && (
-            <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900 rounded text-xs">
+            <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900 rounded-sm text-xs">
               Featured
             </span>
           )}
@@ -235,7 +235,7 @@ export default async function PostPage(props: { params: { slug: string } }) {
             {data.categories.map((cat: any, index: number) => (
               <span
                 key={index}
-                className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded"
+                className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm"
               >
                 {cat.title || cat._ref || ""}
               </span>
@@ -251,7 +251,7 @@ export default async function PostPage(props: { params: { slug: string } }) {
             {data.tags.map((tag: any, index: number) => (
               <span
                 key={index}
-                className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded"
+                className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm"
               >
                 {tag.title || tag._ref || ""}
               </span>

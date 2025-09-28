@@ -90,7 +90,7 @@ export default function Example({ data }: { data: any }) {
           )}
 
           {data.status && (
-            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded text-xs">
+            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded-sm text-xs">
               {data.status}
             </span>
           )}

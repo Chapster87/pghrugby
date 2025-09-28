@@ -1,6 +1,6 @@
 import { getBaseURL } from "@lib/util/env"
 import { Metadata } from "next"
-import { Lato, Oswald } from "next/font/google"
+import { Noto_Sans, Oswald } from "next/font/google"
 import "@styles/globals.css"
 import { Providers } from "./providers"
 
@@ -11,7 +11,11 @@ import { draftMode } from "next/headers"
 import { DisableDraftMode } from "../components/DisableDraftMode"
 import { SanityLive } from "@/sanity/lib/live"
 
-const lato = Lato({ subsets: ["latin"], weight: ["400"], display: "swap" })
+const notoSans = Noto_Sans({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+})
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -25,7 +29,7 @@ export const metadata: Metadata = {
 export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${lato.className}`}>
+      <body>
         <Providers>
           <div className="relative">
             <BreakpointIndicator />
