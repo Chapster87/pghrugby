@@ -17,9 +17,14 @@
   padding: 20px 12px;
   color: var(--color-white);
   text-decoration: none;
+  transition: color 0.3s ease;
 
   @media (prefers-color-scheme: light) {
     color: var(--color-black);
+  }
+
+  &:hover {
+    color: var(--color-gold);
   }
 }
 
@@ -38,9 +43,14 @@
   color: var(--color-white);
   width: 100%;
   text-decoration: none;
+  transition: color 0.3s ease;
 
   @media (prefers-color-scheme: light) {
     color: var(--color-black);
+  }
+
+  &:hover {
+    color: var(--color-gold);
   }
 }
 
