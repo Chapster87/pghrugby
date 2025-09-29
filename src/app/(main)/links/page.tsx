@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from "next"
-import Link from "next/link"
+import Link from "@components/link"
+import Heading from "@components/typography/heading"
 import contentStyles from "@/styles/content.module.css"
 import s from "./styles.module.css"
 
@@ -54,20 +55,23 @@ export default async function LinksPage() {
 
   return (
     <div className={`${contentStyles.contentMain} ${s.linktreeMain}`}>
-      <h1>Links</h1>
+      {/* <h1 className={s.linktreeTitle}>Pittsburgh Rugby Links</h1> */}
       <ul className={s.linkList}>
         {linktreeData && (
           <>
-            <li>
-              <span className={s.linktreeGroupTitle}>
-                {linktreeData.primaryGroupTitle}
-              </span>
+            <li className={s.linktreeLinkGroup}>
+              <Heading className={s.linktreeGroupTitle} level="h2">
+                {linktreeData.primaryGroupTitle}:
+              </Heading>
               <ul className={s.linktreeLinksList}>
                 {linktreeData.primaryLinks.map((link: any) => (
-                  <li key={link.url}>
+                  <li key={link.url} className={s.linktreeLinkItem}>
                     <Link
                       href={link.url}
+                      className={s.linktreeLink}
                       target={link.openInNewTab ? "_blank" : "_self"}
+                      buttonStyle
+                      variant="primary"
                     >
                       {link.label}
                     </Link>
@@ -75,16 +79,19 @@ export default async function LinksPage() {
                 ))}
               </ul>
             </li>
-            <li>
-              <span className={s.linktreeGroupTitle}>
-                {linktreeData.secondaryGroupTitle}
-              </span>
+            <li className={s.linktreeLinkGroup}>
+              <Heading className={s.linktreeGroupTitle} level="h2">
+                {linktreeData.secondaryGroupTitle}:
+              </Heading>
               <ul className={s.linktreeLinksList}>
                 {linktreeData.secondaryLinks.map((link: any) => (
-                  <li key={link.url}>
+                  <li key={link.url} className={s.linktreeLinkItem}>
                     <Link
                       href={link.url}
+                      className={s.linktreeLink}
                       target={link.openInNewTab ? "_blank" : "_self"}
+                      buttonStyle
+                      variant="primary"
                     >
                       {link.label}
                     </Link>

@@ -4,17 +4,40 @@
   background-color: transparent;
 }
 
+.linktreeTitle,
+.linktreeGroupTitle {
+  color: var(--color-gold);
+  align-text: center;
+}
+
+.linktreeLinkGroup {
+  width: 100%;
+  text-align: center;
+}
+
 .linkList {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.externalLinksTitle {
-  font-weight: bold;
+.linktreeLinksList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  margin-bottom: 24px;
 }
 
-.externalLinksList {
-  margin-left: 1rem;
-  list-style: disc;
+.linktreeLinkItem {
+  width: 100%;
+}
+
+.linktreeLink {
+  width: 100%;
 }

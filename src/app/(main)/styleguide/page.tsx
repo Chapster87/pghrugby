@@ -41,12 +41,12 @@ export default async function LinksPage() {
     <div className={`${contentStyles.contentMain} ${s.styleguide}`}>
       <section className="mb-12">
         <h1>Typography</h1>
-        <Heading variant="h1">Heading 1</Heading>
-        <Heading variant="h2">Heading 2</Heading>
-        <Heading variant="h3">Heading 3</Heading>
-        <Heading variant="h4">Heading 4</Heading>
-        <Heading variant="h5">Heading 5</Heading>
-        <Heading variant="h6">Heading 6</Heading>
+        <Heading level="h1">Heading 1</Heading>
+        <Heading level="h2">Heading 2</Heading>
+        <Heading level="h3">Heading 3</Heading>
+        <Heading level="h4">Heading 4</Heading>
+        <Heading level="h5">Heading 5</Heading>
+        <Heading level="h6">Heading 6</Heading>
         <Text>
           Paragraph text. Lorem ipsum dolor sit amet, consectetur adipiscing
           elit. Duis placerat libero id congue ultrices.
