@@ -10,6 +10,7 @@ import * as Checkbox from "@radix-ui/react-checkbox"
 import * as RadioGroup from "@radix-ui/react-radio-group"
 import * as Switch from "@radix-ui/react-switch"
 import * as Tooltip from "@radix-ui/react-tooltip"
+import { Pizza } from "lucide-react"
 
 /**
  * Generate metadata for the page.
@@ -67,8 +68,51 @@ export default async function LinksPage() {
 
       <section className="mb-12">
         <h1>Buttons</h1>
-        <Button variant="primary">Primary Button</Button>
-        <Button variant="secondary">Secondary Button</Button>
+        <div className="mb-4 flex gap-3">
+          <Button variant="primary">Primary Button</Button>
+          <Button variant="primary" beforeText={<Pizza />}>
+            Primary Button w/ Icon
+          </Button>
+          <Button variant="primary" disabled>
+            Disabled
+          </Button>
+        </div>
+        <div className="mb-4 flex gap-3 items-center">
+          <Button variant="primary" size="small">
+            Small Button
+          </Button>
+          <Button variant="primary" size="default">
+            Default Button
+          </Button>
+          <Button variant="primary" size="large">
+            Large Button
+          </Button>
+        </div>
+        <div className="mb-4 flex gap-3">
+          <Button variant="secondary">Secondary Button</Button>
+          <Button variant="secondary" beforeText={<Pizza />}>
+            Secondary Button w/ Icon
+          </Button>
+          <Button variant="secondary" disabled>
+            Disabled
+          </Button>
+        </div>
+        <div className="mb-4 flex gap-3 items-center">
+          <Button variant="secondary" size="small">
+            Small Button
+          </Button>
+          <Button variant="secondary" size="default">
+            Default Button
+          </Button>
+          <Button variant="secondary" size="large">
+            Large Button
+          </Button>
+        </div>
+        <div className="mb-4 flex gap-3">
+          <Link href="#" buttonStyle variant="primary">
+            Text Link as Button
+          </Link>
+        </div>
       </section>
 
       <section className="mb-12">

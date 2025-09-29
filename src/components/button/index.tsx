@@ -5,20 +5,24 @@ type ButtonProps = {
   children: React.ReactNode
   onClick?: () => void
   variant?: "primary" | "secondary"
-  size?: "small" | "large"
+  size?: "small" | "default" | "large"
   disabled?: boolean
   className?: string
   isLoading?: boolean
+  beforeText?: React.ReactNode
+  afterText?: React.ReactNode
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
   variant = "primary",
-  size = "large",
+  size = "default",
   disabled = false,
   isLoading = false,
   className,
+  beforeText,
+  afterText,
   ...props
 }) => {
   const classes = [
@@ -39,7 +43,9 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled || isLoading}
       {...props}
     >
+      {beforeText && <span className={s["icon-before"]}>{beforeText}</span>}
       {isLoading ? <span className={s.spinner}></span> : children}
+      {afterText && <span className={s["icon-after"]}>{afterText}</span>}
     </button>
   )
 }

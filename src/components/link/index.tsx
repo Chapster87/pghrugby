@@ -8,7 +8,7 @@ type LinkProps = {
   children: React.ReactNode
   href: string
   variant?: "primary" | "secondary"
-  size?: "small" | "large"
+  size?: "small" | "default" | "large"
   className?: string
   buttonStyle?: boolean
 } & React.AnchorHTMLAttributes<HTMLAnchorElement>
@@ -17,7 +17,7 @@ const Link: React.FC<LinkProps> = ({
   children,
   href,
   variant = "primary",
-  size = "large",
+  size = "default",
   className,
   buttonStyle = false,
   ...props
