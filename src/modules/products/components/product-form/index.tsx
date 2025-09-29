@@ -63,7 +63,7 @@ export default function ProductForm({
   }
 
   return (
-    <Form.Root className="w-full max-w-xs">
+    <Form.Root className="FormRoot">
       <h3 className="font-bold mb-2">{form.title}</h3>
       {form.formFields?.map((field: any, idx: number) => {
         const fieldValue = meta?.[field.fieldName]?.value
@@ -72,16 +72,15 @@ export default function ProductForm({
           case "text":
           case "email":
             return (
-              <Form.Field key={idx} name={field.fieldName} className="mb-4">
+              <Form.Field
+                key={idx}
+                name={field.fieldName}
+                className="FormField"
+              >
                 <div className="flex justify-between">
-                  <Form.Label className="font-medium text-sm">
-                    {field.label}
-                  </Form.Label>
+                  <Form.Label className="FormLabel">{field.label}</Form.Label>
                   {field.required && (
-                    <Form.Message
-                      match="valueMissing"
-                      className="text-red-500 text-xs"
-                    >
+                    <Form.Message match="valueMissing" className="FormMessage">
                       Please enter {field.label.toLowerCase()}
                     </Form.Message>
                   )}
@@ -94,23 +93,22 @@ export default function ProductForm({
                     required={field.required}
                     value={typeof fieldValue === "string" ? fieldValue : ""}
                     onChange={changeForm}
-                    className="w-full border rounded-sm px-2 py-1"
+                    className="FormInput"
                   />
                 </Form.Control>
               </Form.Field>
             )
           case "textarea":
             return (
-              <Form.Field key={idx} name={field.fieldName} className="mb-4">
+              <Form.Field
+                key={idx}
+                name={field.fieldName}
+                className="FormField"
+              >
                 <div className="flex justify-between">
-                  <Form.Label className="font-medium text-sm">
-                    {field.label}
-                  </Form.Label>
+                  <Form.Label className="FormLabel">{field.label}</Form.Label>
                   {field.required && (
-                    <Form.Message
-                      match="valueMissing"
-                      className="text-red-500 text-xs"
-                    >
+                    <Form.Message match="valueMissing" className="FormMessage">
                       Please enter {field.label.toLowerCase()}
                     </Form.Message>
                   )}
@@ -124,7 +122,7 @@ export default function ProductForm({
                     onChange={
                       changeForm as unknown as React.ChangeEventHandler<HTMLTextAreaElement>
                     }
-                    className="w-full border rounded-sm px-2 py-1"
+                    className="FormInput"
                   />
                 </Form.Control>
               </Form.Field>
@@ -135,13 +133,13 @@ export default function ProductForm({
                 <NativeSelect
                   name={field.fieldName}
                   required={field.required}
-                  className="w-full"
+                  className="SelectRoot"
                   placeholder={`Select ${field.label}`}
                   value={typeof fieldValue === "string" ? fieldValue : ""}
                   onChange={handleSelectChange}
                 >
                   {field.options?.map((opt: string, i: number) => (
-                    <option key={i} value={opt}>
+                    <option key={i} value={opt} className="SelectItem">
                       {opt}
                     </option>
                   ))}

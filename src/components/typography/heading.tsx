@@ -5,14 +5,14 @@ import s from "./typography.module.css"
 
 type HeadingProps = {
   variant: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
-  display: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+  display?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
   children: React.ReactNode
   className?: string
 }
 
 const Heading: React.FC<HeadingProps> = ({
   variant,
-  display,
+  display = variant, // Default display to variant if not defined
   children,
   className,
   ...props

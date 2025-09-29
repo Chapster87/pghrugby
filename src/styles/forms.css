@@ -1,0 +1,235 @@
+.FormRoot {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 16px;
+}
+
+.FormField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.FormLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+
+  .FormField.required & {
+    &::after {
+      content: " *";
+      color: var(--color-red);
+    }
+  }
+
+  &[data-invalid="true"] {
+    color: var(--color-red);
+  }
+}
+
+.FormInput {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  background-color: var(--color-white);
+
+  &::placeholder {
+    color: var(--color-gray-600);
+  }
+
+  &[data-invalid="true"] {
+    border-color: var(--color-red);
+  }
+
+  &[disabled] {
+    background-color: var(--color-gray-100);
+    cursor: not-allowed;
+  }
+}
+
+.FormInput:focus,
+.FormInput:focus-visible {
+  border-color: var(--color-gold);
+  outline: 1px solid var(--color-gold);
+
+  &[aria-invalid="true"] {
+    border-color: var(--color-red);
+    outline: 1px solid var(--color-red);
+  }
+}
+
+.FormSelect {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: var(--color-white);
+  transition: border-color 0.2s;
+
+  &::placeholder {
+    color: var(--color-gray-600);
+  }
+
+  &:focus,
+  &:focus-visible {
+    border-color: var(--color-gold);
+    outline: 1px solid var(--color-gold);
+  }
+
+  &:disabled {
+    background-color: var(--color-gray-100);
+    cursor: not-allowed;
+  }
+}
+
+.FormMessage {
+  font-size: 0.875rem;
+  color: var(--color-grey-700);
+  margin-top: -5px;
+}
+
+.FormErrorMessage {
+  font-size: 0.875rem;
+  color: var(--color-red);
+}
+
+.CheckboxGroup {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 16px;
+}
+
+.CheckboxRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.CheckboxRoot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background-color: #fff;
+
+  &:focus,
+  &:focus-visible {
+    border-color: var(--color-gold);
+    outline: 1px solid var(--color-gold);
+  }
+
+  &[data-disabled] {
+    background-color: var(--color-gray-100);
+    cursor: not-allowed;
+  }
+}
+
+.CheckboxRoot[data-state="checked"] {
+  background-color: var(--color-gold);
+  border-color: var(--color-gold);
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3E%3C/svg%3E");
+}
+
+/* Radio Group */
+.RadioGroupRoot {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 16px;
+}
+
+.RadioRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.RadioItem {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  background-color: #fff;
+
+  &:focus,
+  &:focus-visible {
+    border-color: var(--color-gold);
+    outline: 1px solid var(--color-gold);
+  }
+
+  &[data-disabled] {
+    background-color: var(--color-gray-100);
+    cursor: not-allowed;
+  }
+}
+
+.RadioItem[data-state="checked"] {
+  background-color: var(--color-gold);
+  border-color: var(--color-gold);
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='2'/%3E%3C/svg%3E");
+}
+
+.RadioLabel {
+  &:focus,
+  &:focus-visible {
+    outline: 1px solid var(--color-gold);
+    border-radius: 2px;
+  }
+}
+
+.SwitchRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.SwitchRoot {
+  display: inline-flex;
+  align-items: center;
+  width: 40px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.SwitchRoot[data-state="checked"] {
+  background-color: var(--color-grey-900);
+}
+
+.SwitchThumb {
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  transition: transform 0.2s;
+}
+
+.SwitchRoot[data-state="checked"] .SwitchThumb {
+  transform: translateX(20px);
+}
+
+.TooltipContent {
+  z-index: 1000; /* Ensure tooltip appears above other elements */
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.TooltipArrow {
+  z-index: 1000; /* Match z-index of TooltipContent */
+}
