@@ -46,6 +46,7 @@ export const match = defineType({
           { title: "Friendly", value: "friendly" },
         ],
       },
+      initialValue: "competitive",
     }),
     defineField({
       name: "homeTeam",
@@ -149,8 +150,10 @@ export const match = defineType({
       home: "homeTeam",
       away: "awayTeam",
       datetime: "eventDateTime",
+      homeTeamScore: "homeTeamScore",
+      awayTeamScore: "awayTeamScore",
     },
-    prepare({ title, home, away, datetime }) {
+    prepare({ title, home, away, datetime, homeTeamScore, awayTeamScore }) {
       const displayDate = datetime
         ? new Date(datetime).toLocaleString("en-US", {
             month: "short",
@@ -160,10 +163,13 @@ export const match = defineType({
             minute: "2-digit",
           })
         : "No date"
-      const subtitle = `${home || "TBD"} vs ${away || "TBD"}`
+      const results =
+        homeTeamScore !== null && awayTeamScore !== null
+          ? ` (${homeTeamScore} - ${awayTeamScore})`
+          : null
       return {
         title: title,
-        subtitle: `${displayDate}`,
+        subtitle: `${displayDate} ${results ? "| " + results : ""}`,
       }
     },
   },

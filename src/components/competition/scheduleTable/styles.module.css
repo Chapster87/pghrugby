@@ -1,0 +1,62 @@
+.scheduleTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+
+  th,
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .resultsColumn {
+    width: 20%;
+  }
+
+  th,
+  td:not(.resultsColumn) {
+    width: 26.67%;
+  }
+}
+
+.primaryHeader {
+  font-size: 18px;
+  margin-bottom: 1rem;
+}
+
+.date {
+  font-weight: bold;
+}
+
+.homeTeamContent {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.awayTeamContent {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.win {
+  color: var(--color-success);
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.loss {
+  color: var(--color-danger);
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.draw {
+  color: var(--color-grey-700);
+  font-weight: bold;
+  margin-right: 8px;
+}
