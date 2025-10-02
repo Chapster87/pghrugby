@@ -109,3 +109,47 @@ export const LPPG: React.FC<NumberInputProps<NumberSchemaType>> = (props) => {
     </div>
   )
 }
+
+export const Differential: React.FC<NumberInputProps<NumberSchemaType>> = (
+  props
+) => {
+  const { path, onChange, renderDefault } = props
+
+  // Extract the _key from the path
+  const key =
+    path && path.length >= 2 && typeof path[1] === "object" && "_key" in path[1]
+      ? path[1]._key
+      : null
+
+  // Dynamically determine the current team index
+  const currentTeamPath = useFormValue(["teams"])
+  const teamIndex = Array.isArray(currentTeamPath)
+    ? currentTeamPath.findIndex((team) => team?._key === key)
+    : 0
+
+  const pointsFor = Number(useFormValue(["teams", teamIndex, "pointsFor"])) || 0
+  const pointsAgainst =
+    Number(useFormValue(["teams", teamIndex, "pointsAgainst"])) || 0
+
+  const difference = pointsFor - pointsAgainst
+
+  // Use a ref to store the previous difference value
+  const prevDifferenceRef = useRef<number | null>(null)
+
+  // Update the field value dynamically only if difference has changed
+  useEffect(() => {
+    if (onChange && difference !== prevDifferenceRef.current) {
+      onChange(set(difference))
+      prevDifferenceRef.current = difference
+    }
+  }, [difference, onChange])
+
+  return (
+    <div>
+      {renderDefault({
+        ...props,
+        onChange,
+      })}
+    </div>
+  )
+}

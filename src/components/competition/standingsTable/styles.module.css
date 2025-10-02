@@ -1,0 +1,35 @@
+.standingsTable {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  th:not(.primaryHeader),
+  td {
+    text-align: center;
+    /* width: 26.67%; */
+  }
+}
+
+.primaryHeader {
+  font-size: 18px;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.teamName {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.pittsburgh-forge {
+  background-color: var(--color-gold-100);
+  font-weight: bold;
+}

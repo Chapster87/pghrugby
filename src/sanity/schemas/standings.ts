@@ -1,5 +1,5 @@
 import { defineField, defineType } from "sanity"
-import { Points, LPPG } from "../components/StandingsCalculations"
+import { Differential, Points, LPPG } from "../components/StandingsCalculations"
 
 export default defineType({
   name: "standings",
@@ -79,6 +79,10 @@ export default defineType({
               name: "difference",
               title: "Point Differential",
               type: "number",
+              components: {
+                input: Differential,
+              },
+              readOnly: true,
             }),
             defineField({
               name: "bonusPointTries",
