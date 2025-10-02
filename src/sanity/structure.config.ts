@@ -47,6 +47,7 @@ const DISABLED_TYPES = [
   "settings",
   "sponsor",
   "sponsorBar",
+  "standings",
   "tag",
   "team",
 ]
@@ -105,6 +106,9 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
               S.documentTypeListItem("match")
                 .title("Matches")
                 .icon(FaCalendarDays),
+              S.documentTypeListItem("standings")
+                .title("Standings")
+                .icon(FaMedal),
               S.documentTypeListItem("team").title("Teams").icon(FaPeopleGroup),
               S.documentTypeListItem("league")
                 .title("Leagues")

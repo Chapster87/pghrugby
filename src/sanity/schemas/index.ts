@@ -23,6 +23,7 @@ import { season } from "./season"
 import { settings } from "./settings"
 import { sponsor } from "./sponsor"
 import { sponsorBar } from "./sponsorBar"
+import standings from "./standings"
 import { tag } from "./tag"
 import { team } from "./team"
 
@@ -53,6 +54,7 @@ export const schema: SchemaPluginOptions = {
     settings,
     sponsor,
     sponsorBar,
+    standings,
     tag,
     team,
   ],
