@@ -16,9 +16,9 @@ export async function generateMetadata(
   url.pathname = `/links`
 
   return {
-    title: "Men's Rugby Season Standings | Pittsburgh Forge Rugby Club",
+    title: "Women's Rugby Season Standings | Pittsburgh Forge Rugby Club",
     description:
-      "Stay up-to-date with the latest men's rugby season standings for the Pittsburgh Forge Rugby Club.",
+      "Stay up-to-date with the latest women's rugby season standings for the Pittsburgh Forge Rugby Club.",
     alternates: {
       canonical: url.toString(),
     },
@@ -28,26 +28,20 @@ export async function generateMetadata(
   } satisfies Metadata
 }
 
-export default function MensStandings() {
+export default function WomensStandings() {
   return (
     <div className={`${contentStyles.contentMain} ${s.mensStandingsMain}`}>
       <Heading level="h1">Men's Rugby Season Standings</Heading>
 
       <StandingsTable
-        league="Men's"
+        league="Women's"
         division="D1"
         seasonYear={2025}
         seasonName="Fall"
       />
       <StandingsTable
-        league="Men's"
-        division="D3"
-        seasonYear={2025}
-        seasonName="Fall"
-      />
-      <StandingsTable
-        league="Men's"
-        division="D4"
+        league="Women's"
+        division="D2"
         seasonYear={2025}
         seasonName="Fall"
       />
