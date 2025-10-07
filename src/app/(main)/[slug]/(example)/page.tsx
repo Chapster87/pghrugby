@@ -40,71 +40,71 @@ export default function Example({ data }: { data: any }) {
   const structuredData = generateStructuredData(data)
   return (
     <article className={`${contentStyles.contentMain}`}>
-      {/* <div className="prose max-w-none"> */}
-      {/* Structured data for SEO */}
-      {structuredData && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-      )}
-
-      {/* Featured image with proper alt text */}
-      {data.featuredMedia?.asset?.url && (
-        <div className="mb-6 relative aspect-video w-full">
-          <Image
-            src={data.featuredMedia.asset.url}
-            alt={data.featuredMedia.alt || data.title || "Featured image"}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority
-            className="object-cover rounded-lg"
+      <div className="prose max-w-none">
+        {/* Structured data for SEO */}
+        {structuredData && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
           />
-        </div>
-      )}
+        )}
 
-      <header className="mb-8">
-        <h1>{data.title}</h1>
-
-        {isPortableText(data.excerpt) && (
-          <div className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
-            <PortableText value={data.excerpt} />
+        {/* Featured image with proper alt text */}
+        {data.featuredMedia?.asset?.url && (
+          <div className="mb-6 relative aspect-video w-full">
+            <Image
+              src={data.featuredMedia.asset.url}
+              alt={data.featuredMedia.alt || data.title || "Featured image"}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
+              className="object-cover rounded-lg"
+            />
           </div>
         )}
 
-        <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
-          {data.date && (
-            <time dateTime={new Date(data.date).toISOString()}>
-              Published: {new Date(data.date).toLocaleDateString()}
-            </time>
+        <header className="mb-8">
+          <h1>{data.title}</h1>
+
+          {isPortableText(data.excerpt) && (
+            <div className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
+              <PortableText value={data.excerpt} />
+            </div>
           )}
 
-          {data.modified && data.date !== data.modified && (
-            <time dateTime={new Date(data.modified).toISOString()}>
-              Updated: {new Date(data.modified).toLocaleDateString()}
-            </time>
-          )}
+          <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
+            {data.date && (
+              <time dateTime={new Date(data.date).toISOString()}>
+                Published: {new Date(data.date).toLocaleDateString()}
+              </time>
+            )}
 
-          {data.author?.name && (
-            <address className="not-italic">By: {data.author.name}</address>
-          )}
+            {data.modified && data.date !== data.modified && (
+              <time dateTime={new Date(data.modified).toISOString()}>
+                Updated: {new Date(data.modified).toLocaleDateString()}
+              </time>
+            )}
 
-          {data.status && (
-            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded-sm text-xs">
-              {data.status}
-            </span>
+            {data.author?.name && (
+              <address className="not-italic">By: {data.author.name}</address>
+            )}
+
+            {data.status && (
+              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded-sm text-xs">
+                {data.status}
+              </span>
+            )}
+          </div>
+        </header>
+
+        <div className="">
+          {isPortableText(data.content) ? (
+            <PortableText value={data.content} />
+          ) : (
+            <p>No content available.</p>
           )}
         </div>
-      </header>
-
-      <div className="">
-        {isPortableText(data.content) ? (
-          <PortableText value={data.content} />
-        ) : (
-          <p>No content available.</p>
-        )}
       </div>
-      {/* </div> */}
     </article>
   )
 }
