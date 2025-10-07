@@ -1,0 +1,113 @@
+/* Define CSS module styles for MatchCountdown component */
+.countdown {
+  display: grid;
+  gap: 12px;
+  max-width: 375px;
+  margin: 0 auto;
+}
+
+.divisionHeader {
+  background-color: var(--color-gold);
+  padding: 10px;
+  text-transform: uppercase;
+  margin: 0;
+  border: 1px solid var(--color-grey-300);
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background-color: white;
+  border: 1px solid var(--color-grey-300);
+}
+
+.contentTop {
+  display: grid;
+  gap: 10px;
+  padding: 8px 16px 0;
+}
+
+.venue {
+  width: 100%;
+  color: var(--color-grey-800);
+  text-align: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-grey-400);
+}
+
+.matchDate {
+  padding: 0 10px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0;
+}
+
+.teams {
+  padding: 5px 10px;
+}
+
+.teamLogo {
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.matchup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.teamName {
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.vs {
+  flex-shrink: 0;
+  color: #6b7280;
+  font-weight: bold;
+  font-size: 1.125rem;
+}
+
+.countdownTimer {
+  background-color: #1a1a1a;
+  padding: 12px;
+  width: 100%;
+}
+
+.timerInner {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.timeBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #2a2a2a;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  min-width: 60px;
+}
+
+.timeValue {
+  color: white;
+  font-weight: bold;
+  font-size: 1.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeLabel {
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+}

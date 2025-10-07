@@ -1,10 +1,10 @@
 import type { Metadata, ResolvingMetadata } from "next"
-import Link from "@components/link"
 import Heading from "@components/typography/heading"
 import contentStyles from "@/styles/content.module.css"
-import s from "./styles.module.css"
 import { client } from "@/sanity/lib/client"
 import { scheduleQuery } from "./schedule.query"
+import { MatchCountdown } from "@/components/competition/countdown"
+import s from "./styles.module.css"
 
 interface Match {
   _id: string
@@ -116,6 +116,20 @@ export default async function MensSchedule() {
   return (
     <div className={`${contentStyles.contentMain} ${s.mensScheduleMain}`}>
       <Heading level="h1">All Pittsburgh Forge Rugby Club Matches</Heading>
+
+      <MatchCountdown
+        league="Men's"
+        division="D1"
+        seasonYear={2025}
+        seasonName="Fall"
+      />
+
+      <MatchCountdown
+        league="Women's"
+        division="D1"
+        seasonYear={2025}
+        seasonName="Fall"
+      />
 
       <ul>
         {formattedSchedule.map((match) => (
