@@ -51,6 +51,8 @@
     "react-icons": "^5.5.0",
     "sanity": "^3.90.0",
     "sanity-plugin-media": "^4.0.0",
+    "sanity-plugin-simpler-color-input": "^3.1.1",
+    "sanity-plugin-table-of-contents": "^1.0.1",
     "server-only": "^0.0.1",
     "tailwind-bootstrap-grid": "^6.0.0",
     "webpack": "^5.97.1"

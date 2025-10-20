@@ -9,6 +9,8 @@ import { defineConfig } from "sanity"
 import { structureTool } from "sanity/structure"
 import { presentationTool } from "sanity/presentation"
 import { media } from "sanity-plugin-media"
+import { tableOfContentsPlugin } from "sanity-plugin-table-of-contents"
+import { simplerColorInput } from "sanity-plugin-simpler-color-input"
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { apiVersion, dataset, projectId } from "./src/sanity/env"
@@ -36,5 +38,22 @@ export default defineConfig({
     // Vision is for querying with GROQ from inside the Studio
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({ defaultApiVersion: apiVersion }),
+    tableOfContentsPlugin({
+      fieldNames: ["content", "excerpt", "pageBuilder"], // all array and Portable Text fields that should be included in the TOC
+      documentTypes: ["homepage", "page", "post"], // add the TOC to specific document types
+    }),
+    simplerColorInput({
+      // Note: These are all optional
+      defaultColorFormat: "rgba",
+      defaultColorList: [
+        { label: "Light", value: "#ffffff" },
+        { label: "Dark", value: "#333333" },
+        { label: "Brand", value: "#ca786d" },
+        { label: "Accent", value: "#626754" },
+        { label: "Custom...", value: "custom" },
+      ],
+      enableSearch: true,
+      showColorValue: true,
+    }),
   ],
 })
