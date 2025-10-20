@@ -10,6 +10,7 @@ type LinkProps = {
   variant?: "primary" | "secondary"
   size?: "small" | "default" | "large"
   className?: string
+  openInNewTab?: boolean
   buttonStyle?: boolean
 } & React.AnchorHTMLAttributes<HTMLAnchorElement>
 
@@ -19,6 +20,7 @@ const Link: React.FC<LinkProps> = ({
   variant = "primary",
   size = "default",
   className,
+  openInNewTab = false,
   buttonStyle = false,
   ...props
 }) => {
@@ -30,7 +32,13 @@ const Link: React.FC<LinkProps> = ({
   )
 
   return (
-    <NextLink href={href} className={classes} {...props}>
+    <NextLink
+      href={href}
+      className={classes}
+      target={openInNewTab ? "_blank" : undefined}
+      rel={openInNewTab ? "noopener noreferrer" : undefined}
+      {...props}
+    >
       {children}
     </NextLink>
   )

@@ -4,6 +4,7 @@
   border-radius: 8px;
   padding: 30px 20px 20px;
   background-color: var(--color-white);
+  box-shadow: 0 0 0.5rem 0 #000;
 
   @media (--viewport-2xl-up) {
     max-width: var(--container-max-width);

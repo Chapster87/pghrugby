@@ -9,16 +9,22 @@ import { column, columns } from "./components/columns"
 import { division } from "./division"
 import { form } from "./form"
 import { formField } from "./components/formField"
+import { heading } from "./components/heading"
+import { homepage } from "./homepage"
 import { imageWithCaption } from "./components/imageWithCaption"
 import { league } from "./league"
+import { link } from "./components/link"
+import { linkGroup } from "./components/linkGroup"
 import { linktree } from "./linktree"
 import { match } from "./match"
 import { mediaText } from "./components/mediaText"
 import { navigation } from "./navigation"
 import { page } from "./page"
+import { pageBuilder } from "./components/pageBuilder"
 import { portableText } from "./components/portableText"
 import { post } from "./post"
 import { product } from "./product"
+import { richText } from "./components/richText"
 import { season } from "./season"
 import { settings } from "./settings"
 import { sponsor } from "./sponsor"
@@ -40,16 +46,22 @@ export const schema: SchemaPluginOptions = {
     division,
     form,
     formField,
+    heading,
+    homepage,
     imageWithCaption,
     league,
+    link,
+    linkGroup,
     linktree,
     match,
     mediaText,
     navigation,
     page,
+    pageBuilder,
     portableText,
     post,
     product,
+    richText,
     season,
     settings,
     sponsor,

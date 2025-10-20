@@ -1,0 +1,9 @@
+.homepage {
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
+
+.homepageContent {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: var(--color-white);
+}

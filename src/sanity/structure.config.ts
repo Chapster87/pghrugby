@@ -10,6 +10,7 @@ import {
   FaFolderTree,
   FaGear,
   FaGears,
+  FaHouseChimney,
   FaImages,
   FaMedal,
   FaMoneyBill1Wave,
@@ -35,6 +36,7 @@ const DISABLED_TYPES = [
   "division",
   "event",
   "formType",
+  "homepage",
   "league",
   "linktree",
   "match",
@@ -79,6 +81,15 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                 .title("Categories")
                 .icon(FaFilter),
               S.documentTypeListItem("tag").title("Tags").icon(FaTag),
+              S.divider(),
+              S.listItem()
+                .title("Homepage")
+                .icon(FaHouseChimney)
+                .child(
+                  S.document()
+                    .schemaType("homepage")
+                    .documentId("homepageContent")
+                ),
             ])
         ),
       S.listItem()

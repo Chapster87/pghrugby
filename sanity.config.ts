@@ -46,10 +46,11 @@ export default defineConfig({
       // Note: These are all optional
       defaultColorFormat: "rgba",
       defaultColorList: [
-        { label: "Light", value: "#ffffff" },
-        { label: "Dark", value: "#333333" },
-        { label: "Brand", value: "#ca786d" },
-        { label: "Accent", value: "#626754" },
+        { label: "Gold", value: "var(--color-gold)" },
+        { label: "Black", value: "var(--color-black)" },
+        { label: "Dk. Grey", value: "var(--color-grey-900)" },
+        { label: "White", value: "var(--color-white)" },
+        { label: "Red", value: "var(--color-red)" },
         { label: "Custom...", value: "custom" },
       ],
       enableSearch: true,

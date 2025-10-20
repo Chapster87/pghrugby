@@ -10,3 +10,6 @@ export const client = createClient({
     studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL,
   },
 })
+
+export const fetchFromSanity = (query: string, params?: any) =>
+  client.fetch(query, params)
