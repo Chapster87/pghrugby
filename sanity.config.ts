@@ -16,6 +16,7 @@ import { simplerColorInput } from "sanity-plugin-simpler-color-input"
 import { apiVersion, dataset, projectId } from "./src/sanity/env"
 import { schema } from "./src/sanity/schemas"
 import { structure } from "./src/sanity/structure.config"
+import "./src/styles/components/typography.css"
 
 export default defineConfig({
   basePath: "/studio",

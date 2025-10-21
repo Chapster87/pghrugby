@@ -24,6 +24,9 @@ const myPortableTextComponents = {
       <span style={{ background: value?.value }}>{children}</span>
     ),
   },
+  block: {
+    "h1-lg": ({ children }: any) => <h1 className="h1-lg">{children}</h1>,
+  },
 }
 
 interface PageBuilderProps {
@@ -34,8 +37,20 @@ const renderModule = (item: any) => {
   switch (item._type) {
     case "heading":
     case "richText":
+      const style: React.CSSProperties = {}
+      if (item.spacing_top > 0) {
+        style.paddingTop = `${item.spacing_top}px`
+      }
+      if (item.spacing_bottom > 0) {
+        style.paddingBottom = `${item.spacing_bottom}px`
+      }
+      if (item.gap > 0) {
+        style.display = "grid"
+        style.gap = `${item.gap}px`
+      }
+
       return (
-        <div key={item._key}>
+        <div key={item._key} style={style}>
           {item.content.map((block: any) => (
             <PortableText
               key={block._key}

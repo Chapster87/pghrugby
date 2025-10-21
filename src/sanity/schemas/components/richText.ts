@@ -1,6 +1,6 @@
 import { defineType } from "sanity"
 import { FaAlignLeft, FaAlignCenter, FaAlignRight } from "react-icons/fa6"
-import { TextAlign } from "@/sanity/components/TextAlign"
+import { Heading, TextAlign } from "@/sanity/components/SanityCustom"
 
 export const richText = defineType({
   name: "richText",
@@ -14,6 +14,51 @@ export const richText = defineType({
       of: [
         {
           type: "block",
+          styles: [
+            {
+              title: "Normal",
+              value: "normal",
+            },
+            {
+              title: "Heading 1",
+              value: "h1",
+              component: (props) => Heading({ ...props, value: "h1" }),
+            },
+            {
+              title: "Heading 1 - Large",
+              value: "h1-lg",
+              component: (props) => Heading({ ...props, value: "h1-lg" }),
+            },
+            {
+              title: "Heading 2",
+              value: "h2",
+              component: (props) => Heading({ ...props, value: "h2" }),
+            },
+            {
+              title: "Heading 3",
+              value: "h3",
+              component: (props) => Heading({ ...props, value: "h3" }),
+            },
+            {
+              title: "Heading 4",
+              value: "h4",
+              component: (props) => Heading({ ...props, value: "h4" }),
+            },
+            {
+              title: "Heading 5",
+              value: "h5",
+              component: (props) => Heading({ ...props, value: "h5" }),
+            },
+            {
+              title: "Heading 6",
+              value: "h6",
+              component: (props) => Heading({ ...props, value: "h6" }),
+            },
+            {
+              title: "Quote",
+              value: "blockquote",
+            },
+          ],
           marks: {
             decorators: [
               {
@@ -100,6 +145,54 @@ export const richText = defineType({
           },
         },
       ],
+    },
+    {
+      name: "spacing_top",
+      title: "Spacing Top",
+      type: "number",
+      options: {
+        list: [
+          { title: "None", value: 0 },
+          { title: "8px", value: 8 },
+          { title: "16px", value: 16 },
+          { title: "24px", value: 24 },
+          { title: "32px", value: 32 },
+          { title: "40px", value: 40 },
+        ],
+      },
+      initialValue: 0,
+    },
+    {
+      name: "spacing_bottom",
+      title: "Spacing Bottom",
+      type: "number",
+      options: {
+        list: [
+          { title: "None", value: 0 },
+          { title: "8px", value: 8 },
+          { title: "16px", value: 16 },
+          { title: "24px", value: 24 },
+          { title: "32px", value: 32 },
+          { title: "40px", value: 40 },
+        ],
+      },
+      initialValue: 0,
+    },
+    {
+      name: "gap",
+      title: "Gap",
+      type: "number",
+      options: {
+        list: [
+          { title: "None", value: 0 },
+          { title: "8px", value: 8 },
+          { title: "16px", value: 16 },
+          { title: "24px", value: 24 },
+          { title: "32px", value: 32 },
+          { title: "40px", value: 40 },
+        ],
+      },
+      initialValue: 8,
     },
   ],
   preview: {
