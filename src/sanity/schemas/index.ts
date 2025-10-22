@@ -27,6 +27,7 @@ import { product } from "./product"
 import { richText } from "./components/richText"
 import { season } from "./season"
 import { settings } from "./settings"
+import { socialMedia } from "./socialMedia"
 import { sponsor } from "./sponsor"
 import { sponsorBar } from "./sponsorBar"
 import standings from "./standings"
@@ -64,6 +65,7 @@ export const schema: SchemaPluginOptions = {
     richText,
     season,
     settings,
+    socialMedia,
     sponsor,
     sponsorBar,
     standings,

@@ -125,7 +125,7 @@ export function MobileNav({ formattedNavData }: NavProps) {
               navigation.map((item, index) =>
                 item.submenu ? (
                   <li
-                    key={`${item.label}-${index}`}
+                    key={`${item.label}-MM-${index}`}
                     className={s.mobileNavItem}
                   >
                     <details>

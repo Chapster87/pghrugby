@@ -2,21 +2,30 @@
 
 import { useTheme } from "next-themes"
 import { Text } from "@medusajs/ui"
-import Link from "next/link"
+import Link from "@components/link"
+import Image from "next/image"
+import Heading from "../typography/heading"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 import Skyline from "@svg/skyline/Skyline"
 import clsx from "clsx"
+import JoinForge from "./_components/join-forge"
+import SocialLinks from "./_components/social-bar"
+import FooterLinks from "./_components/footer-links"
+import { FormattedNavData, SocialMedia } from "./types"
 import s from "./style.module.css"
 
 export default function FooterClient({
   serverData,
   sponsorBar,
+  socialMedia,
+  formattedNavData,
 }: {
   serverData?: any
   sponsorBar?: React.ReactNode
+  socialMedia?: SocialMedia
+  formattedNavData?: FormattedNavData
 }) {
   const { collections, productCategories } = serverData || {}
-
   const { theme } = useTheme() // Get the current global theme
 
   // Set classes based on the footer theme
@@ -29,8 +38,17 @@ export default function FooterClient({
     <>
       {sponsorBar}
       <footer className={clsx(footerClass, s.footer)}>
-        <Skyline className="absolute bottom-0 z-1" />
-        <div className="relative 2xl:container px-[12] flex flex-col w-full z-2">
+        <Skyline className={s.skyline} />
+        <div className={`2xl:container ${s.footerInner}`}>
+          <JoinForge />
+          <div className={s.footerLinks}>
+            <SocialLinks socialMedia={socialMedia as SocialMedia} />
+            <FooterLinks
+              formattedNavData={formattedNavData as FormattedNavData}
+            />
+          </div>
+        </div>
+        <div className={`2xl:container ${s.footerInnerOLD}`}>
           <div className="flex flex-col gap-y-6 xsm:flex-row items-start justify-between py-40">
             <div>
               <Link
@@ -50,13 +68,13 @@ export default function FooterClient({
                     className="grid grid-cols-1 gap-2"
                     data-testid="footer-categories"
                   >
-                    {productCategories?.slice(0, 6).map((c) => {
+                    {productCategories?.slice(0, 6).map((c: any) => {
                       if (c.parent_category) {
                         return
                       }
 
                       const children =
-                        c.category_children?.map((child) => ({
+                        c.category_children?.map((child: any) => ({
                           name: child.name,
                           handle: child.handle,
                           id: child.id,
@@ -80,7 +98,7 @@ export default function FooterClient({
                           {children && (
                             <ul className="grid grid-cols-1 ml-3 gap-2">
                               {children &&
-                                children.map((child) => (
+                                children.map((child: any) => (
                                   <li key={child.id}>
                                     <Link
                                       className="hover:text-ui-fg-base"

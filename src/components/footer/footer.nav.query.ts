@@ -1,8 +1,8 @@
 import { defineQuery } from "next-sanity"
 
-export const navQuery = defineQuery(
+export const footerNavQuery = defineQuery(
   `*[_type == "navigation"] | order(publishedAt desc)[0] {
-    mainNav[] {
+    footerNav[] {
       item->{_id, title, slug, _type},
       customLink,
       overrideTitle,

@@ -1,0 +1,26 @@
+.social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0 16px;
+}
+
+.socialHeading {
+  text-transform: uppercase;
+  color: var(--color-red);
+}
+
+.socialLinks {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+}
+
+.socialLink {
+  color: var(--color-red);
+
+  &:hover {
+    color: var(--color-black);
+  }
+}

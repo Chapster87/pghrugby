@@ -17,6 +17,7 @@ import {
   FaPenToSquare,
   FaPeopleGroup,
   FaRegCircleUser,
+  FaShareNodes,
   FaTag,
   FaUserGroup,
   FaLink,
@@ -47,6 +48,7 @@ const DISABLED_TYPES = [
   "product",
   "season",
   "settings",
+  "socialMedia",
   "sponsor",
   "sponsorBar",
   "standings",
@@ -182,6 +184,14 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                   S.document().schemaType("settings").documentId("siteSettings")
                 )
                 .icon(FaGear),
+              S.listItem()
+                .title("Social Media")
+                .child(
+                  S.document()
+                    .schemaType("socialMedia")
+                    .documentId("socialMediaSettings")
+                )
+                .icon(FaShareNodes),
               S.divider(),
             ])
         ),
