@@ -124,6 +124,7 @@ export type SocialMedia = {
   _rev: string
   facebook?: string
   instagram?: string
+  youtube?: string
   twitter?: string
 }
 
@@ -164,6 +165,48 @@ export type Settings = {
     crop?: SanityImageCrop
     alt?: string
     metadataBase?: string
+    _type: "image"
+  }
+}
+
+export type Seo = {
+  _id: string
+  _type: "seo"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  description?: string
+  keywords?: Array<string>
+  canonicalUrl?: string
+  robots?: string
+  ogTitle?: string
+  ogDescription?: string
+  ogImage?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  ogUrl?: string
+  twitterTitle?: string
+  twitterDescription?: string
+  twitterImage?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
     _type: "image"
   }
 }
@@ -381,22 +424,41 @@ export type Navigation = {
           _weak?: boolean
           [internalGroqTypeReferenceTo]?: "post"
         }
+      | {
+          _ref: string
+          _type: "reference"
+          _weak?: boolean
+          [internalGroqTypeReferenceTo]?: "product"
+        }
     customLink?: string
     overrideTitle?: string
-    submenu?: Array<
-      | {
-          _ref: string
-          _type: "reference"
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: "page"
-        }
-      | {
-          _ref: string
-          _type: "reference"
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: "post"
-        }
-    >
+    submenu?: Array<{
+      item?:
+        | {
+            _ref: string
+            _type: "reference"
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: "page"
+          }
+        | {
+            _ref: string
+            _type: "reference"
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: "post"
+          }
+        | {
+            _ref: string
+            _type: "reference"
+            _weak?: boolean
+            [internalGroqTypeReferenceTo]?: "product"
+          }
+      customLink?: string
+      overrideTitle?: string
+      route?: string
+      openInNewTab?: boolean
+      _key: string
+    }>
+    route?: string
     openInNewTab?: boolean
     _key: string
   }>
@@ -639,6 +701,43 @@ export type Homepage = {
   _updatedAt: string
   _rev: string
   pageBuilder?: PageBuilder
+  seo?: {
+    title?: string
+    description?: string
+    keywords?: Array<string>
+    canonicalUrl?: string
+    robots?: string
+    ogTitle?: string
+    ogDescription?: string
+    ogImage?: {
+      asset?: {
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      _type: "image"
+    }
+    ogUrl?: string
+    twitterTitle?: string
+    twitterDescription?: string
+    twitterImage?: {
+      asset?: {
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      _type: "image"
+    }
+    _type: "seo"
+  }
 }
 
 export type Heading = {
@@ -1207,6 +1306,7 @@ export type AllSanitySchemaTypes =
   | Sponsor
   | SocialMedia
   | Settings
+  | Seo
   | RichText
   | PortableText
   | PageBuilder
@@ -1537,7 +1637,7 @@ export type PostPagesSlugsResult = Array<{
 
 // Source: ./src/components/footer/footer.nav.query.ts
 // Variable: footerNavQuery
-// Query: *[_type == "navigation"] | order(publishedAt desc)[0] {    footerNav[] {      item->{_id, title, slug, _type},      customLink,      overrideTitle,      openInNewTab,      route,      submenu[]{        _type == "reference" => @->{_id, title, slug, _type},        _type == "object" => {          item->{_id, title, slug, _type},          customLink,          overrideTitle,          openInNewTab,          route        }      }    }  }
+// Query: *[_type == "navigation"] | order(publishedAt desc)[0] {    footerNav[] {      item->{_id, title, slug, _type},      customLink,      overrideTitle,      openInNewTab,      route,      submenu[]{        item->{_id, title, slug, _type},        customLink,        overrideTitle,        openInNewTab,        route      }    }  }
 export type FooterNavQueryResult = {
   footerNav: Array<{
     item:
@@ -1553,25 +1653,43 @@ export type FooterNavQueryResult = {
           slug: Slug | null
           _type: "post"
         }
+      | {
+          _id: string
+          title: string | null
+          slug: Slug | null
+          _type: "product"
+        }
       | null
     customLink: string | null
     overrideTitle: string | null
     openInNewTab: boolean | null
-    route: null
-    submenu: Array<
-      | {
-          _id: string
-          title: string | null
-          slug: Slug | null
-          _type: "page"
-        }
-      | {
-          _id: string
-          title: string | null
-          slug: Slug | null
-          _type: "post"
-        }
-    > | null
+    route: string | null
+    submenu: Array<{
+      item:
+        | {
+            _id: string
+            title: string | null
+            slug: Slug | null
+            _type: "page"
+          }
+        | {
+            _id: string
+            title: string | null
+            slug: Slug | null
+            _type: "post"
+          }
+        | {
+            _id: string
+            title: string | null
+            slug: Slug | null
+            _type: "product"
+          }
+        | null
+      customLink: string | null
+      overrideTitle: string | null
+      openInNewTab: boolean | null
+      route: string | null
+    }> | null
   }> | null
 } | null
 
@@ -1672,7 +1790,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "match"] {\n    _id,\n    eventDateTime,\n    league-> {\n      _id,\n      name\n    },\n    division-> {\n      _id,\n      name\n    },\n    season-> {\n      _id,\n      name\n    },\n    matchType,\n    homeTeam-> {\n      _id,\n      name\n    },\n    awayTeam-> {\n      _id,\n      name\n    },\n    name,\n    homeTeamScore,\n    awayTeamScore\n  } | order(eventDateTime asc)\n': ScheduleQueryResult
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  featuredMedia,\n  sticky,\n  categories[]->{title},\n  tags[]->{title},\n  "date": coalesce(date, _updatedAt),\n  "modified": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
-    '*[_type == "navigation"] | order(publishedAt desc)[0] {\n    footerNav[] {\n      item->{_id, title, slug, _type},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      route,\n      submenu[]{\n        _type == "reference" => @->{_id, title, slug, _type},\n        _type == "object" => {\n          item->{_id, title, slug, _type},\n          customLink,\n          overrideTitle,\n          openInNewTab,\n          route\n        }\n      }\n    }\n  }': FooterNavQueryResult
+    '*[_type == "navigation"] | order(publishedAt desc)[0] {\n    footerNav[] {\n      item->{_id, title, slug, _type},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      route,\n      submenu[]{\n        item->{_id, title, slug, _type},\n        customLink,\n        overrideTitle,\n        openInNewTab,\n        route\n      }\n    }\n  }': FooterNavQueryResult
     '*[_type == "navigation"] | order(publishedAt desc)[0] {\n    mainNav[] {\n      item->{_id, title, slug, _type},\n      customLink,\n      overrideTitle,\n      openInNewTab,\n      route,\n      submenu[]{\n        item->{_id, title, slug, _type},\n        customLink,\n        overrideTitle,\n        openInNewTab,\n        route\n      }\n    }\n  }': NavQueryResult
     '*[_type == "sponsorBar"] | order(publishedAt desc)[0] {\n    title,\n    items[] {\n      sponsor-> {\n        _id,\n        sponsorName,\n        sponsorLogo,\n        url,\n        nofollow,\n        openInNewTab,\n        width,\n        height\n      }\n    }\n  }': SponsorQueryResult
   }

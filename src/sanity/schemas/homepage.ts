@@ -9,6 +9,11 @@ export const homepage = defineType({
       name: "pageBuilder",
       type: "pageBuilder",
     }),
+    defineField({
+      name: "seo",
+      title: "SEO Metadata",
+      type: "seo",
+    }),
   ],
   preview: {
     select: {
