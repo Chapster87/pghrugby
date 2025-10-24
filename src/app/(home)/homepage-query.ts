@@ -1,3 +1,5 @@
+import { seoFragment } from "@fragments/seo-fragment"
+
 export const homepageQuery = `
   *[_type == "homepage"][0]{
     pageBuilder[] {
@@ -18,19 +20,6 @@ export const homepageQuery = `
         }
       }
     },
-    seo-> {
-      title,
-      description,
-      keywords,
-      canonicalUrl,
-      robots,
-      ogTitle,
-      ogDescription,
-      ogImage,
-      ogUrl,
-      twitterTitle,
-      twitterDescription,
-      twitterImage
-    }
+    ${seoFragment}
   }
 `

@@ -47,6 +47,7 @@ const DISABLED_TYPES = [
   "post",
   "product",
   "season",
+  "seo",
   "settings",
   "socialMedia",
   "sponsor",

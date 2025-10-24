@@ -50,49 +50,43 @@ export async function generateMetadata(
     return {}
   }
 
-  const previousImages = (await parent).openGraph?.images || []
-  const ogImage = resolveOpenGraphImage(data?.coverImage)
+  const seo = data?.seo || {}
 
   // Build canonical URL using current URL and slug
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
   url.pathname = `/${slug}`
 
-  // Format date for structured data if available
   const publishDate = data?.date ? new Date(data.date).toISOString() : undefined
   const modifiedDate = data?.modified
     ? new Date(data.modified).toISOString()
     : undefined
 
   return {
-    title: data?.title
-      ? `${data.title} | Pittsburgh Forge Rugby Club`
-      : "Pittsburgh Forge Rugby Club",
-    description:
-      extractPlainText(data?.excerpt) ||
-      "Pittsburgh Forge Rugby Club - Developing athletes and building community through the sport of rugby",
-    authors: data?.author?.name ? [{ name: data.author.name }] : [],
+    title: seo.title
+      ? `${seo.title} | Pittsburgh Forge Rugby Club`
+      : `${data?.title} | Pittsburgh Forge Rugby Club`,
+    description: seo.description,
     alternates: {
-      canonical: url.toString(),
+      canonical: seo.canonicalUrl || url.toString(),
     },
     openGraph: {
-      title: data?.title || "Pittsburgh Forge Rugby Club",
-      description:
-        extractPlainText(data?.excerpt) ||
-        "Pittsburgh Forge Rugby Club - Rugby news, matches and community",
+      title: seo.ogTitle || seo.title,
+      description: seo.ogDescription || seo.description,
+      url: seo.ogUrl || url.toString(),
+      images: seo.ogImage ? [{ url: seo.ogImage }] : undefined,
       type: "article",
       publishedTime: publishDate,
       modifiedTime: modifiedDate,
       authors: data?.author?.name ? [data.author.name] : [],
-      images: ogImage ? [ogImage, ...previousImages] : previousImages,
-      url: url.toString(),
     },
     twitter: {
-      card: "summary_large_image",
-      title: data?.title || "Pittsburgh Forge Rugby Club",
-      description:
-        extractPlainText(data?.excerpt) ||
-        "Pittsburgh Forge Rugby Club - Rugby news, matches and community",
-      images: ogImage ? [ogImage] : undefined,
+      title: seo.twitterTitle || seo.title || data?.title,
+      description: seo.twitterDescription || seo.description,
+      images: seo.twitterImage
+        ? [{ url: seo.twitterImage }]
+        : seo.ogImage
+        ? [{ url: seo.ogImage }]
+        : undefined,
     },
   } satisfies Metadata
 }
@@ -101,14 +95,23 @@ export async function generateMetadata(
 function generateStructuredData(data: any) {
   if (!data) return null
 
+  const { seo = {} } = data
+
+  const publishDate = data?.date ? new Date(data.date).toISOString() : undefined
+  const modifiedDate = data?.modified
+    ? new Date(data.modified).toISOString()
+    : undefined
+
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: data.title,
-    description: extractPlainText(data.excerpt) || "",
-    image: data.featuredMedia?.asset?.url || "",
-    datePublished: data.date || "",
-    dateModified: data.modified || data.date || "",
+    headline: seo?.title
+      ? `${seo.title} | Pittsburgh Forge Rugby Club`
+      : `${data?.title} | Pittsburgh Forge Rugby Club`,
+    description: seo?.description || "",
+    image: seo?.ogImage || "https://pghrugby.com/logo.png",
+    datePublished: publishDate || "",
+    dateModified: modifiedDate || "",
     author: data.author?.name
       ? {
           "@type": "Person",
@@ -120,12 +123,12 @@ function generateStructuredData(data: any) {
       name: "Pittsburgh Forge Rugby Club",
       logo: {
         "@type": "ImageObject",
-        url: "https://pghrugby.com/logo.png", // Update with actual logo URL
+        url: seo?.ogImage || "https://pghrugby.com/logo.png",
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://pghrugby.com/${data.slug}`,
+      "@id": seo?.canonicalUrl || `https://pghrugby.com/${data.slug}`,
     },
   }
 }
@@ -150,7 +153,7 @@ export default async function Page(props: Props) {
     return notFound()
   }
 
-  const structuredData = generateStructuredData(data)
+  const structuredData = generateStructuredData(data || {})
 
   if (slug === "example") {
     return <Example data={data} />

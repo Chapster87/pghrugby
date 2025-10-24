@@ -43,6 +43,11 @@ export const page = defineType({
     }),
     // Example for custom fields
     // defineField({ name: "readTime", type: "number" }),
+    defineField({
+      name: "seo",
+      title: "SEO Metadata",
+      type: "seo",
+    }),
   ],
   preview: {
     select: {

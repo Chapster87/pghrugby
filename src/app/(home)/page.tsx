@@ -68,23 +68,23 @@ function generateStructuredData(seo: any) {
     "@type": "SportsOrganization",
     sport: "Rugby",
     location: "Pittsburgh, PA",
-    name: seo.title || "Pittsburgh Forge Rugby Club",
-    url: seo.canonicalUrl || "https://pghrugby.com/",
-    headline: seo.title || "Pittsburgh Forge Rugby Club",
+    name: seo?.title || "Pittsburgh Forge Rugby Club",
+    url: seo?.canonicalUrl || "https://pghrugby.com/",
+    headline: seo?.title || "Pittsburgh Forge Rugby Club",
     description:
-      seo.description ||
+      seo?.description ||
       "Welcome to the Pittsburgh Forge Rugby Club, where we celebrate the spirit of rugby in the Steel City. Join us for matches, events, and community engagement.",
     publisher: {
       "@type": "Organization",
       name: "Pittsburgh Forge Rugby Club",
       logo: {
         "@type": "ImageObject",
-        url: seo.ogImage || "https://pghrugby.com/logo.png",
+        url: seo?.ogImage || "https://pghrugby.com/logo.png",
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": seo.canonicalUrl || `https://pghrugby.com/`,
+      "@id": seo?.canonicalUrl || `https://pghrugby.com/`,
     },
   }
 }

@@ -1,4 +1,5 @@
 import { defineQuery } from "next-sanity"
+import { seoFragment } from "@fragments/seo-fragment"
 
 export const pageQuery = defineQuery(
   `*[_type == "page" && slug.current == $slug][0]{
@@ -18,6 +19,7 @@ export const pageQuery = defineQuery(
       alt
     },
     author->{name}
+    ,${seoFragment}
   }`
 )
 
