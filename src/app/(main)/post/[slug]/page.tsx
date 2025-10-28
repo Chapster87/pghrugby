@@ -1,11 +1,9 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
-import Image from "next/image"
 import { client } from "../../../../sanity/client"
-import { type PortableTextBlock } from "@portabletext/types"
-
 import PortableText from "@/components/PortableText"
+import { parseSanityImageRef } from "@/sanity/lib/utils"
 import CoverImage from "@/components/CoverImage"
 import { sanityFetch } from "@/sanity/lib/live"
 import { postPagesSlugs, postQuery } from "./posts.query"
@@ -48,8 +46,34 @@ export async function generateMetadata(
     return {}
   }
 
-  const previousImages = (await parent).openGraph?.images || []
-  const ogImage = resolveOpenGraphImage(data?.featuredMedia)
+  const seo: {
+    title?: string
+    description?: string
+    canonicalUrl?: string
+    ogTitle?: string
+    ogDescription?: string
+    ogUrl?: string
+    ogImage?: string
+    twitterTitle?: string
+    twitterDescription?: string
+    twitterImage?: string
+  } = data?.seo || {}
+
+  // Handle ogImage as either a string or Sanity image object
+  let ogImageUrl: string | undefined = undefined
+  if (seo?.ogImage) {
+    if (
+      typeof seo.ogImage === "object" &&
+      seo.ogImage !== null &&
+      "asset" in seo.ogImage
+    ) {
+      ogImageUrl = parseSanityImageRef(
+        (seo.ogImage as { asset: { _ref: string } }).asset._ref
+      )
+    } else if (typeof seo.ogImage === "string") {
+      ogImageUrl = seo.ogImage
+    }
+  }
 
   // Build canonical URL using current URL and slug
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
@@ -62,41 +86,34 @@ export async function generateMetadata(
     : undefined
 
   return {
-    title: data?.title
-      ? `${data.title} | Pittsburgh Forge Rugby Club`
-      : "Pittsburgh Forge Rugby Club",
-    description:
-      extractPlainText(data?.excerpt) ||
-      "Pittsburgh Forge Rugby Club - Developing athletes and building community through the sport of rugby",
-    authors:
-      data?.author?.firstName && data?.author?.lastName
-        ? [{ name: `${data.author.firstName} ${data.author.lastName}` }]
-        : [],
+    title: seo?.title
+      ? `${seo?.title} | Pittsburgh Forge Rugby Club`
+      : `${data?.title} | Pittsburgh Forge Rugby Club`,
+    description: seo?.description,
+    authors: [{ name: data?.author?.name || "Pittsburgh Forge Rugby Club" }],
     alternates: {
-      canonical: url.toString(),
+      canonical: seo?.canonicalUrl || url.toString(),
     },
     openGraph: {
-      title: data?.title || "Pittsburgh Forge Rugby Club",
-      description:
-        extractPlainText(data?.excerpt) ||
-        "Pittsburgh Forge Rugby Club - Rugby news, matches and community",
+      title: seo?.ogTitle || seo?.title,
+      description: seo?.ogDescription || seo?.description,
+      url: seo?.ogUrl || url.toString(),
+      images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
       type: "article",
       publishedTime: publishDate,
       modifiedTime: modifiedDate,
-      authors:
-        data?.author?.firstName && data?.author?.lastName
-          ? [`${data.author.firstName} ${data.author.lastName}`]
-          : [],
-      images: ogImage ? [ogImage, ...previousImages] : previousImages,
-      url: url.toString(),
+      authors: data?.author?.name
+        ? [data.author.name]
+        : ["Pittsburgh Forge Rugby Club"],
     },
     twitter: {
-      card: "summary_large_image",
-      title: data?.title || "Pittsburgh Forge Rugby Club",
-      description:
-        extractPlainText(data?.excerpt) ||
-        "Pittsburgh Forge Rugby Club - Rugby news, matches and community",
-      images: ogImage ? [ogImage] : undefined,
+      title: seo?.twitterTitle ?? seo?.title ?? data?.title ?? undefined,
+      description: seo?.twitterDescription || seo?.description,
+      images: seo.twitterImage
+        ? [{ url: seo.twitterImage }]
+        : ogImageUrl
+        ? [{ url: ogImageUrl }]
+        : undefined,
     },
   } satisfies Metadata
 }
@@ -105,37 +122,58 @@ export async function generateMetadata(
 function generateStructuredData(data: any) {
   if (!data) return null
 
-  // Get author name if available
-  const authorName =
-    data.author?.firstName && data.author?.lastName
-      ? `${data.author.firstName} ${data.author.lastName}`
-      : undefined
+  const { seo = {} } = data
+
+  // Handle ogImage as either a string or Sanity image object
+  let ogImageUrl: string = "https://pghrugby.com/logo.png"
+  if (seo?.ogImage) {
+    if (
+      typeof seo.ogImage === "object" &&
+      seo.ogImage !== null &&
+      "asset" in seo.ogImage
+    ) {
+      ogImageUrl =
+        parseSanityImageRef(
+          (seo.ogImage as { asset: { _ref: string } }).asset._ref
+        ) || ogImageUrl
+    } else if (typeof seo.ogImage === "string") {
+      ogImageUrl = seo.ogImage
+    }
+  }
+
+  const publishDate = data?.date ? new Date(data.date).toISOString() : undefined
+  const modifiedDate = data?.modified
+    ? new Date(data.modified).toISOString()
+    : undefined
 
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: data.title,
-    description: extractPlainText(data.excerpt) || "",
-    image: data.featuredMedia?.asset?.url || "",
-    datePublished: data.date || "",
-    dateModified: data.modified || data.date || "",
-    author: authorName
-      ? {
-          "@type": "Person",
-          name: authorName,
-        }
-      : undefined,
+    headline: seo?.title
+      ? `${seo.title} | Pittsburgh Forge Rugby Club`
+      : `${data?.title} | Pittsburgh Forge Rugby Club`,
+    description: seo?.description || "",
+    image: ogImageUrl,
+    datePublished: publishDate || "",
+    dateModified: modifiedDate || "",
+    author:
+      data.author?.name || "Pittsburgh Forge Rugby Club"
+        ? {
+            "@type": "Person",
+            name: data.author.name || "Pittsburgh Forge Rugby Club",
+          }
+        : undefined,
     publisher: {
       "@type": "Organization",
       name: "Pittsburgh Forge Rugby Club",
       logo: {
         "@type": "ImageObject",
-        url: "https://pghrugby.com/logo.png", // Update with actual logo URL
+        url: ogImageUrl,
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://pghrugby.com/post/${data.slug}`,
+      "@id": seo?.canonicalUrl || `https://pghrugby.com/${data.slug}`,
     },
     keywords:
       Array.isArray(data.tags) && data.tags.length > 0

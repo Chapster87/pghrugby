@@ -9,6 +9,7 @@ import PageBuilder from "@/components/PageBuilder"
 import { homepageQuery } from "./homepage-query"
 import contentStyles from "@/styles/content.module.css"
 import s from "./style.module.css"
+import { parseSanityImageRef } from "@/sanity/lib/utils"
 
 /**
  * Generate metadata for the page.
@@ -32,6 +33,22 @@ export async function generateMetadata(
 
   const seo = data?.seo || {}
 
+  // Handle ogImage as either a string or Sanity image object
+  let ogImageUrl: string | undefined = undefined
+  if (seo?.ogImage) {
+    if (
+      typeof seo.ogImage === "object" &&
+      seo.ogImage !== null &&
+      "asset" in seo.ogImage
+    ) {
+      ogImageUrl = parseSanityImageRef(
+        (seo.ogImage as { asset: { _ref: string } }).asset._ref
+      )
+    } else if (typeof seo.ogImage === "string") {
+      ogImageUrl = seo.ogImage
+    }
+  }
+
   // Build canonical URL using current URL and slug
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
 
@@ -47,15 +64,15 @@ export async function generateMetadata(
       title: seo.ogTitle || seo.title,
       description: seo.ogDescription || seo.description,
       url: seo.ogUrl || url.toString(),
-      images: seo.ogImage ? [{ url: seo.ogImage }] : undefined,
+      images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
     },
     twitter: {
       title: seo.twitterTitle || seo.title,
       description: seo.twitterDescription || seo.description,
       images: seo.twitterImage
         ? [{ url: seo.twitterImage }]
-        : seo.ogImage
-        ? [{ url: seo.ogImage }]
+        : ogImageUrl
+        ? [{ url: ogImageUrl }]
         : undefined,
     },
   } satisfies Metadata
@@ -63,6 +80,22 @@ export async function generateMetadata(
 
 // JSON-LD schema.org structured data
 function generateStructuredData(seo: any) {
+  // Handle ogImage as either a string or Sanity image object
+  let ogImageUrl: string = "https://pghrugby.com/logo.png"
+  if (seo?.ogImage) {
+    if (
+      typeof seo.ogImage === "object" &&
+      seo.ogImage !== null &&
+      "asset" in seo.ogImage
+    ) {
+      ogImageUrl =
+        parseSanityImageRef(
+          (seo.ogImage as { asset: { _ref: string } }).asset._ref
+        ) || ogImageUrl
+    } else if (typeof seo.ogImage === "string") {
+      ogImageUrl = seo.ogImage
+    }
+  }
   return {
     "@context": "https://schema.org",
     "@type": "SportsOrganization",
@@ -79,7 +112,7 @@ function generateStructuredData(seo: any) {
       name: "Pittsburgh Forge Rugby Club",
       logo: {
         "@type": "ImageObject",
-        url: seo?.ogImage || "https://pghrugby.com/logo.png",
+        url: ogImageUrl,
       },
     },
     mainEntityOfPage: {

@@ -14,7 +14,7 @@ const postFields = /* groq */ `
   tags[]->{title},
   "date": coalesce(date, _updatedAt),
   "modified": coalesce(date, _updatedAt),
-  "author": author->{firstName, lastName, picture},
+  "author": author->{name},
   ${seoFragment}
 `
 

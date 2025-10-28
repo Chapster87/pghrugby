@@ -45,3 +45,9 @@ export function resolveOpenGraphImage(image: any, width = 1200, height = 627) {
   if (!url) return
   return { url, alt: image?.alt as string, width, height }
 }
+
+export function parseSanityImageRef(ref: string | null | undefined): string {
+  if (!ref) return ""
+  const [_, id, dimension, format] = ref.split("-")
+  return `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET}/${id}-${dimension}.${format}`
+}

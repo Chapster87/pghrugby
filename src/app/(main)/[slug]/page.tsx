@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
 import Image from "next/image"
 import { client } from "../../../sanity/client"
+import { parseSanityImageRef } from "@/sanity/lib/utils"
 import PortableText from "@/components/PortableText"
 import { sanityFetch } from "@/sanity/lib/live"
 import { pagesSlugs, pageQuery } from "./pages.query"
@@ -62,6 +63,22 @@ export async function generateMetadata(
     twitterImage?: string
   } = data?.seo || {}
 
+  // Handle ogImage as either a string or Sanity image object
+  let ogImageUrl: string | undefined = undefined
+  if (seo?.ogImage) {
+    if (
+      typeof seo.ogImage === "object" &&
+      seo.ogImage !== null &&
+      "asset" in seo.ogImage
+    ) {
+      ogImageUrl = parseSanityImageRef(
+        (seo.ogImage as { asset: { _ref: string } }).asset._ref
+      )
+    } else if (typeof seo.ogImage === "string") {
+      ogImageUrl = seo.ogImage
+    }
+  }
+
   // Build canonical URL using current URL and slug
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
   url.pathname = `/${slug}`
@@ -83,19 +100,19 @@ export async function generateMetadata(
       title: seo?.ogTitle || seo?.title,
       description: seo?.ogDescription || seo?.description,
       url: seo?.ogUrl || url.toString(),
-      images: seo?.ogImage ? [{ url: seo?.ogImage }] : undefined,
+      images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
       type: "article",
       publishedTime: publishDate,
       modifiedTime: modifiedDate,
       authors: data?.author?.name ? [data.author.name] : [],
     },
     twitter: {
-      title: seo?.twitterTitle || seo?.title || data?.title,
+      title: seo?.twitterTitle ?? seo?.title ?? data?.title ?? undefined,
       description: seo?.twitterDescription || seo?.description,
-      images: seo?.twitterImage
-        ? [{ url: seo?.twitterImage }]
-        : seo?.ogImage
-        ? [{ url: seo?.ogImage }]
+      images: seo.twitterImage
+        ? [{ url: seo.twitterImage }]
+        : ogImageUrl
+        ? [{ url: ogImageUrl }]
         : undefined,
     },
   } satisfies Metadata
@@ -106,6 +123,23 @@ function generateStructuredData(data: any) {
   if (!data) return null
 
   const { seo = {} } = data
+
+  // Handle ogImage as either a string or Sanity image object
+  let ogImageUrl: string = "https://pghrugby.com/logo.png"
+  if (seo?.ogImage) {
+    if (
+      typeof seo.ogImage === "object" &&
+      seo.ogImage !== null &&
+      "asset" in seo.ogImage
+    ) {
+      ogImageUrl =
+        parseSanityImageRef(
+          (seo.ogImage as { asset: { _ref: string } }).asset._ref
+        ) || ogImageUrl
+    } else if (typeof seo.ogImage === "string") {
+      ogImageUrl = seo.ogImage
+    }
+  }
 
   const publishDate = data?.date ? new Date(data.date).toISOString() : undefined
   const modifiedDate = data?.modified
@@ -119,7 +153,7 @@ function generateStructuredData(data: any) {
       ? `${seo.title} | Pittsburgh Forge Rugby Club`
       : `${data?.title} | Pittsburgh Forge Rugby Club`,
     description: seo?.description || "",
-    image: seo?.ogImage || "https://pghrugby.com/logo.png",
+    image: ogImageUrl,
     datePublished: publishDate || "",
     dateModified: modifiedDate || "",
     author: data.author?.name
@@ -133,7 +167,7 @@ function generateStructuredData(data: any) {
       name: "Pittsburgh Forge Rugby Club",
       logo: {
         "@type": "ImageObject",
-        url: seo?.ogImage || "https://pghrugby.com/logo.png",
+        url: ogImageUrl,
       },
     },
     mainEntityOfPage: {
@@ -158,6 +192,8 @@ export default async function Page(props: Props) {
         }
       : undefined
   )
+
+  console.log("Page data:", data)
 
   if (!data?._id) {
     return notFound()

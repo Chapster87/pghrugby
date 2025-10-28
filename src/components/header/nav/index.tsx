@@ -46,7 +46,10 @@ export function MainNav({ formattedNavData }: NavProps) {
                 <NavigationMenu.Content className={s.navContent}>
                   <ul className={s.subNavList}>
                     {item.submenu.map((sub, subIdx) => (
-                      <li key={subIdx} className={s.navSubItem}>
+                      <li
+                        key={`${sub.label}-${subIdx}`}
+                        className={s.navSubItem}
+                      >
                         <Link
                           href={cleanUrl(sub.route || sub.url)} // Ensure route is prioritized
                           className={s.navSubLink}
@@ -137,7 +140,7 @@ export function MobileNav({ formattedNavData }: NavProps) {
                       </summary>
                       <ul className={s.mobileNavSubList}>
                         {item.submenu.map((sub, subIdx) => (
-                          <li key={subIdx}>
+                          <li key={`${sub.label}-${subIdx}`}>
                             <Link
                               href={cleanUrl(sub.route || sub.url)} // Ensure route is prioritized
                               className={s.mobileNavLink}

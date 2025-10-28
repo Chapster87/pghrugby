@@ -24,6 +24,11 @@ export const product = defineType({
       readOnly: true,
     }),
     defineField({
+      name: "description",
+      type: "text",
+      description: "A brief description of the product.",
+    }),
+    defineField({
       group: "content",
       name: "specs",
       type: "array",
@@ -64,6 +69,11 @@ export const product = defineType({
       type: "reference",
       to: [{ type: "formType" }],
       description: "Attach a form to this product (optional)",
+    }),
+    defineField({
+      name: "seo",
+      title: "SEO Metadata",
+      type: "seo",
     }),
   ],
   preview: {

@@ -1,5 +1,5 @@
 export const seoFragment = `
-  seo-> {
+  seo {
     title,
     description,
     keywords,
