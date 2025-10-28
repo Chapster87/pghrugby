@@ -12,24 +12,38 @@ export const product = defineType({
       name: "content",
       title: "Content",
     },
+    {
+      default: false,
+      icon: ComposeIcon,
+      name: "forms",
+      title: "Forms",
+    },
+    {
+      default: false,
+      icon: ComposeIcon,
+      name: "metadata",
+      title: "SEO & Metadata",
+    },
   ],
   fields: [
     defineField({
       name: "title",
       type: "string",
+      group: "content",
     }),
     defineField({
       name: "slug",
       type: "slug",
       readOnly: true,
+      group: "content",
     }),
     defineField({
       name: "description",
       type: "text",
       description: "A brief description of the product.",
+      group: "content",
     }),
     defineField({
-      group: "content",
       name: "specs",
       type: "array",
       of: [
@@ -48,6 +62,7 @@ export const product = defineType({
           ],
         },
       ],
+      group: "content",
     }),
     defineField({
       name: "addons",
@@ -62,11 +77,13 @@ export const product = defineType({
           validation: (Rule) => Rule.max(3),
         },
       ],
+      group: "content",
     }),
     defineField({
       name: "form",
       title: "Form",
       type: "reference",
+      group: "forms",
       to: [{ type: "formType" }],
       description: "Attach a form to this product (optional)",
     }),
@@ -74,6 +91,7 @@ export const product = defineType({
       name: "seo",
       title: "SEO Metadata",
       type: "seo",
+      group: "metadata",
     }),
   ],
   preview: {

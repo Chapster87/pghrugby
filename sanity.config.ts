@@ -18,12 +18,31 @@ import { schema } from "./src/sanity/schemas"
 import { structure } from "./src/sanity/structure.config"
 import "./src/styles/components/typography.css"
 
+import { UpdateModifiedOnPublish } from "./src/sanity/components/UpdateModifiedOnPublish"
+
 export default defineConfig({
   basePath: "/studio",
   projectId,
   dataset,
   // Add and edit the content schema in the './sanity/schemas' folder
   schema,
+  document: {
+    actions: (prev, context) => {
+      if (context.schemaType === "page" || context.schemaType === "post") {
+        // Remove default publish action by filtering by string or object property
+        return [
+          UpdateModifiedOnPublish,
+          ...prev.filter((a) => {
+            if (typeof a === "string") return a !== "publish"
+            if (typeof a === "object" && "action" in a)
+              return (a as any).action !== "publish"
+            return true
+          }),
+        ]
+      }
+      return prev
+    },
+  },
   plugins: [
     structureTool({ structure }),
     presentationTool({
