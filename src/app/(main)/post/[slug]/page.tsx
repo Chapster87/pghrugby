@@ -245,10 +245,8 @@ export default async function PostPage(props: { params: { slug: string } }) {
               </time>
             )}
 
-            {data.author?.firstName && data.author?.lastName && (
-              <address className="not-italic">
-                By: {`${data.author.firstName} ${data.author.lastName}`}
-              </address>
+            {data.author?.name && (
+              <address className="not-italic">By: {data.author.name}</address>
             )}
 
             {data.status && (
