@@ -1,5 +1,18 @@
 import { StorePrice } from "@medusajs/types"
 
+export type SEO = {
+  title?: string
+  description?: string
+  canonicalUrl?: string
+  ogTitle?: string
+  ogDescription?: string
+  ogUrl?: string
+  ogImage?: string
+  twitterTitle?: string
+  twitterDescription?: string
+  twitterImage?: string
+}
+
 export type FeaturedProduct = {
   id: string
   title: string

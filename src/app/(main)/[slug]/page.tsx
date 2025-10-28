@@ -6,9 +6,8 @@ import { client } from "../../../sanity/client"
 import PortableText from "@/components/PortableText"
 import { sanityFetch } from "@/sanity/lib/live"
 import { pagesSlugs, pageQuery } from "./pages.query"
-import { resolveOpenGraphImage } from "@/sanity/lib/utils"
 import contentStyles from "@/styles/content.module.css"
-import { extractPlainText, isPortableText } from "@/lib/util/portableTextUtils"
+import { isPortableText } from "@/lib/util/portableTextUtils"
 import Example from "./(example)/page"
 
 type Props = {
@@ -50,7 +49,18 @@ export async function generateMetadata(
     return {}
   }
 
-  const seo = data?.seo || {}
+  const seo: {
+    title?: string
+    description?: string
+    canonicalUrl?: string
+    ogTitle?: string
+    ogDescription?: string
+    ogUrl?: string
+    ogImage?: string
+    twitterTitle?: string
+    twitterDescription?: string
+    twitterImage?: string
+  } = data?.seo || {}
 
   // Build canonical URL using current URL and slug
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
@@ -62,30 +72,30 @@ export async function generateMetadata(
     : undefined
 
   return {
-    title: seo.title
-      ? `${seo.title} | Pittsburgh Forge Rugby Club`
+    title: seo?.title
+      ? `${seo?.title} | Pittsburgh Forge Rugby Club`
       : `${data?.title} | Pittsburgh Forge Rugby Club`,
-    description: seo.description,
+    description: seo?.description,
     alternates: {
-      canonical: seo.canonicalUrl || url.toString(),
+      canonical: seo?.canonicalUrl || url.toString(),
     },
     openGraph: {
-      title: seo.ogTitle || seo.title,
-      description: seo.ogDescription || seo.description,
-      url: seo.ogUrl || url.toString(),
-      images: seo.ogImage ? [{ url: seo.ogImage }] : undefined,
+      title: seo?.ogTitle || seo?.title,
+      description: seo?.ogDescription || seo?.description,
+      url: seo?.ogUrl || url.toString(),
+      images: seo?.ogImage ? [{ url: seo?.ogImage }] : undefined,
       type: "article",
       publishedTime: publishDate,
       modifiedTime: modifiedDate,
       authors: data?.author?.name ? [data.author.name] : [],
     },
     twitter: {
-      title: seo.twitterTitle || seo.title || data?.title,
-      description: seo.twitterDescription || seo.description,
-      images: seo.twitterImage
-        ? [{ url: seo.twitterImage }]
-        : seo.ogImage
-        ? [{ url: seo.ogImage }]
+      title: seo?.twitterTitle || seo?.title || data?.title,
+      description: seo?.twitterDescription || seo?.description,
+      images: seo?.twitterImage
+        ? [{ url: seo?.twitterImage }]
+        : seo?.ogImage
+        ? [{ url: seo?.ogImage }]
         : undefined,
     },
   } satisfies Metadata

@@ -18,8 +18,6 @@ export default function FooterLinks({
 }) {
   const { navigation } = formattedNavData
 
-  console.log("FooterLinks navigation:", navigation)
-
   return (
     <nav className={s.footerLinks}>
       {navigation &&

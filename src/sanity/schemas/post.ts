@@ -52,6 +52,11 @@ export const post = defineType({
       type: "array",
       of: [{ type: "reference", to: [{ type: "tag" }] }],
     }),
+    defineField({
+      name: "seo",
+      title: "SEO Metadata",
+      type: "seo",
+    }),
   ],
   preview: {
     select: {

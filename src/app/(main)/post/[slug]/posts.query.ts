@@ -1,4 +1,5 @@
 import { defineQuery } from "next-sanity"
+import { seoFragment } from "@fragments/seo-fragment"
 
 const postFields = /* groq */ `
   _id,
@@ -14,6 +15,7 @@ const postFields = /* groq */ `
   "date": coalesce(date, _updatedAt),
   "modified": coalesce(date, _updatedAt),
   "author": author->{firstName, lastName, picture},
+  ${seoFragment}
 `
 
 const linkReference = /* groq */ `

@@ -21,7 +21,8 @@
       "@lib/*": ["./src/lib/*"],
       "@modules/*": ["./src/modules/*"],
       "@styles/*": ["./src/styles/*"],
-      "@svg/*": ["./src/svg/*"]
+      "@svg/*": ["./src/svg/*"],
+      "@types/*": ["./src/types/*"]
     },
     "plugins": [
       {
