@@ -29,12 +29,15 @@ export function MainNav({ formattedNavData }: NavProps) {
     <NavigationMenu.Root className="hidden sm:flex gap-9 flex-1 justify-center">
       <NavigationMenu.List className={s.navList}>
         {navigation &&
-          navigation.map((item, index) =>
-            item.submenu && item.submenu.length > 0 ? (
-              <NavigationMenu.Item
-                key={`${item.label}-${index}`}
-                className={s.navItem}
-              >
+          navigation.map((item, index) => {
+            const itemKey =
+              item.route && item.route !== "#"
+                ? item.route
+                : item.url && item.url !== "#"
+                ? item.url
+                : `${item.label}-${index}`
+            return item.submenu && item.submenu.length > 0 ? (
+              <NavigationMenu.Item key={itemKey} className={s.navItem}>
                 <NavigationMenu.Trigger
                   className={`${s.navLink} flex items-center gap-1 group`}
                 >
@@ -45,27 +48,32 @@ export function MainNav({ formattedNavData }: NavProps) {
                 </NavigationMenu.Trigger>
                 <NavigationMenu.Content className={s.navContent}>
                   <ul className={s.subNavList}>
-                    {item.submenu.map((sub, subIdx) => (
-                      <li
-                        key={`${sub.label}-${subIdx}`}
-                        className={s.navSubItem}
-                      >
-                        <Link
-                          href={cleanUrl(sub.route || sub.url)} // Ensure route is prioritized
-                          className={s.navSubLink}
-                        >
-                          {sub.label}
-                        </Link>
-                      </li>
-                    ))}
+                    {item.submenu.map((sub, subIdx) => {
+                      const subKey =
+                        sub.route && sub.route !== "#"
+                          ? sub.route
+                          : sub.url && sub.url !== "#"
+                          ? sub.url
+                          : `${sub.label}-${subIdx}`
+                      return (
+                        <li key={subKey} className={s.navSubItem}>
+                          <Link
+                            href={cleanUrl(sub.route || sub.url)}
+                            className={s.navSubLink}
+                          >
+                            {sub.label}
+                          </Link>
+                        </li>
+                      )
+                    })}
                   </ul>
                 </NavigationMenu.Content>
               </NavigationMenu.Item>
             ) : (
-              <NavigationMenu.Item key={`${item.label}-${index}`}>
+              <NavigationMenu.Item key={itemKey}>
                 <NavigationMenu.Link asChild>
                   <Link
-                    href={cleanUrl(item.route || item.url)} // Ensure route is prioritized
+                    href={cleanUrl(item.route || item.url)}
                     className={s.navLink}
                   >
                     {item.label}
@@ -73,7 +81,7 @@ export function MainNav({ formattedNavData }: NavProps) {
                 </NavigationMenu.Link>
               </NavigationMenu.Item>
             )
-          )}
+          })}
       </NavigationMenu.List>
     </NavigationMenu.Root>
   )
@@ -125,12 +133,15 @@ export function MobileNav({ formattedNavData }: NavProps) {
           </div>
           <ul className={s.mobileNavList}>
             {navigation &&
-              navigation.map((item, index) =>
-                item.submenu ? (
-                  <li
-                    key={`${item.label}-MM-${index}`}
-                    className={s.mobileNavItem}
-                  >
+              navigation.map((item, index) => {
+                const itemKey =
+                  item.route && item.route !== "#"
+                    ? item.route
+                    : item.url && item.url !== "#"
+                    ? item.url
+                    : `${item.label}-${index}`
+                return item.submenu ? (
+                  <li key={itemKey} className={s.mobileNavItem}>
                     <details>
                       <summary className={s.mobileNavSummary}>
                         {item.label}
@@ -139,30 +150,38 @@ export function MobileNav({ formattedNavData }: NavProps) {
                         </span>
                       </summary>
                       <ul className={s.mobileNavSubList}>
-                        {item.submenu.map((sub, subIdx) => (
-                          <li key={`${sub.label}-${subIdx}`}>
-                            <Link
-                              href={cleanUrl(sub.route || sub.url)} // Ensure route is prioritized
-                              className={s.mobileNavLink}
-                            >
-                              {sub.label}
-                            </Link>
-                          </li>
-                        ))}
+                        {item.submenu.map((sub, subIdx) => {
+                          const subKey =
+                            sub.route && sub.route !== "#"
+                              ? sub.route
+                              : sub.url && sub.url !== "#"
+                              ? sub.url
+                              : `${sub.label}-${subIdx}`
+                          return (
+                            <li key={subKey}>
+                              <Link
+                                href={cleanUrl(sub.route || sub.url)}
+                                className={s.mobileNavLink}
+                              >
+                                {sub.label}
+                              </Link>
+                            </li>
+                          )
+                        })}
                       </ul>
                     </details>
                   </li>
                 ) : (
-                  <li key={`${item.label}-${index}`}>
+                  <li key={itemKey}>
                     <Link
-                      href={cleanUrl(item.route || item.url)} // Ensure route is prioritized
+                      href={cleanUrl(item.route || item.url)}
                       className={s.mobileNavLink}
                     >
                       {item.label}
                     </Link>
                   </li>
                 )
-              )}
+              })}
           </ul>
         </Dialog.Content>
       </Dialog.Portal>
