@@ -6,11 +6,15 @@ import type { PortableTextMarkComponentProps } from "@portabletext/react"
 
 const myPortableTextComponents = {
   marks: {
-    left: ({ children }: any) => <div className="text-left">{children}</div>,
-    center: ({ children }: any) => (
-      <div className="text-center w-full">{children}</div>
+    left: ({ children }: any) => (
+      <span className="block text-left">{children}</span>
     ),
-    right: ({ children }: any) => <div className="text-right">{children}</div>,
+    center: ({ children }: any) => (
+      <span className="block text-center w-full">{children}</span>
+    ),
+    right: ({ children }: any) => (
+      <span className="block text-right">{children}</span>
+    ),
     textColor: ({
       children,
       value,
@@ -51,9 +55,9 @@ const renderModule = (item: any) => {
 
       return (
         <div key={item._key} style={style}>
-          {item.content.map((block: any) => (
+          {item.content.map((block: any, idx: number) => (
             <PortableText
-              key={block._key}
+              key={block._key || idx}
               value={[block]}
               components={myPortableTextComponents}
             />
@@ -73,7 +77,7 @@ const renderModule = (item: any) => {
               : "justify-start"
           }`}
         >
-          {item.links.map((link: any) => {
+          {item.links.map((link: any, idx: number) => {
             const route = link?.route
             const isProduct = link?.reference?._type === "product"
             const isPost = link?.reference?._type === "post"
@@ -89,7 +93,7 @@ const renderModule = (item: any) => {
             return (
               <Link
                 href={url}
-                key={link._key}
+                key={link._key || idx}
                 buttonStyle={link.asButton}
                 openInNewTab={link.openInNewTab}
               >

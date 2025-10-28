@@ -1,4 +1,5 @@
 "use client"
+import React from "react"
 
 import { useTheme } from "next-themes"
 import { Text } from "@medusajs/ui"
@@ -26,12 +27,17 @@ export default function FooterClient({
   formattedNavData?: FormattedNavData
 }) {
   const { collections, productCategories } = serverData || {}
-  const { theme } = useTheme() // Get the current global theme
+  const { theme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
 
-  // Set classes based on the footer theme
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Always render with a default theme class on SSR, update after mount
   const footerClass = clsx(
     "relative border-t border-ui-border-base w-full",
-    theme === "dark" ? "light" : "dark"
+    mounted ? (theme === "dark" ? "dark" : "light") : "dark"
   )
 
   return (
@@ -130,7 +136,7 @@ export default function FooterClient({
                       }
                     )}
                   >
-                    {collections?.slice(0, 6).map((c) => (
+                    {collections?.slice(0, 6).map((c: any) => (
                       <li key={c.id}>
                         <Link
                           className="hover:text-ui-fg-base"

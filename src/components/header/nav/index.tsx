@@ -62,7 +62,7 @@ export function MainNav({ formattedNavData }: NavProps) {
                 </NavigationMenu.Content>
               </NavigationMenu.Item>
             ) : (
-              <NavigationMenu.Item key={`${item.label}-${index}}`}>
+              <NavigationMenu.Item key={`${item.label}-${index}`}>
                 <NavigationMenu.Link asChild>
                   <Link
                     href={cleanUrl(item.route || item.url)} // Ensure route is prioritized
@@ -153,7 +153,7 @@ export function MobileNav({ formattedNavData }: NavProps) {
                     </details>
                   </li>
                 ) : (
-                  <li key={`${item.label}-${index}}`}>
+                  <li key={`${item.label}-${index}`}>
                     <Link
                       href={cleanUrl(item.route || item.url)} // Ensure route is prioritized
                       className={s.mobileNavLink}
