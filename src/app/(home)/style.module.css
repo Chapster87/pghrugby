@@ -3,6 +3,7 @@
   padding-bottom: 48px;
 }
 
-.homepageContent {
+.homepageHero {
+  max-width: 1200px;
   background-color: rgba(0, 0, 0, 0.3);
 }

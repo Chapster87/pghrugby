@@ -1,0 +1,43 @@
+.badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background: var(--color-bg-card, #fff);
+  z-index: 1;
+}
+
+.iconBefore {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  font-size: 1.2em;
+}
+
+.iconAfter {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  font-size: 1.2em;
+}
+
+.text {
+  display: inline-block;
+}
+
+.primary {
+  background: var(--color-primary, #0055a5);
+  color: var(--color-on-primary, #fff);
+}
+.secondary {
+  background: var(--color-secondary, #e2e8f0);
+  color: var(--color-on-secondary, #222);
+}
+.tertiary {
+  background: var(--color-tertiary, #f7fafc);
+  color: var(--color-on-tertiary, #444);
+}

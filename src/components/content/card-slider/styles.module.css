@@ -1,0 +1,57 @@
+.cardSliderWrapper {
+  position: relative;
+}
+
+.cardSlider {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  padding: 1px; /* allows for border to be visible */
+}
+
+.cardSliderSlide {
+  scroll-snap-align: start;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+
+  &[disabled] {
+    pointer-events: none;
+    cursor: none;
+    opacity: 0;
+  }
+}
+
+.arrowPrev {
+  left: 0;
+}
+
+.arrowNext {
+  right: 0;
+}
+
+.sliderDots {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  gap: 4px;
+}
+
+.dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  cursor: pointer;
+}

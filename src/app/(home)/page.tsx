@@ -1,15 +1,15 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import { draftMode } from "next/headers"
-
-import FeaturedProducts from "@modules/home/components/featured-products"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 import { fetchFromSanity } from "@/sanity/client"
 import PageBuilder from "@/components/PageBuilder"
-import { homepageQuery } from "./homepage-query"
+import { homepageQuery, latestContentQuery } from "./homepage-query"
 import contentStyles from "@/styles/content.module.css"
-import s from "./style.module.css"
 import { parseSanityImageRef } from "@/sanity/lib/utils"
+import { CardSlider } from "@/components/content/card-slider"
+import generateExcerpt from "@/lib/util/generateExcerpt"
+import s from "./style.module.css"
 
 /**
  * Generate metadata for the page.
@@ -122,6 +122,33 @@ function generateStructuredData(seo: any) {
   }
 }
 
+function formatContentSliderData(latestContent: any[]) {
+  console.log("Latest Content:", latestContent)
+
+  const formattedContent = latestContent.map((item) => {
+    console.log("Item:", item)
+
+    const formattedExcerpt = item.excerpt || generateExcerpt(item.content) || ""
+    const truncatedExcerpt =
+      formattedExcerpt.length > 175
+        ? formattedExcerpt.slice(0, 175) + "[…]"
+        : formattedExcerpt
+
+    return {
+      type: item._type,
+      title: item.title,
+      slug: item.slug,
+      date: item.date,
+      excerpt: truncatedExcerpt,
+      featuredMedia: item.featuredMedia,
+    }
+  })
+  return {
+    title: "Latest Content",
+    items: formattedContent,
+  }
+}
+
 export default async function Home(props: {
   params: Promise<{ countryCode: string }>
 }) {
@@ -132,6 +159,10 @@ export default async function Home(props: {
     fields: "id, handle, title",
   })
   const { isEnabled } = await draftMode()
+
+  if (!collections || !region) {
+    return null
+  }
 
   const data = await fetchFromSanity(
     homepageQuery,
@@ -146,28 +177,39 @@ export default async function Home(props: {
 
   const structuredData = generateStructuredData(data.seo || {})
 
-  if (!collections || !region) {
-    return null
-  }
+  const latestContent = await fetchFromSanity(
+    latestContentQuery,
+    isEnabled
+      ? {
+          perspective: "previewDrafts",
+          useCdn: false,
+          stega: true,
+        }
+      : undefined
+  )
+
+  const contentSliderData = formatContentSliderData(latestContent || [])
 
   return (
     <div className={`${s.homepage}`}>
-      <div className={`dark ${contentStyles.contentMain} ${s.homepageContent}`}>
-        {/* Structured data for SEO */}
-        {structuredData && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(structuredData),
-            }}
-          />
-        )}
+      {/* Structured data for SEO */}
+      {structuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
+      )}
 
+      <div className={`dark ${contentStyles.contentMain} ${s.homepageHero}`}>
         <PageBuilder data={data.pageBuilder} />
+      </div>
 
-        <ul className="flex flex-col gap-x-6">
-          <FeaturedProducts collections={collections} region={region} />
-        </ul>
+      <div className={`${contentStyles.siteContainer}`}>
+        <div className={`${s.contentSlider}`}>
+          <CardSlider data={contentSliderData} />
+        </div>
       </div>
     </div>
   )
