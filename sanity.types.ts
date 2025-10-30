@@ -856,7 +856,7 @@ export type Post = {
     | "auto-draft"
     | "inherit"
   content?: PortableText
-  excerpt?: PortableText
+  excerpt?: string
   featuredMedia?: {
     asset?: {
       _ref: string
@@ -890,6 +890,7 @@ export type Post = {
     _key: string
     [internalGroqTypeReferenceTo]?: "tag"
   }>
+  excludeFromHomepageSlider?: boolean
   seo?: {
     title?: string
     description?: string
@@ -949,7 +950,7 @@ export type Page = {
     | "auto-draft"
     | "inherit"
   content?: PortableText
-  excerpt?: PortableText
+  excerpt?: string
   featuredMedia?: {
     asset?: {
       _ref: string
@@ -968,6 +969,7 @@ export type Page = {
     _weak?: boolean
     [internalGroqTypeReferenceTo]?: "author"
   }
+  excludeFromHomepageSlider?: boolean
   seo?: {
     title?: string
     description?: string
@@ -1452,7 +1454,7 @@ export type PageQueryResult = {
     | "trash"
     | null
   content: PortableText | null
-  excerpt: PortableText | null
+  excerpt: string | null
   coverImage: null
   featuredMedia: {
     asset: {
@@ -1716,7 +1718,7 @@ export type PostQueryResult = {
   status: "draft" | "published"
   title: string | "Untitled"
   slug: string | null
-  excerpt: PortableText | null
+  excerpt: string | null
   coverImage: null
   featuredMedia: {
     asset?: {

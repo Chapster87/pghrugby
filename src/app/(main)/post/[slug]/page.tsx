@@ -7,9 +7,8 @@ import { parseSanityImageRef } from "@/sanity/lib/utils"
 import CoverImage from "@/components/CoverImage"
 import { sanityFetch } from "@/sanity/lib/live"
 import { postPagesSlugs, postQuery } from "./posts.query"
-import { resolveOpenGraphImage } from "@/sanity/lib/utils"
 import contentStyles from "@/styles/content.module.css"
-import { extractPlainText, isPortableText } from "@/lib/util/portableTextUtils"
+import { isPortableText } from "@/lib/util/portableTextUtils"
 
 /**
  * Generate the static params for the page.
@@ -226,11 +225,9 @@ export default async function PostPage(props: { params: { slug: string } }) {
         <header className="mb-8">
           <h1>{data.title}</h1>
 
-          {isPortableText(data.excerpt) && (
-            <div className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
-              <PortableText value={data.excerpt} />
-            </div>
-          )}
+          <p className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
+            {data.excerpt}
+          </p>
 
           <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
             {data.date && (

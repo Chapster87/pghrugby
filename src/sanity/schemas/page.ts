@@ -62,7 +62,7 @@ export const page = defineType({
     }),
     defineField({
       name: "excerpt",
-      type: "portableText",
+      type: "text",
       group: "content",
     }),
     defineField({ name: "featuredMedia", type: "image", group: "content" }),

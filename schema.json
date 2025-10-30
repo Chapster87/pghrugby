@@ -4929,8 +4929,7 @@
       "excerpt": {
         "type": "objectAttribute",
         "value": {
-          "type": "inline",
-          "name": "portableText"
+          "type": "string"
         },
         "optional": true
       },
@@ -5125,6 +5124,13 @@
               }
             }
           }
+        },
+        "optional": true
+      },
+      "excludeFromHomepageSlider": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
         },
         "optional": true
       },
@@ -5473,8 +5479,7 @@
       "excerpt": {
         "type": "objectAttribute",
         "value": {
-          "type": "inline",
-          "name": "portableText"
+          "type": "string"
         },
         "optional": true
       },
@@ -5574,6 +5579,13 @@
             }
           },
           "dereferencesTo": "author"
+        },
+        "optional": true
+      },
+      "excludeFromHomepageSlider": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
         },
         "optional": true
       },

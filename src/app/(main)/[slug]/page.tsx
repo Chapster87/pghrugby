@@ -233,11 +233,9 @@ export default async function Page(props: Props) {
         <header className="mb-8">
           <h1>{data.title}</h1>
 
-          {isPortableText(data.excerpt) && (
-            <div className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
-              <PortableText value={data.excerpt} />
-            </div>
-          )}
+          <p className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
+            {data.excerpt}
+          </p>
 
           <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
             {data.date && (
