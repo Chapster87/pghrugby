@@ -4,11 +4,11 @@ import { draftMode } from "next/headers"
 import { client } from "../../../../sanity/client"
 import PortableText from "@/components/PortableText"
 import { parseSanityImageRef } from "@/sanity/lib/utils"
-import CoverImage from "@/components/CoverImage"
 import { sanityFetch } from "@/sanity/lib/live"
 import { postPagesSlugs, postQuery } from "./posts.query"
 import contentStyles from "@/styles/content.module.css"
 import { isPortableText } from "@/lib/util/portableTextUtils"
+import ShareBar from "@/components/share-bar"
 
 /**
  * Generate the static params for the page.
@@ -204,6 +204,12 @@ export default async function PostPage(props: { params: { slug: string } }) {
 
   const structuredData = generateStructuredData(data)
 
+  const shareUrl =
+    data.seo?.canonicalUrl || `https://pghrugby.com//post/${slug}`
+  const shareTitle = data.seo?.title
+    ? `${data.seo.title} | Pittsburgh Forge Rugby Club`
+    : `${data?.title} | Pittsburgh Forge Rugby Club`
+
   return (
     <article className={`${contentStyles.contentMain}`}>
       <div className="prose max-w-none">
@@ -300,6 +306,7 @@ export default async function PostPage(props: { params: { slug: string } }) {
             <p>No content available.</p>
           )}
         </div>
+        <ShareBar url={shareUrl} title={shareTitle} />
       </div>
     </article>
   )

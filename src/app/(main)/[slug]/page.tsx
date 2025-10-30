@@ -10,6 +10,7 @@ import { pagesSlugs, pageQuery } from "./pages.query"
 import contentStyles from "@/styles/content.module.css"
 import { isPortableText } from "@/lib/util/portableTextUtils"
 import Example from "./(example)/page"
+import ShareBar from "@/components/share-bar"
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -201,6 +202,11 @@ export default async function Page(props: Props) {
 
   const structuredData = generateStructuredData(data || {})
 
+  const shareUrl = data.seo?.canonicalUrl || `https://pghrugby.com/${slug}`
+  const shareTitle = data.seo?.title
+    ? `${data.seo.title} | Pittsburgh Forge Rugby Club`
+    : `${data?.title} | Pittsburgh Forge Rugby Club`
+
   if (slug === "example") {
     return <Example data={data} />
   }
@@ -269,6 +275,8 @@ export default async function Page(props: Props) {
             <p>No content available.</p>
           )}
         </div>
+
+        <ShareBar url={shareUrl} title={shareTitle} />
       </div>
     </article>
   )
