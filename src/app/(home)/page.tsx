@@ -9,6 +9,7 @@ import contentStyles from "@/styles/content.module.css"
 import { parseSanityImageRef } from "@/sanity/lib/utils"
 import { CardSlider } from "@/components/content/card-slider"
 import generateExcerpt from "@/lib/util/generateExcerpt"
+import VideoBg from "./video-bg"
 import s from "./style.module.css"
 
 /**
@@ -192,6 +193,9 @@ export default async function Home(props: {
 
   return (
     <div className={`${s.homepage}`}>
+      {/* Background Video Component */}
+      <VideoBg />
+
       {/* Structured data for SEO */}
       {structuredData && (
         <script
