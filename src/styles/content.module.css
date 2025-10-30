@@ -13,3 +13,12 @@
     margin-right: auto;
   }
 }
+
+.siteContainer {
+  @media (--viewport-2xl-up) {
+    max-width: var(--container-max-width);
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
