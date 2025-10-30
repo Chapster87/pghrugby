@@ -1,0 +1,44 @@
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-white);
+  opacity: 0.8;
+  border: 1px solid var(--color-black);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    opacity 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-gold);
+    border-color: var(--color-gold);
+    opacity: 1;
+  }
+}
+
+.arrowPrev {
+  padding-right: 2px;
+}
+
+.arrowNext {
+  padding-left: 2px;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-primary, #333);
+  border: 1px solid transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+
+  &.current {
+    background-color: var(--color-gold, #ffd700);
+  }
+
+  &:hover {
+    border-color: var(--color-gold, #ffd700);
+  }
+}
