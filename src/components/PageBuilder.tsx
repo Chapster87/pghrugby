@@ -1,6 +1,7 @@
 import React from "react"
 import { PortableText } from "@portabletext/react"
 import Link from "@components/link"
+import { urlBuilder } from "@/lib/util/url"
 
 import type { PortableTextMarkComponentProps } from "@portabletext/react"
 
@@ -79,16 +80,10 @@ const renderModule = (item: any) => {
         >
           {item.links.map((link: any, idx: number) => {
             const route = link?.route
-            const isProduct = link?.reference?._type === "product"
-            const isPost = link?.reference?._type === "post"
             const url =
               route || // Prioritize route if defined
               (link?.reference?.slug?.current
-                ? isProduct
-                  ? `/product/${link.reference.slug.current}`
-                  : isPost
-                  ? `/post/${link.reference.slug.current}`
-                  : `/${link.reference.slug.current}`
+                ? urlBuilder(link.reference._type, link.reference.slug.current)
                 : "#")
             return (
               <Link

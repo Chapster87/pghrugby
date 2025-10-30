@@ -4,6 +4,7 @@ import { MainNav, MobileNav } from "./nav"
 import { client } from "@/sanity/lib/client"
 import { navQuery } from "./nav.query"
 import { retrieveCart } from "@lib/data/cart"
+import { urlBuilder } from "@/lib/util/url"
 
 const settingsQuery = `*[_type == "settings"] | order(publishedAt desc)[0] {
   title
@@ -32,35 +33,23 @@ export default async function Header() {
   const formattedNavData: FormattedNavData = {
     navigation:
       navigation?.mainNav?.map((menu: any): NavItem => {
-        const isProduct = menu.item?._type === "product"
-        const isPost = menu.item?._type === "post"
         return {
           label: menu.overrideTitle || menu.item?.title,
           url:
             menu.route || // Prioritize route if defined
             (menu.item?.slug?.current
-              ? isProduct
-                ? `/product/${menu.item.slug.current}`
-                : isPost
-                ? `/post/${menu.item.slug.current}`
-                : `/${menu.item.slug.current}`
+              ? urlBuilder(menu.item._type, menu.item.slug.current)
               : "#"),
           route: menu.route || undefined, // Added route handling
           openInNewTab: menu.openInNewTab || false,
           submenu:
             menu.submenu?.map((subItem: any): SubMenuItem => {
-              const isSubProduct = subItem.item?._type === "product"
-              const isSubPost = subItem.item?._type === "post"
               return {
                 label: subItem.overrideTitle || subItem.item?.title,
                 url:
                   subItem.route || // Prioritize route if defined
                   (subItem.item?.slug?.current
-                    ? isSubProduct
-                      ? `/product/${subItem.item.slug.current}`
-                      : isSubPost
-                      ? `/post/${subItem.item.slug.current}`
-                      : `/${subItem.item.slug.current}`
+                    ? urlBuilder(subItem.item._type, subItem.item.slug.current)
                     : "#"),
                 route: subItem.route || undefined, // Added route handling
                 openInNewTab: subItem.openInNewTab || false,

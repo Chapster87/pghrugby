@@ -43,9 +43,9 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled || isLoading}
       {...props}
     >
-      {beforeText && <span className={s["icon-before"]}>{beforeText}</span>}
+      {beforeText && <span className={s["iconBefore"]}>{beforeText}</span>}
       {isLoading ? <span className={s.spinner}></span> : children}
-      {afterText && <span className={s["icon-after"]}>{afterText}</span>}
+      {afterText && <span className={s["iconAfter"]}>{afterText}</span>}
     </button>
   )
 }

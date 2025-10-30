@@ -39,15 +39,24 @@ export const urlForImage = (source: any) => {
   return imageBuilder?.image(source).auto("format")
 }
 
-export function resolveOpenGraphImage(image: any, width = 1200, height = 627) {
-  if (!image) return
-  const url = urlForImage(image)?.width(1200).height(627).fit("crop").url()
-  if (!url) return
-  return { url, alt: image?.alt as string, width, height }
-}
-
 export function parseSanityImageRef(ref: string | null | undefined): string {
   if (!ref) return ""
   const [_, id, dimension, format] = ref.split("-")
   return `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET}/${id}-${dimension}.${format}`
+}
+
+export function sanityToNextImageProps(
+  image: any,
+  options?: { width?: number; height?: number; alt?: string }
+) {
+  if (!image?.asset?._ref) return undefined
+  const imageRef = image.asset._ref
+  const { width, height } = getImageDimensions(imageRef)
+  const src = urlForImage(image)?.url()
+  return {
+    src,
+    width: options?.width || width,
+    height: options?.height || height,
+    alt: options?.alt || image?.alt || "",
+  }
 }
