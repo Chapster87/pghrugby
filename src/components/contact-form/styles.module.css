@@ -1,0 +1,18 @@
+.socialMedia {
+  margin-bottom: 24px;
+}
+
+.socialHeading {
+  margin-bottom: 16px;
+}
+
+.socialLinks {
+  list-style: none;
+  display: flex;
+  gap: 16px;
+  padding: 0;
+}
+
+.formHeading {
+  margin-bottom: 16px;
+}

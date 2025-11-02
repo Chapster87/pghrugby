@@ -8,13 +8,14 @@
 .FormField {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .FormLabel {
   font-size: 1rem;
   font-weight: 600;
   color: #333;
+  margin-bottom: 8px;
 
   .FormField.required & {
     &::after {
@@ -88,7 +89,6 @@
 .FormMessage {
   font-size: 0.875rem;
   color: var(--color-grey-700);
-  margin-top: -5px;
 }
 
 .FormErrorMessage {

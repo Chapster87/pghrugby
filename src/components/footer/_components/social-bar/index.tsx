@@ -1,5 +1,4 @@
 import Link from "@components/link"
-import Image from "next/image"
 import Heading from "@components/typography/heading"
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa6"
 import { SocialMedia } from "../../types"

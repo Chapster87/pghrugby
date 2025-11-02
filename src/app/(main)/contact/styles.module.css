@@ -1,0 +1,17 @@
+.pageHeading {
+  margin-bottom: 16px;
+}
+
+.contactIntro {
+  margin-bottom: 24px;
+}
+
+.descHeadline {
+  margin-bottom: 8px;
+}
+
+.contactForm {
+  @media (--viewport-lg-up) {
+    max-width: 50%;
+  }
+}
