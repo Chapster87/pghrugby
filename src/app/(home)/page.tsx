@@ -124,11 +124,7 @@ function generateStructuredData(seo: any) {
 }
 
 function formatContentSliderData(latestContent: any[]) {
-  console.log("Latest Content:", latestContent)
-
   const formattedContent = latestContent.map((item) => {
-    console.log("Item:", item)
-
     const formattedExcerpt = item.excerpt || generateExcerpt(item.content) || ""
     const truncatedExcerpt =
       formattedExcerpt.length > 175

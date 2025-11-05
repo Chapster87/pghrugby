@@ -1,3 +1,17 @@
+.mainWithSidebar {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @media (--viewport-lg-up) {
+    max-width: var(--container-max-width);
+    width: 100%;
+    grid-template-columns: 4fr 1fr;
+    gap: 24px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 .contentMain {
   margin-top: 20px;
   margin-bottom: 30px;
