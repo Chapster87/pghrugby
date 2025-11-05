@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
 import { Moon, Sun } from "lucide-react"
+import s from "./styles.module.css"
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false)
@@ -15,9 +16,10 @@ export function ThemeSwitcher() {
   if (!mounted) return null
 
   return (
-    <div>
+    <div className={s.themeSwitcher}>
       {theme !== "light" && (
         <button
+          className={`${s.themeButton} ${s.lightThemeButton}`}
           onClick={() => setTheme("light")}
           aria-label="Switch to light theme"
         >
@@ -26,6 +28,7 @@ export function ThemeSwitcher() {
       )}
       {theme !== "dark" && (
         <button
+          className={`${s.themeButton} ${s.darkThemeButton}`}
           onClick={() => setTheme("dark")}
           aria-label="Switch to dark theme"
         >

@@ -1,4 +1,4 @@
-import { ThemeSwitcher } from "@/components/ThemeSwitcher"
+import { ThemeSwitcher } from "@/components/theme-switcher"
 import s from "./style.module.css"
 
 export default function HeaderTop() {

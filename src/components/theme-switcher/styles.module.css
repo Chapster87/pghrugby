@@ -1,0 +1,7 @@
+.themeButton {
+  cursor: pointer;
+}
+
+.lightThemeButton {
+  color: var(--color-white);
+}
