@@ -8,6 +8,7 @@ import { sanityFetch } from "@/sanity/lib/live"
 import { postPagesSlugs, postQuery } from "./posts.query"
 import contentStyles from "@/styles/content.module.css"
 import { isPortableText } from "@/lib/util/portableTextUtils"
+import Sidebar from "@/components/sidebar"
 import ShareBar from "@/components/share-bar"
 
 /**
@@ -211,103 +212,108 @@ export default async function PostPage(props: { params: { slug: string } }) {
     : `${data?.title} | Pittsburgh Forge Rugby Club`
 
   return (
-    <article className={`${contentStyles.contentMain}`}>
-      <div className="prose max-w-none">
-        {/* Structured data for SEO */}
-        {structuredData && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-          />
-        )}
+    <div className={contentStyles.mainWithSidebar}>
+      <article className={`${contentStyles.contentMain}`}>
+        <div className="prose max-w-none">
+          {/* Structured data for SEO */}
+          {structuredData && (
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(structuredData),
+              }}
+            />
+          )}
 
-        {/* Featured image */}
-        {/* {data.featuredMedia && (
+          {/* Featured image */}
+          {/* {data.featuredMedia && (
           <div className="mb-6 relative aspect-video w-full">
             <CoverImage image={data.featuredMedia} priority />
           </div>
         )} */}
 
-        <header className="mb-8">
-          <h1>{data.title}</h1>
+          <header className="mb-8">
+            <h1>{data.title}</h1>
 
-          <p className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
-            {data.excerpt}
-          </p>
+            <p className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
+              {data.excerpt}
+            </p>
 
-          <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
-            {data.date && (
-              <time dateTime={new Date(data.date).toISOString()}>
-                Published: {new Date(data.date).toLocaleDateString()}
-              </time>
+            <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
+              {data.date && (
+                <time dateTime={new Date(data.date).toISOString()}>
+                  Published: {new Date(data.date).toLocaleDateString()}
+                </time>
+              )}
+
+              {data.modified && data.date !== data.modified && (
+                <time dateTime={new Date(data.modified).toISOString()}>
+                  Updated: {new Date(data.modified).toLocaleDateString()}
+                </time>
+              )}
+
+              {data.author?.name && (
+                <address className="not-italic">By: {data.author.name}</address>
+              )}
+
+              {data.status && (
+                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded-sm text-xs">
+                  {data.status}
+                </span>
+              )}
+
+              {data.sticky && (
+                <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900 rounded-sm text-xs">
+                  Featured
+                </span>
+              )}
+            </div>
+
+            {/* Categories and Tags */}
+            {Array.isArray(data.categories) && data.categories.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                <span className="text-sm text-gray-600 dark:text-gray-300">
+                  Categories:
+                </span>
+                {data.categories.map((cat: any, index: number) => (
+                  <span
+                    key={index}
+                    className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm"
+                  >
+                    {cat.title || cat._ref || ""}
+                  </span>
+                ))}
+              </div>
             )}
 
-            {data.modified && data.date !== data.modified && (
-              <time dateTime={new Date(data.modified).toISOString()}>
-                Updated: {new Date(data.modified).toLocaleDateString()}
-              </time>
+            {Array.isArray(data.tags) && data.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                <span className="text-sm text-gray-600 dark:text-gray-300">
+                  Tags:
+                </span>
+                {data.tags.map((tag: any, index: number) => (
+                  <span
+                    key={index}
+                    className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm"
+                  >
+                    {tag.title || tag._ref || ""}
+                  </span>
+                ))}
+              </div>
             )}
+          </header>
 
-            {data.author?.name && (
-              <address className="not-italic">By: {data.author.name}</address>
-            )}
-
-            {data.status && (
-              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded-sm text-xs">
-                {data.status}
-              </span>
-            )}
-
-            {data.sticky && (
-              <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900 rounded-sm text-xs">
-                Featured
-              </span>
+          <div className="">
+            {isPortableText(data.content) ? (
+              <PortableText value={data.content} />
+            ) : (
+              <p>No content available.</p>
             )}
           </div>
-
-          {/* Categories and Tags */}
-          {Array.isArray(data.categories) && data.categories.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2">
-              <span className="text-sm text-gray-600 dark:text-gray-300">
-                Categories:
-              </span>
-              {data.categories.map((cat: any, index: number) => (
-                <span
-                  key={index}
-                  className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm"
-                >
-                  {cat.title || cat._ref || ""}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {Array.isArray(data.tags) && data.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2">
-              <span className="text-sm text-gray-600 dark:text-gray-300">
-                Tags:
-              </span>
-              {data.tags.map((tag: any, index: number) => (
-                <span
-                  key={index}
-                  className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm"
-                >
-                  {tag.title || tag._ref || ""}
-                </span>
-              ))}
-            </div>
-          )}
-        </header>
-
-        <div className="">
-          {isPortableText(data.content) ? (
-            <PortableText value={data.content} />
-          ) : (
-            <p>No content available.</p>
-          )}
+          <ShareBar url={shareUrl} title={shareTitle} />
         </div>
-        <ShareBar url={shareUrl} title={shareTitle} />
-      </div>
-    </article>
+      </article>
+      <Sidebar />
+    </div>
   )
 }
