@@ -1,32 +1,18 @@
 /* Define CSS module styles for MatchCountdown component */
-.countdown {
-  display: grid;
-  gap: 12px;
-  max-width: 375px;
-  margin: 0 auto;
+.matchesWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.divisionHeader {
-  background-color: var(--color-gold);
-  padding: 10px;
-  text-transform: uppercase;
-  margin: 0;
-  border: 1px solid var(--color-grey-300);
-}
-
-.mainContent {
+.match {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   background-color: white;
   border: 1px solid var(--color-grey-300);
-}
-
-.contentTop {
-  display: grid;
-  gap: 10px;
-  padding: 8px 16px 0;
+  padding: 8px;
 }
 
 .venue {
@@ -45,22 +31,30 @@
 }
 
 .teams {
-  padding: 5px 10px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
 }
 
-.teamLogo {
-  width: 4rem;
-  height: 4rem;
-  margin-bottom: 0.5rem;
-  position: relative;
-}
-
-.matchup {
+.team {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+}
+
+.teamLogo {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.atVs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 8px;
+  padding-top: 16px;
 }
 
 .teamName {

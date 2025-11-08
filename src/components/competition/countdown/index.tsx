@@ -6,7 +6,6 @@ import { matchQuery } from "./match.query"
 import Heading from "@/components/typography/heading"
 import Text from "@/components/typography/text"
 import s from "./styles.module.css"
-import Home from "@/app/(home)/page"
 
 interface Team {
   name: string
@@ -145,7 +144,7 @@ export function MatchCountdown({
   const padNumber = (num: number) => String(num).padStart(2, "0")
 
   if (!matchData) {
-    return <div>Loading...</div>
+    return
   }
 
   return (
