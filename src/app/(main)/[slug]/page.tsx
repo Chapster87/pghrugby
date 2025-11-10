@@ -12,7 +12,6 @@ import { isPortableText } from "@/lib/util/portableTextUtils"
 import Sidebar from "@/components/sidebar"
 import Example from "./(example)/page"
 import ShareBar from "@/components/share-bar"
-import s from "./styles.module.css"
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -53,18 +52,7 @@ export async function generateMetadata(
     return {}
   }
 
-  const seo: {
-    title?: string
-    description?: string
-    canonicalUrl?: string
-    ogTitle?: string
-    ogDescription?: string
-    ogUrl?: string
-    ogImage?: string
-    twitterTitle?: string
-    twitterDescription?: string
-    twitterImage?: string
-  } = data?.seo || {}
+  const seo = data?.seo
 
   // Handle ogImage as either a string or Sanity image object
   let ogImageUrl: string | undefined = undefined
@@ -100,8 +88,9 @@ export async function generateMetadata(
       canonical: seo?.canonicalUrl || url.toString(),
     },
     openGraph: {
-      title: seo?.ogTitle || seo?.title,
-      description: seo?.ogDescription || seo?.description,
+      title: (seo?.ogTitle ?? undefined) || (seo?.title ?? undefined),
+      description:
+        (seo?.ogDescription ?? undefined) || (seo?.description ?? undefined),
       url: seo?.ogUrl || url.toString(),
       images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
       type: "article",
@@ -111,12 +100,15 @@ export async function generateMetadata(
     },
     twitter: {
       title: seo?.twitterTitle ?? seo?.title ?? data?.title ?? undefined,
-      description: seo?.twitterDescription || seo?.description,
-      images: seo.twitterImage
-        ? [{ url: seo.twitterImage }]
-        : ogImageUrl
-        ? [{ url: ogImageUrl }]
-        : undefined,
+      description:
+        (seo?.twitterDescription ?? undefined) ||
+        (seo?.description ?? undefined),
+      images:
+        typeof seo?.twitterImage === "string" && seo.twitterImage
+          ? [{ url: seo.twitterImage }]
+          : typeof ogImageUrl === "string" && ogImageUrl
+          ? [{ url: ogImageUrl }]
+          : undefined,
     },
   } satisfies Metadata
 }

@@ -46,18 +46,7 @@ export async function generateMetadata(
     return {}
   }
 
-  const seo: {
-    title?: string
-    description?: string
-    canonicalUrl?: string
-    ogTitle?: string
-    ogDescription?: string
-    ogUrl?: string
-    ogImage?: string
-    twitterTitle?: string
-    twitterDescription?: string
-    twitterImage?: string
-  } = data?.seo || {}
+  const seo = data?.seo
 
   // Handle ogImage as either a string or Sanity image object
   let ogImageUrl: string | undefined = undefined
@@ -95,8 +84,8 @@ export async function generateMetadata(
       canonical: seo?.canonicalUrl || url.toString(),
     },
     openGraph: {
-      title: seo?.ogTitle || seo?.title,
-      description: seo?.ogDescription || seo?.description,
+      title: seo?.ogTitle ?? seo?.title ?? undefined,
+      description: seo?.ogDescription ?? seo?.description ?? undefined,
       url: seo?.ogUrl || url.toString(),
       images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
       type: "article",
@@ -108,9 +97,16 @@ export async function generateMetadata(
     },
     twitter: {
       title: seo?.twitterTitle ?? seo?.title ?? data?.title ?? undefined,
-      description: seo?.twitterDescription || seo?.description,
-      images: seo.twitterImage
-        ? [{ url: seo.twitterImage }]
+      description: seo?.twitterDescription ?? seo?.description ?? undefined,
+      images: seo?.twitterImage
+        ? [
+            {
+              url:
+                typeof seo.twitterImage === "string"
+                  ? seo.twitterImage
+                  : ogImageUrl ?? "",
+            },
+          ]
         : ogImageUrl
         ? [{ url: ogImageUrl }]
         : undefined,
