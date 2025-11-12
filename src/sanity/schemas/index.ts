@@ -10,7 +10,7 @@ import { division } from "./division"
 import { form } from "./form"
 import { formField } from "./components/formField"
 import { heading } from "./components/heading"
-import { homepage } from "./homepage"
+import { homepage } from "./pages/homepage"
 import { imageWithCaption } from "./components/imageWithCaption"
 import { league } from "./league"
 import { link } from "./components/link"
@@ -18,6 +18,7 @@ import { linkGroup } from "./components/linkGroup"
 import { linktree } from "./linktree"
 import { match } from "./match"
 import { mediaText } from "./components/mediaText"
+import { membership } from "./pages/membership"
 import { navigation } from "./navigation"
 import { page } from "./page"
 import { pageBuilder } from "./components/pageBuilder"
@@ -57,6 +58,7 @@ export const schema: SchemaPluginOptions = {
     linktree,
     match,
     mediaText,
+    membership,
     navigation,
     page,
     pageBuilder,

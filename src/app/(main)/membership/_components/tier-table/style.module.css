@@ -1,0 +1,74 @@
+.paypalTable {
+  border: none;
+
+  tr {
+    border: none;
+  }
+}
+
+.tierRow {
+  display: flex;
+  flex-wrap: wrap;
+
+  @media (--viewport-lg-up) {
+    display: table-row;
+  }
+}
+
+.tierCell {
+  width: 100%;
+  border: 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--color-grey-300);
+  }
+
+  @media (--viewport-md-up) {
+    width: 50%;
+
+    &:first-child {
+      border-right: 1px solid var(--color-grey-300);
+    }
+  }
+
+  @media (--viewport-lg-up) {
+    width: auto;
+    &:not(:last-child) {
+      border-right: 1px solid var(--color-grey-300);
+      border-bottom: none;
+    }
+  }
+}
+
+.subSelect {
+  margin-bottom: 0;
+}
+
+.paypalForm {
+  align-items: center;
+  padding-bottom: 0;
+}
+
+.paypalButton {
+  max-width: 250px;
+}
+
+.annualDonation {
+  @media (--viewport-lg-up) {
+    width: 25%;
+  }
+}
+
+.benefits {
+  @media (--viewport-lg-up) {
+    width: 41.66667%;
+  }
+}
+
+.paymentOptions {
+  width: 100%;
+
+  @media (--viewport-lg-up) {
+    width: 33.33333%;
+  }
+}

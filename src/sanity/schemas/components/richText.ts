@@ -176,7 +176,7 @@ export const richText = defineType({
           { title: "40px", value: 40 },
         ],
       },
-      initialValue: 0,
+      initialValue: 16,
     },
     {
       name: "gap",

@@ -432,6 +432,53 @@ export type Navigation = {
   }>
 }
 
+export type Membership = {
+  _id: string
+  _type: "membership"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  pageBuilder?: PageBuilder
+  seo?: {
+    title?: string
+    description?: string
+    keywords?: Array<string>
+    canonicalUrl?: string
+    robots?: string
+    ogTitle?: string
+    ogDescription?: string
+    ogImage?: {
+      asset?: {
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      _type: "image"
+    }
+    ogUrl?: string
+    twitterTitle?: string
+    twitterDescription?: string
+    twitterImage?: {
+      asset?: {
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      _type: "image"
+    }
+    _type: "seo"
+  }
+}
+
 export type MediaText = {
   _type: "mediaText"
   image?: {
@@ -765,6 +812,86 @@ export type Heading = {
   gap?: 0 | 8 | 16 | 24 | 32 | 40
 }
 
+export type Page = {
+  _id: string
+  _type: "page"
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  slug?: Slug
+  date?: string
+  modified?: string
+  status?:
+    | "publish"
+    | "future"
+    | "draft"
+    | "pending"
+    | "private"
+    | "trash"
+    | "auto-draft"
+    | "inherit"
+  pageBuilder?: PageBuilder
+  content?: PortableText
+  excerpt?: string
+  featuredMedia?: {
+    asset?: {
+      _ref: string
+      _type: "reference"
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: "image"
+  }
+  author?: {
+    _ref: string
+    _type: "reference"
+    _weak?: boolean
+    [internalGroqTypeReferenceTo]?: "author"
+  }
+  excludeFromHomepageSlider?: boolean
+  seo?: {
+    title?: string
+    description?: string
+    keywords?: Array<string>
+    canonicalUrl?: string
+    robots?: string
+    ogTitle?: string
+    ogDescription?: string
+    ogImage?: {
+      asset?: {
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      _type: "image"
+    }
+    ogUrl?: string
+    twitterTitle?: string
+    twitterDescription?: string
+    twitterImage?: {
+      asset?: {
+        _ref: string
+        _type: "reference"
+        _weak?: boolean
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
+      }
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      _type: "image"
+    }
+    _type: "seo"
+  }
+}
+
 export type Product = {
   _id: string
   _type: "product"
@@ -890,85 +1017,6 @@ export type Post = {
     _key: string
     [internalGroqTypeReferenceTo]?: "tag"
   }>
-  excludeFromHomepageSlider?: boolean
-  seo?: {
-    title?: string
-    description?: string
-    keywords?: Array<string>
-    canonicalUrl?: string
-    robots?: string
-    ogTitle?: string
-    ogDescription?: string
-    ogImage?: {
-      asset?: {
-        _ref: string
-        _type: "reference"
-        _weak?: boolean
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-      }
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      _type: "image"
-    }
-    ogUrl?: string
-    twitterTitle?: string
-    twitterDescription?: string
-    twitterImage?: {
-      asset?: {
-        _ref: string
-        _type: "reference"
-        _weak?: boolean
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-      }
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      _type: "image"
-    }
-    _type: "seo"
-  }
-}
-
-export type Page = {
-  _id: string
-  _type: "page"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  date?: string
-  modified?: string
-  status?:
-    | "publish"
-    | "future"
-    | "draft"
-    | "pending"
-    | "private"
-    | "trash"
-    | "auto-draft"
-    | "inherit"
-  content?: PortableText
-  excerpt?: string
-  featuredMedia?: {
-    asset?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: "image"
-  }
-  author?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "author"
-  }
   excludeFromHomepageSlider?: boolean
   seo?: {
     title?: string
@@ -1393,6 +1441,7 @@ export type AllSanitySchemaTypes =
   | PortableText
   | PageBuilder
   | Navigation
+  | Membership
   | MediaText
   | Match
   | Team
@@ -1404,9 +1453,9 @@ export type AllSanitySchemaTypes =
   | ImageWithCaption
   | Homepage
   | Heading
+  | Page
   | Product
   | Post
-  | Page
   | FormFieldType
   | FormType
   | Division
@@ -1436,7 +1485,7 @@ export type AllSanitySchemaTypes =
 export declare const internalGroqTypeReferenceTo: unique symbol
 // Source: ./src/app/(main)/[slug]/pages.query.ts
 // Variable: pageQuery
-// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    date,    modified,    status,    content,    excerpt,    coverImage,    featuredMedia{      asset->{        url      },      alt    },    author->{name}    ,  seo {    title,    description,    keywords,    canonicalUrl,    robots,    ogTitle,    ogDescription,    ogImage,    ogUrl,    twitterTitle,    twitterDescription,    twitterImage  }  }
+// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    date,    modified,    status,    pageBuilder,    content,    excerpt,    coverImage,    featuredMedia{      asset->{        url      },      alt    },    author->{name}    ,  seo {    title,    description,    keywords,    canonicalUrl,    robots,    ogTitle,    ogDescription,    ogImage,    ogUrl,    twitterTitle,    twitterDescription,    twitterImage  }  }
 export type PageQueryResult = {
   _id: string
   title: string | null
@@ -1453,6 +1502,7 @@ export type PageQueryResult = {
     | "publish"
     | "trash"
     | null
+  pageBuilder: PageBuilder | null
   content: PortableText | null
   excerpt: string | null
   coverImage: null
@@ -1998,7 +2048,7 @@ export type SponsorQueryResult = {
 import "@sanity/client"
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    date,\n    modified,\n    status,\n    content,\n    excerpt,\n    coverImage,\n    featuredMedia{\n      asset->{\n        url\n      },\n      alt\n    },\n    author->{name}\n    ,\n  seo {\n    title,\n    description,\n    keywords,\n    canonicalUrl,\n    robots,\n    ogTitle,\n    ogDescription,\n    ogImage,\n    ogUrl,\n    twitterTitle,\n    twitterDescription,\n    twitterImage\n  }\n\n  }': PageQueryResult
+    '*[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    date,\n    modified,\n    status,\n    pageBuilder,\n    content,\n    excerpt,\n    coverImage,\n    featuredMedia{\n      asset->{\n        url\n      },\n      alt\n    },\n    author->{name}\n    ,\n  seo {\n    title,\n    description,\n    keywords,\n    canonicalUrl,\n    robots,\n    ogTitle,\n    ogDescription,\n    ogImage,\n    ogUrl,\n    twitterTitle,\n    twitterDescription,\n    twitterImage\n  }\n\n  }': PageQueryResult
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
     '\n  *[_type == "match"] {\n    _id,\n    eventDateTime,\n    league-> {\n      _id,\n      name\n    },\n    division-> {\n      _id,\n      name\n    },\n    season-> {\n      _id,\n      name\n    },\n    matchType,\n    homeTeam-> {\n      _id,\n      name\n    },\n    awayTeam-> {\n      _id,\n      name\n    },\n    name,\n    homeTeamScore,\n    awayTeamScore\n  } | order(eventDateTime asc)\n': ScheduleQueryResult
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  featuredMedia,\n  sticky,\n  categories[]->{title},\n  tags[]->{title},\n  "date": coalesce(date, _updatedAt),\n  "modified": coalesce(date, _updatedAt),\n  "author": author->{name},\n  \n  seo {\n    title,\n    description,\n    keywords,\n    canonicalUrl,\n    robots,\n    ogTitle,\n    ogDescription,\n    ogImage,\n    ogUrl,\n    twitterTitle,\n    twitterDescription,\n    twitterImage\n  }\n\n\n  }\n': PostQueryResult

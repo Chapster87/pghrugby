@@ -1,5 +1,6 @@
 import type { StructureBuilder, StructureResolver } from "sanity/structure"
 import {
+  FaAddressCard,
   FaBox,
   FaBuilding,
   FaBuildingColumns,
@@ -92,6 +93,14 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                   S.document()
                     .schemaType("homepage")
                     .documentId("homepageContent")
+                ),
+              S.listItem()
+                .title("Membership Landing Page")
+                .icon(FaAddressCard)
+                .child(
+                  S.document()
+                    .schemaType("membership")
+                    .documentId("membershipContent")
                 ),
             ])
         ),

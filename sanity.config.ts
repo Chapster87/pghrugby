@@ -28,7 +28,11 @@ export default defineConfig({
   schema,
   document: {
     actions: (prev, context) => {
-      if (context.schemaType === "page" || context.schemaType === "post") {
+      if (
+        context.schemaType === "page" ||
+        context.schemaType === "post" ||
+        context.schemaType === "membership"
+      ) {
         // Remove default publish action by filtering by string or object property
         return [
           UpdateModifiedOnPublish,

@@ -1,0 +1,41 @@
+.venmoLogo {
+  max-width: 200px;
+}
+
+.intro {
+  margin-bottom: 8px;
+}
+
+.venmoQr {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.venmoQrImg {
+  max-width: 200px;
+  margin-bottom: 8px;
+}
+
+.venmoAmount {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.venmoAmountImg {
+  max-width: 250px;
+  margin-bottom: 16px;
+}
+
+.venmoSchedule {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.venmoScheduleImg {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 16px;
+}
