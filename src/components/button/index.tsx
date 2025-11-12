@@ -11,6 +11,7 @@ type ButtonProps = {
   isLoading?: boolean
   beforeText?: React.ReactNode
   afterText?: React.ReactNode
+  unstyled?: boolean
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,18 +24,21 @@ const Button: React.FC<ButtonProps> = ({
   className,
   beforeText,
   afterText,
+  unstyled = false,
   ...props
 }) => {
-  const classes = [
-    s.base,
-    s[variant],
-    s[size],
-    disabled && s.disabled,
-    isLoading && s.loading,
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ")
+  const classes = unstyled
+    ? `${s.unstyled} ${className || ""}`
+    : [
+        s.base,
+        s[variant],
+        s[size],
+        disabled && s.disabled,
+        isLoading && s.loading,
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")
 
   return (
     <button
