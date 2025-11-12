@@ -4,6 +4,7 @@ import { draftMode } from "next/headers"
 import Image from "next/image"
 import { client } from "../../../sanity/client"
 import { parseSanityImageRef } from "@/sanity/lib/utils"
+import PageBuilder from "@/components/PageBuilder"
 import PortableText from "@/components/PortableText"
 import { sanityFetch } from "@/sanity/lib/live"
 import { pagesSlugs, pageQuery } from "./pages.query"
@@ -265,11 +266,17 @@ export default async function Page(props: Props) {
             </div>
           </header>
 
+          {data.pageBuilder ? (
+            <div>
+              <PageBuilder data={data.pageBuilder} />
+            </div>
+          ) : (
+            <p>No content available.</p>
+          )}
+
           <div className="">
-            {isPortableText(data.content) ? (
+            {isPortableText(data.content) && (
               <PortableText value={data.content} />
-            ) : (
-              <p>No content available.</p>
             )}
           </div>
 

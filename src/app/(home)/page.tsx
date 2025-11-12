@@ -172,7 +172,7 @@ export default async function Home(props: {
       : undefined
   )
 
-  const structuredData = generateStructuredData(data.seo || {})
+  const structuredData = generateStructuredData(data?.seo || {})
 
   const latestContent = await fetchFromSanity(
     latestContentQuery,
@@ -202,9 +202,11 @@ export default async function Home(props: {
         />
       )}
 
-      <div className={`dark ${contentStyles.contentMain} ${s.homepageHero}`}>
-        <PageBuilder data={data.pageBuilder} />
-      </div>
+      {data?.pageBuilder && (
+        <div className={`dark ${contentStyles.contentMain} ${s.homepageHero}`}>
+          <PageBuilder data={data.pageBuilder} />
+        </div>
+      )}
 
       <div className={`${contentStyles.siteContainer}`}>
         <div className={`${s.contentSlider}`}>

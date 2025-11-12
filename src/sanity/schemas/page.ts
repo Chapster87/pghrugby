@@ -56,6 +56,11 @@ export const page = defineType({
       group: "content",
     }),
     defineField({
+      name: "pageBuilder",
+      type: "pageBuilder",
+      group: "content",
+    }),
+    defineField({
       name: "content",
       type: "portableText",
       group: "content",

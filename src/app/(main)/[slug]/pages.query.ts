@@ -9,6 +9,7 @@ export const pageQuery = defineQuery(
     date,
     modified,
     status,
+    pageBuilder,
     content,
     excerpt,
     coverImage,
