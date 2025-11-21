@@ -60,7 +60,7 @@ const DISABLED_TYPES = [
 
 export const structure: StructureResolver = (S: StructureBuilder) =>
   S.list()
-    .title("Site Management")
+    .title("Sanity Studio")
     .items([
       S.listItem()
         .title("Navigation")
