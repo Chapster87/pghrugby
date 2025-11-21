@@ -1,0 +1,14 @@
+.productImages {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  background-color: var(--color-black);
+  border-radius: 8px;
+  height: 100%;
+  width: 100%;
+}

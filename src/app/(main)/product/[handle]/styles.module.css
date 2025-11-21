@@ -1,0 +1,17 @@
+.productMain {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+.productDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.productActions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

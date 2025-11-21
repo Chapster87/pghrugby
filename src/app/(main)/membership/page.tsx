@@ -6,8 +6,8 @@ import { fetchFromSanity } from "@/sanity/client"
 import PageBuilder from "@/components/PageBuilder"
 import { membershipQuery } from "./membership.query"
 import TierTable from "./_components/tier-table"
-import contentStyles from "@/styles/content.module.css"
 import { parseSanityImageRef } from "@/sanity/lib/utils"
+import contentStyles from "@/styles/content.module.css"
 import s from "./style.module.css"
 
 /**

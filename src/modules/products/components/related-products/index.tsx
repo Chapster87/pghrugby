@@ -35,9 +35,11 @@ export default async function RelatedProducts({
   }
   ;(queryParams as any).is_giftcard = false
 
+  // Fallback: if countryCode is missing, use regionId
   const products = await listProducts({
     queryParams,
-    countryCode,
+    countryCode: countryCode || undefined,
+    regionId: !countryCode && region?.id ? region.id : undefined,
   }).then(({ response }) => {
     return response.products.filter(
       (responseProduct) => responseProduct.id !== product.id

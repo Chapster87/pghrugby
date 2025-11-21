@@ -1,23 +1,26 @@
 import React, { Suspense } from "react"
 import type { Metadata, ResolvingMetadata } from "next"
-import ImageGallery from "@modules/products/components/image-gallery"
+import ProductName from "./_components/product-name"
+import ImageGallery from "./_components/image-gallery"
+
 import ProductActions from "@modules/products/components/product-actions"
-import ProductOnboardingCta from "@modules/products/components/product-onboarding-cta"
-import ProductTabs from "@modules/products/components/product-tabs"
 import RelatedProducts from "@modules/products/components/related-products"
-import ProductInfo from "@modules/products/templates/product-info"
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
 import { notFound } from "next/navigation"
 import ProductActionsWrapper from "@modules/products/templates/product-actions-wrapper"
 import { draftMode } from "next/headers"
-import { listProducts } from "@lib/data/products"
+import { getProductByHandle, listProducts } from "@lib/data/products"
 import { getRegion, listRegions } from "@lib/data/regions"
-import { client } from "../../../../sanity/lib/client"
+import { client } from "@sanity/lib/client"
 import { productContentQuery } from "./product.content.query"
 import { parseSanityImageRef } from "@/sanity/lib/utils"
+import Sidebar from "@/components/sidebar"
+
+import contentStyles from "@/styles/content.module.css"
+import s from "./styles.module.css"
 
 type Props = {
-  params: Promise<{ countryCode: string; handle: string }>
+  params: { countryCode: string; handle: string }
 }
 
 const countryCode = process.env.NEXT_PUBLIC_MEDUSA_DEFAULT_COUNTRY_CODE ?? "us"
@@ -69,25 +72,19 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  props: Props,
+  props: { params: { countryCode: string; handle: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const resolvedParams = await props.params
   const { isEnabled } = await draftMode()
-  const params = await props.params
-  const { handle } = params
+  const { handle, countryCode } = resolvedParams
   const region = await getRegion(countryCode)
 
   if (!region) {
     notFound()
   }
 
-  // Get all products and filter by handle (since handle query param isn't supported)
-  const { response } = await listProducts({
-    countryCode: countryCode,
-    queryParams: { limit: 100 },
-  })
-
-  const product = response.products.find((p) => p.handle === handle)
+  const { product } = await getProductByHandle(handle, countryCode)
 
   if (!product) {
     notFound()
@@ -105,6 +102,20 @@ export async function generateMetadata(
       : undefined
   )
 
+  // Normalize SEO fields to undefined if null
+  const rawSeo =
+    (productContent?.seo as {
+      title?: string | null
+      description?: string | null
+      canonicalUrl?: string | null
+      ogTitle?: string | null
+      ogDescription?: string | null
+      ogUrl?: string | null
+      ogImage?: string | null
+      twitterTitle?: string | null
+      twitterDescription?: string | null
+      twitterImage?: string | null
+    }) || {}
   const seo: {
     title?: string
     description?: string
@@ -116,7 +127,18 @@ export async function generateMetadata(
     twitterTitle?: string
     twitterDescription?: string
     twitterImage?: string
-  } = productContent?.seo || {}
+  } = {
+    title: rawSeo?.title ?? undefined,
+    description: rawSeo?.description ?? undefined,
+    canonicalUrl: rawSeo?.canonicalUrl ?? undefined,
+    ogTitle: rawSeo?.ogTitle ?? undefined,
+    ogDescription: rawSeo?.ogDescription ?? undefined,
+    ogUrl: rawSeo?.ogUrl ?? undefined,
+    ogImage: rawSeo?.ogImage ?? undefined,
+    twitterTitle: rawSeo?.twitterTitle ?? undefined,
+    twitterDescription: rawSeo?.twitterDescription ?? undefined,
+    twitterImage: rawSeo?.twitterImage ?? undefined,
+  }
 
   // Handle ogImage as either a string or Sanity image object
   let ogImageUrl: string | undefined = undefined
@@ -254,8 +276,11 @@ function generateProductStructuredData(
   }
 }
 
-export default async function ProductPage(props: Props) {
-  const params = await props.params
+export default async function ProductPage(props: {
+  params: { countryCode: string; handle: string }
+}) {
+  const resolvedParams = await props.params
+  const { countryCode, handle } = resolvedParams
   const { isEnabled } = await draftMode()
   const region = await getRegion(countryCode)
 
@@ -263,11 +288,9 @@ export default async function ProductPage(props: Props) {
     notFound()
   }
 
-  const pricedProduct = await listProducts({
-    countryCode: countryCode,
-    queryParams: { limit: 100 },
-  }).then(({ response }) =>
-    response.products.find((p) => p.handle === params.handle)
+  const { product: pricedProduct } = await getProductByHandle(
+    handle,
+    countryCode
   )
 
   if (!pricedProduct) {
@@ -296,51 +319,45 @@ export default async function ProductPage(props: Props) {
   )
 
   return (
-    <div>
-      {/* Structured data for SEO */}
-      {structuredData && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-      )}
-      <div
-        className="2xl:container px-[12] flex flex-col sm:flex-row sm:items-start py-6 relative"
-        data-testid="product-container"
-      >
-        <div className="flex flex-col sm:sticky sm:top-48 sm:py-0 sm:max-w-[300px] w-full py-8 gap-y-6">
-          <ProductInfo
-            product={pricedProduct}
-            productContentData={productContentData}
+    <>
+      <div className={contentStyles.mainWithSidebar}>
+        {/* Structured data for SEO */}
+        {structuredData && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
           />
-          <ProductTabs product={pricedProduct} />
-        </div>
-        <div className="block w-full relative">
+        )}
+        <div className={`${contentStyles.contentMain} ${s.productMain}`}>
           <ImageGallery images={pricedProduct?.images || []} />
+          <div className={s.productDetails}>
+            <ProductName
+              product={pricedProduct}
+              productData={productContentData as any}
+            />
+            <p>Need to add short/long description</p>
+            <div className={s.productActions}>
+              <Suspense
+                fallback={
+                  <ProductActions
+                    disabled={true}
+                    product={pricedProduct}
+                    region={region}
+                  />
+                }
+              >
+                <ProductActionsWrapper id={pricedProduct.id} region={region} />
+              </Suspense>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col sm:sticky sm:top-48 sm:py-0 sm:max-w-[300px] w-full py-8 gap-y-12">
-          <ProductOnboardingCta />
-          <Suspense
-            fallback={
-              <ProductActions
-                disabled={true}
-                product={pricedProduct}
-                region={region}
-              />
-            }
-          >
-            <ProductActionsWrapper id={pricedProduct.id} region={region} />
-          </Suspense>
-        </div>
+        <Sidebar />
       </div>
-      <div
-        className="2xl:container px-[12] my-16 sm:my-32"
-        data-testid="related-products-container"
-      >
+      <div className={`${contentStyles.siteContainer} ${s.relatedProducts}`}>
         <Suspense fallback={<SkeletonRelatedProducts />}>
           <RelatedProducts product={pricedProduct} countryCode={countryCode} />
         </Suspense>
       </div>
-    </div>
+    </>
   )
 }
