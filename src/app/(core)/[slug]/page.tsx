@@ -1,15 +1,24 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
-import { client } from "../../../../sanity/client"
-import PortableText from "@/components/PortableText"
+import SidebarLayout from "@/layouts/sidebar"
+import Image from "next/image"
+import { client } from "@sanity/client"
 import { parseSanityImageRef } from "@/sanity/lib/utils"
+import PageBuilder from "@/components/PageBuilder"
+import PortableText from "@/components/PortableText"
 import { sanityFetch } from "@/sanity/lib/live"
-import { postPagesSlugs, postQuery } from "./posts.query"
-import contentStyles from "@/styles/content.module.css"
+import { pagesSlugs, pageQuery } from "./pages.query"
 import { isPortableText } from "@/lib/util/portableTextUtils"
-import Sidebar from "@/components/sidebar"
+import Example from "./(example)/page"
 import ShareBar from "@/components/share-bar"
+
+import contentStyles from "@/styles/content.module.css"
+import s from "./styles.module.css"
+
+type Props = {
+  params: Promise<{ slug: string }>
+}
 
 /**
  * Generate the static params for the page.
@@ -17,7 +26,7 @@ import ShareBar from "@/components/share-bar"
  */
 export async function generateStaticParams() {
   const { data } = await sanityFetch({
-    query: postPagesSlugs,
+    query: pagesSlugs,
     perspective: "published",
     stega: false,
   })
@@ -34,7 +43,7 @@ export async function generateMetadata(
   const { isEnabled } = await draftMode()
   const { slug } = await props.params
   const data = await client.fetch(
-    postQuery,
+    pageQuery,
     { slug },
     {
       perspective: isEnabled ? "previewDrafts" : "published",
@@ -66,9 +75,8 @@ export async function generateMetadata(
 
   // Build canonical URL using current URL and slug
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
-  url.pathname = `/post/${slug}`
+  url.pathname = `/${slug}`
 
-  // Format date for structured data if available
   const publishDate = data?.date ? new Date(data.date).toISOString() : undefined
   const modifiedDate = data?.modified
     ? new Date(data.modified).toISOString()
@@ -79,37 +87,31 @@ export async function generateMetadata(
       ? `${seo?.title} | Pittsburgh Forge Rugby Club`
       : `${data?.title} | Pittsburgh Forge Rugby Club`,
     description: seo?.description,
-    authors: [{ name: data?.author?.name || "Pittsburgh Forge Rugby Club" }],
     alternates: {
       canonical: seo?.canonicalUrl || url.toString(),
     },
     openGraph: {
-      title: seo?.ogTitle ?? seo?.title ?? undefined,
-      description: seo?.ogDescription ?? seo?.description ?? undefined,
+      title: (seo?.ogTitle ?? undefined) || (seo?.title ?? undefined),
+      description:
+        (seo?.ogDescription ?? undefined) || (seo?.description ?? undefined),
       url: seo?.ogUrl || url.toString(),
       images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
       type: "article",
       publishedTime: publishDate,
       modifiedTime: modifiedDate,
-      authors: data?.author?.name
-        ? [data.author.name]
-        : ["Pittsburgh Forge Rugby Club"],
+      authors: data?.author?.name ? [data.author.name] : [],
     },
     twitter: {
       title: seo?.twitterTitle ?? seo?.title ?? data?.title ?? undefined,
-      description: seo?.twitterDescription ?? seo?.description ?? undefined,
-      images: seo?.twitterImage
-        ? [
-            {
-              url:
-                typeof seo.twitterImage === "string"
-                  ? seo.twitterImage
-                  : ogImageUrl ?? "",
-            },
-          ]
-        : ogImageUrl
-        ? [{ url: ogImageUrl }]
-        : undefined,
+      description:
+        (seo?.twitterDescription ?? undefined) ||
+        (seo?.description ?? undefined),
+      images:
+        typeof seo?.twitterImage === "string" && seo.twitterImage
+          ? [{ url: seo.twitterImage }]
+          : typeof ogImageUrl === "string" && ogImageUrl
+          ? [{ url: ogImageUrl }]
+          : undefined,
     },
   } satisfies Metadata
 }
@@ -144,7 +146,7 @@ function generateStructuredData(data: any) {
 
   return {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": "Article",
     headline: seo?.title
       ? `${seo.title} | Pittsburgh Forge Rugby Club`
       : `${data?.title} | Pittsburgh Forge Rugby Club`,
@@ -152,13 +154,12 @@ function generateStructuredData(data: any) {
     image: ogImageUrl,
     datePublished: publishDate || "",
     dateModified: modifiedDate || "",
-    author:
-      data.author?.name || "Pittsburgh Forge Rugby Club"
-        ? {
-            "@type": "Person",
-            name: data.author.name || "Pittsburgh Forge Rugby Club",
-          }
-        : undefined,
+    author: data.author?.name
+      ? {
+          "@type": "Person",
+          name: data.author.name,
+        }
+      : undefined,
     publisher: {
       "@type": "Organization",
       name: "Pittsburgh Forge Rugby Club",
@@ -171,20 +172,15 @@ function generateStructuredData(data: any) {
       "@type": "WebPage",
       "@id": seo?.canonicalUrl || `https://pghrugby.com/${data.slug}`,
     },
-    keywords:
-      Array.isArray(data.tags) && data.tags.length > 0
-        ? data.tags
-            .map((tag: any) => tag.title || tag._ref || "")
-            .filter(Boolean)
-        : [],
   }
 }
 
-export default async function PostPage(props: { params: { slug: string } }) {
-  const { isEnabled } = await draftMode()
+export default async function Page(props: Props) {
   const { slug } = await props.params
+  const { isEnabled } = await draftMode()
+
   const data = await client.fetch(
-    postQuery,
+    pageQuery,
     { slug },
     isEnabled
       ? {
@@ -195,21 +191,26 @@ export default async function PostPage(props: { params: { slug: string } }) {
       : undefined
   )
 
+  console.log("Page data:", data)
+
   if (!data?._id) {
     return notFound()
   }
 
-  const structuredData = generateStructuredData(data)
+  const structuredData = generateStructuredData(data || {})
 
-  const shareUrl =
-    data.seo?.canonicalUrl || `https://pghrugby.com//post/${slug}`
+  const shareUrl = data.seo?.canonicalUrl || `https://pghrugby.com/${slug}`
   const shareTitle = data.seo?.title
     ? `${data.seo.title} | Pittsburgh Forge Rugby Club`
     : `${data?.title} | Pittsburgh Forge Rugby Club`
 
+  if (slug === "example") {
+    return <Example data={data} />
+  }
+
   return (
-    <div className={contentStyles.mainWithSidebar}>
-      <article className={`${contentStyles.contentMain}`}>
+    <SidebarLayout>
+      <article className={`${contentStyles.contentMain} ${s.pageContent}`}>
         <div className="prose max-w-none">
           {/* Structured data for SEO */}
           {structuredData && (
@@ -221,12 +222,19 @@ export default async function PostPage(props: { params: { slug: string } }) {
             />
           )}
 
-          {/* Featured image */}
-          {/* {data.featuredMedia && (
-          <div className="mb-6 relative aspect-video w-full">
-            <CoverImage image={data.featuredMedia} priority />
-          </div>
-        )} */}
+          {/* Featured image with proper alt text */}
+          {data.featuredMedia?.asset?.url && (
+            <div className="mb-6 relative aspect-video w-full">
+              <Image
+                src={data.featuredMedia.asset.url}
+                alt={data.featuredMedia.alt || data.title || "Featured image"}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority
+                className="object-cover rounded-lg"
+              />
+            </div>
+          )}
 
           <header className="mb-8">
             <h1>{data.title}</h1>
@@ -257,59 +265,26 @@ export default async function PostPage(props: { params: { slug: string } }) {
                   {data.status}
                 </span>
               )}
-
-              {data.sticky && (
-                <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900 rounded-sm text-xs">
-                  Featured
-                </span>
-              )}
             </div>
-
-            {/* Categories and Tags */}
-            {Array.isArray(data.categories) && data.categories.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                <span className="text-sm text-gray-600 dark:text-gray-300">
-                  Categories:
-                </span>
-                {data.categories.map((cat: any, index: number) => (
-                  <span
-                    key={index}
-                    className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm"
-                  >
-                    {cat.title || cat._ref || ""}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {Array.isArray(data.tags) && data.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                <span className="text-sm text-gray-600 dark:text-gray-300">
-                  Tags:
-                </span>
-                {data.tags.map((tag: any, index: number) => (
-                  <span
-                    key={index}
-                    className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm"
-                  >
-                    {tag.title || tag._ref || ""}
-                  </span>
-                ))}
-              </div>
-            )}
           </header>
 
+          {data.pageBuilder ? (
+            <div>
+              <PageBuilder data={data.pageBuilder} />
+            </div>
+          ) : (
+            <p>No content available.</p>
+          )}
+
           <div className="">
-            {isPortableText(data.content) ? (
+            {isPortableText(data.content) && (
               <PortableText value={data.content} />
-            ) : (
-              <p>No content available.</p>
             )}
           </div>
+
           <ShareBar url={shareUrl} title={shareTitle} />
         </div>
       </article>
-      <Sidebar />
-    </div>
+    </SidebarLayout>
   )
 }

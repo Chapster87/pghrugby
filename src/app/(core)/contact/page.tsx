@@ -2,10 +2,11 @@
 
 import type { Metadata, ResolvingMetadata } from "next"
 import { client } from "@/sanity/lib/client"
+import SidebarLayout from "@/layouts/sidebar"
 import Heading from "@components/typography/heading"
 import Text from "@/components/typography/text"
 import ContactForm from "@/components/contact-form"
-import Sidebar from "@/components/sidebar"
+
 import contentStyles from "@/styles/content.module.css"
 import s from "./styles.module.css"
 
@@ -47,7 +48,7 @@ const socialsQuery = `*[_type == "socialMedia"] | order(publishedAt desc)[0] {
 export default async function ContactUs() {
   const socials = await client.fetch(socialsQuery)
   return (
-    <div className={contentStyles.mainWithSidebar}>
+    <SidebarLayout>
       <div className={`${contentStyles.contentMain} ${s.contactPage}`}>
         <Heading level="h1" className={s.pageHeading}>
           Contact Us
@@ -69,7 +70,6 @@ export default async function ContactUs() {
           <ContactForm socialsData={socials} />
         </div>
       </div>
-      <Sidebar />
-    </div>
+    </SidebarLayout>
   )
 }

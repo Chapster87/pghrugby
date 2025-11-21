@@ -1,6 +1,7 @@
 "use client"
 
 import { Suspense, useEffect, useRef } from "react"
+import { usePathname } from "next/navigation"
 import Link from "next/link"
 import CartDropdown from "@/modules/layout/components/cart-dropdown"
 import Crest from "@svg/Crest"
@@ -21,6 +22,10 @@ export default function HeaderMain({
 }: NavProps) {
   const headerRef = useRef<HTMLDivElement>(null)
 
+  // Determine if current page is home based on slug
+  const pathname = usePathname()
+  const isHome = pathname === "/"
+
   useEffect(() => {
     const header = headerRef.current
     if (!header) return
@@ -40,7 +45,7 @@ export default function HeaderMain({
   }, [])
 
   return (
-    <header ref={headerRef} className={s.header}>
+    <header ref={headerRef} className={s.header} data-home={isHome}>
       <div
         className={`lg:container lg:mx-auto ${s.headerInner} px-[12] flex items-center justify-between`}
       >

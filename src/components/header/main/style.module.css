@@ -34,7 +34,7 @@
   }
 }
 
-[data-page="home"] {
+[data-home="true"] {
   .siteLogo {
     @media (--viewport-lg-up) {
       top: -45px;

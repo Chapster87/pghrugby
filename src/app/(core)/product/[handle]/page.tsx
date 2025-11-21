@@ -1,5 +1,6 @@
 import React, { Suspense } from "react"
 import type { Metadata, ResolvingMetadata } from "next"
+import SidebarLayout from "@/layouts/sidebar"
 import ProductName from "./_components/product-name"
 import ImageGallery from "./_components/image-gallery"
 
@@ -14,7 +15,6 @@ import { getRegion, listRegions } from "@lib/data/regions"
 import { client } from "@sanity/lib/client"
 import { productContentQuery } from "./product.content.query"
 import { parseSanityImageRef } from "@/sanity/lib/utils"
-import Sidebar from "@/components/sidebar"
 
 import contentStyles from "@/styles/content.module.css"
 import s from "./styles.module.css"
@@ -319,8 +319,8 @@ export default async function ProductPage(props: {
   )
 
   return (
-    <>
-      <div className={contentStyles.mainWithSidebar}>
+    <SidebarLayout>
+      <div className={`${contentStyles.contentMain} ${s.productPage}`}>
         {/* Structured data for SEO */}
         {structuredData && (
           <script
@@ -328,7 +328,7 @@ export default async function ProductPage(props: {
             dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
           />
         )}
-        <div className={`${contentStyles.contentMain} ${s.productMain}`}>
+        <div className={s.productMain}>
           <ImageGallery images={pricedProduct?.images || []} />
           <div className={s.productDetails}>
             <ProductName
@@ -351,13 +351,12 @@ export default async function ProductPage(props: {
             </div>
           </div>
         </div>
-        <Sidebar />
       </div>
       <div className={`${contentStyles.siteContainer} ${s.relatedProducts}`}>
         <Suspense fallback={<SkeletonRelatedProducts />}>
           <RelatedProducts product={pricedProduct} countryCode={countryCode} />
         </Suspense>
       </div>
-    </>
+    </SidebarLayout>
   )
 }
