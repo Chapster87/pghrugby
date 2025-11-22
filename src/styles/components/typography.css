@@ -57,18 +57,19 @@ p {
 }
 
 a {
-  color: var(--color-gold);
+  color: var(--color-grey-900);
   text-decoration: underline;
   transition: color 0.3s ease;
 
   &:hover {
     color: var(--color-grey-800);
+    text-decoration: none;
+  }
 
-    @media (prefers-color-scheme: light) {
-      color: var(--color-gold-400);
-    }
+  .light & {
+    color: var(--color-gold);
 
-    .dark & {
+    &:hover {
       color: var(--color-gold-400);
     }
   }

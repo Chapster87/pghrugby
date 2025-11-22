@@ -7,7 +7,7 @@ export default function SidebarPosts({ posts }: { posts: any[] }) {
       <Heading level="h3" className={sidebarStyles.sidebarHeader}>
         Latest Posts
       </Heading>
-      <ul className={sidebarStyles.sidebarList}>
+      <ul className={`light ${sidebarStyles.sidebarList}`}>
         {posts.map((post) => (
           <li key={post._id}>
             <a href={`/post/${post.slug.current}`}>{post.title}</a>
