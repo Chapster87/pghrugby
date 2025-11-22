@@ -13,7 +13,10 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
 import ProductForm from "@modules/products/components/product-form"
+import { VariantWithDigitalProduct } from "../../../../types/global"
+import { getDigitalProductPreview } from "../../../../lib/data/products"
 import GolfOutingForm from "@modules/products/components/product-form/golf-outing"
+import QuantityInput from "../quantity-input"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -36,6 +39,7 @@ export default function ProductActions({
 }: ProductActionsProps) {
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
+  const [quantity, setQuantity] = useState(1)
   const [meta, setMeta] = useState<Record<string, any>>({})
   const [formValid, setFormValid] = useState(true)
   const countryCode = useParams().countryCode as string
@@ -57,7 +61,7 @@ export default function ProductActions({
       const variantOptions = optionsAsKeymap(v.options)
       return isEqual(variantOptions, options)
     })
-  }, [product.variants, options])
+  }, [product.variants, options]) as VariantWithDigitalProduct | undefined
 
   // update the options when a variant is selected
   const setOptionValue = (optionId: string, value: string) => {
@@ -99,6 +103,20 @@ export default function ProductActions({
     return false
   }, [selectedVariant])
 
+  const handleDownloadPreview = async () => {
+    if (!selectedVariant?.digital_product) {
+      return
+    }
+
+    const downloadUrl = await getDigitalProductPreview({
+      id: selectedVariant?.digital_product.id,
+    })
+
+    if (downloadUrl.length) {
+      window.open(downloadUrl)
+    }
+  }
+
   const actionsRef = useRef<HTMLDivElement>(null)
 
   const inView = useIntersection(actionsRef, "0px")
@@ -122,14 +140,25 @@ export default function ProductActions({
 
     setIsAdding(true)
 
-    await addToCart({
-      variantId: selectedVariant.id,
-      quantity: 1,
-      countryCode,
-      metadata: meta,
-    })
+    // Flatten the meta object to be a simple key-value store
+    const flattenedMeta = Object.entries(meta).reduce((acc, [key, value]) => {
+      acc[key] = value.value
+      return acc
+    }, {} as Record<string, string>)
 
-    setIsAdding(false)
+    try {
+      await addToCart({
+        variantId: selectedVariant.id,
+        quantity,
+        countryCode,
+        metadata: flattenedMeta,
+      })
+    } catch (error) {
+      console.error("Failed to add to cart:", error)
+      // Optionally, you can add state to show an error message to the user
+    } finally {
+      setIsAdding(false)
+    }
   }
 
   return (
@@ -168,6 +197,18 @@ export default function ProductActions({
         {/* {product.handle === "golf-outing" && (
           <GolfOutingForm meta={meta} changeForm={handleChange} />
         )} */}
+
+        {selectedVariant?.digital_product && (
+          <Button
+            onClick={handleDownloadPreview}
+            variant="secondary"
+            className="w-full h-10"
+          >
+            Download Preview
+          </Button>
+        )}
+
+        <QuantityInput quantity={quantity} setQuantity={setQuantity} />
 
         <Button
           onClick={handleAddToCart}
