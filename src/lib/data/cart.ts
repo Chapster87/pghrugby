@@ -40,7 +40,7 @@ export async function retrieveCart(cartId?: string) {
       method: "GET",
       query: {
         fields:
-          "*items, *region, *items.product, *items.variant, *items.thumbnail, *items.metadata, +items.total, *promotions, +shipping_methods.name",
+          "*items, *region, *items.product, *items.variant, *items.thumbnail, *items.metadata, +items.total, *promotions, +shipping_methods.name, shipping_address, fulfillment_sets",
       },
       headers,
       next,
@@ -75,6 +75,12 @@ export async function getOrSetCart(countryCode: string) {
 
     const cartCacheTag = await getCacheTag("carts")
     revalidateTag(cartCacheTag)
+
+    // Re-retrieve the cart to ensure it's fully hydrated with all fields
+    const hydratedCart = await retrieveCart(cart.id)
+    if (hydratedCart) {
+      cart = hydratedCart
+    }
   }
 
   if (cart && cart?.region_id !== region.id) {
@@ -136,25 +142,27 @@ export async function addToCart({
     ...(await getAuthHeaders()),
   }
 
-  await sdk.store.cart
-    .createLineItem(
+  try {
+    await sdk.store.cart.createLineItem(
       cart.id,
       {
         variant_id: variantId,
         quantity,
         metadata: metadata || {},
       },
-      {},
-      headers
+      {}, // query parameters (empty in this case)
+      headers // pass headers directly
     )
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
 
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
-    })
-    .catch(medusaError)
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+
+    const fulfillmentCacheTag = await getCacheTag("fulfillment")
+    revalidateTag(fulfillmentCacheTag)
+  } catch (error: any) {
+    // medusaError already logs details, just re-throw to propagate the message
+    throw medusaError(error)
+  }
 }
 
 export async function updateLineItem({
@@ -206,7 +214,7 @@ export async function deleteLineItem(lineId: string) {
   }
 
   await sdk.store.cart
-    .deleteLineItem(cartId, lineId, headers)
+    .deleteLineItem(cartId, lineId, {}, headers)
     .then(async () => {
       const cartCacheTag = await getCacheTag("carts")
       revalidateTag(cartCacheTag)
@@ -468,12 +476,17 @@ export async function listCartOptions() {
     ...(await getCacheOptions("shippingOptions")),
   }
 
-  return await sdk.client.fetch<{
-    shipping_options: HttpTypes.StoreCartShippingOption[]
-  }>("/store/shipping-options", {
-    query: { cart_id: cartId },
-    next,
-    headers,
-    cache: "force-cache",
-  })
+  try {
+    return await sdk.client.fetch<{
+      shipping_options: HttpTypes.StoreCartShippingOption[]
+    }>("/store/shipping-options", {
+      query: { cart_id: cartId },
+      next,
+      headers,
+      cache: "force-cache",
+    })
+  } catch (error: any) {
+    console.error("Error in listCartOptions:", error) // Explicitly log the error
+    throw medusaError(error)
+  }
 }

@@ -39,6 +39,7 @@ export default function ProductActions({
 }: ProductActionsProps) {
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
+  const [cartMessage, setCartMessage] = useState<string | undefined>(undefined)
   const [quantity, setQuantity] = useState(1)
   const [meta, setMeta] = useState<Record<string, any>>({})
   const [formValid, setFormValid] = useState(true)
@@ -139,6 +140,7 @@ export default function ProductActions({
     if (!selectedVariant?.id) return null
 
     setIsAdding(true)
+    setCartMessage(undefined) // Clear any previous messages
 
     // Flatten the meta object to be a simple key-value store
     const flattenedMeta = Object.entries(meta).reduce((acc, [key, value]) => {
@@ -153,9 +155,10 @@ export default function ProductActions({
         countryCode,
         metadata: flattenedMeta,
       })
-    } catch (error) {
+      setCartMessage("Item added to cart successfully!")
+    } catch (error: any) {
       console.error("Failed to add to cart:", error)
-      // Optionally, you can add state to show an error message to the user
+      setCartMessage(error.message || "Failed to add item to cart.")
     } finally {
       setIsAdding(false)
     }
@@ -233,6 +236,17 @@ export default function ProductActions({
             ? "Complete required fields"
             : "Add to cart"}
         </Button>
+        {cartMessage && (
+          <div
+            className={`text-sm text-center ${
+              cartMessage.includes("successfully")
+                ? "text-green-500"
+                : "text-red-500"
+            }`}
+          >
+            {cartMessage}
+          </div>
+        )}
         <MobileActions
           product={product}
           variant={selectedVariant}
