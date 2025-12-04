@@ -47,8 +47,6 @@ export default function CartLineItem({ item, index, currencyCode }: ItemProps) {
       })
   }
 
-  console.log("ITEM", item)
-
   // TODO: Update this to grab the actual max inventory
   const maxQtyFromInventory = 10
   const maxQuantity = item.variant?.manage_inventory ? 10 : maxQtyFromInventory

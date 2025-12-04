@@ -17,20 +17,25 @@ export default async function CheckoutForm({
     return null
   }
 
-  const shippingMethods = await listCartShippingMethods(cart.id)
-  const paymentMethods = await listCartPaymentMethods(cart.region?.id ?? "")
+  // Only fetch shipping methods if cart has a shipping address
+  // Medusa requires the shipping address to determine available options based on service zones
+  const shippingMethods = cart.shipping_address
+    ? await listCartShippingMethods(cart.id)
+    : null
 
-  if (!shippingMethods || !paymentMethods) {
-    return null
-  }
+  const paymentMethods = await listCartPaymentMethods(cart.region?.id ?? "")
 
   return (
     <div className="w-full grid grid-cols-1 gap-y-8">
       <Addresses cart={cart} customer={customer} />
 
-      <Shipping cart={cart} availableShippingMethods={shippingMethods} />
+      {shippingMethods && shippingMethods.length > 0 && (
+        <Shipping cart={cart} availableShippingMethods={shippingMethods} />
+      )}
 
-      <Payment cart={cart} availablePaymentMethods={paymentMethods} />
+      {paymentMethods && paymentMethods.length > 0 && (
+        <Payment cart={cart} availablePaymentMethods={paymentMethods} />
+      )}
 
       <Review cart={cart} />
     </div>

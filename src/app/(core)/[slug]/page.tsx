@@ -191,8 +191,6 @@ export default async function Page(props: Props) {
       : undefined
   )
 
-  console.log("Page data:", data)
-
   if (!data?._id) {
     return notFound()
   }
