@@ -1,0 +1,17 @@
+.cartPage {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @media (--viewport-lg-up) {
+    max-width: var(--container-max-width);
+    width: 100%;
+    grid-template-columns: 3fr 1fr;
+    gap: 24px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.primary {
+  display: block;
+}

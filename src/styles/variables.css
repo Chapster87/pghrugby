@@ -39,4 +39,6 @@
   --color-background-dark: var(--color-grey-900);
   --color-foreground-light: var(--color-black);
   --color-background-light: var(--color-white);
+
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

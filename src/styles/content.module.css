@@ -20,7 +20,7 @@
   margin-top: 20px;
   margin-bottom: 30px;
   border-radius: 8px;
-  padding: 20px;
+  padding: 20px 16px 16px;
   background-color: var(--color-white);
   box-shadow: 0 0 0.5rem 0 #000;
 

@@ -18,6 +18,10 @@
   td:not(.resultsColumn) {
     width: 26.67%;
   }
+
+  td {
+    padding: 8px 12px;
+  }
 }
 
 .primaryHeader {

@@ -16,7 +16,7 @@ import ProductForm from "@modules/products/components/product-form"
 import { VariantWithDigitalProduct } from "../../../../types/global"
 import { getDigitalProductPreview } from "../../../../lib/data/products"
 import GolfOutingForm from "@modules/products/components/product-form/golf-outing"
-import QuantityInput from "../quantity-input"
+import QuantitySelector from "@/components/quantity-selector"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -143,17 +143,17 @@ export default function ProductActions({
     setCartMessage(undefined) // Clear any previous messages
 
     // Flatten the meta object to be a simple key-value store
-    const flattenedMeta = Object.entries(meta).reduce((acc, [key, value]) => {
-      acc[key] = value.value
-      return acc
-    }, {} as Record<string, string>)
+    // const flattenedMeta = Object.entries(meta).reduce((acc, [key, value]) => {
+    //   acc[key] = value.value
+    //   return acc
+    // }, {} as Record<string, string>)
 
     try {
       await addToCart({
         variantId: selectedVariant.id,
         quantity,
         countryCode,
-        metadata: flattenedMeta,
+        metadata: meta,
       })
       setCartMessage("Item added to cart successfully!")
     } catch (error: any) {
@@ -211,7 +211,7 @@ export default function ProductActions({
           </Button>
         )}
 
-        <QuantityInput quantity={quantity} setQuantity={setQuantity} />
+        <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
 
         <Button
           onClick={handleAddToCart}

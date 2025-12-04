@@ -1,0 +1,50 @@
+.itemInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.itemImg {
+  border-radius: 8px;
+}
+
+.placeholderImg {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-grey-600);
+  background-color: var(--color-grey-300);
+  border-radius: 8px;
+}
+
+.itemTitle {
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.itemSubtitle {
+  font-size: 14px;
+  color: var(--color-grey-600);
+}
+
+.metadataList {
+  font-size: 14px;
+  color: var(--color-grey-600);
+}
+
+.quantity {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding: 32px 0;
+}
+
+.removeItemBtn {
+  position: absolute;
+  bottom: 0;
+}

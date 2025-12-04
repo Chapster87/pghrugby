@@ -89,6 +89,7 @@ export default function ProductForm({
                   <input
                     type={field.fieldType}
                     name={field.fieldName}
+                    title={field.label}
                     placeholder={placeholder}
                     required={field.required}
                     value={typeof fieldValue === "string" ? fieldValue : ""}
@@ -116,6 +117,7 @@ export default function ProductForm({
                 <Form.Control asChild>
                   <textarea
                     name={field.fieldName}
+                    title={field.label}
                     placeholder={placeholder}
                     required={field.required}
                     value={typeof fieldValue === "string" ? fieldValue : ""}
@@ -132,6 +134,7 @@ export default function ProductForm({
               <div key={idx} className="mb-2">
                 <NativeSelect
                   name={field.fieldName}
+                  title={field.label}
                   required={field.required}
                   className="SelectRoot"
                   placeholder={`Select ${field.label}`}
@@ -151,6 +154,7 @@ export default function ProductForm({
               <div key={idx} className="mb-2">
                 <CheckboxWithLabel
                   name={field.fieldName}
+                  title={field.label}
                   label={field.label}
                   checked={!!fieldValue}
                   onChange={() => {

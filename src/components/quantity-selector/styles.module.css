@@ -1,0 +1,31 @@
+.quantitySelector {
+  display: flex;
+  align-items: stretch;
+}
+
+.button {
+  padding: 6px;
+  border-radius: 0;
+  background-color: var(--color-grey-700);
+  color: var(--color-white);
+
+  &:hover {
+    background-color: var(--color-gold);
+  }
+}
+
+.input {
+  width: 55px;
+  border-radius: 0;
+  text-align: center;
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input[type="number"] {
+  -moz-appearance: textfield;
+}

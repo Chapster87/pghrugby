@@ -1,0 +1,18 @@
+.originalPrice {
+  color: var(--color-grey-600);
+}
+
+.priceStrikethrough {
+  text-decoration: line-through;
+}
+
+.salePrice {
+  font-weight: bold;
+  color: var(--color-black);
+
+  &.hasReducedPrice {
+    background-color: var(--color-gold);
+    border-radius: 8px;
+    padding: 4px 8px;
+  }
+}

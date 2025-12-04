@@ -5,6 +5,7 @@ type CheckboxProps = {
   checked?: boolean
   onChange?: () => void
   label: string
+  title?: string
   name?: string
   "data-testid"?: string
 }
@@ -13,6 +14,7 @@ const CheckboxWithLabel: React.FC<CheckboxProps> = ({
   checked = true,
   onChange,
   label,
+  title,
   name,
   "data-testid": dataTestId,
 }) => {
@@ -23,6 +25,7 @@ const CheckboxWithLabel: React.FC<CheckboxProps> = ({
         id="checkbox"
         role="checkbox"
         type="button"
+        title={title}
         checked={checked}
         aria-checked={checked}
         onClick={onChange}
