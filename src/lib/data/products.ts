@@ -1,5 +1,6 @@
 "use server"
 
+import { notFound } from "next/navigation"
 import { sdk } from "@lib/config"
 import { sortProducts } from "@lib/util/sort-products"
 import { HttpTypes } from "@medusajs/types"
@@ -128,7 +129,7 @@ export const getProductByHandle = async (
   const product = products[0]
 
   if (!product) {
-    throw new Error(`Product with handle ${handle} not found`)
+    return notFound()
   }
 
   return {

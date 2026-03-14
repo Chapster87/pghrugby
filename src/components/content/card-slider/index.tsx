@@ -9,7 +9,7 @@ import s from "./styles.module.css"
 type ContentCard = {
   type: string
   title: string
-  slug: string
+  slug: { current: string; _type: "slug" }
   date: string
   excerpt: string
   featuredMedia: string
@@ -69,7 +69,7 @@ export function CardSlider({
       <div className={s.cardSlider} ref={containerRef}>
         {data.items.map((item: ContentCard, idx: number) => (
           <div
-            key={item.slug}
+            key={item.slug.current}
             ref={(el) => {
               slideRefs.current[idx] = el
             }}

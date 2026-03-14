@@ -1,6 +1,7 @@
 "use client"
 import * as NavigationMenu from "@radix-ui/react-navigation-menu"
 import * as Dialog from "@radix-ui/react-dialog"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import Link from "next/link"
 import { ChevronDown, Menu, X } from "lucide-react"
 import s from "./style.module.css"
@@ -30,12 +31,7 @@ export function MainNav({ formattedNavData }: NavProps) {
       <NavigationMenu.List className={s.navList}>
         {navigation &&
           navigation.map((item, index) => {
-            const itemKey =
-              item.route && item.route !== "#"
-                ? item.route
-                : item.url && item.url !== "#"
-                ? item.url
-                : `${item.label}-${index}`
+            const itemKey = `${item.label}-${index}`
             return item.submenu && item.submenu.length > 0 ? (
               <NavigationMenu.Item key={itemKey} className={s.navItem}>
                 <NavigationMenu.Trigger
@@ -49,12 +45,7 @@ export function MainNav({ formattedNavData }: NavProps) {
                 <NavigationMenu.Content className={s.navContent}>
                   <ul className={s.subNavList}>
                     {item.submenu.map((sub, subIdx) => {
-                      const subKey =
-                        sub.route && sub.route !== "#"
-                          ? sub.route
-                          : sub.url && sub.url !== "#"
-                          ? sub.url
-                          : `${sub.label}-${subIdx}`
+                      const subKey = `${sub.label}-${subIdx}`
                       return (
                         <li key={subKey} className={s.navSubItem}>
                           <Link
@@ -90,6 +81,7 @@ export function MainNav({ formattedNavData }: NavProps) {
 export function MobileNav({ formattedNavData }: NavProps) {
   const { navigation } = formattedNavData
   const [isOpen, setIsOpen] = useState(false) // State to manage dialog open state
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null)
 
   useEffect(() => {
     const handleResize = () => {
@@ -120,6 +112,9 @@ export function MobileNav({ formattedNavData }: NavProps) {
       <Dialog.Portal>
         <Dialog.Overlay className={s.mobileNavOverlay} />
         <Dialog.Content className={s.mobileNavContent}>
+          <VisuallyHidden>
+            <Dialog.Title>Navigation Menu</Dialog.Title>
+          </VisuallyHidden>
           <div className={s.mobileNavHeader}>
             <Dialog.Close asChild>
               <button
@@ -134,34 +129,36 @@ export function MobileNav({ formattedNavData }: NavProps) {
           <ul className={s.mobileNavList}>
             {navigation &&
               navigation.map((item, index) => {
-                const itemKey =
-                  item.route && item.route !== "#"
-                    ? item.route
-                    : item.url && item.url !== "#"
-                    ? item.url
-                    : `${item.label}-${index}`
-                return item.submenu ? (
+                const itemKey = `${item.label}-${index}`
+                const isSubmenuOpen = openSubmenu === itemKey
+
+                return item.submenu && item.submenu.length > 0 ? (
                   <li key={itemKey} className={s.mobileNavItem}>
-                    <details>
-                      <summary className={s.mobileNavSummary}>
-                        {item.label}
-                        <span>
-                          <ChevronDown className="w-4 h-4" />
-                        </span>
-                      </summary>
+                    <button
+                      className={s.mobileNavSummary}
+                      onClick={() =>
+                        setOpenSubmenu(isSubmenuOpen ? null : itemKey)
+                      }
+                    >
+                      {item.label}
+                      <span
+                        className={`transition-transform duration-200 ${
+                          isSubmenuOpen ? "rotate-180" : ""
+                        }`}
+                      >
+                        <ChevronDown className="w-4 h-4" />
+                      </span>
+                    </button>
+                    {isSubmenuOpen && (
                       <ul className={s.mobileNavSubList}>
                         {item.submenu.map((sub, subIdx) => {
-                          const subKey =
-                            sub.route && sub.route !== "#"
-                              ? sub.route
-                              : sub.url && sub.url !== "#"
-                              ? sub.url
-                              : `${sub.label}-${subIdx}`
+                          const subKey = `${sub.label}-${subIdx}`
                           return (
                             <li key={subKey}>
                               <Link
                                 href={cleanUrl(sub.route || sub.url)}
                                 className={s.mobileNavLink}
+                                onClick={() => setIsOpen(false)}
                               >
                                 {sub.label}
                               </Link>
@@ -169,13 +166,14 @@ export function MobileNav({ formattedNavData }: NavProps) {
                           )
                         })}
                       </ul>
-                    </details>
+                    )}
                   </li>
                 ) : (
                   <li key={itemKey}>
                     <Link
                       href={cleanUrl(item.route || item.url)}
                       className={s.mobileNavLink}
+                      onClick={() => setIsOpen(false)}
                     >
                       {item.label}
                     </Link>
