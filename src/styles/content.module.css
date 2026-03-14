@@ -12,11 +12,12 @@
   }
 }
 
-.primary {
+.primary,
+.secondary {
   display: block;
 }
 
-.contentMain {
+.contentBlock {
   margin-top: 20px;
   margin-bottom: 30px;
   border-radius: 8px;

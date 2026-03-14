@@ -30,7 +30,7 @@ export async function generateMetadata(
 
 export default function WomensSchedule() {
   return (
-    <div className={`${contentStyles.contentMain} ${s.mensScheduleMain}`}>
+    <div className={`${contentStyles.contentBlock} ${s.mensScheduleMain}`}>
       <Heading level="h1">Women's Rugby Season Schedules</Heading>
 
       <ScheduleTable

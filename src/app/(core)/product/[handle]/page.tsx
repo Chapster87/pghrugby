@@ -320,7 +320,7 @@ export default async function ProductPage(props: {
 
   return (
     <SidebarLayout>
-      <div className={`${contentStyles.contentMain} ${s.productPage}`}>
+      <div className={`${contentStyles.contentBlock} ${s.productPage}`}>
         {/* Structured data for SEO */}
         {structuredData && (
           <script

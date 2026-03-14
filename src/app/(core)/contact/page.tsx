@@ -49,7 +49,7 @@ export default async function ContactUs() {
   const socials = await client.fetch(socialsQuery)
   return (
     <SidebarLayout>
-      <div className={`${contentStyles.contentMain} ${s.contactPage}`}>
+      <div className={`${contentStyles.contentBlock} ${s.contactPage}`}>
         <Heading level="h1" className={s.pageHeading}>
           Contact Us
         </Heading>

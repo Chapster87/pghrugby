@@ -156,7 +156,7 @@ export default async function Home(props: {
   const structuredData = generateStructuredData(data?.seo || {})
 
   return (
-    <div className={`${contentStyles.contentMain} ${s.membershipPage}`}>
+    <div className={`${contentStyles.contentBlock} ${s.membershipPage}`}>
       {/* Structured data for SEO */}
       {structuredData && (
         <script

@@ -38,7 +38,7 @@ export async function generateMetadata(
 
 export default async function LinksPage() {
   return (
-    <div className={`${contentStyles.contentMain} ${s.styleguide}`}>
+    <div className={`${contentStyles.contentBlock} ${s.styleguide}`}>
       <section className="mb-12">
         <h1>Typography</h1>
         <Heading level="h1">Heading 1</Heading>

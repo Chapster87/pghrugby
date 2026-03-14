@@ -1,25 +1,18 @@
 "use client"
 
-import { Suspense, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import CartDropdown from "@/modules/layout/components/cart-dropdown"
 import Crest from "@svg/Crest"
+import { ChevronLeft } from "lucide-react"
 import s from "./style.module.css"
 
 interface NavProps {
   title: string
-  mainNav: React.ReactNode
-  mobileNav: React.ReactNode
   cart?: any
 }
 
-export default function HeaderMain({
-  title,
-  mainNav,
-  mobileNav,
-  cart,
-}: NavProps) {
+export default function HeaderMain({ title, cart }: NavProps) {
   const headerRef = useRef<HTMLDivElement>(null)
 
   // Determine if current page is home based on slug
@@ -49,33 +42,19 @@ export default function HeaderMain({
       <div
         className={`lg:container lg:mx-auto ${s.headerInner} px-[12] flex items-center justify-between`}
       >
-        <div key="mobile-nav">{mobileNav}</div>
         <Link href="/" aria-label="View Homepage" className={s.siteLogo}>
           <Crest className={s.crest} />
           <div className="sr-only">{title}</div>
         </Link>
-        <div key="main-nav">{mainNav}</div>
-        <div className="flex items-center gap-4">
+        <div className={`flex items-center gap-4`}>
           <Link
-            href="/account"
-            className={s.navLink + " hidden lg:inline-block"}
-            data-testid="nav-account-link"
+            href="/cart"
+            className={`${s.navLink}`}
+            data-testid="back-to-cart-link"
           >
-            Account
+            <ChevronLeft className="mr-2" />
+            Back to Cart
           </Link>
-          <Suspense
-            fallback={
-              <Link
-                href="/cart"
-                className={s.navLink}
-                data-testid="nav-cart-link"
-              >
-                Cart (0)
-              </Link>
-            }
-          >
-            <CartDropdown cart={cart} />
-          </Suspense>
         </div>
       </div>
     </header>

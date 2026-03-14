@@ -114,7 +114,7 @@ export default async function MensSchedule() {
   )
 
   return (
-    <div className={`${contentStyles.contentMain} ${s.mensScheduleMain}`}>
+    <div className={`${contentStyles.contentBlock} ${s.mensScheduleMain}`}>
       <Heading level="h1">All Pittsburgh Forge Rugby Club Matches</Heading>
 
       <MatchCountdown

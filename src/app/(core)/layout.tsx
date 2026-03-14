@@ -28,7 +28,6 @@ export default async function CoreLayout(props: { children: React.ReactNode }) {
   return (
     <>
       <BreakpointIndicator />
-      {/* @TODO: Update this to be dynamic somehow */}
       <div className="siteMain">
         <Header />
         {customer && cart && (

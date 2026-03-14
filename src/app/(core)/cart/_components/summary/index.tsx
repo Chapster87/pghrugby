@@ -1,7 +1,7 @@
 import Heading from "@/components/typography/heading"
 import Button from "@/components/button"
 import Link from "@/components/link"
-import CartTotals from "@modules/common/components/cart-totals"
+import CartTotals from "../cart-totals"
 import DiscountCode from "@/components/checkout/discount-code"
 import type { HttpTypes } from "@medusajs/types"
 

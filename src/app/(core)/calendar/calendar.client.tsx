@@ -78,7 +78,7 @@ export default function CalendarClient({
   }
 
   return (
-    <div className={`${contentStyles.contentMain}`}>
+    <div className={`${contentStyles.contentBlock}`}>
       <h1 className="text-2xl font-bold mb-4">Event Calendar</h1>
       <div className="flex justify-between mb-4">
         <button

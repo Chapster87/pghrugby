@@ -1,10 +1,13 @@
 import { retrieveCart } from "@lib/data/cart"
 import { retrieveCustomer } from "@lib/data/customer"
+import SidebarLayout from "@/layouts/sidebar"
 import PaymentWrapper from "@modules/checkout/components/payment-wrapper"
 import CheckoutForm from "@modules/checkout/templates/checkout-form"
 import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
+import contentStyles from "@/styles/content.module.css"
+import s from "./styles.module.css"
 
 export const metadata: Metadata = {
   title: "Checkout",
@@ -20,11 +23,19 @@ export default async function Checkout() {
   const customer = await retrieveCustomer()
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-[1fr_416px] 2xl:container px-[12] gap-x-40 py-12">
-      <PaymentWrapper cart={cart}>
-        <CheckoutForm cart={cart} customer={customer} />
-      </PaymentWrapper>
-      <CheckoutSummary cart={cart} />
+    <div className={s.checkoutPage}>
+      <div className={contentStyles.primary}>
+        <div className={`${contentStyles.contentBlock}`}>
+          <PaymentWrapper cart={cart}>
+            <CheckoutForm cart={cart} customer={customer} />
+          </PaymentWrapper>
+        </div>
+      </div>
+      <div className={contentStyles.secondary}>
+        <div className={`${contentStyles.contentBlock}`}>
+          <CheckoutSummary cart={cart} />
+        </div>
+      </div>
     </div>
   )
 }

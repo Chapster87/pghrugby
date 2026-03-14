@@ -203,7 +203,7 @@ export default async function Home(props: {
       )}
 
       {data?.pageBuilder && (
-        <div className={`dark ${contentStyles.contentMain} ${s.homepageHero}`}>
+        <div className={`dark ${contentStyles.contentBlock} ${s.homepageHero}`}>
           <PageBuilder data={data.pageBuilder} />
         </div>
       )}

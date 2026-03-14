@@ -54,7 +54,7 @@ export default async function LinksPage() {
   const linktreeData = await getLinktreeData()
 
   return (
-    <div className={`${contentStyles.contentMain} ${s.linktreeMain}`}>
+    <div className={`${contentStyles.contentBlock} ${s.linktreeMain}`}>
       {/* <h1 className={s.linktreeTitle}>Pittsburgh Rugby Links</h1> */}
       <ul className={s.linkList}>
         {linktreeData && (

@@ -28,7 +28,7 @@ export default async function Cart() {
   // Show empty cart message if cart is null or has no items
   if (!cart || cart.items?.length === 0) {
     return (
-      <div className={`${contentStyles.contentMain} ${s.emptyCart}`}>
+      <div className={`${contentStyles.contentBlock} ${s.emptyCart}`}>
         <Heading level="h1">Your Cart</Heading>
         <EmptyCartMessage />
       </div>
@@ -37,9 +37,9 @@ export default async function Cart() {
 
   return (
     <div className={s.cartPage}>
-      <div className={s.primary}>
+      <div className={contentStyles.primary}>
         <div
-          className={`${contentStyles.contentMain} ${s.cartContent}`}
+          className={`${contentStyles.contentBlock} ${s.cartContent}`}
           data-testid="cart-container"
         >
           <Heading level="h1">Your Cart</Heading>
@@ -52,7 +52,11 @@ export default async function Cart() {
           <CartTable cart={cart ?? undefined} />
         </div>
       </div>
-      <CartSummary cart={cart as any} />
+      <div className={contentStyles.secondary}>
+        <div className={contentStyles.contentBlock}>
+          <CartSummary cart={cart as any} />
+        </div>
+      </div>
     </div>
   )
 }

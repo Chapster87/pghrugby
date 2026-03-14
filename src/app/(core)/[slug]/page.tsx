@@ -208,7 +208,7 @@ export default async function Page(props: Props) {
 
   return (
     <SidebarLayout>
-      <article className={`${contentStyles.contentMain} ${s.pageContent}`}>
+      <article className={`${contentStyles.contentBlock} ${s.pageContent}`}>
         <div className="prose max-w-none">
           {/* Structured data for SEO */}
           {structuredData && (
