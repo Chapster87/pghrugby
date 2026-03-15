@@ -1,11 +1,6 @@
 "use client"
 
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  Transition,
-} from "@headlessui/react"
+import * as Popover from "@radix-ui/react-popover"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
@@ -15,16 +10,16 @@ import LineItemPrice from "@modules/common/components/line-item-price"
 import Thumbnail from "@modules/products/components/thumbnail"
 import Link from "@components/link"
 import { usePathname } from "next/navigation"
-import { Fragment, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
-const CartDropdown = ({
+import s from "./style.module.css"
+
+const MiniCart = ({
   cart: cartState,
 }: {
   cart?: HttpTypes.StoreCart | null
 }) => {
-  const [activeTimer, setActiveTimer] = useState<NodeJS.Timer | undefined>(
-    undefined
-  )
+  const [activeTimer, setActiveTimer] = useState<NodeJS.Timeout | null>(null)
   const [cartDropdownOpen, setCartDropdownOpen] = useState(false)
 
   const open = () => setCartDropdownOpen(true)
@@ -40,21 +35,18 @@ const CartDropdown = ({
 
   const timedOpen = () => {
     open()
-
     const timer = setTimeout(close, 5000)
-
     setActiveTimer(timer)
   }
 
   const openAndCancel = () => {
     if (activeTimer) {
       clearTimeout(activeTimer)
+      setActiveTimer(null)
     }
-
     open()
   }
 
-  // Clean up the timer when the component unmounts
   useEffect(() => {
     return () => {
       if (activeTimer) {
@@ -65,7 +57,6 @@ const CartDropdown = ({
 
   const pathname = usePathname()
 
-  // open cart dropdown when modifying the cart items, but only if we're not on the cart page
   useEffect(() => {
     if (itemRef.current !== totalItems && !pathname.includes("/cart")) {
       timedOpen()
@@ -74,40 +65,36 @@ const CartDropdown = ({
   }, [totalItems, itemRef.current])
 
   return (
-    <div
-      className="h-full z-50"
-      onMouseEnter={openAndCancel}
-      onMouseLeave={close}
-    >
-      <Popover className="relative h-full">
-        <PopoverButton className="h-full">
-          <Link
-            href="/cart"
-            data-testid="nav-cart-link"
-            className="text-[18px] text-white font-semibold"
-          >{`Cart (${totalItems})`}</Link>
-        </PopoverButton>
-        <Transition
-          show={cartDropdownOpen}
-          as={Fragment}
-          enter="transition ease-out duration-200"
-          enterFrom="opacity-0 translate-y-1"
-          enterTo="opacity-100 translate-y-0"
-          leave="transition ease-in duration-150"
-          leaveFrom="opacity-100 translate-y-0"
-          leaveTo="opacity-0 translate-y-1"
-        >
-          <PopoverPanel
-            static
-            className="hidden sm:block absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[420px] text-ui-fg-base"
-            data-testid="nav-cart-dropdown"
+    <div className={s.container}>
+      <Popover.Root open={cartDropdownOpen} onOpenChange={setCartDropdownOpen}>
+        <Popover.Trigger asChild>
+          <button
+            className={s.trigger}
+            onMouseEnter={openAndCancel}
+            onMouseLeave={close}
           >
-            <div className="p-4 flex items-center justify-center">
-              <h3 className="text-base leading-6 font-semibold">Cart</h3>
+            <Link
+              href="/cart"
+              data-testid="nav-cart-link"
+              className={s.link}
+            >{`Cart (${totalItems})`}</Link>
+          </button>
+        </Popover.Trigger>
+        <Popover.Portal>
+          <Popover.Content
+            className={`${s.slideDownAndFade} ${s.content}`}
+            data-testid="nav-cart-dropdown"
+            onMouseEnter={openAndCancel}
+            onMouseLeave={close}
+            sideOffset={0}
+            align="end"
+          >
+            <div className={s.header}>
+              <h3 className={s.title}>Cart</h3>
             </div>
             {cartState && cartState.items?.length ? (
               <>
-                <div className="overflow-y-scroll max-h-[402px] px-4 grid grid-cols-1 gap-y-8 no-scrollbar p-px">
+                <div className={s.items}>
                   {cartState.items
                     .sort((a, b) => {
                       return (a.created_at ?? "") > (b.created_at ?? "")
@@ -116,13 +103,13 @@ const CartDropdown = ({
                     })
                     .map((item) => (
                       <div
-                        className="grid grid-cols-[122px_1fr] gap-x-4"
+                        className={s.item}
                         key={item.id}
                         data-testid="cart-item"
                       >
                         <Link
                           href={`/product/${item.product_handle}`}
-                          className="w-24"
+                          className={s.itemThumbnail}
                         >
                           <Thumbnail
                             thumbnail={item.thumbnail}
@@ -130,11 +117,11 @@ const CartDropdown = ({
                             size="square"
                           />
                         </Link>
-                        <div className="flex flex-col justify-between flex-1">
-                          <div className="flex flex-col flex-1">
-                            <div className="flex items-start justify-between">
-                              <div className="flex flex-col text-ellipsis whitespace-nowrap mr-4 w-[180px]">
-                                <h3 className="overflow-hidden text-ellipsis">
+                        <div className={s.itemContent}>
+                          <div className={s.itemHeader}>
+                            <div className={s.itemInfo}>
+                              <div className={s.itemDetails}>
+                                <h3 className={s.itemTitle}>
                                   <Link
                                     href={`/product/${item.product_handle}`}
                                     data-testid="product-link"
@@ -154,7 +141,7 @@ const CartDropdown = ({
                                   Quantity: {item.quantity}
                                 </span>
                               </div>
-                              <div className="flex justify-end">
+                              <div className={s.itemPrice}>
                                 <LineItemPrice
                                   item={item}
                                   style="tight"
@@ -165,7 +152,7 @@ const CartDropdown = ({
                           </div>
                           <DeleteButton
                             id={item.id}
-                            className="mt-1"
+                            className={s.itemRemove}
                             data-testid="cart-item-remove-button"
                           >
                             Remove
@@ -174,14 +161,14 @@ const CartDropdown = ({
                       </div>
                     ))}
                 </div>
-                <div className="p-4 flex flex-col gap-y-4 text-small-regular">
-                  <div className="flex items-center justify-between">
-                    <span className="text-ui-fg-base font-semibold">
+                <div className={s.footer}>
+                  <div className={s.subtotal}>
+                    <span className={s.subtotalLabel}>
                       Subtotal{" "}
-                      <span className="font-normal">(excl. taxes)</span>
+                      <span className={s.subtotalTax}>(excl. taxes)</span>
                     </span>
                     <span
-                      className="text-base leading-6 font-semibold"
+                      className={s.subtotalValue}
                       data-testid="cart-subtotal"
                       data-value={subtotal}
                     >
@@ -193,7 +180,7 @@ const CartDropdown = ({
                   </div>
                   <Link href="/cart">
                     <Button
-                      className="w-full"
+                      className={s.goToCartButton}
                       size="large"
                       data-testid="go-to-cart-button"
                     >
@@ -204,15 +191,17 @@ const CartDropdown = ({
               </>
             ) : (
               <div>
-                <div className="flex py-16 flex-col gap-y-4 items-center justify-center">
-                  <div className="bg-gray-900 flex items-center justify-center w-6 h-6 rounded-full text-white">
+                <div className={s.empty}>
+                  <div className={s.emptyIcon}>
                     <span>0</span>
                   </div>
                   <span>Your shopping bag is empty.</span>
                   <div>
                     <Link href="/store">
                       <>
-                        <span className="sr-only">Go to all products page</span>
+                        <span className={s.srOnly}>
+                          Go to all products page
+                        </span>
                         <Button onClick={close}>Explore products</Button>
                       </>
                     </Link>
@@ -220,11 +209,11 @@ const CartDropdown = ({
                 </div>
               </div>
             )}
-          </PopoverPanel>
-        </Transition>
-      </Popover>
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
     </div>
   )
 }
 
-export default CartDropdown
+export default MiniCart

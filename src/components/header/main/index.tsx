@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import CartDropdown from "@/modules/layout/components/cart-dropdown"
+import MiniCart from "@/components/mini-cart"
 import Crest from "@svg/Crest"
 import s from "./style.module.css"
 
@@ -74,7 +74,7 @@ export default function HeaderMain({
               </Link>
             }
           >
-            <CartDropdown cart={cart} />
+            <MiniCart cart={cart} />
           </Suspense>
         </div>
       </div>
