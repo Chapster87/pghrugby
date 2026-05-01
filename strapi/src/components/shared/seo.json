@@ -16,11 +16,28 @@
       "type": "text",
       "required": true
     },
-    "shareImage": {
+    "metaImage": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ]
+    },
+    "metaKeywords": {
+      "type": "string",
+      "regex": "[^,]+"
+    },
+    "metaRobots": {
+      "type": "json"
+    },
+    "structuredData": {
+      "type": "json"
+    },
+    "canonicalURL": {
+      "type": "string"
     }
   }
 }

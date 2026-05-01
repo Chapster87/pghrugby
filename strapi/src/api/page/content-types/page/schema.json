@@ -1,0 +1,64 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pages",
+  "info": {
+    "singularName": "page",
+    "pluralName": "pages",
+    "displayName": "Page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "excerpt": {
+      "type": "string"
+    },
+    "status": {
+      "type": "enumeration",
+      "default": "draft",
+      "enum": [
+        "publish",
+        "future",
+        "draft",
+        "pending",
+        "private",
+        "trash",
+        "auto-draft",
+        "inherit"
+      ]
+    },
+    "featured_media": {
+      "type": "media",
+      "multiple": false,
+      "required": false
+    },
+    "author": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "content_blocks": {
+      "type": "blocks"
+    }
+  }
+}

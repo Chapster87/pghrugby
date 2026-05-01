@@ -23,6 +23,8 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
+        port: "1337", // Allow images from local Strapi instance
+        pathname: "/uploads/**", // Specify the path for Strapi uploads
       },
       {
         protocol: "https",
