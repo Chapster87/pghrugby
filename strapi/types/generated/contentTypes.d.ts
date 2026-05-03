@@ -711,10 +711,7 @@ export interface ApiWpPageWpPage extends Struct.CollectionTypeSchema {
       'api::wp-page.wp-page'
     > &
       Schema.Attribute.Private;
-    publishedAt: Schema.Attribute.DateTime;
-    seo: Schema.Attribute.Component<'shared.seo', false>;
-    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
-    status: Schema.Attribute.Enumeration<
+    page_status: Schema.Attribute.Enumeration<
       [
         'publish',
         'future',
@@ -727,6 +724,9 @@ export interface ApiWpPageWpPage extends Struct.CollectionTypeSchema {
       ]
     > &
       Schema.Attribute.DefaultTo<'draft'>;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;

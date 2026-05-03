@@ -1,8 +1,8 @@
 // To run this script (full migration):
-// npx dotenv -c ..\pghrugby\nextjs\.env.local -- node migrate-wp-images-to-strapi.js
+// npx dotenv -c .\.env.local -- node migrate-wp-images-to-strapi.js
 
 // To run in test mode (migrates the first 10 images):
-// npx dotenv -c ..\pghrugby\nextjs\.env.local -- node migrate-wp-images-to-strapi.js --test
+// npx dotenv -c .\.env.local -- node migrate-wp-images-to-strapi.js --test
 
 const axios = require("axios");
 const fs = require("fs").promises;
@@ -98,8 +98,8 @@ async function fetchWordPressPostsAndPages() {
   let hasMore = true;
 
   while (hasMore) {
-    const postsUrl = `${WORDPRESS_URL}/wp-json/wp/v2/posts?per_page=100&page=${page}`;
-    const pagesUrl = `${WORDPRESS_URL}/wp-json/wp/v2/pages?per_page=100&page=${page}`;
+    const postsUrl = `${WORDPRESS_URL}/wp-json/wp/v2/posts?per_page=100&page=${page}&status=any`;
+    const pagesUrl = `${WORDPRESS_URL}/wp-json/wp/v2/pages?per_page=100&page=${page}&status=any`;
 
     const [postsResponse, pagesResponse] = await Promise.all([
       axios.get(postsUrl, { headers: wpHeaders }).catch((e) => {

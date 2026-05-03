@@ -28,7 +28,7 @@
     "excerpt": {
       "type": "string"
     },
-    "status": {
+    "page_status": {
       "type": "enumeration",
       "default": "draft",
       "enum": [

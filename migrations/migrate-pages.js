@@ -1,12 +1,13 @@
 // To run this script:
-// npx dotenv -c ..\pghrugby\nextjs\.env.local -- node migrate-pages.js
-// npx dotenv -c ..\pghrugby\nextjs\.env.local -- node migrate-pages.js --dry-run
-// npx dotenv -c ..\pghrugby\nextjs\.env.local -- node migrate-pages.js --test-slug about
+// npx dotenv -c .\.env.local -- node migrate-pages.js
+// npx dotenv -c .\.env.local -- node migrate-pages.js --dry-run
+// npx dotenv -c .\.env.local -- node migrate-pages.js --test-slug about
 
 const axios = require("axios");
 const fs = require("fs").promises;
 const path = require("path");
 const cheerio = require("cheerio"); // For parsing HTML
+const { decode } = require("html-entities"); // For decoding HTML entities
 
 const WORDPRESS_URL = "https://pghrugby.com";
 const WORDPRESS_API_USERNAME = process.env.WORDPRESS_APP_USERNAME;
@@ -75,9 +76,9 @@ async function migratePages(dryRun = false, testSlug = null) {
 
     // 2. Fetch pages from WordPress
     console.log("Fetching pages from WordPress...");
-    let wordpressApiUrl = `${WORDPRESS_URL}/wp-json/wp/v2/pages?per_page=100`;
+    let wordpressApiUrl = `${WORDPRESS_URL}/wp-json/wp/v2/pages?per_page=100&status=any`;
     if (testSlug) {
-      wordpressApiUrl = `${WORDPRESS_URL}/wp-json/wp/v2/pages?slug=${testSlug}`;
+      wordpressApiUrl = `${WORDPRESS_URL}/wp-json/wp/v2/pages?slug=${testSlug}&status=any`;
       console.log(`Running in test mode for slug: ${testSlug}`);
     }
 
@@ -91,12 +92,14 @@ async function migratePages(dryRun = false, testSlug = null) {
       return;
     }
 
+    // wp_id: strapi_id
     const authorMap = {
+      19: 1, // Forge
       1: 1, // Forge
-      4: 4, // Andy Chapman
-      5: 5, // Bill Marnell
-      15: 2, // Billy Gordon
-      13: 3, // Hannah Zibert
+      4: 2, // Andy Chapman
+      5: 4, // Bill Marnell
+      15: 3, // Billy Gordon
+      13: 5, // Hannah Zibert
     };
 
     // Map WordPress statuses to Strapi enumeration values
@@ -140,15 +143,17 @@ async function migratePages(dryRun = false, testSlug = null) {
     };
 
     for (const wpPage of wpPages) {
+      const decodedTitle = decode(wpPage.title.rendered);
       const strapiPageData = {
         data: {
-          title: wpPage.title.rendered,
+          title: decodedTitle,
           slug: wpPage.slug,
           excerpt: wpPage.excerpt.rendered,
-          status: statusMap[wpPage.status] || "draft", // Default to "draft" if status is not mapped
-          publishedAt: wpPage.date_gmt
-            ? new Date(wpPage.date_gmt).toISOString()
-            : null,
+          page_status: statusMap[wpPage.status] || "draft", // Default to "draft" if status is not mapped
+          publishedAt:
+            wpPage.status === "publish" && wpPage.date_gmt
+              ? new Date(wpPage.date_gmt).toISOString()
+              : null, // Only set publishedAt for 'publish' status
           creationDate: wpPage.date_gmt
             ? new Date(wpPage.date_gmt).toISOString()
             : null,
@@ -157,15 +162,25 @@ async function migratePages(dryRun = false, testSlug = null) {
             : null,
           author: authorMap[wpPage.author],
           seo: {
-            metaTitle: wpPage.yoast_head_json?.title || wpPage.title.rendered,
-            metaDescription:
-              wpPage.yoast_head_json?.description || wpPage.excerpt.rendered,
+            metaTitle: wpPage.yoast_head_json?.title
+              ? decode(wpPage.yoast_head_json.title)
+              : decodedTitle, // Decode metaTitle, fallback to decoded main title
+            metaDescription: wpPage.yoast_head_json?.description || null, // Keep metaDescription as is
             canonicalURL: wpPage.yoast_head_json?.canonical || null,
             metaRobots: wpPage.yoast_head_json?.robots || null,
           },
           wpData: wpPage || null, // drops a copy of export into an attr to save data
         },
       };
+
+      console.log(
+        `--- Processing Page: "${wpPage.title.rendered}" (WordPress ID: ${wpPage.id}) ---`,
+      );
+      console.log(`WordPress Status: "${wpPage.status}"`);
+      console.log(`Strapi Status (to send): "${strapiPageData.data.status}"`);
+      console.log(
+        `Strapi PublishedAt (to send): "${strapiPageData.data.publishedAt}"`,
+      );
 
       // Handle featured media
       if (wpPage.featured_media && wpPage.featured_media > 0) {
@@ -238,9 +253,13 @@ async function migratePages(dryRun = false, testSlug = null) {
         console.log(`[DRY RUN] Would migrate page: ${wpPage.title.rendered}`);
         console.log(JSON.stringify(strapiPageData, null, 2));
       } else {
-        console.log(`Attempting to post to Strapi: ${STRAPI_URL}/api/pages`);
-        // console.log("Payload:", JSON.stringify(strapiPageData, null, 2)); // Log the payload
-        console.log("wpPage:", wpPage);
+        console.log(`Attempting to post to Strapi: ${STRAPI_URL}/api/wp-pages`);
+        console.log(
+          "Full Payload to Strapi:",
+          JSON.stringify(strapiPageData, null, 2),
+        ); // Log the full payload
+        // console.log("wpPage:", wpPage); // Already logged details above if needed
+
         try {
           await axios.post(`${STRAPI_URL}/api/wp-pages`, strapiPageData, {
             headers: strapiHeaders,
