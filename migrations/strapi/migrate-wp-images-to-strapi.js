@@ -1,8 +1,8 @@
 // To run this script (full migration):
-// npx dotenv -c .\.env.local -- node migrate-wp-images-to-strapi.js
+// npx dotenv -c .\strapi\.env.local -- node migrate-wp-images-to-strapi.js
 
 // To run in test mode (migrates the first 10 images):
-// npx dotenv -c .\.env.local -- node migrate-wp-images-to-strapi.js --test
+// npx dotenv -c .\strapi\.env.local -- node migrate-wp-images-to-strapi.js --test
 
 const axios = require("axios");
 const fs = require("fs").promises;

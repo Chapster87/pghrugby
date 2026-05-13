@@ -1,7 +1,7 @@
 // To run this script:
-// npx dotenv -c .\.env.local -- node migrate-pages.js
-// npx dotenv -c .\.env.local -- node migrate-pages.js --dry-run
-// npx dotenv -c .\.env.local -- node migrate-pages.js --test-slug about
+// npx dotenv -c .\strapi\.env.local -- node migrate-pages.js
+// npx dotenv -c .\strapi\.env.local -- node migrate-pages.js --dry-run
+// npx dotenv -c .\strapi\.env.local -- node migrate-pages.js --test-slug about
 
 const axios = require("axios");
 const fs = require("fs").promises;

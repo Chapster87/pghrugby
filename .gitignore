@@ -1,3 +1,3 @@
-/migrations/node_modules
-/migrations/.env.local
-/migrations/image-map.json
+/migrations/*/node_modules
+/migrations/*/.env.local
+/migrations/*/image-map.json

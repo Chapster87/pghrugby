@@ -1,0 +1,148 @@
+
+scalar JSON
+
+type DatoCmsFile {
+  id: ID!
+  url: String!
+  filename: String
+  width: Int
+  height: Int
+  size: Int
+  alt: String
+  title: String
+}
+
+type DatoCmsSeo {
+  title: String
+  description: String
+  image: DatoCmsFile
+  no_index: Boolean
+  no_follow: Boolean
+}
+
+type DatoCmsStructuredText {
+  value: JSON!
+  blocks: [AnyBlock!]
+  inlineBlocks: [AnyModel!]
+}
+
+type DatoCmsRichText {
+  value: JSON!
+  blocks: [AnyBlock!]
+}
+
+type DatoCmsCloudinaryUrl {
+  bytes: Int
+  created_at: String
+  created_by: DatoCmsCloudinaryUser
+  duration: Int
+  format: String
+  width: Int
+  height: Int
+  metadata: JSON
+  public_id: String
+  id: String
+  resource_type: String
+  secure_url: String
+  tags: [String!]
+  type: String
+  uploaded_by: DatoCmsCloudinaryUser
+  url: String
+  version: Int
+}
+
+type DatoCmsCloudinaryUser {
+  type: String
+  id: String
+}
+
+
+type PageOld {
+  title: String
+  structured_text: DatoCmsStructuredText
+  slug: String
+  seo_settings_social: DatoCmsSeo
+  seo_analysis: JSON
+  modular_content_block: DatoCmsRichText
+}
+
+type ImageBlock {
+  asset: DatoCmsFile
+}
+
+type ImageGalleryBlock {
+  assets: [DatoCmsFile!]
+}
+
+type VideoBlock {
+  asset: DatoCmsFile
+}
+
+type WpCategory {
+  name: String
+  description: String
+  slug: String
+  position: Int
+  parent_id: String
+}
+
+type WpAuthor {
+  name: String
+  description: String
+  url: String
+  slug: String
+}
+
+type Page {
+  wpcontent: String
+  meta_title: String
+  wpexcerpt: String
+  title: String
+  meta_description: String
+  meta_keywords: JSON
+  slug: String
+  wpdata: JSON
+  meta_image: JSON
+  author: WpAuthor
+  content: DatoCmsStructuredText
+  canonical_url: String
+  meta_robots: JSON
+  modular_content_block: DatoCmsRichText
+  featured_image: JSON
+  structured_data: JSON
+  seo_analysis: JSON
+  creation_date: String
+}
+
+type WpArticle {
+  title: String
+  author: WpAuthor
+  content: String
+  tags: [WpArticle!]
+  excerpt: String
+  featured_media: DatoCmsFile
+  categories: [WpCategory!]
+  slug: String
+}
+
+type Homepage {
+  title: String
+  slug: String
+  author: WpAuthor
+  structured_text: DatoCmsStructuredText
+  modular_content_block: DatoCmsRichText
+  seo_settings_social: DatoCmsSeo
+  seo_analysis: JSON
+  excerpt: String
+  featured_media: DatoCmsFile
+  content: String
+}
+
+type Test {
+  image: JSON
+}
+
+type ExternalImageBlock {
+  url: String
+  cloudinary_url: DatoCmsCloudinaryUrl
+}

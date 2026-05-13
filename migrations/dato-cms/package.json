@@ -1,0 +1,23 @@
+{
+  "name": "dato-cms-migrations",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "migrate:pages": "node migrate-pages.js"
+  },
+  "dependencies": {
+    "@datocms/cma-client-node": "^5.4.14",
+    "axios": "^1.16.0",
+    "datocms": "^4.0.24",
+    "datocms-html-to-structured-text": "^5.1.16",
+    "datocms-structured-text-utils": "^5.1.16",
+    "dotenv": "^17.4.2",
+    "dotenv-cli": "^11.0.0",
+    "html-entities": "^2.6.0",
+    "jsdom": "22.1.0",
+    "parse5": "^8.0.1",
+    "typescript": "^6.0.3",
+    "unist-utils-core": "1.0.5"
+  }
+}
