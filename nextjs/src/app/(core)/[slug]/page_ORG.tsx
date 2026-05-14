@@ -3,27 +3,20 @@ import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
 import SidebarLayout from "@/layouts/sidebar"
 import Image from "next/image"
-import { executeQuery } from "@/lib/datocms/executeQuery"
-import { StructuredText } from "react-datocms"
 import { client } from "@sanity/client"
 import { parseSanityImageRef } from "@/sanity/lib/utils"
-import { pageSlugs, pageQuery, pageQuerySanity } from "./pages.query"
+import PageBuilder from "@/components/PageBuilder"
+import PortableText from "@/components/PortableText"
+import { sanityFetch } from "@/sanity/lib/live"
+import { pagesSlugs, pageQuery } from "./pages.query"
+import { isPortableText } from "@/lib/util/portableTextUtils"
 import Example from "./(example)/page"
 import ShareBar from "@/components/share-bar"
-import { CloudinaryImage } from "@/types/datocms"
-import { isFileField, FileField } from "@/utils/datocms"
-import { ResultOf } from "@/lib/datocms/graphql"
-import { getCloudinaryImageProps } from "@/utils/cloudinary"
-import { StructuredArticleData } from "@/types/structured-data"
 
 import contentStyles from "@/styles/content.module.css"
 import s from "./styles.module.css"
 
-type PageContentBlocks = ResultOf<
-  typeof pageQuery
->["page"]["content"]["blocks"][number]
-
-type PageProps = {
+type Props = {
   params: Promise<{ slug: string }>
 }
 
@@ -32,10 +25,11 @@ type PageProps = {
  * Always use published content here.
  */
 export async function generateStaticParams() {
-  const { allPages: data } = await executeQuery(pageSlugs, {
-    includeDrafts: false,
+  const { data } = await sanityFetch({
+    query: pagesSlugs,
+    perspective: "published",
+    stega: false,
   })
-
   return data
 }
 
@@ -49,7 +43,7 @@ export async function generateMetadata(
   const { isEnabled } = await draftMode()
   const { slug } = await props.params
   const data = await client.fetch(
-    pageQuerySanity,
+    pageQuery,
     { slug },
     {
       perspective: isEnabled ? "previewDrafts" : "published",
@@ -123,7 +117,9 @@ export async function generateMetadata(
 }
 
 // JSON-LD schema.org structured data
-function generateStructuredData(data: any): StructuredArticleData {
+function generateStructuredData(data: any) {
+  if (!data) return null
+
   const { seo = {} } = data
 
   // Handle ogImage as either a string or Sanity image object
@@ -179,22 +175,14 @@ function generateStructuredData(data: any): StructuredArticleData {
   }
 }
 
-export default async function Page({ params }: PageProps) {
-  const { slug } = await params
-  const { isEnabled: isDraftModeEnabled } = await draftMode()
+export default async function Page(props: Props) {
+  const { slug } = await props.params
+  const { isEnabled } = await draftMode()
 
-  const { page } = await executeQuery(pageQuery, {
-    variables: { slug },
-    excludeInvalid: false,
-    includeDrafts: isDraftModeEnabled,
-  })
-
-  console.log("DatoCMS Page:", page)
-
-  const sanityData = await client.fetch(
-    pageQuerySanity,
+  const data = await client.fetch(
+    pageQuery,
     { slug },
-    isDraftModeEnabled
+    isEnabled
       ? {
           perspective: "previewDrafts",
           useCdn: false,
@@ -203,21 +191,19 @@ export default async function Page({ params }: PageProps) {
       : undefined
   )
 
-  if (!page) {
-    notFound()
+  if (!data?._id) {
+    return notFound()
   }
 
-  console.log("Dato CMS Page", page)
+  const structuredData = generateStructuredData(data || {})
 
-  const structuredData = generateStructuredData(sanityData || {})
-
-  const shareUrl = page?.canonicalUrl ?? `https://pghrugby.com/${slug}`
-  const shareTitle = page?.metaTitle
-    ? page.metaTitle
-    : `${page?.title ?? ""} | Pittsburgh Forge Rugby Club`
+  const shareUrl = data.seo?.canonicalUrl || `https://pghrugby.com/${slug}`
+  const shareTitle = data.seo?.title
+    ? `${data.seo.title} | Pittsburgh Forge Rugby Club`
+    : `${data?.title} | Pittsburgh Forge Rugby Club`
 
   if (slug === "example") {
-    return <Example data={page} />
+    return <Example data={data} />
   }
 
   return (
@@ -229,17 +215,17 @@ export default async function Page({ params }: PageProps) {
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={{
-                __html: JSON.stringify(structuredData) as string,
+                __html: JSON.stringify(structuredData),
               }}
             />
           )}
 
           {/* Featured image with proper alt text */}
-          {page.featuredImage && (
+          {data.featuredMedia?.asset?.url && (
             <div className="mb-6 relative aspect-video w-full">
               <Image
-                src={(page.featuredImage as CloudinaryImage).secure_url}
-                alt={page.title || "Featured image"}
+                src={data.featuredMedia.asset.url}
+                alt={data.featuredMedia.alt || data.title || "Featured image"}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority
@@ -249,91 +235,48 @@ export default async function Page({ params }: PageProps) {
           )}
 
           <header className="mb-8">
-            <h1>{page.title}</h1>
+            <h1>{data.title}</h1>
 
             <p className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
-              {page.wpexcerpt}
+              {data.excerpt}
             </p>
 
             <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
-              {page.creationDate && (
-                <time dateTime={new Date(page.creationDate).toISOString()}>
-                  Published: {new Date(page.creationDate).toLocaleDateString()}
+              {data.date && (
+                <time dateTime={new Date(data.date).toISOString()}>
+                  Published: {new Date(data.date).toLocaleDateString()}
                 </time>
               )}
 
-              {page._updatedAt && page.creationDate && page._updatedAt && (
-                <time dateTime={new Date(page._updatedAt).toISOString()}>
-                  Updated: {new Date(page._updatedAt).toLocaleDateString()}
+              {data.modified && data.date !== data.modified && (
+                <time dateTime={new Date(data.modified).toISOString()}>
+                  Updated: {new Date(data.modified).toLocaleDateString()}
                 </time>
               )}
 
-              {page.author?.name && (
-                <address className="not-italic">By: {page.author.name}</address>
+              {data.author?.name && (
+                <address className="not-italic">By: {data.author.name}</address>
+              )}
+
+              {data.status && (
+                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded-sm text-xs">
+                  {data.status}
+                </span>
               )}
             </div>
           </header>
 
-          <div className="">
-            {page.content && (
-              <StructuredText
-                data={page.content}
-                renderBlock={({ record }) => {
-                  const typedRecord = record as PageContentBlocks
-                  switch (typedRecord.__typename) {
-                    case "ExternalImageBlockRecord":
-                      if (typedRecord.cloudinary) {
-                        const image = typedRecord.cloudinary
-                        return (
-                          <Image
-                            src={image.secure_url}
-                            alt={image.public_id}
-                            width={image.width ?? undefined}
-                            height={image.height ?? undefined}
-                          />
-                        )
-                      } else if (typedRecord.url) {
-                        const image = getCloudinaryImageProps(typedRecord.url)
-                        return (
-                          <Image
-                            src={image.url}
-                            alt=""
-                            width={image.width ?? undefined}
-                            height={image.height ?? undefined}
-                          />
-                        )
-                      }
+          {data.pageBuilder ? (
+            <div>
+              <PageBuilder data={data.pageBuilder} />
+            </div>
+          ) : (
+            <p>No content available.</p>
+          )}
 
-                      return null
-                    case "ImageBlockRecord":
-                      if (isFileField(typedRecord.asset)) {
-                        return <Image src={typedRecord.asset.url} alt="" />
-                      }
-                      return null
-                    case "ImageGalleryBlockRecord":
-                      return (
-                        <div>
-                          {typedRecord.assets.map((asset: FileField) =>
-                            isFileField(asset) ? (
-                              <Image key={asset.id} src={asset.url} alt="" />
-                            ) : null
-                          )}
-                        </div>
-                      )
-                    case "VideoBlockRecord":
-                      if (isFileField(typedRecord.asset)) {
-                        // For videos, you might want a video player component
-                        // For now, returning a link to the video
-                        return (
-                          <video controls src={typedRecord.asset.url}></video>
-                        )
-                      }
-                      return null
-                    default:
-                      return null
-                  }
-                }}
-              />
+          <div className="">
+            {isPortableText(data.content) && (
+              <PortableText value={data.content} />
             )}
           </div>
 
