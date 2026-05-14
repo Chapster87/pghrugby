@@ -5,23 +5,21 @@ import SidebarLayout from "@/layouts/sidebar"
 import Image from "next/image"
 import { executeQuery } from "@/lib/datocms/executeQuery"
 import { StructuredText } from "react-datocms"
-import { client } from "@sanity/client"
-import { parseSanityImageRef } from "@/sanity/lib/utils"
-import { pageSlugs, pageQuery, pageQuerySanity } from "./pages.query"
+import { pageSlugs, pageQuery } from "./pages.query"
 import Example from "./(example)/page"
 import ShareBar from "@/components/share-bar"
 import { CloudinaryImage } from "@/types/datocms"
-import { isFileField, FileField } from "@/utils/datocms"
-import { ResultOf } from "@/lib/datocms/graphql"
+import { ResultOf, readFragment } from "@/lib/datocms/graphql"
 import { getCloudinaryImageProps } from "@/utils/cloudinary"
+import { fileFieldFragment } from "./pages.query"
 import { StructuredArticleData } from "@/types/structured-data"
 
 import contentStyles from "@/styles/content.module.css"
 import s from "./styles.module.css"
 
-type PageContentBlocks = ResultOf<
-  typeof pageQuery
->["page"]["content"]["blocks"][number]
+type PageContentBlocks = NonNullable<
+  NonNullable<ResultOf<typeof pageQuery>["page"]>["content"]
+>["blocks"][number]
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -48,120 +46,105 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { isEnabled } = await draftMode()
   const { slug } = await props.params
-  const data = await client.fetch(
-    pageQuerySanity,
-    { slug },
-    {
-      perspective: isEnabled ? "previewDrafts" : "published",
-      stega: false,
-    }
-  )
 
-  if (!data?._id) {
+  const { page } = await executeQuery(pageQuery, {
+    variables: { slug },
+    excludeInvalid: false,
+    includeDrafts: isEnabled,
+  })
+
+  if (!page) {
     return {}
-  }
-
-  const seo = data?.seo
-
-  // Handle ogImage as either a string or Sanity image object
-  let ogImageUrl: string | undefined = undefined
-  if (seo?.ogImage) {
-    if (
-      typeof seo.ogImage === "object" &&
-      seo.ogImage !== null &&
-      "asset" in seo.ogImage
-    ) {
-      ogImageUrl = parseSanityImageRef(
-        (seo.ogImage as { asset: { _ref: string } }).asset._ref
-      )
-    } else if (typeof seo.ogImage === "string") {
-      ogImageUrl = seo.ogImage
-    }
   }
 
   // Build canonical URL using current URL and slug
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
   url.pathname = `/${slug}`
 
-  const publishDate = data?.date ? new Date(data.date).toISOString() : undefined
-  const modifiedDate = data?.modified
-    ? new Date(data.modified).toISOString()
+  const publishDate = page.creationDate
+    ? new Date(page.creationDate).toISOString()
+    : undefined
+  const modifiedDate = page._updatedAt
+    ? new Date(page._updatedAt).toISOString()
     : undefined
 
+  const structuredData = generateStructuredData(page, slug)
+
   return {
-    title: seo?.title
-      ? `${seo?.title} | Pittsburgh Forge Rugby Club`
-      : `${data?.title} | Pittsburgh Forge Rugby Club`,
-    description: seo?.description,
+    title: page.metaTitle || `${page.title} | Pittsburgh Forge Rugby Club`,
+    description: page.metaDescription || undefined,
     alternates: {
-      canonical: seo?.canonicalUrl || url.toString(),
+      canonical: page.canonicalUrl || url.toString(),
     },
     openGraph: {
-      title: (seo?.ogTitle ?? undefined) || (seo?.title ?? undefined),
-      description:
-        (seo?.ogDescription ?? undefined) || (seo?.description ?? undefined),
-      url: seo?.ogUrl || url.toString(),
-      images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
+      title: page.metaTitle || page.title || undefined,
+      description: page.metaDescription || page.wpexcerpt || undefined,
+      url: page.canonicalUrl || url.toString(),
+      images:
+        page.metaImage &&
+        Array.isArray(page.metaImage) &&
+        page.metaImage[0]?.url
+          ? [{ url: page.metaImage[0].url }]
+          : undefined,
       type: "article",
       publishedTime: publishDate,
       modifiedTime: modifiedDate,
-      authors: data?.author?.name ? [data.author.name] : [],
+      authors: page.author?.name ? [page.author.name] : [],
     },
     twitter: {
-      title: seo?.twitterTitle ?? seo?.title ?? data?.title ?? undefined,
-      description:
-        (seo?.twitterDescription ?? undefined) ||
-        (seo?.description ?? undefined),
+      title: page.metaTitle || page.title || undefined,
+      description: page.metaDescription || page.wpexcerpt || undefined,
       images:
-        typeof seo?.twitterImage === "string" && seo.twitterImage
-          ? [{ url: seo.twitterImage }]
-          : typeof ogImageUrl === "string" && ogImageUrl
-          ? [{ url: ogImageUrl }]
+        page.metaImage &&
+        Array.isArray(page.metaImage) &&
+        page.metaImage[0]?.url
+          ? [{ url: page.metaImage[0].url }]
           : undefined,
+    },
+    other: {
+      "application/ld+json": JSON.stringify(structuredData),
     },
   } satisfies Metadata
 }
 
 // JSON-LD schema.org structured data
-function generateStructuredData(data: any): StructuredArticleData {
-  const { seo = {} } = data
+function generateStructuredData(
+  page: any,
+  slug: string
+): StructuredArticleData {
+  const imageUrl =
+    (page.metaImage &&
+      Array.isArray(page.metaImage) &&
+      page.metaImage.length > 0 &&
+      page.metaImage[0].url) ||
+    "https://pghrugby.com/logo.png"
 
-  // Handle ogImage as either a string or Sanity image object
-  let ogImageUrl: string = "https://pghrugby.com/logo.png"
-  if (seo?.ogImage) {
-    if (
-      typeof seo.ogImage === "object" &&
-      seo.ogImage !== null &&
-      "asset" in seo.ogImage
-    ) {
-      ogImageUrl =
-        parseSanityImageRef(
-          (seo.ogImage as { asset: { _ref: string } }).asset._ref
-        ) || ogImageUrl
-    } else if (typeof seo.ogImage === "string") {
-      ogImageUrl = seo.ogImage
-    }
-  }
+  const publishDate = page.creationDate
+    ? new Date(page.creationDate).toISOString()
+    : ""
+  const modifiedDate = page._updatedAt
+    ? new Date(page._updatedAt).toISOString()
+    : ""
 
-  const publishDate = data?.date ? new Date(data.date).toISOString() : undefined
-  const modifiedDate = data?.modified
-    ? new Date(data.modified).toISOString()
-    : undefined
+  const headline =
+    page.metaTitle ||
+    (page.title ? `${page.title} | Pittsburgh Forge Rugby Club` : "")
+  const description =
+    page.metaDescription ||
+    (page.wpexcerpt ? page.wpexcerpt.replace(/<[^>]*>/g, "") : "")
 
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: seo?.title
-      ? `${seo.title} | Pittsburgh Forge Rugby Club`
-      : `${data?.title} | Pittsburgh Forge Rugby Club`,
-    description: seo?.description || "",
-    image: ogImageUrl,
-    datePublished: publishDate || "",
-    dateModified: modifiedDate || "",
-    author: data.author?.name
+    headline,
+    description,
+    image: imageUrl,
+    datePublished: publishDate,
+    dateModified: modifiedDate,
+    author: page.author?.name
       ? {
           "@type": "Person",
-          name: data.author.name,
+          name: page.author.name,
         }
       : undefined,
     publisher: {
@@ -169,12 +152,12 @@ function generateStructuredData(data: any): StructuredArticleData {
       name: "Pittsburgh Forge Rugby Club",
       logo: {
         "@type": "ImageObject",
-        url: ogImageUrl,
+        url: imageUrl,
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": seo?.canonicalUrl || `https://pghrugby.com/${data.slug}`,
+      "@id": page.canonicalUrl || `https://pghrugby.com/${slug}`,
     },
   }
 }
@@ -189,27 +172,11 @@ export default async function Page({ params }: PageProps) {
     includeDrafts: isDraftModeEnabled,
   })
 
-  console.log("DatoCMS Page:", page)
-
-  const sanityData = await client.fetch(
-    pageQuerySanity,
-    { slug },
-    isDraftModeEnabled
-      ? {
-          perspective: "previewDrafts",
-          useCdn: false,
-          stega: true,
-        }
-      : undefined
-  )
-
   if (!page) {
     notFound()
   }
 
   console.log("Dato CMS Page", page)
-
-  const structuredData = generateStructuredData(sanityData || {})
 
   const shareUrl = page?.canonicalUrl ?? `https://pghrugby.com/${slug}`
   const shareTitle = page?.metaTitle
@@ -224,18 +191,8 @@ export default async function Page({ params }: PageProps) {
     <SidebarLayout>
       <article className={`${contentStyles.contentBlock} ${s.pageContent}`}>
         <div className="prose max-w-none">
-          {/* Structured data for SEO */}
-          {structuredData && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify(structuredData) as string,
-              }}
-            />
-          )}
-
           {/* Featured image with proper alt text */}
-          {page.featuredImage && (
+          {/* {(page.featuredImage as CloudinaryImage) && (
             <div className="mb-6 relative aspect-video w-full">
               <Image
                 src={(page.featuredImage as CloudinaryImage).secure_url}
@@ -246,14 +203,10 @@ export default async function Page({ params }: PageProps) {
                 className="object-cover rounded-lg"
               />
             </div>
-          )}
+          )} */}
 
           <header className="mb-8">
             <h1>{page.title}</h1>
-
-            <p className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
-              {page.wpexcerpt}
-            </p>
 
             <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
               {page.creationDate && (
@@ -283,7 +236,7 @@ export default async function Page({ params }: PageProps) {
                   switch (typedRecord.__typename) {
                     case "ExternalImageBlockRecord":
                       if (typedRecord.cloudinary) {
-                        const image = typedRecord.cloudinary
+                        const image = typedRecord.cloudinary as CloudinaryImage
                         return (
                           <Image
                             src={image.secure_url}
@@ -306,27 +259,41 @@ export default async function Page({ params }: PageProps) {
 
                       return null
                     case "ImageBlockRecord":
-                      if (isFileField(typedRecord.asset)) {
-                        return <Image src={typedRecord.asset.url} alt="" />
+                      if (typedRecord.asset) {
+                        const asset = readFragment(
+                          fileFieldFragment,
+                          typedRecord.asset
+                        )
+                        return <Image src={asset.url} alt={asset.alt || ""} />
                       }
                       return null
                     case "ImageGalleryBlockRecord":
                       return (
                         <div>
-                          {typedRecord.assets.map((asset: FileField) =>
-                            isFileField(asset) ? (
-                              <Image key={asset.id} src={asset.url} alt="" />
-                            ) : null
-                          )}
+                          {typedRecord.assets.map((maskedAsset) => {
+                            const asset = readFragment(
+                              fileFieldFragment,
+                              maskedAsset
+                            )
+                            return (
+                              <Image
+                                key={asset.id}
+                                src={asset.url}
+                                alt={asset.alt || ""}
+                              />
+                            )
+                          })}
                         </div>
                       )
                     case "VideoBlockRecord":
-                      if (isFileField(typedRecord.asset)) {
+                      if (typedRecord.asset) {
+                        const asset = readFragment(
+                          fileFieldFragment,
+                          typedRecord.asset
+                        )
                         // For videos, you might want a video player component
                         // For now, returning a link to the video
-                        return (
-                          <video controls src={typedRecord.asset.url}></video>
-                        )
+                        return <video controls src={asset.url}></video>
                       }
                       return null
                     default:
