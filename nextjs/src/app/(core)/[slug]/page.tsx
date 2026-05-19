@@ -170,13 +170,12 @@ export default async function Page({ params }: PageProps) {
     variables: { slug },
     excludeInvalid: false,
     includeDrafts: isDraftModeEnabled,
+    baseEditingUrl: true,
   })
 
   if (!page) {
     notFound()
   }
-
-  console.log("Dato CMS Page", page)
 
   const shareUrl = page?.canonicalUrl ?? `https://pghrugby.com/${slug}`
   const shareTitle = page?.metaTitle

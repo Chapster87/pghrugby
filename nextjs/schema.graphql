@@ -136,7 +136,7 @@ type ExternalImageBlockRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
-  cloudinaryUrl: JsonField
+  cloudinary: JsonField
   id: ItemId!
   url: String
 }
@@ -382,19 +382,30 @@ type GlobalSeoField {
   twitterAccount: String
 }
 
-union HomepageModelModularContentBlockField = ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+union HomepageModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
 
-union HomepageModelStructuredTextBlocksField = ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
-
-type HomepageModelStructuredTextField {
-  blocks: [HomepageModelStructuredTextBlocksField!]!
+type HomepageModelContentField {
+  blocks: [HomepageModelContentBlocksField!]!
   inlineBlocks: [String!]!
   links: [PageRecord!]!
   value: JsonField!
 }
 
-"""Record of type 🏠 Homepage (homepage)"""
-type HomepageRecord implements RecordInterface {
+union HomepageModelModularContentBlockField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+
+union HomepageOldModelModularContentBlockField = ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+
+union HomepageOldModelStructuredTextBlocksField = ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+
+type HomepageOldModelStructuredTextField {
+  blocks: [HomepageOldModelStructuredTextBlocksField!]!
+  inlineBlocks: [String!]!
+  links: [PageRecord!]!
+  value: JsonField!
+}
+
+"""Record of type 🏚️ Homepage (OLD) (homepage_old)"""
+type HomepageOldRecord implements RecordInterface {
   _createdAt: DateTime!
 
   """Editing URL"""
@@ -424,12 +435,59 @@ type HomepageRecord implements RecordInterface {
   ): String
   featuredMedia: FileField
   id: ItemId!
-  modularContentBlock: [HomepageModelModularContentBlockField!]!
+  modularContentBlock: [HomepageOldModelModularContentBlockField!]!
   seoAnalysis: JsonField
   seoSettingsSocial: SeoField
   slug: String
-  structuredText: HomepageModelStructuredTextField
+  structuredText: HomepageOldModelStructuredTextField
   title: String
+}
+
+"""Record of type 🏠 Homepage (homepage)"""
+type HomepageRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  author: WpAuthorRecord
+  canonicalUrl: String
+  content: HomepageModelContentField
+  creationDate: DateTime
+  featuredImage: JsonField
+  id: ItemId!
+  metaDescription: String
+  metaImage: JsonField
+  metaKeywords: JsonField
+  metaRobots: JsonField
+  metaTitle: String
+  modularContentBlock: [HomepageModelModularContentBlockField!]!
+  seoAnalysis: JsonField
+  slug: String
+  structuredData: JsonField
+  title: String
+  wpcontent(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  wpdata: JsonField
+  wpexcerpt(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
 }
 
 """Block of type 🌅 Image (image_block)"""
@@ -2685,7 +2743,7 @@ type PageOldModelStructuredTextField {
   value: JsonField!
 }
 
-"""Record of type 📝 Page (OLD) (page_old)"""
+"""Record of type 🧻 Page (OLD) (page_old)"""
 type PageOldRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -2714,7 +2772,7 @@ type PageOldRecord implements RecordInterface {
   title: String
 }
 
-"""Record of type 📄 Page (page)"""
+"""Record of type 📝 Page (page)"""
 type PageRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -3016,6 +3074,17 @@ type Query {
     """
     fallbackLocales: [SiteLocale!]
   ): HomepageRecord
+
+  """Returns the single instance record"""
+  homepageOld(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): HomepageOldRecord
 
   """Returns a specific record"""
   page(

@@ -71,4 +71,5 @@ type ExecuteQueryOptions<Variables> = {
   variables?: Variables
   excludeInvalid?: boolean
   includeDrafts?: boolean
+  baseEditingUrl?: boolean
 }
