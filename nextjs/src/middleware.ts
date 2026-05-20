@@ -104,6 +104,16 @@ async function getCountryCode(
  * Middleware to handle region selection and onboarding status.
  */
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // Skip middleware for DatoCMS plugin and Sanity Studio
+  if (
+    pathname.startsWith("/private-datocms-plugin") ||
+    pathname.startsWith("/studio")
+  ) {
+    return NextResponse.next()
+  }
+
   let redirectUrl = request.nextUrl.href
 
   let response = NextResponse.redirect(redirectUrl, 307)
@@ -124,7 +134,7 @@ export async function middleware(request: NextRequest) {
   //   request.nextUrl.pathname.startsWith("/studio") ||
   //   (urlHasCountryCode && cacheIdCookie)
   // ) {
-  if (request.nextUrl.pathname.startsWith("/studio") || cacheIdCookie) {
+  if (cacheIdCookie) {
     return NextResponse.next()
   }
 

@@ -40,6 +40,8 @@
     "@tailwindcss/postcss": "^4.1.13",
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
+    "datocms-plugin-sdk": "^2.1.5",
+    "datocms-react-ui": "^2.1.5",
     "dayjs": "^1.11.18",
     "framer-motion": "^12.15.0",
     "googleapis": "^160.0.0",

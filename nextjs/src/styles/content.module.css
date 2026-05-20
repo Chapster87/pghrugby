@@ -31,6 +31,11 @@
     margin-left: auto;
     margin-right: auto;
   }
+
+  mark {
+    background-color: inherit;
+    color: var(--color-gold);
+  }
 }
 
 .siteContainer {

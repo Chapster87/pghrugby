@@ -1,124 +1,146 @@
 import type { Metadata, ResolvingMetadata } from "next"
+import Image from "next/image"
+import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
+import { executeQuery } from "@/lib/datocms/executeQuery"
+import { StructuredText } from "react-datocms"
 import { fetchFromSanity } from "@/sanity/client"
 import PageBuilder from "@/components/PageBuilder"
-import { homepageQuery, latestContentQuery } from "./homepage-query"
+import { homepageQuery, homeQuery, latestContentQuery } from "./homepage.query"
+import { CloudinaryImage } from "@/types/datocms"
+import { ResultOf, readFragment } from "@/lib/datocms/graphql"
+import { getCloudinaryImageProps } from "@/utils/cloudinary"
 import contentStyles from "@/styles/content.module.css"
-import { parseSanityImageRef } from "@/sanity/lib/utils"
 import { CardSlider } from "@/components/content/card-slider"
 import generateExcerpt from "@/lib/util/generateExcerpt"
 import VideoBg from "./video-bg"
+import { fileFieldFragment } from "./homepage.query"
+import { StructuredArticleData } from "@/types/structured-data"
 import s from "./style.module.css"
+
+type PageContentBlocks = NonNullable<
+  NonNullable<ResultOf<typeof homeQuery>["homepage"]>["content"]
+>["blocks"][number]
+
+type PageProps = {
+  params: Promise<{ countryCode: string }>
+}
 
 /**
  * Generate metadata for the page.
  */
 export async function generateMetadata(
-  props: { params: { slug: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // Fetch metadata from Sanity
   const { isEnabled } = await draftMode()
-  const data = await fetchFromSanity(
-    homepageQuery,
-    isEnabled
-      ? {
-          perspective: "previewDrafts",
-          useCdn: false,
-          stega: true,
-        }
-      : undefined
-  )
 
-  const seo = data?.seo || {}
+  const { homepage: page } = await executeQuery(homeQuery, {
+    excludeInvalid: false,
+    includeDrafts: isEnabled,
+  })
 
-  // Handle ogImage as either a string or Sanity image object
-  let ogImageUrl: string | undefined = undefined
-  if (seo?.ogImage) {
-    if (
-      typeof seo.ogImage === "object" &&
-      seo.ogImage !== null &&
-      "asset" in seo.ogImage
-    ) {
-      ogImageUrl = parseSanityImageRef(
-        (seo.ogImage as { asset: { _ref: string } }).asset._ref
-      )
-    } else if (typeof seo.ogImage === "string") {
-      ogImageUrl = seo.ogImage
-    }
+  if (!page) {
+    return {}
   }
 
   // Build canonical URL using current URL and slug
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
+  url.pathname = `/`
+
+  const publishDate = page.creationDate
+    ? new Date(page.creationDate).toISOString()
+    : undefined
+  const modifiedDate = page._updatedAt
+    ? new Date(page._updatedAt).toISOString()
+    : undefined
+
+  const structuredData = generateStructuredData(page)
 
   return {
-    title: seo.title || "Pittsburgh Forge Rugby Club",
-    description:
-      seo.description ||
-      "Welcome to the Pittsburgh Forge Rugby Club, where we celebrate the spirit of rugby in the Steel City. Join us for matches, events, and community engagement.",
+    title: page.metaTitle || `${page.title} | Pittsburgh Forge Rugby Club`,
+    description: page.metaDescription || undefined,
     alternates: {
-      canonical: seo.canonicalUrl || url.toString(),
+      canonical: page.canonicalUrl || url.toString(),
     },
     openGraph: {
-      title: seo.ogTitle || seo.title,
-      description: seo.ogDescription || seo.description,
-      url: seo.ogUrl || url.toString(),
-      images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
+      title: page.metaTitle || page.title || undefined,
+      description: page.metaDescription || page.wpexcerpt || undefined,
+      url: page.canonicalUrl || url.toString(),
+      images:
+        page.metaImage &&
+        Array.isArray(page.metaImage) &&
+        page.metaImage[0]?.url
+          ? [{ url: page.metaImage[0].url }]
+          : undefined,
+      publishedTime: publishDate,
+      modifiedTime: modifiedDate,
+      authors: page.author?.name ? [page.author.name] : [],
     },
     twitter: {
-      title: seo.twitterTitle || seo.title,
-      description: seo.twitterDescription || seo.description,
-      images: seo.twitterImage
-        ? [{ url: seo.twitterImage }]
-        : ogImageUrl
-        ? [{ url: ogImageUrl }]
-        : undefined,
+      title: page.metaTitle || page.title || undefined,
+      description: page.metaDescription || page.wpexcerpt || undefined,
+      images:
+        page.metaImage &&
+        Array.isArray(page.metaImage) &&
+        page.metaImage[0]?.url
+          ? [{ url: page.metaImage[0].url }]
+          : undefined,
+    },
+    other: {
+      "application/ld+json": JSON.stringify(structuredData),
     },
   } satisfies Metadata
 }
 
 // JSON-LD schema.org structured data
-function generateStructuredData(seo: any) {
-  // Handle ogImage as either a string or Sanity image object
-  let ogImageUrl: string = "https://pghrugby.com/logo.png"
-  if (seo?.ogImage) {
-    if (
-      typeof seo.ogImage === "object" &&
-      seo.ogImage !== null &&
-      "asset" in seo.ogImage
-    ) {
-      ogImageUrl =
-        parseSanityImageRef(
-          (seo.ogImage as { asset: { _ref: string } }).asset._ref
-        ) || ogImageUrl
-    } else if (typeof seo.ogImage === "string") {
-      ogImageUrl = seo.ogImage
-    }
-  }
+function generateStructuredData(page: any): StructuredArticleData {
+  const imageUrl =
+    (page.metaImage &&
+      Array.isArray(page.metaImage) &&
+      page.metaImage.length > 0 &&
+      page.metaImage[0].url) ||
+    "https://pghrugby.com/logo.png"
+
+  const publishDate = page.creationDate
+    ? new Date(page.creationDate).toISOString()
+    : ""
+  const modifiedDate = page._updatedAt
+    ? new Date(page._updatedAt).toISOString()
+    : ""
+
+  const headline =
+    page.metaTitle ||
+    (page.title ? `${page.title} | Pittsburgh Forge Rugby Club` : "")
+  const description =
+    page.metaDescription ||
+    (page.wpexcerpt ? page.wpexcerpt.replace(/<[^>]*>/g, "") : "")
+
   return {
     "@context": "https://schema.org",
     "@type": "SportsOrganization",
     sport: "Rugby",
     location: "Pittsburgh, PA",
-    name: seo?.title || "Pittsburgh Forge Rugby Club",
-    url: seo?.canonicalUrl || "https://pghrugby.com/",
-    headline: seo?.title || "Pittsburgh Forge Rugby Club",
-    description:
-      seo?.description ||
-      "Welcome to the Pittsburgh Forge Rugby Club, where we celebrate the spirit of rugby in the Steel City. Join us for matches, events, and community engagement.",
+    name: headline || "Pittsburgh Forge Rugby Club",
+    url: page.canonicalUrl || "https://pghrugby.com/",
+    headline,
+    description,
+    image: imageUrl,
+    datePublished: publishDate,
+    dateModified: modifiedDate,
     publisher: {
       "@type": "Organization",
       name: "Pittsburgh Forge Rugby Club",
       logo: {
         "@type": "ImageObject",
-        url: ogImageUrl,
+        url: imageUrl,
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": seo?.canonicalUrl || `https://pghrugby.com/`,
+      "@id": page.canonicalUrl || `https://pghrugby.com/`,
     },
   }
 }
@@ -146,24 +168,33 @@ function formatContentSliderData(latestContent: any[]) {
   }
 }
 
-export default async function Home(props: {
-  params: Promise<{ countryCode: string }>
-}) {
-  const params = await props.params
-  const { countryCode } = params
+export default async function Home({ params }: PageProps) {
+  const { countryCode } = await params
   const region = await getRegion(countryCode)
   const { collections } = await listCollections({
     fields: "id, handle, title",
   })
-  const { isEnabled } = await draftMode()
+  const { isEnabled: isDraftModeEnabled } = await draftMode()
 
   if (!collections || !region) {
     return null
   }
 
-  const data = await fetchFromSanity(
+  const { homepage: page } = await executeQuery(homeQuery, {
+    variables: {},
+    excludeInvalid: false,
+    includeDrafts: isDraftModeEnabled,
+  })
+
+  console.log("page", page)
+
+  if (!page) {
+    notFound()
+  }
+
+  const dataSanity = await fetchFromSanity(
     homepageQuery,
-    isEnabled
+    isDraftModeEnabled
       ? {
           perspective: "previewDrafts",
           useCdn: false,
@@ -172,11 +203,9 @@ export default async function Home(props: {
       : undefined
   )
 
-  const structuredData = generateStructuredData(data?.seo || {})
-
   const latestContent = await fetchFromSanity(
     latestContentQuery,
-    isEnabled
+    isDraftModeEnabled
       ? {
           perspective: "previewDrafts",
           useCdn: false,
@@ -192,21 +221,83 @@ export default async function Home(props: {
       {/* Background Video Component */}
       <VideoBg />
 
-      {/* Structured data for SEO */}
-      {structuredData && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData),
-          }}
-        />
-      )}
+      <div className={`dark ${contentStyles.contentBlock} ${s.homepageHero}`}>
+        {/* <PageBuilder data={dataSanity.pageBuilder} /> */}
+        {page.content && (
+          <StructuredText
+            data={page.content}
+            renderBlock={({ record }) => {
+              const typedRecord = record as PageContentBlocks
+              switch (typedRecord.__typename) {
+                case "ExternalImageBlockRecord":
+                  if (typedRecord.cloudinary) {
+                    const image = typedRecord.cloudinary as CloudinaryImage
+                    return (
+                      <Image
+                        src={image.secure_url}
+                        alt={image.public_id}
+                        width={image.width ?? undefined}
+                        height={image.height ?? undefined}
+                      />
+                    )
+                  } else if (typedRecord.url) {
+                    const image = getCloudinaryImageProps(typedRecord.url)
+                    return (
+                      <Image
+                        src={image.url}
+                        alt=""
+                        width={image.width ?? undefined}
+                        height={image.height ?? undefined}
+                      />
+                    )
+                  }
 
-      {data?.pageBuilder && (
-        <div className={`dark ${contentStyles.contentBlock} ${s.homepageHero}`}>
-          <PageBuilder data={data.pageBuilder} />
-        </div>
-      )}
+                  return null
+                case "ImageBlockRecord":
+                  if (typedRecord.asset) {
+                    const asset = readFragment(
+                      fileFieldFragment,
+                      typedRecord.asset
+                    )
+                    return <Image src={asset.url} alt={asset.alt || ""} />
+                  }
+                  return null
+                case "ImageGalleryBlockRecord":
+                  return (
+                    <div>
+                      {typedRecord.assets.map((maskedAsset) => {
+                        const asset = readFragment(
+                          fileFieldFragment,
+                          maskedAsset
+                        )
+                        return (
+                          <Image
+                            key={asset.id}
+                            src={asset.url}
+                            alt={asset.alt || ""}
+                          />
+                        )
+                      })}
+                    </div>
+                  )
+                case "VideoBlockRecord":
+                  if (typedRecord.asset) {
+                    const asset = readFragment(
+                      fileFieldFragment,
+                      typedRecord.asset
+                    )
+                    // For videos, you might want a video player component
+                    // For now, returning a link to the video
+                    return <video controls src={asset.url}></video>
+                  }
+                  return null
+                default:
+                  return null
+              }
+            }}
+          />
+        )}
+      </div>
 
       <div className={`${contentStyles.siteContainer}`}>
         <div className={`${s.contentSlider}`}>

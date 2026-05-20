@@ -1,6 +1,8 @@
 :root {
   --font-noto-sans: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-oswald: "Oswald", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-lemon-milk: "Lemon Milk", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
 
   --color-white: #ffffff;
   --color-grey-100: #f8f9fa;

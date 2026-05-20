@@ -5,5 +5,22 @@
 
 .homepageHero {
   max-width: 1200px;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgb(from var(--color-black) r g b / 0.6);
+  text-align: center;
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+
+  h1 {
+    font-family: var(--font-lemon-milk);
+    font-size: 28px;
+
+    @media (--viewport-md-up) {
+      font-size: 48px;
+    }
+  }
+
+  a {
+    color: var(--color-gold);
+  }
 }

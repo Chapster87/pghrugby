@@ -4,7 +4,11 @@
  */
 export interface StructuredArticleData {
   "@context": "https://schema.org"
-  "@type": "Article"
+  "@type": "Article" | "SportsOrganization"
+  sport?: string
+  location?: string
+  name?: string
+  url?: string
   headline: string
   description: string
   image: string
