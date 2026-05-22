@@ -1,19 +1,14 @@
 /*
- * Entry point for a DatoCMS plugin. The connect() call registers every hook the
- * plugin implements. Each render hook receives a context object (ctx) that
- * provides access to plugin parameters, the current user/role, and helpers.
- *
- * This template provides a clean starting point for implementing various hooks.
- * For an overview of all available hooks:
- * https://www.datocms.com/docs/plugin-sdk/what-hooks-are
+ * Entry point for a DatoCMS plugin.
  */
 
 "use client"
 
 import { useEffect } from "react"
-import { connect } from "datocms-plugin-sdk"
+import { connect, type RenderFieldExtensionCtx } from "datocms-plugin-sdk"
 import ConfigScreen from "./entrypoints/ConfigScreen"
 import LinkPicker from "./entrypoints/LinkPicker"
+import TestField from "./entrypoints/TestField"
 import { render } from "./utils/render"
 import "datocms-react-ui/styles.css"
 
@@ -26,9 +21,6 @@ export default function PluginEntry({ onConnect }: PluginEntryProps) {
     let isConnected = false
 
     connect({
-      /**
-       * Renders the settings page for the plugin under Settings > Plugins.
-       */
       renderConfigScreen(ctx: any) {
         if (!isConnected) {
           isConnected = true
@@ -37,9 +29,6 @@ export default function PluginEntry({ onConnect }: PluginEntryProps) {
         render(<ConfigScreen ctx={ctx} />)
       },
 
-      /**
-       * Declare which field extensions or sidebar panels this plugin provides.
-       */
       manualFieldExtensions() {
         return [
           {
@@ -48,34 +37,51 @@ export default function PluginEntry({ onConnect }: PluginEntryProps) {
             type: "editor",
             fieldTypes: ["json", "string"],
           },
+          {
+            id: "test-field",
+            name: "Simple Test Field",
+            type: "editor",
+            fieldTypes: ["json", "string"],
+          },
         ]
       },
 
-      /**
-       * Renders a custom field extension or addon UI.
-       */
-      renderFieldExtension(fieldExtensionId: string, ctx: any) {
+      renderFieldExtension(
+        fieldExtensionId: string,
+        ctx: RenderFieldExtensionCtx
+      ) {
         if (!isConnected) {
           isConnected = true
           onConnect(ctx)
         }
-        if (fieldExtensionId === "link-picker") {
-          render(<LinkPicker ctx={ctx} />)
+        // if (fieldExtensionId === "link-picker") {
+        //   render(<LinkPicker ctx={ctx} />)
+        // }
+        if (fieldExtensionId === "test-field") {
+          render(<TestField ctx={ctx} />)
         }
       },
 
       /**
-       * Renders a sidebar panel in the record editing form.
+       * Handle external field changes (including resets during save cycles).
+       * This is the bridge between the DatoCMS state and the React component.
        */
-      renderItemFormSidebarPanel(sidebarPanelId: string, ctx: any) {
-        if (!isConnected) {
-          isConnected = true
-          onConnect(ctx)
-        }
-        // render(<MySidebarComponent ctx={ctx} />)
+      onFieldValueChange(value: any, ctx: RenderFieldExtensionCtx) {
+        console.log("Plugin: onFieldValueChange", value)
+        // Note: The LinkPicker component also listens to ctx.value via useEffect,
+        // but this hook ensures the SDK protocol is followed for state updates.
       },
 
-      /* @TODO: Implement specific hooks like renderStructuredTextLinkMetadataForm if needed */
+      buildItemPresentationInfo(item: any, ctx: any) {
+        return {
+          title:
+            item.attributes.title ||
+            item.attributes.name ||
+            `Record ${item.id}`,
+          subtitle: item.meta.status,
+          icon: "link",
+        }
+      },
     } as any)
   }, [onConnect])
 
