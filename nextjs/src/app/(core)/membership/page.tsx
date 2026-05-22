@@ -1,133 +1,151 @@
 import type { Metadata, ResolvingMetadata } from "next"
+import Image from "next/image"
 import { draftMode } from "next/headers"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
-import { fetchFromSanity } from "@/sanity/client"
-import PageBuilder from "@/components/PageBuilder"
+import { executeQuery } from "@/lib/datocms/executeQuery"
+import { StructuredText } from "react-datocms"
 import { membershipQuery } from "./membership.query"
 import TierTable from "./_components/tier-table"
-import { parseSanityImageRef } from "@/sanity/lib/utils"
+import { CloudinaryImage } from "@/types/datocms"
+import { ResultOf, readFragment } from "@/lib/datocms/graphql"
+import { getCloudinaryImageProps } from "@/utils/cloudinary"
+import { fileFieldFragment } from "@fragments/blocks"
+import { StructuredArticleData } from "@/types/structured-data"
+
 import contentStyles from "@/styles/content.module.css"
 import s from "./style.module.css"
+
+type MembershipQueryResult = ResultOf<typeof membershipQuery>["membership"]
+
+type MembershipContentBlocks = NonNullable<
+  NonNullable<MembershipQueryResult>["content"]
+>["blocks"][number]
 
 /**
  * Generate metadata for the page.
  */
 export async function generateMetadata(
-  props: { params: { slug: string } },
+  props: { params: { countryCode: string } | Promise<{ countryCode: string }> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // Fetch metadata from Sanity
   const { isEnabled } = await draftMode()
-  const data = await fetchFromSanity(
-    membershipQuery,
-    isEnabled
-      ? {
-          perspective: "previewDrafts",
-          useCdn: false,
-          stega: true,
-        }
-      : undefined
-  )
 
-  const seo = data?.seo || {}
+  const { membership: page } = await executeQuery(membershipQuery, {
+    variables: {},
+    excludeInvalid: false,
+    includeDrafts: isEnabled,
+  })
 
-  // Handle ogImage as either a string or Sanity image object
-  let ogImageUrl: string | undefined = undefined
-  if (seo?.ogImage) {
-    if (
-      typeof seo.ogImage === "object" &&
-      seo.ogImage !== null &&
-      "asset" in seo.ogImage
-    ) {
-      ogImageUrl = parseSanityImageRef(
-        (seo.ogImage as { asset: { _ref: string } }).asset._ref
-      )
-    } else if (typeof seo.ogImage === "string") {
-      ogImageUrl = seo.ogImage
-    }
+  if (!page) {
+    return {}
   }
 
-  // Build canonical URL using current URL and slug
+  // Build canonical URL using current URL
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
+  url.pathname = `/membership`
+
+  const publishDate = page.creationDate
+    ? new Date(page.creationDate).toISOString()
+    : undefined
+  const modifiedDate = page._updatedAt
+    ? new Date(page._updatedAt).toISOString()
+    : undefined
+
+  const structuredData = generateStructuredData(page)
 
   return {
-    title: seo?.title
-      ? `${seo.title} | Pittsburgh Forge Rugby Club`
-      : "Club Membership | Pittsburgh Forge Rugby Club",
-    description:
-      seo.description ||
-      "Club membership information for the Pittsburgh Forge Rugby Club.",
+    title: page.metaTitle || `${page.title} | Pittsburgh Forge Rugby Club`,
+    description: page.metaDescription || undefined,
     alternates: {
-      canonical: seo.canonicalUrl || url.toString(),
+      canonical: page.canonicalUrl || url.toString(),
     },
     openGraph: {
-      title: seo.ogTitle || seo.title,
-      description: seo.ogDescription || seo.description,
-      url: seo.ogUrl || url.toString(),
-      images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
+      title: page.metaTitle || page.title || undefined,
+      description: page.metaDescription || page.wpexcerpt || undefined,
+      url: page.canonicalUrl || url.toString(),
+      images:
+        page.metaImage &&
+        Array.isArray(page.metaImage) &&
+        page.metaImage[0]?.url
+          ? [{ url: page.metaImage[0].url }]
+          : undefined,
+      type: "article",
+      publishedTime: publishDate,
+      modifiedTime: modifiedDate,
+      authors: page.author?.name ? [page.author.name] : [],
     },
     twitter: {
-      title: seo.twitterTitle || seo.title,
-      description: seo.twitterDescription || seo.description,
-      images: seo.twitterImage
-        ? [{ url: seo.twitterImage }]
-        : ogImageUrl
-        ? [{ url: ogImageUrl }]
-        : undefined,
+      title: page.metaTitle || page.title || undefined,
+      description: page.metaDescription || page.wpexcerpt || undefined,
+      images:
+        page.metaImage &&
+        Array.isArray(page.metaImage) &&
+        page.metaImage[0]?.url
+          ? [{ url: page.metaImage[0].url }]
+          : undefined,
+    },
+    other: {
+      "application/ld+json": JSON.stringify(structuredData),
     },
   } satisfies Metadata
 }
 
 // JSON-LD schema.org structured data
-function generateStructuredData(seo: any) {
-  // Handle ogImage as either a string or Sanity image object
-  let ogImageUrl: string = "https://pghrugby.com/logo.png"
-  if (seo?.ogImage) {
-    if (
-      typeof seo.ogImage === "object" &&
-      seo.ogImage !== null &&
-      "asset" in seo.ogImage
-    ) {
-      ogImageUrl =
-        parseSanityImageRef(
-          (seo.ogImage as { asset: { _ref: string } }).asset._ref
-        ) || ogImageUrl
-    } else if (typeof seo.ogImage === "string") {
-      ogImageUrl = seo.ogImage
-    }
-  }
+function generateStructuredData(
+  page: NonNullable<MembershipQueryResult>
+): StructuredArticleData {
+  const imageUrl =
+    (page.metaImage &&
+      Array.isArray(page.metaImage) &&
+      page.metaImage.length > 0 &&
+      page.metaImage[0].url) ||
+    "https://pghrugby.com/logo.png"
+
+  const publishDate = page.creationDate
+    ? new Date(page.creationDate).toISOString()
+    : ""
+  const modifiedDate = page._updatedAt
+    ? new Date(page._updatedAt).toISOString()
+    : ""
+
+  const headline =
+    page.metaTitle ||
+    (page.title ? `${page.title} | Pittsburgh Forge Rugby Club` : "")
+  const description =
+    page.metaDescription ||
+    (page.wpexcerpt ? page.wpexcerpt.replace(/<[^>]*>/g, "") : "")
+
   return {
     "@context": "https://schema.org",
-    "@type": "SportsOrganization",
-    sport: "Rugby",
-    location: "Pittsburgh, PA",
-    name: seo?.title
-      ? `${seo.title} | Pittsburgh Forge Rugby Club`
-      : "Club Membership | Pittsburgh Forge Rugby Club",
-    url: seo?.canonicalUrl || "https://pghrugby.com/",
-    headline: seo?.title
-      ? `${seo.title} | Pittsburgh Forge Rugby Club`
-      : "Club Membership | Pittsburgh Forge Rugby Club",
-    description:
-      seo?.description ||
-      "Club membership information for the Pittsburgh Forge Rugby Club.",
+    "@type": "Article",
+    headline,
+    description,
+    image: imageUrl,
+    datePublished: publishDate,
+    dateModified: modifiedDate,
+    author: page.author?.name
+      ? {
+          "@type": "Person",
+          name: page.author.name,
+        }
+      : undefined,
     publisher: {
       "@type": "Organization",
       name: "Pittsburgh Forge Rugby Club",
       logo: {
         "@type": "ImageObject",
-        url: ogImageUrl,
+        url: imageUrl,
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": seo?.canonicalUrl || `https://pghrugby.com/`,
+      "@id": page.canonicalUrl || `https://pghrugby.com/membership`,
     },
   }
 }
 
-export default async function Home(props: {
+export default async function Membership(props: {
   params: Promise<{ countryCode: string }>
 }) {
   const params = await props.params
@@ -136,44 +154,103 @@ export default async function Home(props: {
   const { collections } = await listCollections({
     fields: "id, handle, title",
   })
-  const { isEnabled } = await draftMode()
+  const { isEnabled: isDraftModeEnabled } = await draftMode()
 
   if (!collections || !region) {
     return null
   }
 
-  const data = await fetchFromSanity(
-    membershipQuery,
-    isEnabled
-      ? {
-          perspective: "previewDrafts",
-          useCdn: false,
-          stega: true,
-        }
-      : undefined
-  )
+  const { membership: page } = await executeQuery(membershipQuery, {
+    variables: {},
+    excludeInvalid: false,
+    includeDrafts: isDraftModeEnabled,
+    baseEditingUrl: true,
+  })
 
-  const structuredData = generateStructuredData(data?.seo || {})
+  if (!page) {
+    return null
+  }
 
   return (
     <div className={`${contentStyles.contentBlock} ${s.membershipPage}`}>
-      {/* Structured data for SEO */}
-      {structuredData && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData),
-          }}
-        />
-      )}
+      <h1 className={s.pageTitle}>{page.title}</h1>
 
-      <h1 className={s.pageTitle}>{data?.title}</h1>
+      <div className="">
+        {page.content && (
+          <StructuredText
+            data={page.content}
+            renderBlock={({ record }) => {
+              const typedRecord = record as MembershipContentBlocks
+              switch (typedRecord.__typename) {
+                case "ExternalImageBlockRecord":
+                  if (typedRecord.cloudinary) {
+                    const image = typedRecord.cloudinary as CloudinaryImage
+                    return (
+                      <Image
+                        src={image.secure_url}
+                        alt={image.public_id}
+                        width={image.width ?? undefined}
+                        height={image.height ?? undefined}
+                      />
+                    )
+                  } else if (typedRecord.url) {
+                    const image = getCloudinaryImageProps(typedRecord.url)
+                    return (
+                      <Image
+                        src={image.url}
+                        alt=""
+                        width={image.width ?? undefined}
+                        height={image.height ?? undefined}
+                      />
+                    )
+                  }
 
-      {data?.pageBuilder && (
-        <div className={s.pageBuilderContainer}>
-          <PageBuilder data={data.pageBuilder} />
-        </div>
-      )}
+                  return null
+                case "ImageBlockRecord":
+                  if (typedRecord.asset) {
+                    const asset = readFragment(
+                      fileFieldFragment,
+                      typedRecord.asset
+                    )
+                    return <Image src={asset.url} alt={asset.alt || ""} />
+                  }
+                  return null
+                case "ImageGalleryBlockRecord":
+                  return (
+                    <div>
+                      {typedRecord.assets.map((maskedAsset: any) => {
+                        const asset = readFragment(
+                          fileFieldFragment,
+                          maskedAsset
+                        )
+                        return (
+                          <Image
+                            key={asset.id}
+                            src={asset.url}
+                            alt={asset.alt || ""}
+                          />
+                        )
+                      })}
+                    </div>
+                  )
+                case "VideoBlockRecord":
+                  if (typedRecord.asset) {
+                    const asset = readFragment(
+                      fileFieldFragment,
+                      typedRecord.asset
+                    )
+                    // For videos, you might want a video player component
+                    // For now, returning a link to the video
+                    return <video controls src={asset.url}></video>
+                  }
+                  return null
+                default:
+                  return null
+              }
+            }}
+          />
+        )}
+      </div>
 
       <div className={s.membershipDetails}>
         <h2>Membership Tiers</h2>

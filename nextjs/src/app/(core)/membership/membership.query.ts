@@ -1,6 +1,8 @@
-import { seoFragment } from "@fragments/seo-fragment"
+import { seoFragment } from "@sanity-fragments/seo-fragment"
+import { graphql } from "@/lib/datocms/graphql"
+import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
 
-export const membershipQuery = `
+export const membershipQuerySanity = `
   *[_type == "membership"][0]{
     title,
     pageBuilder[] {
@@ -24,3 +26,33 @@ export const membershipQuery = `
     ${seoFragment}
   }
 `
+
+export const membershipQuery = graphql(
+  `
+    query MembershipQuery {
+      membership {
+        title
+        author {
+          name
+        }
+        canonicalUrl
+        creationDate
+        _updatedAt
+        wpexcerpt
+        featuredImage
+        metaDescription
+        metaImage
+        metaKeywords
+        metaRobots
+        metaTitle
+        content {
+          value
+          blocks {
+            ...BlocksFragment
+          }
+        }
+      }
+    }
+  `,
+  [fileFieldFragment, blocksFragment]
+)

@@ -17,8 +17,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
-      "@fragments/*": ["./src/sanity/fragments/*"],
+      "@fragments/*": ["./src/fragments/*"],
       "@layouts/*": ["./src/layouts/*"],
+      "@sanity-fragments/*": ["./src/sanity/fragments/*"],
       "@lib/*": ["./src/lib/*"],
       "@modules/*": ["./src/modules/*"],
       "@styles/*": ["./src/styles/*"],

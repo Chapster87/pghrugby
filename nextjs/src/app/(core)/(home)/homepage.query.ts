@@ -1,16 +1,6 @@
-import { seoFragment } from "@fragments/seo-fragment"
+import { seoFragment } from "@sanity-fragments/seo-fragment"
 import { graphql } from "@/lib/datocms/graphql"
-
-export const fileFieldFragment = graphql(`
-  fragment FileFieldFragment on FileField {
-    id
-    url
-    alt
-    width
-    height
-    title
-  }
-`)
+import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
 
 export const homepageQuery = `
   *[_type == "homepage"][0]{
@@ -57,39 +47,13 @@ export const homeQuery = graphql(
         content {
           value
           blocks {
-            ... on ExternalImageBlockRecord {
-              id
-              __typename
-              url
-              cloudinary
-            }
-            ... on ImageBlockRecord {
-              id
-              __typename
-              asset {
-                ...FileFieldFragment
-              }
-            }
-            ... on ImageGalleryBlockRecord {
-              id
-              __typename
-              assets {
-                ...FileFieldFragment
-              }
-            }
-            ... on VideoBlockRecord {
-              id
-              __typename
-              asset {
-                ...FileFieldFragment
-              }
-            }
+            ...BlocksFragment
           }
         }
       }
     }
   `,
-  [fileFieldFragment]
+  [fileFieldFragment, blocksFragment]
 )
 
 // Query to fetch the last 8 pages or posts added by date

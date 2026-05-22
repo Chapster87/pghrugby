@@ -11,7 +11,7 @@ import ShareBar from "@/components/share-bar"
 import { CloudinaryImage } from "@/types/datocms"
 import { ResultOf, readFragment } from "@/lib/datocms/graphql"
 import { getCloudinaryImageProps } from "@/utils/cloudinary"
-import { fileFieldFragment } from "./pages.query"
+import { fileFieldFragment } from "@fragments/blocks"
 import { StructuredArticleData } from "@/types/structured-data"
 
 import contentStyles from "@/styles/content.module.css"

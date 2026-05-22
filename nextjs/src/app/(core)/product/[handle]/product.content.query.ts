@@ -1,5 +1,5 @@
 import { defineQuery } from "next-sanity"
-import { seoFragment } from "@fragments/seo-fragment"
+import { seoFragment } from "@sanity-fragments/seo-fragment"
 
 export const productContentQuery = defineQuery(
   `*[_type == "product" && slug.current == $slug][0]{

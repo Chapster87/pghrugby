@@ -1,15 +1,5 @@
 import { graphql } from "@/lib/datocms/graphql"
-
-export const fileFieldFragment = graphql(`
-  fragment FileFieldFragment on FileField {
-    id
-    url
-    alt
-    width
-    height
-    title
-  }
-`)
+import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
 
 export const pageSlugs = graphql(`
   query PageSlugsQuery {
@@ -40,37 +30,11 @@ export const pageQuery = graphql(
         content {
           value
           blocks {
-            ... on ExternalImageBlockRecord {
-              id
-              __typename
-              url
-              cloudinary
-            }
-            ... on ImageBlockRecord {
-              id
-              __typename
-              asset {
-                ...FileFieldFragment
-              }
-            }
-            ... on ImageGalleryBlockRecord {
-              id
-              __typename
-              assets {
-                ...FileFieldFragment
-              }
-            }
-            ... on VideoBlockRecord {
-              id
-              __typename
-              asset {
-                ...FileFieldFragment
-              }
-            }
+            ...BlocksFragment
           }
         }
       }
     }
   `,
-  [fileFieldFragment]
+  [fileFieldFragment, blocksFragment]
 )

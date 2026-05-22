@@ -382,7 +382,7 @@ type GlobalSeoField {
   twitterAccount: String
 }
 
-union HomepageModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+union HomepageModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | LinkButtonRecord | VideoBlockRecord
 
 type HomepageModelContentField {
   blocks: [HomepageModelContentBlocksField!]!
@@ -2548,6 +2548,35 @@ input JsonFilter {
   exists: BooleanType
 }
 
+"""Block of type 🔗 Link Button (link_button)"""
+type LinkButtonRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  classname: String
+  customProps: JsonField
+  id: ItemId!
+  openInNewTab: BooleanType!
+  size: String
+  testField: JsonField
+  variant: String
+}
+
 """Specifies how to filter Single-link fields"""
 input LinkFilter {
   """
@@ -2598,6 +2627,64 @@ input LinksFilter {
   Filter records with the specified field defined (i.e. with any value) or not
   """
   exists: BooleanType
+}
+
+union MembershipModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | LinkButtonRecord | VideoBlockRecord
+
+type MembershipModelContentField {
+  blocks: [MembershipModelContentBlocksField!]!
+  inlineBlocks: [String!]!
+  links: [PageRecord!]!
+  value: JsonField!
+}
+
+union MembershipModelModularContentBlockField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+
+"""Record of type 👥 Club Membership (membership)"""
+type MembershipRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  author: WpAuthorRecord
+  canonicalUrl: String
+  content: MembershipModelContentField
+  creationDate: DateTime
+  featuredImage: JsonField
+  id: ItemId!
+  metaDescription: String
+  metaImage: JsonField
+  metaKeywords: JsonField
+  metaRobots: JsonField
+  metaTitle: String
+  modularContentBlock: [MembershipModelModularContentBlockField!]!
+  seoAnalysis: JsonField
+  slug: String
+  structuredData: JsonField
+  title: String
+  wpcontent(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  wpdata: JsonField
+  wpexcerpt(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
 }
 
 scalar MetaTagAttributes
@@ -3086,6 +3173,17 @@ type Query {
     fallbackLocales: [SiteLocale!]
   ): HomepageOldRecord
 
+  """Returns the single instance record"""
+  membership(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): MembershipRecord
+
   """Returns a specific record"""
   page(
     """The locale to use to fetch the field's content"""
@@ -3362,30 +3460,6 @@ type Tag {
   attributes: MetaTagAttributes
   content: String
   tag: String!
-}
-
-"""Block of type 🖼️ Test (test)"""
-type TestRecord implements RecordInterface {
-  _createdAt: DateTime!
-
-  """Editing URL"""
-  _editingUrl: String
-  _firstPublishedAt: DateTime!
-  _isValid: BooleanType!
-  _modelApiKey: String!
-  _publicationScheduledAt: DateTime
-  _publishedAt: DateTime!
-
-  """Generates SEO and Social card meta tags to be used in your frontend"""
-  _seoMetaTags(
-    """The locale to use to fetch the field's content"""
-    locale: SiteLocale
-  ): [Tag!]!
-  _status: ItemStatus!
-  _unpublishingScheduledAt: DateTime
-  _updatedAt: DateTime!
-  id: ItemId!
-  image: JsonField
 }
 
 """Specifies how to filter text fields"""

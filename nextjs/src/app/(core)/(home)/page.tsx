@@ -16,7 +16,7 @@ import contentStyles from "@/styles/content.module.css"
 import { CardSlider } from "@/components/content/card-slider"
 import generateExcerpt from "@/lib/util/generateExcerpt"
 import VideoBg from "./video-bg"
-import { fileFieldFragment } from "./homepage.query"
+import { fileFieldFragment } from "@fragments/blocks"
 import { StructuredArticleData } from "@/types/structured-data"
 import s from "./style.module.css"
 
