@@ -56,6 +56,16 @@ export const homeQuery = graphql(
   [fileFieldFragment, blocksFragment]
 )
 
+export const latestContentQueryDato = graphql(
+  `
+    query ArticlesQuery {
+      allArticles(orderBy: [_createdAt_ASC], first: 8) {
+        slug
+      }
+    }
+  `
+)
+
 // Query to fetch the last 8 pages or posts added by date
 export const latestContentQuery = `
   *[_type in ['post'] && !(_id match "draft.*") && (!defined(excludeFromHomepageSlider) || excludeFromHomepageSlider != true)]|order(date desc)[0...8]{
