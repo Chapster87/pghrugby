@@ -25,7 +25,6 @@ const config = {
     },
   },
   plugins: [
-    require("@tailwindcss/typography"),
     require("tailwind-bootstrap-grid")({
       generateContainer: false,
       gridGutterWidth: "2rem",

@@ -212,7 +212,7 @@ export default async function PostPage(props: { params: { slug: string } }) {
   return (
     <SidebarLayout>
       <article className={`${contentStyles.contentBlock} ${s.content}`}>
-        <div className="prose max-w-none">
+        <div className="prose">
           {/* Structured data for SEO */}
           {structuredData && (
             <script

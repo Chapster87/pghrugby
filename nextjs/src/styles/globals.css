@@ -5,6 +5,7 @@
 @import "./custom-media.css" layer(utilities);
 @import "./theming.css" layer(utilities);
 @import "./components/typography.css" layer(utilities);
+@import "./components/prose.css" layer(utilities);
 @import "./components/forms.css" layer(utilities);
 @import "./components/tables.css" layer(utilities);
 

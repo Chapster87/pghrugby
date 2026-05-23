@@ -40,7 +40,7 @@ export default function Example({ data }: { data: any }) {
   const structuredData = generateStructuredData(data)
   return (
     <article className={`${contentStyles.contentBlock}`}>
-      <div className="prose max-w-none">
+      <div className="prose">
         {/* Structured data for SEO */}
         {structuredData && (
           <script

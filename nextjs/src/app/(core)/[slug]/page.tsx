@@ -189,7 +189,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <SidebarLayout>
       <article className={`${contentStyles.contentBlock} ${s.pageContent}`}>
-        <div className="prose max-w-none">
+        <div className="prose">
           {/* Featured image with proper alt text */}
           {/* {(page.featuredImage as CloudinaryImage) && (
             <div className="mb-6 relative aspect-video w-full">

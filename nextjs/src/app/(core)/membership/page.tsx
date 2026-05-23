@@ -173,9 +173,8 @@ export default async function Membership(props: {
 
   return (
     <div className={`${contentStyles.contentBlock} ${s.membershipPage}`}>
-      <h1 className={s.pageTitle}>{page.title}</h1>
-
-      <div className="">
+      <div className="prose">
+        <h1 className={s.pageTitle}>{page.title}</h1>
         {page.content && (
           <StructuredText
             data={page.content}
