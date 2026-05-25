@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  padding-bottom: 40px;
+}
+
+.titleSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 40%;
+  height: 16px;
+}
+
+.headerSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 50%;
+  height: 24px;
+}
+
+.infoWrapper {
+  display: flex;
+  column-gap: 16px;
+}
+
+.dateSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 64px;
+  height: 16px;
+}
+
+.orderNumberSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 48px;
+  height: 16px;
+}

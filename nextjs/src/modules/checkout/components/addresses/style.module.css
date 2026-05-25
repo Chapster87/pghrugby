@@ -1,0 +1,90 @@
+.container {
+  background-color: var(--color-white);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  font-size: 32px;
+  line-height: 44px;
+  font-weight: 400;
+  column-gap: 8px;
+  align-items: baseline;
+}
+
+.editButton {
+  color: var(--fg-interactive);
+  transition: color 0.15s ease-in-out;
+
+  &:hover {
+    color: var(--fg-interactive-hover);
+  }
+}
+
+.formContainer {
+  padding-bottom: 32px;
+}
+
+.billingHeading {
+  font-size: 32px;
+  line-height: 44px;
+  font-weight: 400;
+  display: flex;
+  column-gap: 16px;
+  padding-bottom: 24px;
+  padding-top: 32px;
+}
+
+.summaryContainer {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.summaryContent {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 32px;
+}
+
+.summaryGrid {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 4px;
+  width: 100%;
+}
+
+.summaryColumn {
+  display: flex;
+  flex-direction: column;
+  width: 33.333333%;
+}
+
+.summaryTitle {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  color: var(--fg-base);
+  margin-bottom: 4px;
+}
+
+.summaryText {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--fg-subtle);
+}
+
+.submitButton {
+  margin-top: 24px;
+}
+
+.divider {
+  margin-top: 32px;
+}

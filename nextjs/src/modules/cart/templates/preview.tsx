@@ -7,6 +7,8 @@ import { Table, clx } from "@medusajs/ui"
 import Item from "@modules/cart/components/item"
 import SkeletonLineItem from "@modules/skeletons/components/skeleton-line-item"
 
+import s from "./style.module.css"
+
 type ItemsTemplateProps = {
   cart: HttpTypes.StoreCart
 }
@@ -17,9 +19,8 @@ const ItemsPreviewTemplate = ({ cart }: ItemsTemplateProps) => {
 
   return (
     <div
-      className={clx({
-        "pl-px overflow-y-scroll overflow-x-hidden no-scrollbar max-h-[420px]":
-          hasOverflow,
+      className={clx(s.container, {
+        [s.overflow]: hasOverflow,
       })}
     >
       <Table>

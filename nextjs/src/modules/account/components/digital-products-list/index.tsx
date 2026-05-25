@@ -1,57 +1,30 @@
-"use client"
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { Button } from "@medusajs/ui"
 
-import { Table } from "@medusajs/ui"
-import { DigitalProduct } from "../../../../types/global"
-import { getDigitalMediaDownloadLink } from "@/lib/data/digital-products"
+import s from "./style.module.css"
 
-type Props = {
-  digitalProducts: DigitalProduct[]
-}
-
-export const DigitalProductsList = ({ digitalProducts }: Props) => {
-  const handleDownload = async (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    mediaId: string
-  ) => {
-    e.preventDefault()
-
-    const url = await getDigitalMediaDownloadLink(mediaId)
-
-    window.open(url)
-  }
-
+const DigitalProductsList = () => {
   return (
-    <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Name</Table.HeaderCell>
-          <Table.HeaderCell>Action</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {digitalProducts.map((digitalProduct) => {
-          const medias = digitalProduct.medias?.filter(
-            (media) => media.type === "main"
-          )
-          const showMediaCount = (medias?.length || 0) > 1
-          return (
-            <Table.Row key={digitalProduct.id}>
-              <Table.Cell>{digitalProduct.name}</Table.Cell>
-              <Table.Cell>
-                <ul>
-                  {medias?.map((media, index) => (
-                    <li key={media.id}>
-                      <a href="#" onClick={(e) => handleDownload(e, media.id)}>
-                        Download{showMediaCount ? ` ${index + 1}` : ``}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </Table.Cell>
-            </Table.Row>
-          )
-        })}
-      </Table.Body>
-    </Table>
+    <div className={s.digitalProductsWrapper}>
+      <div className={s.header}>
+        <Heading level="h2">Digital Products</Heading>
+        <Text>View and download your digital purchases.</Text>
+      </div>
+      <div className={s.emptyState}>
+        <Heading level="h3" display="h6">
+          No digital products found
+        </Heading>
+        <Text>You haven't purchased any digital products yet.</Text>
+        <div style={{ marginTop: "16px" }}>
+          <LocalizedClientLink href="/store">
+            <Button>Go to store</Button>
+          </LocalizedClientLink>
+        </div>
+      </div>
+    </div>
   )
 }
+
+export default DigitalProductsList

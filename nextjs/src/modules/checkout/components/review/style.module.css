@@ -1,0 +1,43 @@
+.container {
+  background-color: var(--color-white);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  font-size: 32px;
+  line-height: 44px;
+  font-weight: 400;
+  column-gap: 8px;
+  align-items: baseline;
+}
+
+.headingDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.termsWrapper {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 4px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.termsText {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  color: var(--fg-base);
+  margin-bottom: 4px;
+}

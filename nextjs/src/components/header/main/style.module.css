@@ -72,3 +72,28 @@
     color: var(--color-black);
   }
 }
+
+.headerInnerContainer {
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 12px;
+  padding-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.accountSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.accountLinkHiddenLg {
+  display: none;
+
+  @media (--viewport-md-up) {
+    display: inline-block;
+  }
+}

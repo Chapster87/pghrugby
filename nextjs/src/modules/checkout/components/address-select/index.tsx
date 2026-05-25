@@ -7,6 +7,8 @@ import Radio from "@modules/common/components/radio"
 import compareAddresses from "@lib/util/compare-addresses"
 import { HttpTypes } from "@medusajs/types"
 
+import s from "./style.module.css"
+
 type AddressSelectProps = {
   addresses: HttpTypes.StoreCustomerAddress[]
   addressInput: HttpTypes.StoreCartAddress | null
@@ -34,21 +36,21 @@ const AddressSelect = ({
 
   return (
     <Listbox onChange={handleSelect} value={selectedAddress?.id}>
-      <div className="relative">
+      <div className={s.container}>
         <Listbox.Button
-          className="relative w-full flex justify-between items-center px-4 py-[10px] text-left bg-white cursor-default focus:outline-hidden border rounded-rounded focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-gray-300 focus-visible:ring-offset-2 focus-visible:border-gray-300"
+          className={s.button}
           data-testid="shipping-address-select"
         >
           {({ open }) => (
             <>
-              <span className="block truncate">
+              <span className={s.buttonText}>
                 {selectedAddress
                   ? selectedAddress.address_1
                   : "Choose an address"}
               </span>
               <ChevronUpDown
-                className={clx("transition-rotate duration-200", {
-                  "transform rotate-180": open,
+                className={clx(s.chevron, {
+                  [s.chevronOpen]: open,
                 })}
               />
             </>
@@ -61,7 +63,7 @@ const AddressSelect = ({
           leaveTo="opacity-0"
         >
           <Listbox.Options
-            className="absolute z-20 w-full overflow-auto bg-white border border-top-0 max-h-60 focus:outline-hidden sm:text-sm"
+            className={s.options}
             data-testid="shipping-address-options"
           >
             {addresses.map((address) => {
@@ -69,24 +71,24 @@ const AddressSelect = ({
                 <Listbox.Option
                   key={address.id}
                   value={address.id}
-                  className="cursor-default select-none relative pl-6 pr-10 hover:bg-gray-50 py-4"
+                  className={s.option}
                   data-testid="shipping-address-option"
                 >
-                  <div className="flex gap-x-4 items-start">
+                  <div className={s.optionContent}>
                     <Radio
                       checked={selectedAddress?.id === address.id}
                       data-testid="shipping-address-radio"
                     />
-                    <div className="flex flex-col">
-                      <span className="text-left text-sm leading-6 font-semibold">
+                    <div className={s.optionInfo}>
+                      <span className={s.optionName}>
                         {address.first_name} {address.last_name}
                       </span>
                       {address.company && (
-                        <span className="text-ui-fg-base">
+                        <span className={s.optionCompany}>
                           {address.company}
                         </span>
                       )}
-                      <div className="flex flex-col text-left mt-2">
+                      <div className={s.optionAddress}>
                         <span>
                           {address.address_1}
                           {address.address_2 && (

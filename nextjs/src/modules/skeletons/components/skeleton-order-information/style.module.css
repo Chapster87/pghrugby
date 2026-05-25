@@ -1,0 +1,61 @@
+.section {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 16px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--border-base);
+
+  @media (--viewport-lg-up) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sectionNoBorder {
+  composes: section;
+  border-bottom: none;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 128px;
+  height: 16px;
+  margin-bottom: 16px;
+}
+
+.itemSkeletonSmall {
+  composes: base from "../skeleton.module.css";
+  width: 33.333333%;
+  height: 12px;
+}
+
+.itemSkeletonMedium {
+  composes: base from "../skeleton.module.css";
+  width: 50%;
+  height: 12px;
+}
+
+.itemSkeletonTiny {
+  composes: base from "../skeleton.module.css";
+  width: 16.666667%;
+  height: 12px;
+}
+
+.marginSmall {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.marginTopTiny {
+  margin-top: 8px;
+}
+
+.marginMedium {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}

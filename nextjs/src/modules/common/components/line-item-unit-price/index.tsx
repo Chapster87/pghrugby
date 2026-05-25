@@ -1,6 +1,6 @@
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
-import { clx } from "@medusajs/ui"
+import s from "./style.module.css"
 
 type LineItemUnitPriceProps = {
   item: HttpTypes.StoreCartLineItem | HttpTypes.StoreOrderLineItem
@@ -14,43 +14,43 @@ const LineItemUnitPrice = ({
   currencyCode,
 }: LineItemUnitPriceProps) => {
   const { total, original_total } = item
-  const hasReducedPrice = total < original_total
+  const safeTotal = total || 0
+  const safeOriginalTotal = original_total || 0
+  const hasReducedPrice = safeTotal < safeOriginalTotal
 
   const percentage_diff = Math.round(
-    ((original_total - total) / original_total) * 100
+    ((safeOriginalTotal - safeTotal) / safeOriginalTotal) * 100
   )
 
   return (
-    <div className="flex flex-col text-ui-fg-muted justify-center h-full">
+    <div className={s.wrapper}>
       {hasReducedPrice && (
         <>
           <p>
             {style === "default" && (
-              <span className="text-ui-fg-muted">Original: </span>
+              <span className={s.originalPriceText}>Original: </span>
             )}
             <span
-              className="line-through"
+              className={s.originalPriceValue}
               data-testid="product-unit-original-price"
             >
               {convertToLocale({
-                amount: original_total / item.quantity,
+                amount: safeOriginalTotal / item.quantity,
                 currency_code: currencyCode,
               })}
             </span>
           </p>
           {style === "default" && (
-            <span className="text-ui-fg-interactive">-{percentage_diff}%</span>
+            <span className={s.discountPercentage}>-{percentage_diff}%</span>
           )}
         </>
       )}
       <span
-        className={clx({
-          "text-ui-fg-interactive": hasReducedPrice,
-        })}
+        className={hasReducedPrice ? s.currentPrice : s.currentPriceDefault}
         data-testid="product-unit-price"
       >
         {convertToLocale({
-          amount: total / item.quantity,
+          amount: safeTotal / item.quantity,
           currency_code: currencyCode,
         })}
       </span>

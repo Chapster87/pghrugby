@@ -8,6 +8,8 @@ import { StructuredText } from "react-datocms"
 import { pageSlugs, pageQuery } from "./pages.query"
 import Example from "./(example)/page"
 import ShareBar from "@/components/share-bar"
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
 import { CloudinaryImage } from "@/types/datocms"
 import { ResultOf, readFragment } from "@/lib/datocms/graphql"
 import { getCloudinaryImageProps } from "@/utils/cloudinary"
@@ -192,36 +194,45 @@ export default async function Page({ params }: PageProps) {
         <div className="prose">
           {/* Featured image with proper alt text */}
           {/* {(page.featuredImage as CloudinaryImage) && (
-            <div className="mb-6 relative aspect-video w-full">
+            <div className={s.featuredImageWrapper}>
               <Image
                 src={(page.featuredImage as CloudinaryImage).secure_url}
                 alt={page.title || "Featured image"}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority
-                className="object-cover rounded-lg"
+                className={s.featuredImage}
               />
             </div>
           )} */}
 
-          <header className="mb-8">
-            <h1>{page.title}</h1>
+          <header className={s.header}>
+            <Heading level="h1">{page.title}</Heading>
 
-            <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <div className={s.meta}>
               {page.creationDate && (
                 <time dateTime={new Date(page.creationDate).toISOString()}>
-                  Published: {new Date(page.creationDate).toLocaleDateString()}
+                  <Text variant="span" size="sm">
+                    Published:{" "}
+                    {new Date(page.creationDate).toLocaleDateString()}
+                  </Text>
                 </time>
               )}
 
-              {page._updatedAt && page.creationDate && page._updatedAt && (
+              {page._updatedAt && page.creationDate && (
                 <time dateTime={new Date(page._updatedAt).toISOString()}>
-                  Updated: {new Date(page._updatedAt).toLocaleDateString()}
+                  <Text variant="span" size="sm">
+                    Updated: {new Date(page._updatedAt).toLocaleDateString()}
+                  </Text>
                 </time>
               )}
 
               {page.author?.name && (
-                <address className="not-italic">By: {page.author.name}</address>
+                <address>
+                  <Text variant="span" size="sm">
+                    By: {page.author.name}
+                  </Text>
+                </address>
               )}
             </div>
           </header>

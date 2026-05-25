@@ -42,9 +42,22 @@
   }
 }
 
+.headerContainer {
+  composes: siteContainer from "@/styles/content.module.css";
+}
+
 .headerInner {
   position: relative;
   padding-left: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navControls {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* gap-4 */
 }
 
 .navLink {
@@ -59,4 +72,20 @@
   @media (prefers-color-scheme: light) {
     color: var(--color-black);
   }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.backToCartIcon {
+  margin-right: 8px; /* mr-2 */
 }

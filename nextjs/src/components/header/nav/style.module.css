@@ -156,3 +156,42 @@
 .mobileNavLink:hover {
   background-color: #f3f4f6;
 }
+
+.mainNavRoot {
+  display: none;
+
+  @media (--viewport-sm-up) {
+    display: flex;
+    gap: 36px; /* gap-9 */
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+.navTriggerContent {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* gap-1 */
+}
+
+.navTriggerIcon {
+  transition: transform 0.2s ease; /* transition-transform duration-200 */
+  margin-left: 4px; /* ml-1 */
+  width: 16px; /* w-4 */
+  height: 16px; /* h-4 */
+}
+
+/* Specific state for when the NavigationMenu.Trigger is open */
+.navTriggerIcon[data-state="open"] {
+  transform: rotate(180deg);
+}
+
+.mobileNavSummaryIcon {
+  transition: transform 0.2s ease; /* transition-transform duration-200 */
+  width: 16px; /* w-4 */
+  height: 16px; /* h-4 */
+}
+
+.mobileNavSummaryIconRotate {
+  transform: rotate(180deg);
+}

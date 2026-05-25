@@ -5,7 +5,7 @@
     margin-top: 0;
     margin-bottom: 16px;
 
-    @media (--viewport-medium-up) {
+    @media (--viewport-md-up) {
       margin-bottom: 24px;
     }
   }
@@ -22,7 +22,7 @@
   h1 {
     margin-bottom: 24px;
 
-    @media (--viewport-medium-up) {
+    @media (--viewport-md-up) {
       margin-bottom: 32px;
     }
   }
@@ -43,7 +43,7 @@
     margin-bottom: 16px;
     padding-left: 24px;
 
-    @media (--viewport-medium-up) {
+    @media (--viewport-md-up) {
       margin-bottom: 24px;
       padding-left: 32px;
     }
@@ -65,7 +65,7 @@
     margin-bottom: 16px;
     padding-left: 24px;
 
-    @media (--viewport-medium-up) {
+    @media (--viewport-md-up) {
       margin-bottom: 24px;
       padding-left: 32px;
     }
@@ -92,7 +92,7 @@
     border-left: 4px solid var(--color-grey-300);
     color: var(--color-grey-700);
 
-    @media (--viewport-medium-up) {
+    @media (--viewport-md-up) {
       margin-top: 32px;
       margin-bottom: 32px;
       padding: 24px 32px;
@@ -103,7 +103,7 @@
     margin-top: 32px;
     margin-bottom: 32px;
 
-    @media (--viewport-medium-up) {
+    @media (--viewport-md-up) {
       margin-top: 40px;
       margin-bottom: 40px;
     }
@@ -145,7 +145,7 @@
     margin-top: 24px;
     margin-bottom: 24px;
 
-    @media (--viewport-medium-up) {
+    @media (--viewport-md-up) {
       padding: 24px;
       margin-top: 32px;
       margin-bottom: 32px;

@@ -1,0 +1,81 @@
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 16px 32px;
+  width: 100%;
+
+  @media (--viewport-md-up) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.textSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  @media (--viewport-md-up) {
+    align-items: flex-end;
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.submitButton {
+  width: fit-content;
+  white-space: nowrap;
+  align-self: flex-end;
+}
+
+.successMessage {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: var(--color-grey-100);
+  box-shadow: var(
+    --shadow-borders-base
+  ); /* Need to check variables for shadow or use local */
+  width: 100%;
+  align-items: center;
+}
+
+.successInfo {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.successText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.errorMessage {
+  color: var(--color-red);
+  text-align: right;
+  margin-top: 8px;
+}
+
+.successIcon {
+  color: var(--color-green);
+}

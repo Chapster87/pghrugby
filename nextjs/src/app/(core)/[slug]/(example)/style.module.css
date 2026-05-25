@@ -1,0 +1,51 @@
+.exampleArticle {
+  /* Inherits contentBlock behavior from global contentStyles */
+}
+
+.featuredImageWrapper {
+  margin-bottom: 24px;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+.featuredImage {
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.excerpt {
+  font-weight: 500;
+  margin-bottom: 16px;
+  color: var(--color-grey-600);
+
+  :global(.dark) & {
+    color: var(--color-grey-300);
+  }
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--color-grey-500);
+
+  :global(.dark) & {
+    color: var(--color-grey-400);
+  }
+}
+
+.statusBadge {
+  padding: 4px 8px;
+  background-color: #dbeafe; /* bg-blue-100 */
+  border-radius: 2px;
+  font-size: 12px;
+
+  :global(.dark) & {
+    background-color: #1e3a8a; /* bg-blue-900 */
+  }
+}

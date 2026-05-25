@@ -8,7 +8,7 @@ import localFont from "next/font/local"
 import { draftMode } from "next/headers"
 import { VisualEditing } from "next-sanity"
 
-import BreakpointIndicator from "@components/BreakpointIndicator"
+import BreakpointIndicator from "@/components/breakpoint-indicator"
 import Footer from "@/components/footer"
 import Header from "@/components/header"
 import CartMismatchBanner from "@modules/layout/components/cart-mismatch-banner"
@@ -86,8 +86,8 @@ export default async function CoreLayout(props: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`dark ${lemonMilk.variable}`}
-      style={{ colorScheme: "dark" }}
+      className={`light ${lemonMilk.variable}`}
+      style={{ colorScheme: "light" }}
     >
       <body>
         <Providers>

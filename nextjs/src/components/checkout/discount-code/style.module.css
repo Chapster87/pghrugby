@@ -1,0 +1,91 @@
+.wrapper {
+  width: 100%;
+  background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  width: 100%;
+  margin-bottom: 20px; /* mb-5 */
+}
+
+.label {
+  display: flex;
+  gap: 4px; /* gap-x-1 */
+  margin-top: 8px; /* my-2 */
+  margin-bottom: 8px; /* my-2 */
+  align-items: center;
+}
+
+.button {
+  color: var(--color-interactive);
+  font-size: 16px; /* txt-medium */
+}
+
+.button:hover {
+  color: var(--color-interactive-hover);
+}
+
+.inputWrapper {
+  display: flex;
+  width: 100%;
+  gap: 8px; /* gap-x-2 */
+}
+
+.promotionsWrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.promotionsList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.promotionsHeading {
+  font-size: 16px; /* txt-medium */
+  margin-bottom: 8px; /* mb-2 */
+}
+
+.promotionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 8px; /* mb-2 */
+}
+
+.promotionText {
+  display: flex;
+  gap: 4px; /* gap-x-1 */
+  align-items: baseline;
+  font-size: 14px; /* txt-small-plus */
+  width: 80%; /* w-4/5 */
+  padding-right: 4px; /* pr-1 */
+}
+
+.promotionCode {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.removeButton {
+  display: flex;
+  align-items: center;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

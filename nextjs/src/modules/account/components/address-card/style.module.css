@@ -1,0 +1,90 @@
+.addAddressCard {
+  border: 1px solid var(--color-grey-200);
+  border-radius: 8px;
+  padding: 24px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+  background-color: var(--color-white);
+}
+
+.addAddressCard:hover {
+  background-color: var(--color-grey-100);
+}
+
+.addressCard {
+  border: 1px solid var(--color-grey-200);
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 220px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardTitle {
+  font-weight: 600;
+}
+
+.addressInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.addressDetails {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-grey-600);
+  transition: color 0.15s ease;
+}
+
+.iconButton:hover {
+  color: var(--color-black);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}

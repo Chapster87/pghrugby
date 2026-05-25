@@ -161,24 +161,24 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({
             </th>
           </tr>
           <tr>
-            <th className="align-center">Date</th>
-            <th className="align-right">Home</th>
-            <th className={`${s.resultsColumn} align-center`}>Result</th>
+            <th className={s.alignCenter}>Date</th>
+            <th className={s.alignRight}>Home</th>
+            <th className={clsx(s.resultsColumn, s.alignCenter)}>Result</th>
             <th>Away</th>
           </tr>
         </thead>
         <tbody>
           {schedule.map((match) => (
             <tr key={match.id}>
-              <td className={`${s.date} align-center`}>
+              <td className={clsx(s.date, s.alignCenter)}>
                 {new Date(match.eventDateTime).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
                   year: "numeric",
                 })}
               </td>
-              <td className={`${s.homeTeam} align-right`}>
-                <div className={`${s.homeTeamContent}`}>
+              <td className={clsx(s.homeTeam, s.alignRight)}>
+                <div className={s.homeTeamContent}>
                   {match.homeTeam}
 
                   <Image
@@ -190,7 +190,7 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({
                   />
                 </div>
               </td>
-              <td className={clsx(s.results, "align-center")}>
+              <td className={clsx(s.results, s.alignCenter)}>
                 {match.homeTeamScore || match.awayTeamScore ? (
                   <span
                     className={clsx({

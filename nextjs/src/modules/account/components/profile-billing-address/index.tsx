@@ -9,6 +9,8 @@ import AccountInfo from "../account-info"
 import { HttpTypes } from "@medusajs/types"
 import { addCustomerAddress, updateCustomerAddress } from "@lib/data/customer"
 
+import s from "./style.module.css"
+
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
   regions: HttpTypes.StoreRegion[]
@@ -72,8 +74,8 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
       )?.label || billingAddress.country_code?.toUpperCase()
 
     return (
-      <div className="flex flex-col font-semibold" data-testid="current-info">
-        <span>
+      <div className={s.inputGrid} data-testid="current-info">
+        <span className="font-semibold">
           {billingAddress.first_name} {billingAddress.last_name}
         </span>
         <span>{billingAddress.company}</span>
@@ -90,7 +92,7 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
   }, [billingAddress, regionOptions])
 
   return (
-    <form action={formAction} onReset={() => clearState()} className="w-full">
+    <form action={formAction} onReset={() => clearState()} className={s.form}>
       <input type="hidden" name="addressId" value={billingAddress?.id} />
       <AccountInfo
         label="Billing address"
@@ -100,8 +102,8 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
         clearState={clearState}
         data-testid="account-billing-address-editor"
       >
-        <div className="grid grid-cols-1 gap-y-2">
-          <div className="grid grid-cols-2 gap-x-2">
+        <div className={s.inputGrid}>
+          <div className={s.doubleInputGrid}>
             <Input
               label="First name"
               name="first_name"
@@ -136,7 +138,10 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
             defaultValue={billingAddress?.address_2 || undefined}
             data-testid="billing-address-2-input"
           />
-          <div className="grid grid-cols-[144px_1fr] gap-x-2">
+          <div
+            className={s.doubleInputGrid}
+            style={{ gridTemplateColumns: "144px 1fr" }}
+          >
             <Input
               label="Postal code"
               name="postal_code"

@@ -1,0 +1,42 @@
+.container {
+  composes: siteContainer from "@/styles/content.module.css";
+  display: flex;
+  flex-direction: column;
+  padding-top: 24px;
+  padding-bottom: 24px;
+
+  @media (--viewport-sm-up) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.productContent {
+  width: 100%;
+}
+
+.titleWrapper {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 30px;
+  line-height: 48px;
+  font-weight: 600;
+}
+
+.productsList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  column-gap: 24px;
+  row-gap: 32px;
+
+  @media (--viewport-sm-up) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (--viewport-md-up) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

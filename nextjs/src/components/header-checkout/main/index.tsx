@@ -39,20 +39,18 @@ export default function HeaderMain({ title, cart }: NavProps) {
 
   return (
     <header ref={headerRef} className={s.header} data-home={isHome}>
-      <div
-        className={`lg:container lg:mx-auto ${s.headerInner} px-[12] flex items-center justify-between`}
-      >
+      <div className={`${s.headerContainer} ${s.headerInner} px-[12]`}>
         <Link href="/" aria-label="View Homepage" className={s.siteLogo}>
           <Crest className={s.crest} />
-          <div className="sr-only">{title}</div>
+          <div className={s.srOnly}>{title}</div>
         </Link>
-        <div className={`flex items-center gap-4`}>
+        <div className={s.navControls}>
           <Link
             href="/cart"
-            className={`${s.navLink}`}
+            className={s.navLink}
             data-testid="back-to-cart-link"
           >
-            <ChevronLeft className="mr-2" />
+            <ChevronLeft className={s.backToCartIcon} />
             Back to Cart
           </Link>
         </div>

@@ -2,15 +2,16 @@
 
 import { clx } from "@medusajs/ui"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import s from "./style.module.css"
 
 export function Pagination({
   page,
   totalPages,
-  'data-testid': dataTestid
+  "data-testid": dataTestid,
 }: {
   page: number
   totalPages: number
-  'data-testid'?: string
+  "data-testid"?: string
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -35,7 +36,7 @@ export function Pagination({
   ) => (
     <button
       key={p}
-      className={clx("txt-xlarge-plus text-ui-fg-muted", {
+      className={clx(s.pageButton, {
         "text-ui-fg-base hover:text-ui-fg-subtle": isCurrent,
       })}
       disabled={isCurrent}
@@ -47,10 +48,7 @@ export function Pagination({
 
   // Function to render ellipsis
   const renderEllipsis = (key: string) => (
-    <span
-      key={key}
-      className="txt-xlarge-plus text-ui-fg-muted items-center cursor-default"
-    >
+    <span key={key} className={s.ellipsis}>
       ...
     </span>
   )
@@ -107,8 +105,10 @@ export function Pagination({
 
   // Render the component
   return (
-    <div className="flex justify-center w-full mt-12">
-      <div className="flex gap-3 items-end" data-testid={dataTestid}>{renderPageButtons()}</div>
+    <div className={s.paginationContainer}>
+      <div className={s.paginationControls} data-testid={dataTestid}>
+        {renderPageButtons()}
+      </div>
     </div>
   )
 }

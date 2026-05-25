@@ -11,3 +11,27 @@
     display: flex;
   }
 }
+
+.container {
+  max-width: var(--container-max-width); /* container */
+  margin-left: auto; /* mx-auto */
+  margin-right: auto; /* mx-auto */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-left: 16px; /* px-4 */
+  padding-right: 16px; /* px-4 */
+}
+
+.navList {
+  display: flex;
+  gap: 16px; /* space-x-4 */
+}
+
+.navItemSmHidden {
+  display: none;
+
+  @media (--viewport-sm-up) {
+    display: block;
+  }
+}

@@ -4,7 +4,10 @@ import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-g
 import RefinementList from "@modules/store/components/refinement-list"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
+import Heading from "@/components/typography/heading"
 import PaginatedProducts from "./paginated-products"
+
+import s from "./style.module.css"
 
 const StoreTemplate = ({
   sortBy,
@@ -19,14 +22,17 @@ const StoreTemplate = ({
   const sort = sortBy || "created_at"
 
   return (
-    <div
-      className="flex flex-col sm:flex-row sm:items-start py-6 container"
-      data-testid="category-container"
-    >
+    <div className={s.container} data-testid="category-container">
       <RefinementList sortBy={sort} />
-      <div className="w-full">
-        <div className="mb-8 text-[30px] leading-[48px] font-semibold">
-          <h1 data-testid="store-page-title">All products</h1>
+      <div className={s.productContent}>
+        <div className={s.titleWrapper}>
+          <Heading
+            level="h1"
+            className={s.title}
+            data-testid="store-page-title"
+          >
+            All products
+          </Heading>
         </div>
         <Suspense fallback={<SkeletonProductGrid />}>
           <PaginatedProducts

@@ -46,7 +46,6 @@ export default function Badge({
       style={
         absolute
           ? {
-              position: "absolute",
               top: posTop,
               right: posRight,
               bottom: posBottom,

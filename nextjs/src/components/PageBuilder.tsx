@@ -2,19 +2,22 @@ import React from "react"
 import { PortableText } from "@portabletext/react"
 import Link from "@components/link"
 import { urlBuilder } from "@/lib/util/url"
+import clsx from "clsx"
 
 import type { PortableTextMarkComponentProps } from "@portabletext/react"
+
+import s from "./PageBuilder.module.css"
 
 const myPortableTextComponents = {
   marks: {
     left: ({ children }: any) => (
-      <span className="block text-left">{children}</span>
+      <span className={s.textAlignLeft}>{children}</span>
     ),
     center: ({ children }: any) => (
-      <span className="block text-center w-full">{children}</span>
+      <span className={s.textAlignCenter}>{children}</span>
     ),
     right: ({ children }: any) => (
-      <span className="block text-right">{children}</span>
+      <span className={s.textAlignRight}>{children}</span>
     ),
     textColor: ({
       children,
@@ -67,17 +70,16 @@ const renderModule = (item: any) => {
       )
     case "linkGroup":
       if (!Array.isArray(item.links)) return null
+
+      const justifyClass =
+        item.alignment === "center"
+          ? s.justifyCenter
+          : item.alignment === "right"
+          ? s.justifyEnd
+          : s.justifyStart
+
       return (
-        <div
-          key={item._key}
-          className={`link-group my-4 flex gap-4 ${
-            item.alignment === "center"
-              ? "justify-center"
-              : item.alignment === "right"
-              ? "justify-end"
-              : "justify-start"
-          }`}
-        >
+        <div key={item._key} className={clsx(s.linkGroup, justifyClass)}>
           {item.links.map((link: any, idx: number) => {
             const route = link?.route
             const url =

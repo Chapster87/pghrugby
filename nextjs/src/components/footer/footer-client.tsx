@@ -1,10 +1,8 @@
 "use client"
-import React from "react"
 
-import { useTheme } from "next-themes"
+import React from "react"
 import { Text } from "@medusajs/ui"
 import Link from "@components/link"
-import Image from "next/image"
 import Heading from "../typography/heading"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 import Skyline from "@svg/skyline/Skyline"
@@ -27,25 +25,13 @@ export default function FooterClient({
   formattedNavData?: FormattedNavData
 }) {
   const { collections, productCategories } = serverData || {}
-  const { theme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
-
-  React.useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Always render with a default theme class on SSR, update after mount
-  const footerClass = clsx(
-    "relative border-t border-ui-border-base w-full",
-    mounted ? (theme === "dark" ? "dark" : "light") : "dark"
-  )
 
   return (
     <>
       {sponsorBar}
-      <footer className={clsx(footerClass, s.footer)}>
+      <footer className={clsx(s.footer)}>
         <Skyline className={s.skyline} />
-        <div className={`2xl:container ${s.footerInner}`}>
+        <div className={s.footerInner}>
           <JoinForge />
           <div className={s.footerLinks}>
             <SocialLinks socialMedia={socialMedia as SocialMedia} />
@@ -54,24 +40,19 @@ export default function FooterClient({
             />
           </div>
         </div>
-        <div className={`2xl:container ${s.footerInnerOLD}`}>
-          <div className="flex flex-col gap-y-6 xsm:flex-row items-start justify-between py-40">
+        <div className={s.footerInnerOLD}>
+          <div className={s.footerBottomWrapper}>
             <div>
-              <Link
-                href="/"
-                className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
-              >
+              <Link href="/" className={s.footerLinkLarge}>
                 Medusa Store
               </Link>
             </div>
-            <div className="gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3">
+            <div className={s.footerLinkGroups}>
               {productCategories && productCategories?.length > 0 && (
-                <div className="flex flex-col gap-y-2">
-                  <span className="txt-small-plus txt-ui-fg-base">
-                    Categories
-                  </span>
+                <div className={s.footerLinkGroup}>
+                  <span className={s.footerLinkHeading}>Categories</span>
                   <ul
-                    className="grid grid-cols-1 gap-2"
+                    className={s.footerLinkList}
                     data-testid="footer-categories"
                   >
                     {productCategories?.slice(0, 6).map((c: any) => {
@@ -87,14 +68,11 @@ export default function FooterClient({
                         })) || null
 
                       return (
-                        <li
-                          className="flex flex-col gap-2 text-ui-fg-subtle txt-small"
-                          key={c.id}
-                        >
+                        <li className={s.footerLinkListItem} key={c.id}>
                           <Link
                             className={clsx(
-                              "hover:text-ui-fg-base",
-                              children && "txt-small-plus"
+                              s.footerLink,
+                              children && s.footerLinkLarge
                             )}
                             href={`/categories/${c.handle}`}
                             data-testid="category-link"
@@ -102,12 +80,12 @@ export default function FooterClient({
                             {c.name}
                           </Link>
                           {children && (
-                            <ul className="grid grid-cols-1 ml-3 gap-2">
+                            <ul className={s.footerLinkSubList}>
                               {children &&
                                 children.map((child: any) => (
                                   <li key={child.id}>
                                     <Link
-                                      className="hover:text-ui-fg-base"
+                                      className={s.footerLink}
                                       href={`/categories/${child.handle}`}
                                       data-testid="category-link"
                                     >
@@ -124,22 +102,17 @@ export default function FooterClient({
                 </div>
               )}
               {collections && collections.length > 0 && (
-                <div className="flex flex-col gap-y-2">
-                  <span className="txt-small-plus txt-ui-fg-base">
-                    Collections
-                  </span>
+                <div className={s.footerLinkGroup}>
+                  <span className={s.footerLinkHeading}>Collections</span>
                   <ul
-                    className={clsx(
-                      "grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small",
-                      {
-                        "grid-cols-2": (collections?.length || 0) > 3,
-                      }
-                    )}
+                    className={clsx(s.footerLinkList, {
+                      [s.footerLinkListTwoCols]: (collections?.length || 0) > 3,
+                    })}
                   >
                     {collections?.slice(0, 6).map((c: any) => (
                       <li key={c.id}>
                         <Link
-                          className="hover:text-ui-fg-base"
+                          className={s.footerLink}
                           href={`/collections/${c.handle}`}
                         >
                           {c.title}
@@ -149,15 +122,15 @@ export default function FooterClient({
                   </ul>
                 </div>
               )}
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">Medusa</span>
-                <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
+              <div className={s.footerLinkGroup}>
+                <span className={s.footerLinkHeading}>Medusa</span>
+                <ul className={s.footerLinkList}>
                   <li>
                     <a
                       href="https://github.com/medusajs"
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-ui-fg-base"
+                      className={s.footerLink}
                     >
                       GitHub
                     </a>
@@ -167,7 +140,7 @@ export default function FooterClient({
                       href="https://docs.medusajs.com"
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-ui-fg-base"
+                      className={s.footerLink}
                     >
                       Documentation
                     </a>
@@ -177,7 +150,7 @@ export default function FooterClient({
                       href="https://github.com/medusajs/nextjs-starter-medusa"
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-ui-fg-base"
+                      className={s.footerLink}
                     >
                       Source code
                     </a>
@@ -186,8 +159,8 @@ export default function FooterClient({
               </div>
             </div>
           </div>
-          <div className="flex w-full mb-16 justify-between text-ui-fg-muted">
-            <Text className="txt-compact-small">
+          <div className={s.footerCopyright}>
+            <Text className={s.txtCompactSmall}>
               © {new Date().getFullYear()} Medusa Store. All rights reserved.
             </Text>
             <MedusaCTA />

@@ -27,10 +27,12 @@
   --color-gold-900: #795c03;
 
   --color-gold: #ffb81c;
-
   --color-red: #c60c30;
   --color-green: #198754;
   --color-blue: #377cfb;
+  --color-yellow: #fef08a; /* Added for BreakpointIndicator */
+  --color-pink: #fbcfe8; /* Added for BreakpointIndicator */
+  --color-purple: #a78bfa; /* Custom purple for 2xl BreakpointIndicator */
 
   --color-success: var(--color-green);
   --color-warning: var(--color-gold);
@@ -41,6 +43,8 @@
   --color-background-dark: var(--color-grey-900);
   --color-foreground-light: var(--color-black);
   --color-background-light: var(--color-white);
+
+  --container-max-width: 1536px; /* Defined based on Tailwind's 2xl breakpoint */
 
   --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

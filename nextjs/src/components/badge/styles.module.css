@@ -41,3 +41,7 @@
   background: var(--color-tertiary, #f7fafc);
   color: var(--color-on-tertiary, #444);
 }
+
+.absolute {
+  position: absolute;
+}

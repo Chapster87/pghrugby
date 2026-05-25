@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.headerSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 128px;
+  height: 16px;
+  margin-bottom: 16px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.marginRow {
+  composes: row;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.itemSkeletonLarge {
+  composes: base from "../skeleton.module.css";
+  width: 128px;
+  height: 12px;
+}
+
+.itemSkeletonMedium {
+  composes: base from "../skeleton.module.css";
+  width: 96px;
+  height: 12px;
+}
+
+.itemSkeletonSmall {
+  composes: base from "../skeleton.module.css";
+  width: 112px;
+  height: 12px;
+}
+
+.itemSkeletonXSmall {
+  composes: base from "../skeleton.module.css";
+  width: 80px;
+  height: 12px;
+}
+
+.divider {
+  width: 100%;
+  border-bottom: 1px dashed var(--border-base);
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.totalSkeletonLarge {
+  composes: base from "../skeleton.module.css";
+  width: 128px;
+  height: 24px;
+  margin-bottom: 16px;
+}
+
+.totalSkeletonMedium {
+  composes: base from "../skeleton.module.css";
+  width: 96px;
+  height: 24px;
+  margin-bottom: 16px;
+}

@@ -1,0 +1,27 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text-muted);
+  justify-content: center;
+  height: 100%;
+}
+
+.originalPriceText {
+  color: var(--color-text-muted);
+}
+
+.originalPriceValue {
+  text-decoration: line-through;
+}
+
+.discountPercentage {
+  color: var(--color-interactive);
+}
+
+.currentPrice {
+  color: var(--color-interactive);
+}
+
+.currentPriceDefault {
+  /* Default style, no specific color if not reduced */
+}

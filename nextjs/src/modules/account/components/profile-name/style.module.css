@@ -1,0 +1,10 @@
+.form {
+  width: 100%;
+  overflow: visible;
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}

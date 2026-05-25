@@ -1,0 +1,7 @@
+.options {
+  display: inline-block;
+  color: var(--color-text-subtle);
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

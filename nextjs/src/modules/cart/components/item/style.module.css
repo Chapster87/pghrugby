@@ -1,0 +1,58 @@
+.itemRow {
+  width: 100%;
+}
+
+.thumbnailCell {
+  padding-left: 0;
+  padding: 16px;
+  width: 96px; /* w-24 */
+}
+
+.thumbnailWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleCell {
+  text-align: left;
+}
+
+.productTitle {
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.quantityWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 112px; /* w-28 */
+}
+
+.quantitySelect {
+  width: 56px; /* w-14 */
+  height: 40px; /* h-10 */
+  padding: 16px;
+}
+
+.desktopPriceCell {
+  display: none;
+
+  @media (--viewport-md-up) {
+    display: table-cell;
+  }
+}
+
+.totalPriceCell {
+  /* Aligns with Table cell styles */
+}
+
+.previewQuantity {
+  display: flex;
+  gap: 4px;
+}
+
+.updating {
+  opacity: 0.5;
+  pointer-events: none;
+}

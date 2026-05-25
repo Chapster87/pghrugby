@@ -1,12 +1,12 @@
-import { Container } from "@medusajs/ui"
+import s from "./style.module.css"
 
 const SkeletonProductPreview = () => {
   return (
-    <div className="animate-pulse">
-      <Container className="aspect-9/16 w-full bg-gray-100 bg-ui-bg-subtle" />
-      <div className="flex justify-between mt-2">
-        <div className="w-2/5 h-6 bg-gray-100"></div>
-        <div className="w-1/5 h-6 bg-gray-100"></div>
+    <div className={s.container}>
+      <div className={s.imageSkeleton} />
+      <div className={s.infoWrapper}>
+        <div className={s.titleSkeleton}></div>
+        <div className={s.priceSkeleton}></div>
       </div>
     </div>
   )

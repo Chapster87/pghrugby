@@ -4,7 +4,10 @@ import { setAddresses } from "@lib/data/cart"
 import compareAddresses from "@lib/util/compare-addresses"
 import { CheckCircleSolid } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
-import { Heading, Text, useToggleState } from "@medusajs/ui"
+import { useToggleState } from "@medusajs/ui"
+
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
 import Divider from "@modules/common/components/divider"
 import Spinner from "@modules/common/icons/spinner"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
@@ -13,6 +16,8 @@ import BillingAddress from "../billing_address"
 import ErrorMessage from "../error-message"
 import ShippingAddress from "../shipping-address"
 import { SubmitButton } from "../submit-button"
+
+import s from "./style.module.css"
 
 const Addresses = ({
   cart,
@@ -40,12 +45,9 @@ const Addresses = ({
   const [message, formAction] = useActionState(setAddresses, null)
 
   return (
-    <div className="bg-white">
-      <div className="flex flex-row items-center justify-between mb-6">
-        <Heading
-          level="h2"
-          className="flex flex-row text-[32px] leading-[44px] font-normal gap-x-2 items-baseline"
-        >
+    <div className={s.container}>
+      <div className={s.header}>
+        <Heading level="h2" className={s.heading}>
           Shipping Address
           {!isOpen && <CheckCircleSolid />}
         </Heading>
@@ -53,7 +55,7 @@ const Addresses = ({
           <Text>
             <button
               onClick={handleEdit}
-              className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
+              className={s.editButton}
               data-testid="edit-address-button"
             >
               Edit
@@ -63,7 +65,7 @@ const Addresses = ({
       </div>
       {isOpen ? (
         <form action={formAction}>
-          <div className="pb-8">
+          <div className={s.formContainer}>
             <ShippingAddress
               customer={customer}
               checked={sameAsBilling}
@@ -73,17 +75,17 @@ const Addresses = ({
 
             {!sameAsBilling && (
               <div>
-                <Heading
-                  level="h2"
-                  className="text-[32px] leading-[44px] font-normal gap-x-4 pb-6 pt-8"
-                >
+                <Heading level="h2" className={s.billingHeading}>
                   Billing address
                 </Heading>
 
                 <BillingAddress cart={cart} />
               </div>
             )}
-            <SubmitButton className="mt-6" data-testid="submit-address-button">
+            <SubmitButton
+              className={s.submitButton}
+              data-testid="submit-address-button"
+            >
               Continue to delivery
             </SubmitButton>
             <ErrorMessage error={message} data-testid="address-error-message" />
@@ -91,76 +93,68 @@ const Addresses = ({
         </form>
       ) : (
         <div>
-          <div className="text-small-regular">
+          <div className={s.summaryContainer}>
             {cart && cart.shipping_address ? (
-              <div className="flex items-start gap-x-8">
-                <div className="flex items-start gap-x-1 w-full">
+              <div className={s.summaryContent}>
+                <div className={s.summaryGrid}>
                   <div
-                    className="flex flex-col w-1/3"
+                    className={s.summaryColumn}
                     data-testid="shipping-address-summary"
                   >
-                    <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                      Shipping Address
-                    </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className={s.summaryTitle}>Shipping Address</Text>
+                    <Text className={s.summaryText}>
                       {cart.shipping_address.first_name}{" "}
                       {cart.shipping_address.last_name}
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className={s.summaryText}>
                       {cart.shipping_address.address_1}{" "}
                       {cart.shipping_address.address_2}
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className={s.summaryText}>
                       {cart.shipping_address.postal_code},{" "}
                       {cart.shipping_address.city}
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className={s.summaryText}>
                       {cart.shipping_address.country_code?.toUpperCase()}
                     </Text>
                   </div>
 
                   <div
-                    className="flex flex-col w-1/3 "
+                    className={s.summaryColumn}
                     data-testid="shipping-contact-summary"
                   >
-                    <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                      Contact
-                    </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className={s.summaryTitle}>Contact</Text>
+                    <Text className={s.summaryText}>
                       {cart.shipping_address.phone}
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
-                      {cart.email}
-                    </Text>
+                    <Text className={s.summaryText}>{cart.email}</Text>
                   </div>
 
                   <div
-                    className="flex flex-col w-1/3"
+                    className={s.summaryColumn}
                     data-testid="billing-address-summary"
                   >
-                    <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                      Billing Address
-                    </Text>
+                    <Text className={s.summaryTitle}>Billing Address</Text>
 
                     {sameAsBilling ? (
-                      <Text className="txt-medium text-ui-fg-subtle">
+                      <Text className={s.summaryText}>
                         Billing- and delivery address are the same.
                       </Text>
                     ) : (
                       <>
-                        <Text className="txt-medium text-ui-fg-subtle">
+                        <Text className={s.summaryText}>
                           {cart.billing_address?.first_name}{" "}
                           {cart.billing_address?.last_name}
                         </Text>
-                        <Text className="txt-medium text-ui-fg-subtle">
+                        <Text className={s.summaryText}>
                           {cart.billing_address?.address_1}{" "}
                           {cart.billing_address?.address_2}
                         </Text>
-                        <Text className="txt-medium text-ui-fg-subtle">
+                        <Text className={s.summaryText}>
                           {cart.billing_address?.postal_code},{" "}
                           {cart.billing_address?.city}
                         </Text>
-                        <Text className="txt-medium text-ui-fg-subtle">
+                        <Text className={s.summaryText}>
                           {cart.billing_address?.country_code?.toUpperCase()}
                         </Text>
                       </>
@@ -176,7 +170,7 @@ const Addresses = ({
           </div>
         </div>
       )}
-      <Divider className="mt-8" />
+      <Divider className={s.divider} />
     </div>
   )
 }

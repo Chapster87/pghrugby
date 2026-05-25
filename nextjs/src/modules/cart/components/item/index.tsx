@@ -1,23 +1,20 @@
 "use client"
 
-import { Table, Text, clx } from "@medusajs/ui"
-import { updateLineItem } from "@lib/data/cart"
+import { Table } from "@medusajs/ui"
+import Text from "@/components/typography/text"
 import { HttpTypes } from "@medusajs/types"
-import CartItemSelect from "@modules/cart/components/cart-item-select"
-import ErrorMessage from "@modules/checkout/components/error-message"
-import DeleteButton from "@modules/common/components/delete-button"
-import LineItemOptions from "@modules/common/components/line-item-options"
 import LineItemPrice from "@modules/common/components/line-item-price"
 import LineItemUnitPrice from "@modules/common/components/line-item-unit-price"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import Spinner from "@modules/common/icons/spinner"
 import Thumbnail from "@modules/products/components/thumbnail"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import DeleteButton from "@modules/common/components/delete-button"
+import CartItemSelect from "@modules/cart/components/cart-item-select"
+import { updateLineItem } from "@lib/data/cart"
 import { useState } from "react"
+import ErrorMessage from "@modules/checkout/components/error-message"
+import clsx from "clsx"
 
-type MetadataItem = {
-  displayName: string
-  value: string
-}
+import s from "./style.module.css"
 
 type ItemProps = {
   item: HttpTypes.StoreCartLineItem
@@ -33,77 +30,53 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
     setError(null)
     setUpdating(true)
 
-    await updateLineItem({
+    const message = await updateLineItem({
       lineId: item.id,
       quantity,
     })
       .catch((err) => {
-        setError(err.message)
+        return err.message
       })
       .finally(() => {
         setUpdating(false)
       })
+
+    message && setError(message)
   }
 
-  // TODO: Update this to grab the actual max inventory
-  const maxQtyFromInventory = 10
-  const maxQuantity = item.variant?.manage_inventory ? 10 : maxQtyFromInventory
-
   return (
-    <Table.Row className="w-full" data-testid="product-row">
-      <Table.Cell className="pl-0! p-4 w-24">
+    <Table.Row className={s.itemRow} data-testid="product-row">
+      <Table.Cell className={s.thumbnailCell}>
         <LocalizedClientLink
-          href={`/product/${item.product_handle}`}
-          className={clx("flex", {
-            "w-16": type === "preview",
-            "sm:w-24 w-12": type === "full",
-          })}
+          href={`/products/${item.variant?.product?.handle}`}
+          className={s.thumbnailWrapper}
         >
-          <Thumbnail
-            thumbnail={item.thumbnail}
-            images={item.variant?.product?.images}
-            size="square"
-          />
+          <Thumbnail thumbnail={item.thumbnail} size="square" />
         </LocalizedClientLink>
       </Table.Cell>
 
-      <Table.Cell className="text-left">
-        <Text
-          className="txt-medium-plus text-ui-fg-base"
-          data-testid="product-title"
-        >
-          {item.product_title}
+      <Table.Cell className={s.titleCell}>
+        <Text className={s.productTitle} data-testid="product-title">
+          {item.title}
         </Text>
-        <LineItemOptions variant={item.variant} data-testid="product-variant" />
-        {/* {JSON.stringify(item.metadata)} */}
-        {item.metadata && (
-          <ul>
-            {Object.keys(item.metadata).map((key) => {
-              const metaValue = item.metadata?.[key] as MetadataItem | undefined
-              return (
-                <li key={key}>
-                  {metaValue?.displayName}: {metaValue?.value}
-                </li>
-              )
-            })}
-          </ul>
-        )}
+        <Text variant="span" size="sm" className="text-ui-fg-subtle">
+          {item.variant?.title}
+        </Text>
       </Table.Cell>
 
       {type === "full" && (
         <Table.Cell>
-          <div className="flex gap-2 items-center w-28">
+          <div className={s.quantityWrapper}>
             <DeleteButton id={item.id} data-testid="product-delete-button" />
             <CartItemSelect
               value={item.quantity}
               onChange={(value) => changeQuantity(parseInt(value.target.value))}
-              className="w-14 h-10 p-4"
+              className={s.quantitySelect}
               data-testid="product-select-button"
             >
-              {/* TODO: Update this with the v2 way of managing inventory */}
               {Array.from(
                 {
-                  length: Math.min(maxQuantity, 10),
+                  length: Math.min(item.variant?.inventory_quantity || 0, 10),
                 },
                 (_, i) => (
                   <option value={i + 1} key={i}>
@@ -111,36 +84,30 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
                   </option>
                 )
               )}
-
-              <option value={1} key={1}>
-                1
-              </option>
             </CartItemSelect>
-            {updating && <Spinner />}
+            {updating && <Text variant="span">...</Text>}
           </div>
           <ErrorMessage error={error} data-testid="product-error-message" />
         </Table.Cell>
       )}
 
       {type === "full" && (
-        <Table.Cell className="hidden sm:table-cell">
+        <Table.Cell className={s.desktopPriceCell}>
           <LineItemUnitPrice
             item={item}
-            style="tight"
+            style="stacked"
             currencyCode={currencyCode}
           />
         </Table.Cell>
       )}
 
-      <Table.Cell className="pr-0!">
-        <span
-          className={clx("pr-0!", {
-            "flex flex-col items-end h-full justify-center": type === "preview",
-          })}
-        >
+      <Table.Cell className={s.totalPriceCell}>
+        <span className={clsx({ [s.updating]: updating })}>
           {type === "preview" && (
-            <span className="flex gap-x-1 ">
-              <Text className="text-ui-fg-muted">{item.quantity}x </Text>
+            <span className={s.previewQuantity}>
+              <Text variant="span" className="text-ui-fg-muted">
+                {item.quantity}x{" "}
+              </Text>
               <LineItemUnitPrice
                 item={item}
                 style="tight"
@@ -150,7 +117,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
           )}
           <LineItemPrice
             item={item}
-            style="tight"
+            style="stacked"
             currencyCode={currencyCode}
           />
         </span>

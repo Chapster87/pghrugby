@@ -1,0 +1,68 @@
+.overviewWrapper {
+  /* No direct utilities on wrapper in original code besides potential global styles */
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.welcomeText {
+  text-transform: uppercase;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  padding: 32px;
+  border-top: 1px solid var(--color-grey-200);
+
+  @media (--viewport-md-up) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.statHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statTitle {
+  /* Heading typography handled by component */
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statValue {
+  /* Heading typography handled by component */
+}
+
+.statLink {
+  /* Link styles handled by component */
+}
+
+.orderSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orderHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

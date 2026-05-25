@@ -1,16 +1,20 @@
 "use client"
 
-import { clx } from "@medusajs/ui"
 import { ArrowRightOnRectangle, Photo } from "@medusajs/icons"
 import { useParams, usePathname } from "next/navigation"
+import clsx from "clsx"
 
 import ChevronDown from "@modules/common/icons/chevron-down"
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
 import User from "@modules/common/icons/user"
 import MapPin from "@modules/common/icons/map-pin"
 import Package from "@modules/common/icons/package"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
 import { signout } from "@lib/data/customer"
+
+import s from "./style.module.css"
 
 const AccountNav = ({
   customer,
@@ -25,12 +29,12 @@ const AccountNav = ({
   }
 
   return (
-    <div>
-      <div className="sm:hidden" data-testid="mobile-account-nav">
+    <div className={s.navContainer}>
+      <div className={s.mobileNav} data-testid="mobile-account-nav">
         {route !== `/${countryCode}/account` ? (
           <LocalizedClientLink
             href="/account"
-            className="flex items-center gap-x-2 py-2"
+            className={s.mobileMainLink}
             data-testid="account-main-link"
           >
             <>
@@ -40,21 +44,21 @@ const AccountNav = ({
           </LocalizedClientLink>
         ) : (
           <>
-            <div className="text-2xl leading-[36px] font-semibold mb-4 px-8">
-              Hello {customer?.first_name}
+            <div className={s.mobileWelcome}>
+              <Heading level="h2">Hello {customer?.first_name}</Heading>
             </div>
             <div>
-              <ul>
+              <ul className={s.mobileList}>
                 <li>
                   <LocalizedClientLink
                     href="/account/profile"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
+                    className={s.mobileListItemLink}
                     data-testid="profile-link"
                   >
                     <>
-                      <div className="flex items-center gap-x-2">
+                      <div className={s.mobileListItemContent}>
                         <User size={20} />
-                        <span>Profile</span>
+                        <Text variant="span">Profile</Text>
                       </div>
                       <ChevronDown className="transform -rotate-90" />
                     </>
@@ -63,13 +67,13 @@ const AccountNav = ({
                 <li>
                   <LocalizedClientLink
                     href="/account/addresses"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
+                    className={s.mobileListItemLink}
                     data-testid="addresses-link"
                   >
                     <>
-                      <div className="flex items-center gap-x-2">
+                      <div className={s.mobileListItemContent}>
                         <MapPin size={20} />
-                        <span>Addresses</span>
+                        <Text variant="span">Addresses</Text>
                       </div>
                       <ChevronDown className="transform -rotate-90" />
                     </>
@@ -78,12 +82,12 @@ const AccountNav = ({
                 <li>
                   <LocalizedClientLink
                     href="/account/orders"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
+                    className={s.mobileListItemLink}
                     data-testid="orders-link"
                   >
-                    <div className="flex items-center gap-x-2">
+                    <div className={s.mobileListItemContent}>
                       <Package size={20} />
-                      <span>Orders</span>
+                      <Text variant="span">Orders</Text>
                     </div>
                     <ChevronDown className="transform -rotate-90" />
                   </LocalizedClientLink>
@@ -91,12 +95,12 @@ const AccountNav = ({
                 <li>
                   <LocalizedClientLink
                     href="/account/digital-products"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
+                    className={s.mobileListItemLink}
                     data-testid="digital-products-link"
                   >
-                    <div className="flex items-center gap-x-2">
+                    <div className={s.mobileListItemContent}>
                       <Photo />
-                      <span>Digital Products</span>
+                      <Text variant="span">Digital Products</Text>
                     </div>
                     <ChevronDown className="transform -rotate-90" />
                   </LocalizedClientLink>
@@ -104,13 +108,13 @@ const AccountNav = ({
                 <li>
                   <button
                     type="button"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8 w-full"
+                    className={s.mobileLogoutButton}
                     onClick={handleLogout}
                     data-testid="logout-button"
                   >
-                    <div className="flex items-center gap-x-2">
+                    <div className={s.mobileListItemContent}>
                       <ArrowRightOnRectangle />
-                      <span>Log out</span>
+                      <Text variant="span">Log out</Text>
                     </div>
                     <ChevronDown className="transform -rotate-90" />
                   </button>
@@ -120,13 +124,13 @@ const AccountNav = ({
           </>
         )}
       </div>
-      <div className="hidden sm:block" data-testid="account-nav">
+      <div className={s.desktopNav} data-testid="account-nav">
         <div>
-          <div className="pb-4">
-            <h3>Account</h3>
+          <div className={s.desktopTitle}>
+            <Heading level="h3">Account</Heading>
           </div>
           <div>
-            <ul className="flex mb-0 justify-start items-start flex-col gap-y-4">
+            <ul className={s.desktopList}>
               <li>
                 <AccountNavLink
                   href="/account"
@@ -172,9 +176,10 @@ const AccountNav = ({
                   Digital Products
                 </AccountNavLink>
               </li>
-              <li className="text-grey-700">
+              <li className={s.logoutContainer}>
                 <button
                   type="button"
+                  className={s.logoutButton}
                   onClick={handleLogout}
                   data-testid="logout-button"
                 >
@@ -208,8 +213,8 @@ const AccountNavLink = ({
   return (
     <LocalizedClientLink
       href={href}
-      className={clx("text-ui-fg-subtle hover:text-ui-fg-base", {
-        "text-ui-fg-base font-semibold": active,
+      className={clsx(s.navLink, {
+        [s.navLinkActive]: active,
       })}
       data-testid={dataTestId}
     >

@@ -1,0 +1,112 @@
+.pageContainer {
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+.innerContainer {
+  composes: siteContainer from "@/styles/content.module.css";
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  column-gap: 160px;
+
+  @media (--viewport-sm-up) {
+    grid-template-columns: 1fr 360px;
+  }
+}
+
+.itemsSection {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white);
+  padding: 24px;
+  row-gap: 24px;
+}
+
+.headerRow {
+  background-color: var(--color-white);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.titleSkeleton {
+  composes: base from "../../components/skeleton.module.css";
+  width: 240px;
+  height: 32px;
+}
+
+.subtitleSkeleton {
+  composes: base from "../../components/skeleton.module.css";
+  width: 192px;
+  height: 24px;
+}
+
+.countSkeleton {
+  composes: base from "../../components/skeleton.module.css";
+  width: 56px;
+  height: 32px;
+}
+
+.tableTitleWrapper {
+  padding-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.tableTitleSkeleton {
+  composes: base from "../../components/skeleton.module.css";
+  width: 80px;
+  height: 48px;
+}
+
+.tableHeader {
+  border-top-width: 0;
+}
+
+.tableHeaderCellLeft {
+  padding-left: 0 !important;
+}
+
+.tableHeaderCellRight {
+  padding-right: 0 !important;
+}
+
+.headerCellSkeletonTiny {
+  composes: base from "../../components/skeleton.module.css";
+  width: 40px;
+  height: 24px;
+}
+
+.headerCellSkeletonSmall {
+  composes: base from "../../components/skeleton.module.css";
+  width: 64px;
+  height: 24px;
+}
+
+.headerCellSkeletonXSmall {
+  composes: base from "../../components/skeleton.module.css";
+  width: 48px;
+  height: 24px;
+}
+
+.headerCellContentRight {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  row-gap: 32px;
+}

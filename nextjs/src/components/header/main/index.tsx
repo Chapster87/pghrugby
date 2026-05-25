@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import Link from "next/link"
 import MiniCart from "@/components/mini-cart"
 import Crest from "@svg/Crest"
@@ -46,19 +47,17 @@ export default function HeaderMain({
 
   return (
     <header ref={headerRef} className={s.header} data-home={isHome}>
-      <div
-        className={`lg:container lg:mx-auto ${s.headerInner} px-[12] flex items-center justify-between`}
-      >
+      <div className={s.headerInnerContainer}>
         <div key="mobile-nav">{mobileNav}</div>
         <Link href="/" aria-label="View Homepage" className={s.siteLogo}>
           <Crest className={s.crest} />
-          <div className="sr-only">{title}</div>
+          <VisuallyHidden>{title}</VisuallyHidden>
         </Link>
         <div key="main-nav">{mainNav}</div>
-        <div className="flex items-center gap-4">
+        <div className={s.accountSection}>
           <Link
             href="/account"
-            className={s.navLink + " hidden lg:inline-block"}
+            className={`${s.navLink} ${s.accountLinkHiddenLg}`}
             data-testid="nav-account-link"
           >
             Account

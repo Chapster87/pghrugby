@@ -43,7 +43,6 @@ Check out [create-medusa-app docs](https://docs.medusajs.com/learn/installation)
 The Medusa Next.js Starter is built with:
 
 - [Next.js](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
 - [Typescript](https://www.typescriptlang.org/)
 - [Medusa](https://medusajs.com/)
 

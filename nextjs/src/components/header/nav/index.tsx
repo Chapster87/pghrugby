@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ChevronDown, Menu, X } from "lucide-react"
 import s from "./style.module.css"
 import { useEffect, useState } from "react"
+import clsx from "clsx"
 
 import type { NavItem } from ".." // You may need to create or adjust this import
 
@@ -27,7 +28,7 @@ export function MainNav({ formattedNavData }: NavProps) {
   const { navigation } = formattedNavData
 
   return (
-    <NavigationMenu.Root className="hidden sm:flex gap-9 flex-1 justify-center">
+    <NavigationMenu.Root className={s.mainNavRoot}>
       <NavigationMenu.List className={s.navList}>
         {navigation &&
           navigation.map((item, index) => {
@@ -35,11 +36,11 @@ export function MainNav({ formattedNavData }: NavProps) {
             return item.submenu && item.submenu.length > 0 ? (
               <NavigationMenu.Item key={itemKey} className={s.navItem}>
                 <NavigationMenu.Trigger
-                  className={`${s.navLink} flex items-center gap-1 group`}
+                  className={clsx(s.navLink, s.navTriggerContent)}
                 >
                   {item.label}
-                  <span className="transition-transform duration-200 ml-1 group-data-[state=open]:rotate-180">
-                    <ChevronDown className="w-4 h-4" />
+                  <span className={s.navTriggerIcon}>
+                    <ChevronDown className={s.navTriggerIcon} />
                   </span>
                 </NavigationMenu.Trigger>
                 <NavigationMenu.Content className={s.navContent}>
@@ -142,11 +143,11 @@ export function MobileNav({ formattedNavData }: NavProps) {
                     >
                       {item.label}
                       <span
-                        className={`transition-transform duration-200 ${
-                          isSubmenuOpen ? "rotate-180" : ""
-                        }`}
+                        className={clsx(s.mobileNavSummaryIcon, {
+                          [s.mobileNavSummaryIconRotate]: isSubmenuOpen,
+                        })}
                       >
-                        <ChevronDown className="w-4 h-4" />
+                        <ChevronDown className={s.mobileNavSummaryIcon} />
                       </span>
                     </button>
                     {isSubmenuOpen && (

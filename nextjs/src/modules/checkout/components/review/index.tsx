@@ -1,9 +1,13 @@
 "use client"
 
-import { Heading, Text, clx } from "@medusajs/ui"
+import { clx } from "@medusajs/ui"
 
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
 import PaymentButton from "../payment-button"
 import { useSearchParams } from "next/navigation"
+
+import s from "./style.module.css"
 
 const Review = ({ cart }: { cart: any }) => {
   const searchParams = useSearchParams()
@@ -19,29 +23,26 @@ const Review = ({ cart }: { cart: any }) => {
     (cart.payment_collection || paidByGiftcard)
 
   return (
-    <div className="bg-white">
-      <div className="flex flex-row items-center justify-between mb-6">
+    <div className={s.container}>
+      <div className={s.header}>
         <Heading
           level="h2"
-          className={clx(
-            "flex flex-row text-[32px] leading-[44px] font-normal gap-x-2 items-baseline",
-            {
-              "opacity-50 pointer-events-none select-none": !isOpen,
-            }
-          )}
+          className={clx(s.heading, {
+            [s.headingDisabled]: !isOpen,
+          })}
         >
           Review
         </Heading>
       </div>
       {isOpen && previousStepsCompleted && (
         <>
-          <div className="flex items-start gap-x-1 w-full mb-6">
+          <div className={s.termsWrapper}>
             <div className="w-full">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
+              <Text className={s.termsText}>
                 By clicking the Place Order button, you confirm that you have
                 read, understand and accept our Terms of Use, Terms of Sale and
-                Returns Policy and acknowledge that you have read Medusa
-                Store&apos;s Privacy Policy.
+                Returns Policy and acknowledge that you have read Medusa Store's
+                Privacy Policy.
               </Text>
             </div>
           </div>

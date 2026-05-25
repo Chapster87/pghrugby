@@ -1,9 +1,13 @@
 import { Disclosure } from "@headlessui/react"
-import { Badge, Button, clx } from "@medusajs/ui"
+import { Badge, Button } from "@medusajs/ui"
 import { useEffect } from "react"
+import clsx from "clsx"
 
 import useToggleState from "@lib/hooks/use-toggle-state"
 import { useFormStatus } from "react-dom"
+import Text from "@/components/typography/text"
+
+import s from "./style.module.css"
 
 type AccountInfoProps = {
   label: string
@@ -42,15 +46,17 @@ const AccountInfo = ({
   }, [isSuccess, close])
 
   return (
-    <div className="text-small-regular" data-testid={dataTestid}>
-      <div className="flex items-end justify-between">
-        <div className="flex flex-col">
-          <span className="uppercase text-ui-fg-base">{label}</span>
-          <div className="flex items-center flex-1 basis-0 justify-end gap-x-4">
+    <div className={s.infoWrapper} data-testid={dataTestid}>
+      <div className={s.header}>
+        <div className={s.currentInfo}>
+          <Text size="sm" className={s.label}>
+            {label}
+          </Text>
+          <div className={s.contentWrapper}>
             {typeof currentInfo === "string" ? (
-              <span className="font-semibold" data-testid="current-info">
+              <Text className="font-semibold" data-testid="current-info">
                 {currentInfo}
-              </span>
+              </Text>
             ) : (
               currentInfo
             )}
@@ -59,7 +65,7 @@ const AccountInfo = ({
         <div>
           <Button
             variant="secondary"
-            className="w-[100px] min-h-[25px] py-1"
+            className={s.editButton}
             onClick={handleToggle}
             type={state ? "reset" : "button"}
             data-testid="edit-button"
@@ -74,13 +80,11 @@ const AccountInfo = ({
       <Disclosure>
         <Disclosure.Panel
           static
-          className={clx(
-            "transition-[max-height,opacity] duration-300 ease-in-out overflow-hidden",
-            {
-              "max-h-[1000px] opacity-100": isSuccess,
-              "max-h-0 opacity-0": !isSuccess,
-            }
-          )}
+          className={clsx(s.contentWrapper, {
+            [s.statusMessage]: true,
+            "max-h-[1000px] opacity-100": isSuccess,
+            "max-h-0 opacity-0": !isSuccess,
+          })}
           data-testid="success-message"
         >
           <Badge className="p-2 my-4" color="green">
@@ -93,13 +97,11 @@ const AccountInfo = ({
       <Disclosure>
         <Disclosure.Panel
           static
-          className={clx(
-            "transition-[max-height,opacity] duration-300 ease-in-out overflow-hidden",
-            {
-              "max-h-[1000px] opacity-100": isError,
-              "max-h-0 opacity-0": !isError,
-            }
-          )}
+          className={clsx(s.contentWrapper, {
+            [s.statusMessage]: true,
+            "max-h-[1000px] opacity-100": isError,
+            "max-h-0 opacity-0": !isError,
+          })}
           data-testid="error-message"
         >
           <Badge className="p-2 my-4" color="red">
@@ -111,20 +113,17 @@ const AccountInfo = ({
       <Disclosure>
         <Disclosure.Panel
           static
-          className={clx(
-            "transition-[max-height,opacity] duration-300 ease-in-out overflow-visible",
-            {
-              "max-h-[1000px] opacity-100": state,
-              "max-h-0 opacity-0": !state,
-            }
-          )}
+          className={clsx(s.contentWrapper, {
+            "max-h-[1000px] opacity-100": state,
+            "max-h-0 opacity-0": !state,
+          })}
         >
-          <div className="flex flex-col gap-y-2 py-4">
+          <div className={s.editArea}>
             <div>{children}</div>
-            <div className="flex items-center justify-end mt-2">
+            <div className={s.buttonGroup}>
               <Button
                 isLoading={pending}
-                className="w-full sm:max-w-[140px]"
+                className={s.saveButton}
                 type="submit"
                 data-testid="save-button"
               >

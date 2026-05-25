@@ -7,7 +7,7 @@ import Button from "@components/button"
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa6"
 import ReCAPTCHA from "react-google-recaptcha"
 import * as Form from "@radix-ui/react-form"
-import s from "./styles.module.css"
+import s from "./style.module.css"
 
 export type SocialMedia = {
   facebook: string
@@ -149,7 +149,7 @@ export default function ContactForm({
             </div>
           )}
           <Form.Field name="name" className="FormField required">
-            <div className="flex justify-between">
+            <div className={s.formFieldLabelWrapper}>
               <Form.Label htmlFor="name" className="FormLabel">
                 Name
               </Form.Label>
@@ -169,7 +169,7 @@ export default function ContactForm({
             </Form.Control>
           </Form.Field>
           <Form.Field name="email" className="FormField required">
-            <div className="flex justify-between">
+            <div className={s.formFieldLabelWrapper}>
               <Form.Label htmlFor="email" className="FormLabel">
                 Email
               </Form.Label>
@@ -190,7 +190,7 @@ export default function ContactForm({
             </Form.Control>
           </Form.Field>
           <Form.Field name="context" className="FormField required">
-            <div className="flex justify-between">
+            <div className={s.formFieldLabelWrapper}>
               <Form.Label htmlFor="context" className="FormLabel">
                 Context for Message
               </Form.Label>
@@ -229,7 +229,7 @@ export default function ContactForm({
             </Form.Control>
           </Form.Field>
           <Form.Field name="message" className="FormField required">
-            <div className="flex justify-between">
+            <div className={s.formFieldLabelWrapper}>
               <Form.Label htmlFor="message" className="FormLabel">
                 Message
               </Form.Label>

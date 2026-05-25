@@ -4,6 +4,7 @@ import { Text } from "@medusajs/ui"
 
 import InteractiveLink from "@modules/common/components/interactive-link"
 import ProductPreview from "@modules/products/components/product-preview"
+import s from "./style.module.css"
 
 export default async function ProductRail({
   collection,
@@ -16,8 +17,8 @@ export default async function ProductRail({
     response: { products: pricedProducts },
   } = await listProducts({
     regionId: region.id,
+    collectionId: collection.id,
     queryParams: {
-      collection_id: collection.id,
       fields: "*variants.calculated_price",
     },
   })
@@ -27,14 +28,14 @@ export default async function ProductRail({
   }
 
   return (
-    <div className="2xl:container px-[12] py-12 sm:py-24">
-      <div className="flex justify-between mb-8">
+    <div className={s.productRail}>
+      <div className={s.productRailHeader}>
         <Text className="txt-xlarge">{collection.title}</Text>
         <InteractiveLink href={`/collections/${collection.handle}`}>
           View all
         </InteractiveLink>
       </div>
-      <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-24 sm:gap-y-36">
+      <ul className={s.productGrid}>
         {pricedProducts &&
           pricedProducts.map((product) => (
             <li key={product.id}>

@@ -99,6 +99,22 @@
   min-width: 60px;
 }
 
+.teamDisplay {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px; /* gap-4 */
+}
+
+.fullSizeImage {
+  width: 100%;
+  height: 100%;
+}
+
+.objectContain {
+  object-fit: contain;
+}
+
 .timeValue {
   color: white;
   font-weight: bold;

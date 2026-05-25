@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  border-top: 1px solid var(--border-base);
+  border-bottom: 1px solid var(--border-base);
+}
+
+.itemWrapper {
+  display: grid;
+  grid-template-columns: 122px 1fr;
+  column-gap: 16px;
+}
+
+.imageSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 100%;
+  aspect-ratio: 29/34;
+}
+
+.infoRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.infoWrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.titleSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 192px;
+  height: 24px;
+}
+
+.subtitleSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 96px;
+  height: 16px;
+}
+
+.descriptionSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 128px;
+  height: 16px;
+}
+
+.priceSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 128px;
+  height: 24px;
+}

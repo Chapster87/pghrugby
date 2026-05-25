@@ -1,0 +1,28 @@
+.container {
+  composes: siteContainer from "@/styles/content.module.css";
+  display: flex;
+  flex-direction: column;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  padding-left: 12px;
+  padding-right: 12px;
+
+  @media (--viewport-sm-up) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.productContent {
+  width: 100%;
+}
+
+.titleWrapper {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 30px;
+  line-height: 48px;
+  font-weight: 600;
+}

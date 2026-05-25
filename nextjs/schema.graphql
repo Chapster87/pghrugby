@@ -1,3 +1,129 @@
+union ArticleModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+
+type ArticleModelContentField {
+  blocks: [ArticleModelContentBlocksField!]!
+  inlineBlocks: [String!]!
+  links: [PageRecord!]!
+  value: JsonField!
+}
+
+input ArticleModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  author: LinkFilter
+  canonicalUrl: StringFilter
+  categories: LinksFilter
+  content: StructuredTextFilter
+  creationDate: DateTimeFilter
+  featuredImage: JsonFilter
+  featuredImageJson: JsonFilter
+  metaDescription: StringFilter
+  metaImage: JsonFilter
+  metaKeywords: JsonFilter
+  metaRobots: JsonFilter
+  metaTitle: StringFilter
+  seoAnalysis: JsonFilter
+  slug: SlugFilter
+  structuredData: JsonFilter
+  tags: JsonFilter
+  title: StringFilter
+  wpcontent: TextFilter
+  wpdata: JsonFilter
+  wpexcerpt: TextFilter
+  OR: [ArticleModelFilter]
+  AND: [ArticleModelFilter]
+}
+
+union ArticleModelModularContentBlockField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+
+enum ArticleModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  canonicalUrl_ASC
+  canonicalUrl_DESC
+  creationDate_ASC
+  creationDate_DESC
+  metaDescription_ASC
+  metaDescription_DESC
+  metaTitle_ASC
+  metaTitle_DESC
+  title_ASC
+  title_DESC
+}
+
+"""Record of type 📰 Article (article)"""
+type ArticleRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  author: WpAuthorRecord
+  canonicalUrl: String
+  categories: [CategoryRecord!]!
+  content: ArticleModelContentField
+  creationDate: DateTime
+  featuredImage: JsonField
+  featuredImageJson: JsonField
+  id: ItemId!
+  metaDescription: String
+  metaImage: JsonField
+  metaKeywords: JsonField
+  metaRobots: JsonField
+  metaTitle: String
+  modularContentBlock: [ArticleModelModularContentBlockField!]!
+  seoAnalysis: JsonField
+  slug: String
+  structuredData: JsonField
+  tags: JsonField
+  title: String
+  wpcontent(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  wpdata: JsonField
+  wpexcerpt(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+}
+
 """Specifies how to filter Boolean fields"""
 input BooleanFilter {
   """Search for records with an exact match"""
@@ -6,6 +132,82 @@ input BooleanFilter {
 
 """Represents `true` or `false` values."""
 scalar BooleanType
+
+input CategoryModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  parent: ParentFilter
+  position: PositionFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  description: TextFilter
+  name: StringFilter
+  slug: SlugFilter
+  OR: [CategoryModelFilter]
+  AND: [CategoryModelFilter]
+}
+
+enum CategoryModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  position_ASC
+  position_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  name_ASC
+  name_DESC
+}
+
+"""Record of type 🏷️ Category (category)"""
+type CategoryRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  children: [CategoryRecord!]!
+  description(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  id: ItemId!
+  name: String
+  parent: CategoryRecord
+  position: IntType
+  slug: String
+}
 
 type CollectionMetadata {
   count: IntType!
@@ -2985,6 +3187,20 @@ input PublishedAtFilter {
 """The query root for this schema"""
 type Query {
   """Returns meta information regarding a record collection"""
+  _allArticlesMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: ArticleModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
+  _allCategoriesMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: CategoryModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
   _allPageOldsMeta(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -3036,6 +3252,44 @@ type Query {
     """
     fallbackLocales: [SiteLocale!]
   ): Site!
+
+  """Returns a collection of records"""
+  allArticles(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: ArticleModelFilter
+    orderBy: [ArticleModelOrderBy] = [_updatedAt_DESC]
+  ): [ArticleRecord!]!
+
+  """Returns a collection of records"""
+  allCategories(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: CategoryModelFilter
+    orderBy: [CategoryModelOrderBy] = [position_ASC]
+  ): [CategoryRecord!]!
 
   """Returns a collection of records"""
   allPageOlds(
@@ -3150,6 +3404,32 @@ type Query {
     filter: WpCategoryModelFilter
     orderBy: [WpCategoryModelOrderBy] = [position_ASC]
   ): [WpCategoryRecord!]!
+
+  """Returns a specific record"""
+  article(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: ArticleModelFilter
+    orderBy: [ArticleModelOrderBy] = [_updatedAt_DESC]
+  ): ArticleRecord
+
+  """Returns a specific record"""
+  category(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: CategoryModelFilter
+    orderBy: [CategoryModelOrderBy] = [position_ASC]
+  ): CategoryRecord
 
   """Returns the single instance record"""
   homepage(

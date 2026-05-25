@@ -11,16 +11,16 @@
   gap: 16px;
   padding: 24px;
 
-  h1 {
-    font-family: var(--font-lemon-milk);
-    font-size: 28px;
-
-    @media (--viewport-md-up) {
-      font-size: 48px;
-    }
+  :global(.dark) & {
+    background-color: rgb(from var(--color-black) r g b / 0.8);
   }
 
-  a {
-    color: var(--color-gold);
+  @media (--viewport-md-up) {
+    margin-left: auto;
+    margin-right: auto;
   }
+}
+
+.contentSlider {
+  margin-top: 32px;
 }

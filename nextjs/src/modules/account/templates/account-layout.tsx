@@ -1,9 +1,12 @@
 import React from "react"
-
-import UnderlineLink from "@modules/common/components/interactive-link"
+import { HttpTypes } from "@medusajs/types"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
+import contentStyles from "@/styles/content.module.css"
 
 import AccountNav from "../components/account-nav"
-import { HttpTypes } from "@medusajs/types"
+import s from "./style.module.css"
 
 interface AccountLayoutProps {
   customer: HttpTypes.StoreCustomer | null
@@ -15,26 +18,26 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
   children,
 }) => {
   return (
-    <div className="flex-1 sm:py-12" data-testid="account-page">
-      <div className="flex-1 2xl:container px-[12] h-full max-w-5xl mx-auto bg-white flex flex-col">
-        <div className="grid grid-cols-1  sm:grid-cols-[240px_1fr] py-12">
+    <div className={s.layoutWrapper} data-testid="account-page">
+      <div className={`${contentStyles.siteContainer} ${s.container}`}>
+        <div className={s.grid}>
           <div>{customer && <AccountNav customer={customer} />}</div>
-          <div className="flex-1">{children}</div>
+          <div className={s.content}>{children}</div>
         </div>
-        <div className="flex flex-col sm:flex-row items-end justify-between sm:border-t border-gray-200 py-12 gap-8">
+        <div className={s.footer}>
           <div>
-            <h3 className="text-2xl leading-[36px] font-semibold mb-4">
+            <Heading level="h3" className={s.footerTitle}>
               Got questions?
-            </h3>
-            <span className="txt-medium">
+            </Heading>
+            <Text>
               You can find frequently asked questions and answers on our
               customer service page.
-            </span>
+            </Text>
           </div>
           <div>
-            <UnderlineLink href="/customer-service">
-              Customer Service
-            </UnderlineLink>
+            <LocalizedClientLink href="/contact">
+              <Text className="underline">Customer Service</Text>
+            </LocalizedClientLink>
           </div>
         </div>
       </div>

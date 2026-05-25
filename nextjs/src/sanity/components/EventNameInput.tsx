@@ -1,4 +1,5 @@
 import React from "react"
+import s from "./style.module.css"
 import { StringInputProps, useFormValue, PatchEvent, set } from "sanity"
 import { useClient } from "sanity"
 
@@ -71,7 +72,7 @@ const EventNameInput: React.FC<StringInputProps> = (props) => {
       <button
         type="button"
         onClick={generateEventName}
-        className="bg-transparent hover:bg-gray-100 text-blue-500 font-semibold py-2 px-4 border border-blue-500 rounded-sm shadow-sm"
+        className={s.generateButton}
       >
         Generate Name
       </button>

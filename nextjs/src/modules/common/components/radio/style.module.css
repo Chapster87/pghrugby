@@ -1,0 +1,58 @@
+.radioWrapper {
+  position: relative;
+  display: flex;
+  height: 20px; /* h-5 */
+  width: 20px; /* w-5 */
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.radioInner {
+  box-shadow: var(--shadow-borders-base);
+  background-color: var(--color-bg-base);
+  display: flex;
+  height: 14px; /* h-[14px] */
+  width: 14px; /* w-[14px] */
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%; /* rounded-full */
+  transition: all 0.2s ease-in-out;
+}
+
+.radioWrapper:hover .radioInner {
+  box-shadow: var(--shadow-borders-strong-with-shadow);
+}
+
+.radioWrapper[data-state="checked"] .radioInner {
+  background-color: var(--color-bg-interactive);
+  box-shadow: var(--shadow-borders-interactive);
+}
+
+.radioWrapper:focus .radioInner {
+  box-shadow: var(--shadow-borders-interactive-with-focus);
+}
+
+.radioWrapper:disabled .radioInner {
+  background-color: var(--color-bg-disabled);
+  box-shadow: var(--shadow-borders-base);
+}
+
+.radioDotWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radioDot {
+  background-color: var(--color-bg-base);
+  box-shadow: var(--shadow-details-contrast-on-bg-interactive);
+  border-radius: 50%;
+  height: 6px; /* h-1.5 */
+  width: 6px; /* w-1.5 */
+}
+
+.radioWrapper:disabled .radioDot {
+  background-color: var(--color-fg-disabled);
+  box-shadow: none;
+}

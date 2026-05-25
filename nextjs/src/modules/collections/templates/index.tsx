@@ -6,6 +6,10 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 import { HttpTypes } from "@medusajs/types"
 
+import Heading from "@/components/typography/heading"
+
+import s from "./style.module.css"
+
 export default function CollectionTemplate({
   sortBy,
   collection,
@@ -21,11 +25,13 @@ export default function CollectionTemplate({
   const sort = sortBy || "created_at"
 
   return (
-    <div className="2xl:container px-[12] flex flex-col sm:flex-row sm:items-start py-6">
+    <div className={s.container}>
       <RefinementList sortBy={sort} />
-      <div className="w-full">
-        <div className="mb-8 text-[30px] leading-[48px] font-semibold">
-          <h1>{collection.title}</h1>
+      <div className={s.productContent}>
+        <div className={s.titleWrapper}>
+          <Heading level="h1" className={s.title}>
+            {collection.title}
+          </Heading>
         </div>
         <Suspense
           fallback={

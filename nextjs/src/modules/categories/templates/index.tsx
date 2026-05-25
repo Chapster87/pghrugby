@@ -8,6 +8,7 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
+import s from "./style.module.css"
 
 export default function CategoryTemplate({
   category,
@@ -37,18 +38,15 @@ export default function CategoryTemplate({
   getParents(category)
 
   return (
-    <div
-      className="2xl:container px-[12] flex flex-col sm:flex-row sm:items-start py-6"
-      data-testid="category-container"
-    >
+    <div className={s.categoryContainer} data-testid="category-container">
       <RefinementList sortBy={sort} data-testid="sort-by-container" />
-      <div className="w-full">
-        <div className="flex flex-row mb-8 text-[30px] leading-[48px] font-semibold gap-4">
+      <div className={s.categoryContent}>
+        <div className={s.categoryHeader}>
           {parents &&
             parents.map((parent) => (
-              <span key={parent.id} className="text-ui-fg-subtle">
+              <span key={parent.id} className={s.parentCategoryLink}>
                 <LocalizedClientLink
-                  className="mr-4 hover:text-black"
+                  className={s.parentCategoryLink}
                   href={`/categories/${parent.handle}`}
                   data-testid="sort-by-link"
                 >
@@ -60,13 +58,13 @@ export default function CategoryTemplate({
           <h1 data-testid="category-page-title">{category.name}</h1>
         </div>
         {category.description && (
-          <div className="mb-8">
+          <div className={s.categoryDescription}>
             <p>{category.description}</p>
           </div>
         )}
         {category.category_children && (
-          <div className="mb-8 text-base-large">
-            <ul className="grid grid-cols-1 gap-2">
+          <div className={s.categoryChildren}>
+            <ul className={s.categoryChildrenList}>
               {category.category_children?.map((c) => (
                 <li key={c.id}>
                   <InteractiveLink href={`/categories/${c.handle}`}>

@@ -1,12 +1,14 @@
 "use client"
 
-import React, { useEffect, useActionState } from "react";
+import React, { useEffect, useActionState } from "react"
 
 import Input from "@modules/common/components/input"
 
 import AccountInfo from "../account-info"
 import { HttpTypes } from "@medusajs/types"
 import { updateCustomer } from "@lib/data/customer"
+
+import s from "./style.module.css"
 
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
@@ -46,7 +48,7 @@ const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
   }, [state])
 
   return (
-    <form action={formAction} className="w-full overflow-visible">
+    <form action={formAction} className={s.form}>
       <AccountInfo
         label="Name"
         currentInfo={`${customer.first_name} ${customer.last_name}`}
@@ -55,7 +57,7 @@ const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
         clearState={clearState}
         data-testid="account-name-editor"
       >
-        <div className="grid grid-cols-2 gap-x-4">
+        <div className={s.inputGrid}>
           <Input
             label="First name"
             name="first_name"

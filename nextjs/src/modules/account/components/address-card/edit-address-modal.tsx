@@ -2,7 +2,9 @@
 
 import React, { useEffect, useState, useActionState } from "react"
 import { PencilSquare as Edit, Trash } from "@medusajs/icons"
-import { Button, Heading, Text, clx } from "@medusajs/ui"
+import { Button } from "@medusajs/ui"
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
 
 import useToggleState from "@lib/hooks/use-toggle-state"
 import CountrySelect from "@modules/checkout/components/country-select"
@@ -15,6 +17,8 @@ import {
   deleteCustomerAddress,
   updateCustomerAddress,
 } from "@lib/data/customer"
+
+import s from "./style.module.css"
 
 type EditAddressProps = {
   region: HttpTypes.StoreRegion
@@ -64,72 +68,71 @@ const EditAddress: React.FC<EditAddressProps> = ({
   return (
     <>
       <div
-        className={clx(
-          "border rounded-rounded p-5 min-h-[220px] h-full w-full flex flex-col justify-between transition-colors",
-          {
-            "border-gray-900": isActive,
-          }
-        )}
+        className={s.addressCard}
+        style={isActive ? { borderColor: "var(--color-grey-900)" } : {}}
         data-testid="address-container"
       >
-        <div className="flex flex-col">
+        <div className={s.addressInfo}>
           <Heading
-            className="text-left text-sm leading-6 font-semibold"
+            level="h3"
+            display="h6"
+            className="text-left"
             data-testid="address-name"
           >
             {address.first_name} {address.last_name}
           </Heading>
           {address.company && (
-            <Text
-              className="txt-compact-small text-ui-fg-base"
-              data-testid="address-company"
-            >
+            <Text size="sm" data-testid="address-company">
               {address.company}
             </Text>
           )}
-          <Text className="flex flex-col text-left mt-2">
-            <span data-testid="address-address">
+          <div className={s.addressDetails}>
+            <Text variant="span" data-testid="address-address">
               {address.address_1}
               {address.address_2 && <span>, {address.address_2}</span>}
-            </span>
-            <span data-testid="address-postal-city">
+            </Text>
+            <Text variant="span" data-testid="address-postal-city">
               {address.postal_code}, {address.city}
-            </span>
-            <span data-testid="address-province-country">
+            </Text>
+            <Text variant="span" data-testid="address-province-country">
               {address.province && `${address.province}, `}
               {address.country_code?.toUpperCase()}
-            </span>
-          </Text>
+            </Text>
+          </div>
         </div>
-        <div className="flex items-center gap-x-4">
+        <div className={s.actionButtons}>
           <button
-            className="text-ui-fg-base flex items-center gap-x-2"
+            className={s.iconButton}
             onClick={open}
             data-testid="address-edit-button"
           >
             <Edit />
-            Edit
+            <Text variant="span" size="sm">
+              Edit
+            </Text>
           </button>
           <button
-            className="text-ui-fg-base flex items-center gap-x-2"
+            className={s.iconButton}
             onClick={removeAddress}
             data-testid="address-delete-button"
           >
             {removing ? <Spinner /> : <Trash />}
-            Remove
+            <Text variant="span" size="sm">
+              Remove
+            </Text>
           </button>
         </div>
       </div>
 
       <Modal isOpen={state} close={close} data-testid="edit-address-modal">
         <Modal.Title>
-          <Heading className="mb-2">Edit address</Heading>
+          <Heading level="h2">Edit address</Heading>
         </Modal.Title>
         <form action={formAction}>
           <input type="hidden" name="addressId" value={address.id} />
           <Modal.Body>
-            <div className="grid grid-cols-1 gap-y-2">
-              <div className="grid grid-cols-2 gap-x-2">
+            <div className={s.form}>
+              <div className={s.inputGrid}>
                 <Input
                   label="First name"
                   name="first_name"
@@ -169,7 +172,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
                 defaultValue={address.address_2 || undefined}
                 data-testid="address-2-input"
               />
-              <div className="grid grid-cols-[144px_1fr] gap-x-2">
+              <div className={s.inputGrid}>
                 <Input
                   label="Postal code"
                   name="postal_code"
@@ -215,12 +218,11 @@ const EditAddress: React.FC<EditAddressProps> = ({
             )}
           </Modal.Body>
           <Modal.Footer>
-            <div className="flex gap-3 mt-6">
+            <div className={s.footer}>
               <Button
                 type="reset"
                 variant="secondary"
                 onClick={close}
-                className="h-10"
                 data-testid="cancel-button"
               >
                 Cancel

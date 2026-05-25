@@ -1,6 +1,6 @@
 import Header from "@/components/header-checkout"
 import Footer from "@/components/footer"
-import BreakpointIndicator from "@components/BreakpointIndicator"
+import BreakpointIndicator from "@/components/breakpoint-indicator"
 
 export default function CheckoutLayout({
   children,

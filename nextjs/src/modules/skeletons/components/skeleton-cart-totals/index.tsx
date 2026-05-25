@@ -1,27 +1,29 @@
+import s from "./style.module.css"
+
 const SkeletonCartTotals = ({ header = true }) => {
   return (
-    <div className="flex flex-col">
-      {header && <div className="w-32 h-4 bg-gray-100 mb-4"></div>}
-      <div className="flex items-center justify-between">
-        <div className="w-32 h-3 bg-gray-100"></div>
-        <div className="w-32 h-3 bg-gray-100"></div>
+    <div className={s.container}>
+      {header && <div className={s.headerSkeleton}></div>}
+      <div className={s.row}>
+        <div className={s.itemSkeletonLarge}></div>
+        <div className={s.itemSkeletonLarge}></div>
       </div>
 
-      <div className="flex items-center justify-between my-4">
-        <div className="w-24 h-3 bg-gray-100"></div>
-        <div className="w-24 h-3 bg-gray-100"></div>
+      <div className={s.marginRow}>
+        <div className={s.itemSkeletonMedium}></div>
+        <div className={s.itemSkeletonMedium}></div>
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="w-28 h-3 bg-gray-100 "></div>
-        <div className="w-20 h-3 bg-gray-100"></div>
+      <div className={s.row}>
+        <div className={s.itemSkeletonSmall}></div>
+        <div className={s.itemSkeletonXSmall}></div>
       </div>
 
-      <div className="w-full border-b border-gray-200 border-dashed my-4"></div>
+      <div className={s.divider}></div>
 
-      <div className="flex items-center justify-between">
-        <div className="w-32 h-6 bg-gray-100 mb-4"></div>
-        <div className="w-24 h-6 bg-gray-100 mb-4"></div>
+      <div className={s.row}>
+        <div className={s.totalSkeletonLarge}></div>
+        <div className={s.totalSkeletonMedium}></div>
       </div>
     </div>
   )

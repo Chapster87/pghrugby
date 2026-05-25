@@ -1,0 +1,59 @@
+.styleguide section {
+  margin-bottom: 48px; /* mb-12 */
+}
+
+.buttonGroup {
+  margin-bottom: 16px; /* mb-4 */
+  display: flex;
+  gap: 12px; /* gap-3 */
+}
+
+.buttonGroupItemsCenter {
+  margin-bottom: 16px; /* mb-4 */
+  display: flex;
+  gap: 12px; /* gap-3 */
+  align-items: center;
+}
+
+.formFieldTooltip {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* gap-2 */
+}
+
+.tooltipTrigger {
+  color: var(--color-grey-500); /* text-gray-500 */
+
+  &:hover {
+    color: var(--color-grey-700); /* hover:text-gray-700 */
+  }
+}
+
+.tooltipContent {
+  background-color: var(--color-grey-800); /* bg-gray-800 */
+  color: var(--color-white); /* text-white */
+  font-size: 14px; /* text-sm */
+  padding: 8px; /* px-2 py-1 */
+  border-radius: 4px; /* rounded */
+}
+
+.tooltipArrow {
+  fill: var(--color-grey-800); /* fill-gray-800 */
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column; /* This was implied by the default block display and vertical spacing, but explicit is better */
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.switchRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

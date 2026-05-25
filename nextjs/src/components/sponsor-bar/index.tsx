@@ -30,7 +30,7 @@ export default async function SponsorBar() {
   const sponsors: SponsorBarData = await client.fetch(sponsorQuery)
   return (
     <div className={s.sponsorBar}>
-      <div className={`lg:container ${s.sponsorRow}`}>
+      <div className={`${s.sponsorRowContainer} ${s.sponsorRow}`}>
         {sponsors.items.map((item) => (
           <a
             key={item.sponsor._id}

@@ -1,0 +1,74 @@
+.itemRow {
+  width: 100%;
+  margin: 16px;
+}
+
+.thumbnailCell {
+  padding: 16px;
+  width: 96px;
+}
+
+.thumbnail {
+  composes: base from "../skeleton.module.css";
+  display: flex;
+  width: 96px;
+  height: 96px;
+  padding: 16px;
+}
+
+.infoCell {
+  text-align: left;
+}
+
+.infoWrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.titleSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 128px;
+  height: 16px;
+}
+
+.subtitleSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 96px;
+  height: 16px;
+}
+
+.quantityWrapper {
+  display: flex;
+  column-gap: 8px;
+  align-items: center;
+}
+
+.quantitySkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 24px;
+  height: 32px;
+}
+
+.selectSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 56px;
+  height: 40px;
+}
+
+.unitPriceWrapper {
+  display: flex;
+  column-gap: 8px;
+}
+
+.priceSkeleton {
+  composes: base from "../skeleton.module.css";
+  width: 48px;
+  height: 24px;
+}
+
+.totalPriceWrapper {
+  display: flex;
+  column-gap: 8px;
+  justify-content: flex-end;
+}

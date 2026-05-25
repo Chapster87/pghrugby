@@ -1,0 +1,48 @@
+.totalsWrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--fg-subtle);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.labelWithIcon {
+  display: flex;
+  column-gap: 4px;
+  align-items: center;
+}
+
+.interactiveText {
+  color: var(--fg-interactive);
+}
+
+.divider {
+  height: 1px;
+  width: 100%;
+  border-bottom: 1px solid var(--border-base);
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.totalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.totalAmount {
+  font-size: 20px;
+  line-height: 32px;
+  font-weight: 600;
+  color: var(--fg-base);
+}

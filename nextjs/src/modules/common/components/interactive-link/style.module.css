@@ -1,0 +1,17 @@
+.link {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.linkText {
+  color: var(--color-interactive);
+}
+
+.arrowIcon {
+  transition: transform 150ms ease-in-out;
+}
+
+.link:hover .arrowIcon {
+  transform: rotate(45deg);
+}

@@ -6,6 +6,8 @@ import AccountInfo from "../account-info"
 import { HttpTypes } from "@medusajs/types"
 import { toast } from "@medusajs/ui"
 
+import s from "./style.module.css"
+
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
 }
@@ -26,7 +28,7 @@ const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
     <form
       action={updatePassword}
       onReset={() => clearState()}
-      className="w-full"
+      className={s.form}
     >
       <AccountInfo
         label="Password"
@@ -39,7 +41,7 @@ const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
         clearState={clearState}
         data-testid="account-password-editor"
       >
-        <div className="grid grid-cols-2 gap-4">
+        <div className={s.inputGrid}>
           <Input
             label="Old password"
             name="old_password"

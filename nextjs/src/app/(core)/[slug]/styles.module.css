@@ -1,0 +1,31 @@
+.pageContent {
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--color-grey-600);
+  font-size: 14px;
+
+  :global(.dark) & {
+    color: var(--color-grey-500);
+  }
+}
+
+.featuredImageWrapper {
+  margin-bottom: 24px;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+.featuredImage {
+  object-fit: cover;
+  border-radius: 8px;
+}

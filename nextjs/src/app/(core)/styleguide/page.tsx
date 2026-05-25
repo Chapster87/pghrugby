@@ -39,7 +39,7 @@ export async function generateMetadata(
 export default async function LinksPage() {
   return (
     <div className={`${contentStyles.contentBlock} ${s.styleguide}`}>
-      <section className="mb-12">
+      <section className={s.styleguideSection}>
         <h1>Typography</h1>
         <Heading level="h1">Heading 1</Heading>
         <Heading level="h2">Heading 2</Heading>
@@ -66,9 +66,9 @@ export default async function LinksPage() {
         </Text>
       </section>
 
-      <section className="mb-12">
+      <section className={s.styleguideSection}>
         <h1>Buttons</h1>
-        <div className="mb-4 flex gap-3">
+        <div className={s.buttonGroup}>
           <Button variant="primary">Primary Button</Button>
           <Button variant="primary" beforeText={<Pizza />}>
             Primary Button w/ Icon
@@ -77,7 +77,7 @@ export default async function LinksPage() {
             Disabled
           </Button>
         </div>
-        <div className="mb-4 flex gap-3 items-center">
+        <div className={s.buttonGroupItemsCenter}>
           <Button variant="primary" size="small">
             Small Button
           </Button>
@@ -88,7 +88,7 @@ export default async function LinksPage() {
             Large Button
           </Button>
         </div>
-        <div className="mb-4 flex gap-3">
+        <div className={s.buttonGroup}>
           <Button variant="secondary">Secondary Button</Button>
           <Button variant="secondary" beforeText={<Pizza />}>
             Secondary Button w/ Icon
@@ -97,7 +97,7 @@ export default async function LinksPage() {
             Disabled
           </Button>
         </div>
-        <div className="mb-4 flex gap-3 items-center">
+        <div className={s.buttonGroupItemsCenter}>
           <Button variant="secondary" size="small">
             Small Button
           </Button>
@@ -108,14 +108,14 @@ export default async function LinksPage() {
             Large Button
           </Button>
         </div>
-        <div className="mb-4 flex gap-3">
+        <div className={s.buttonGroup}>
           <Link href="#" buttonStyle variant="primary">
             Text Link as Button
           </Link>
         </div>
       </section>
 
-      <section className="mb-12">
+      <section className={s.styleguideSection}>
         <h1>Forms</h1>
         <div>
           <h2>Text Fields</h2>
@@ -178,7 +178,7 @@ export default async function LinksPage() {
             </Form.Field>
 
             <Form.Field name="tooltip" className="FormField">
-              <div className="flex items-center gap-2">
+              <div className={s.formFieldTooltip}>
                 <Form.Label className="FormLabel">
                   Text Field with Tooltip
                 </Form.Label>
@@ -188,18 +188,18 @@ export default async function LinksPage() {
                       <button
                         type="button"
                         aria-label="Info"
-                        className="text-gray-500 hover:text-gray-700"
+                        className={s.tooltipTrigger}
                       >
                         ℹ️
                       </button>
                     </Tooltip.Trigger>
                     <Tooltip.Portal>
                       <Tooltip.Content
-                        className="TooltipContent bg-gray-800 text-white text-sm px-2 py-1 rounded"
+                        className={s.tooltipContent}
                         sideOffset={5}
                       >
                         This is a tooltip for the text field.
-                        <Tooltip.Arrow className="TooltipArrow fill-gray-800" />
+                        <Tooltip.Arrow className={s.tooltipArrow} />
                       </Tooltip.Content>
                     </Tooltip.Portal>
                   </Tooltip.Root>
@@ -233,8 +233,8 @@ export default async function LinksPage() {
 
         <div>
           <h2>Checkboxes</h2>
-          <div className="CheckboxGroup">
-            <div className="CheckboxRow">
+          <div className={s.checkboxGroup}>
+            <div className={s.checkboxRow}>
               <Checkbox.Root className="CheckboxRoot" id="checkbox1">
                 <Checkbox.Indicator className="CheckboxIndicator" />
               </Checkbox.Root>
@@ -242,7 +242,7 @@ export default async function LinksPage() {
                 Checkbox
               </label>
             </div>
-            <div className="CheckboxRow">
+            <div className={s.checkboxRow}>
               <Checkbox.Root disabled className="CheckboxRoot" id="checkbox2">
                 <Checkbox.Indicator className="CheckboxIndicator" />
               </Checkbox.Root>
@@ -298,7 +298,7 @@ export default async function LinksPage() {
 
         <div>
           <h2>Switch</h2>
-          <div className="SwitchRow">
+          <div className={s.switchRow}>
             <label htmlFor="switch1">Toggle</label>
             <Switch.Root className="SwitchRoot" id="switch1">
               <Switch.Thumb className="SwitchThumb" />

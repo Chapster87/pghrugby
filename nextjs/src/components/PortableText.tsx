@@ -6,6 +6,7 @@ import {
 } from "@portabletext/react"
 import type { PortableTextBlock } from "next-sanity"
 import Image from "next/image"
+import s from "./PortableText.module.css"
 
 // Import your custom block/object components here as you build them
 // import ImageWithCaption from "./ImageWithCaption"
@@ -19,27 +20,31 @@ function sanityImageUrl(ref: string, width = 800, height = 600) {
   return `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/production/${id}-${size}.${format}?w=${width}&h=${height}&fit=max`
 }
 
-// MediaText: renders an image and rich text side by side
+/**
+ * MediaText: Renders an image and rich text side by side.
+ * @param {object} value - The media text data.
+ * @returns {JSX.Element | null} The rendered media text or null.
+ */
 function MediaText({ value }: { value: any }) {
   if (!value) return null
   const imageUrl = value.image?.asset?._ref
     ? sanityImageUrl(value.image.asset._ref, 400, 300)
     : value.image?.asset?.url
   return (
-    <div className="flex flex-col md:flex-row gap-4 items-start my-4">
+    <div className={s.mediaText}>
       {imageUrl && (
-        <div className="max-w-xs w-full">
+        <div className={s.mediaTextImgContainer}>
           <Image
             src={imageUrl}
             alt={value.image?.alt || ""}
             width={400}
             height={300}
-            className="object-contain w-full h-auto"
+            className={s.mediaTextImg}
           />
         </div>
       )}
       {value.text && (
-        <div className="flex-1">
+        <div className={s.mediaTextContent}>
           <PT value={value.text} components={components} />
         </div>
       )}
@@ -47,15 +52,16 @@ function MediaText({ value }: { value: any }) {
   )
 }
 
-// ButtonBlock: renders a single button
+/**
+ * ButtonBlock: Renders a single button.
+ * @param {object} value - The button data.
+ * @returns {JSX.Element | null} The rendered button or null.
+ */
 function ButtonBlock({ value }: { value: any }) {
   return (
     <a
       href={value?.url || "#"}
-      className={
-        value?.style ||
-        "inline-block px-4 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-700 transition"
-      }
+      className={value?.style || s.buttonBlock}
       target={value?.target || "_self"}
       rel={
         value?.rel ||
@@ -67,11 +73,15 @@ function ButtonBlock({ value }: { value: any }) {
   )
 }
 
-// ButtonGroup: renders a group of buttons
+/**
+ * ButtonGroup: Renders a group of buttons.
+ * @param {object} value - The button group data.
+ * @returns {JSX.Element | null} The rendered button group or null.
+ */
 function ButtonGroup({ value }: { value: any }) {
   if (!Array.isArray(value?.buttons)) return null
   return (
-    <div className="flex flex-wrap gap-2 my-2">
+    <div className={s.buttonGroup}>
       {value.buttons.map((btn: any, idx: number) =>
         btn ? <ButtonBlock key={btn._key || idx} value={btn} /> : null
       )}
@@ -79,7 +89,11 @@ function ButtonGroup({ value }: { value: any }) {
   )
 }
 
-// ImageWithCaption: renders an image with an optional caption
+/**
+ * ImageWithCaption: Renders an image with an optional caption.
+ * @param {object} value - The image data.
+ * @returns {JSX.Element | null} The rendered image with caption or null.
+ */
 function ImageWithCaption({ value }: { value: any }) {
   if (!value) return null
   const imageUrl = value.asset?._ref
@@ -87,17 +101,17 @@ function ImageWithCaption({ value }: { value: any }) {
     : value.url
   if (!imageUrl) return null
   return (
-    <figure className="my-6">
+    <figure className={s.imageWithCaptionFigure}>
       <Image
         src={imageUrl}
         alt={value.alt || value.caption || ""}
         width={value.width || 800}
         height={value.height || 600}
         style={{ maxWidth: "100%", height: "auto" }}
-        className="rounded"
+        className={s.imageWithCaptionImg}
       />
       {value.caption && (
-        <figcaption className="text-center text-sm text-gray-500 mt-2">
+        <figcaption className={s.imageWithCaptionFigcaption}>
           {value.caption}
         </figcaption>
       )}
@@ -126,6 +140,7 @@ const components: PortableTextComponents = {
           width={800}
           height={600}
           style={{ maxWidth: "100%", height: "auto" }}
+          className={s.imageWithCaptionImg}
         />
       ) : null
     },
@@ -133,11 +148,15 @@ const components: PortableTextComponents = {
   // You can also customize marks, block, list, etc. here
 }
 
-// BlockGroup: renders a group of blocks recursively
+/**
+ * BlockGroup: Renders a group of blocks recursively.
+ * @param {object} value - The block group data.
+ * @returns {JSX.Element | null} The rendered block group or null.
+ */
 function BlockGroup({ value }: { value: any }) {
   if (!Array.isArray(value?.children)) return null
   return (
-    <div className="block-group my-4">
+    <div className={s.blockGroup}>
       <PT value={value.children} components={components} />
     </div>
   )

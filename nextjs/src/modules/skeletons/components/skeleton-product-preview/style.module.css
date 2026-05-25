@@ -1,0 +1,29 @@
+.container {
+  composes: base from "../skeleton.module.css";
+}
+
+.imageSkeleton {
+  aspect-ratio: 9/16;
+  width: 100%;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-base);
+  border-radius: 8px;
+}
+
+.infoWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.titleSkeleton {
+  width: 40%;
+  height: 24px;
+  background-color: var(--color-gray-100);
+}
+
+.priceSkeleton {
+  width: 20%;
+  height: 24px;
+  background-color: var(--color-gray-100);
+}

@@ -1,6 +1,5 @@
 module.exports = {
   plugins: {
-    "@tailwindcss/postcss": {},
     "postcss-flexbugs-fixes": {},
     "@csstools/postcss-global-data": {
       files: ["./src/styles/custom-media.css"],

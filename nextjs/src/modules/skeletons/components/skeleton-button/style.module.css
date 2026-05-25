@@ -1,0 +1,6 @@
+.button {
+  composes: base from "../skeleton.module.css";
+  width: 100%;
+  min-height: 50px;
+  padding: 10px 20px;
+}

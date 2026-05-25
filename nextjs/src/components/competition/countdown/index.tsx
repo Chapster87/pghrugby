@@ -5,6 +5,7 @@ import { client } from "@/sanity/lib/client"
 import { matchQuery } from "./match.query"
 import Heading from "@/components/typography/heading"
 import Text from "@/components/typography/text"
+import clsx from "clsx"
 import s from "./styles.module.css"
 
 interface Team {
@@ -165,14 +166,14 @@ export function MatchCountdown({
           </Text>
 
           <div className={s.teams}>
-            <div className="flex items-center justify-between gap-4">
+            <div className={s.teamDisplay}>
               {matchData.venue === "Home" ? (
                 <>
                   <div className={s.teamLogo}>
                     <img
                       src={matchData.homeTeam.logo || "/placeholder.svg"}
                       alt={matchData.homeTeam.name}
-                      className="w-full h-full object-contain"
+                      className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
                   <div className={s.matchup}>
@@ -188,7 +189,7 @@ export function MatchCountdown({
                     <img
                       src={matchData.awayTeam.logo || "/placeholder.svg"}
                       alt={matchData.awayTeam.name}
-                      className="w-full h-full object-contain"
+                      className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
                 </>
@@ -198,7 +199,7 @@ export function MatchCountdown({
                     <img
                       src={matchData.awayTeam.logo || "/placeholder.svg"}
                       alt={matchData.awayTeam.name}
-                      className="w-full h-full object-contain"
+                      className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
                   <div className={s.matchup}>
@@ -214,7 +215,7 @@ export function MatchCountdown({
                     <img
                       src={matchData.homeTeam.logo || "/placeholder.svg"}
                       alt={matchData.homeTeam.name}
-                      className="w-full h-full object-contain"
+                      className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
                 </>

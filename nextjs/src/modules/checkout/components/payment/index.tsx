@@ -3,7 +3,10 @@
 import { paymentInfoMap } from "@lib/constants"
 import { initiatePaymentSession } from "@lib/data/cart"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
-import { Button, Container, Heading, Text, clx } from "@medusajs/ui"
+import { Button, clx } from "@medusajs/ui"
+
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { StripeContext } from "@modules/checkout/components/payment-wrapper/stripe-wrapper"
 import Divider from "@modules/common/components/divider"
@@ -11,6 +14,8 @@ import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { StripePaymentElementChangeEvent } from "@stripe/stripe-js"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useContext, useEffect, useState } from "react"
+
+import s from "./style.module.css"
 
 const Payment = ({
   cart,
@@ -121,17 +126,13 @@ const Payment = ({
   }, [isOpen])
 
   return (
-    <div className="bg-white">
-      <div className="flex flex-row items-center justify-between mb-6">
+    <div className={s.container}>
+      <div className={s.header}>
         <Heading
           level="h2"
-          className={clx(
-            "flex flex-row text-[32px] leading-[44px] font-normal gap-x-2 items-baseline",
-            {
-              "opacity-50 pointer-events-none select-none":
-                !isOpen && !paymentReady,
-            }
-          )}
+          className={clx(s.heading, {
+            [s.headingDisabled]: !isOpen && !paymentReady,
+          })}
         >
           Payment
           {!isOpen && paymentReady && <CheckCircleSolid />}
@@ -140,7 +141,7 @@ const Payment = ({
           <Text>
             <button
               onClick={handleEdit}
-              className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
+              className={s.editButton}
               data-testid="edit-payment-button"
             >
               Edit
@@ -149,11 +150,11 @@ const Payment = ({
         )}
       </div>
       <div>
-        <div className={isOpen ? "block" : "hidden"}>
+        <div style={{ display: isOpen ? "block" : "none" }}>
           {!paidByGiftcard &&
             availablePaymentMethods?.length &&
             stripeReady && (
-              <div className="mt-5 transition-all duration-150 ease-in-out">
+              <div className={s.paymentElementWrapper}>
                 <PaymentElement
                   onChange={handlePaymentElementChange}
                   options={{
@@ -163,12 +164,10 @@ const Payment = ({
               </div>
             )}
           {paidByGiftcard && (
-            <div className="flex flex-col w-1/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                Payment method
-              </Text>
+            <div className={s.summaryColumn}>
+              <Text className={s.summaryTitle}>Payment method</Text>
               <Text
-                className="txt-medium text-ui-fg-subtle"
+                className={s.summaryText}
                 data-testid="payment-method-summary"
               >
                 Gift card
@@ -183,7 +182,7 @@ const Payment = ({
 
           <Button
             size="large"
-            className="mt-6"
+            className={s.submitButton}
             onClick={handleSubmit}
             isLoading={isLoading}
             disabled={
@@ -198,45 +197,39 @@ const Payment = ({
           </Button>
         </div>
 
-        <div className={isOpen ? "hidden" : "block"}>
+        <div style={{ display: isOpen ? "none" : "block" }}>
           {cart && paymentReady && activeSession && selectedPaymentMethod ? (
-            <div className="flex items-start gap-x-1 w-full">
-              <div className="flex flex-col w-1/3">
-                <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                  Payment method
-                </Text>
+            <div className={s.summaryGrid}>
+              <div className={s.summaryColumn}>
+                <Text className={s.summaryTitle}>Payment method</Text>
                 <Text
-                  className="txt-medium text-ui-fg-subtle"
+                  className={s.summaryText}
                   data-testid="payment-method-summary"
                 >
                   {paymentInfoMap[selectedPaymentMethod]?.title ||
                     selectedPaymentMethod}
                 </Text>
               </div>
-              <div className="flex flex-col w-1/3">
-                <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                  Payment details
-                </Text>
+              <div className={s.summaryColumn}>
+                <Text className={s.summaryTitle}>Payment details</Text>
                 <div
-                  className="flex gap-2 txt-medium text-ui-fg-subtle items-center"
+                  className={s.summaryDetail}
                   data-testid="payment-details-summary"
                 >
-                  <Container className="flex items-center h-7 w-fit p-2 bg-ui-button-neutral-hover">
+                  <div className={s.iconWrapper}>
                     {paymentInfoMap[selectedPaymentMethod]?.icon || (
                       <CreditCard />
                     )}
-                  </Container>
+                  </div>
                   <Text>Another step will appear</Text>
                 </div>
               </div>
             </div>
           ) : paidByGiftcard ? (
-            <div className="flex flex-col w-1/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                Payment method
-              </Text>
+            <div className={s.summaryColumn}>
+              <Text className={s.summaryTitle}>Payment method</Text>
               <Text
-                className="txt-medium text-ui-fg-subtle"
+                className={s.summaryText}
                 data-testid="payment-method-summary"
               >
                 Gift card
@@ -245,7 +238,7 @@ const Payment = ({
           ) : null}
         </div>
       </div>
-      <Divider className="mt-8" />
+      <Divider className={s.divider} />
     </div>
   )
 }

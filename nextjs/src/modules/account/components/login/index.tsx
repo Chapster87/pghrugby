@@ -3,7 +3,11 @@ import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import Input from "@modules/common/components/input"
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
 import { useActionState } from "react"
+
+import s from "./style.module.css"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
@@ -13,18 +17,15 @@ const Login = ({ setCurrentView }: Props) => {
   const [message, formAction] = useActionState(login, null)
 
   return (
-    <div
-      className="max-w-sm w-full flex flex-col items-center"
-      data-testid="login-page"
-    >
-      <h1 className="text-base leading-6 font-semibold uppercase mb-6">
+    <div className={s.loginWrapper} data-testid="login-page">
+      <Heading level="h1" display="h6" className={s.title}>
         Welcome back
-      </h1>
-      <p className="text-center text-ui-fg-base mb-8">
+      </Heading>
+      <Text className={s.description}>
         Sign in to access an enhanced shopping experience.
-      </p>
-      <form className="w-full" action={formAction}>
-        <div className="flex flex-col w-full gap-y-2">
+      </Text>
+      <form className={s.form} action={formAction}>
+        <div className={s.inputGroup}>
           <Input
             label="Email"
             name="email"
@@ -44,21 +45,21 @@ const Login = ({ setCurrentView }: Props) => {
           />
         </div>
         <ErrorMessage error={message} data-testid="login-error-message" />
-        <SubmitButton data-testid="sign-in-button" className="w-full mt-6">
+        <SubmitButton data-testid="sign-in-button" className={s.submitButton}>
           Sign in
         </SubmitButton>
       </form>
-      <span className="text-center text-ui-fg-base mt-6">
+      <Text variant="span" className={s.footer}>
         Not a member?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.REGISTER)}
-          className="underline"
+          className={s.linkButton}
           data-testid="register-button"
         >
           Join us
         </button>
         .
-      </span>
+      </Text>
     </div>
   )
 }

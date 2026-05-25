@@ -22,3 +22,7 @@
   align-items: center;
   flex-grow: 1;
 }
+
+.sponsorRowContainer {
+  composes: siteContainer from "@/styles/content.module.css";
+}

@@ -1,0 +1,150 @@
+.container {
+  background-color: var(--color-white);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  font-size: 32px;
+  line-height: 44px;
+  font-weight: 400;
+  column-gap: 8px;
+  align-items: baseline;
+}
+
+.headingDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.editButton {
+  color: var(--fg-interactive);
+  transition: color 0.15s ease-in-out;
+
+  &:hover {
+    color: var(--fg-interactive-hover);
+  }
+}
+
+.grid {
+  display: grid;
+}
+
+.methodInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.methodTitle {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--fg-base);
+}
+
+.methodDescription {
+  margin-bottom: 16px;
+  color: var(--fg-muted);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.optionsWrapper {
+  padding-bottom: 32px;
+  padding-top: 8px;
+
+  @media (--viewport-md-up) {
+    padding-top: 0;
+  }
+}
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 16px 32px;
+  border: 1px solid var(--border-base);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: box-shadow 0.15s ease-in-out;
+
+  &:hover {
+    box-shadow: var(--shadow-interactive);
+  }
+}
+
+.radioOptionActive {
+  border-color: var(--border-interactive);
+}
+
+.radioOptionDisabled {
+  cursor: not-allowed;
+
+  &:hover {
+    box-shadow: none;
+  }
+}
+
+.radioLabelWrapper {
+  display: flex;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.radioLabelWrapperStart {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 16px;
+}
+
+.radioDescription {
+  color: var(--fg-muted);
+}
+
+.radioPrice {
+  justify-self: flex-end;
+  color: var(--fg-base);
+}
+
+.submitButton {
+  margin-top: 24px;
+}
+
+.divider {
+  margin-top: 32px;
+}
+
+.summaryContainer {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.summaryColumn {
+  display: flex;
+  flex-direction: column;
+  width: 33.333333%;
+}
+
+.summaryTitle {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  color: var(--fg-base);
+  margin-bottom: 4px;
+}
+
+.summaryText {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--fg-subtle);
+}

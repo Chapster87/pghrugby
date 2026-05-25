@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  transition: all 0.15s ease-in-out;
+}
+
+.labelSkeleton {
+  composes: base from "../skeleton.module.css";
+  height: 16px;
+  background-color: var(--bg-component-pressed);
+  border-radius: 6px;
+  width: 25%;
+  margin-bottom: 4px;
+}
+
+.inputSkeleton {
+  composes: base from "../skeleton.module.css";
+  display: block;
+  width: 100%;
+  height: 44px;
+  padding-top: 12px;
+  padding-bottom: 4px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-top: 0;
+  background-color: var(--bg-field);
+  border: 1px solid var(--border-base);
+  border-radius: 6px;
+  appearance: none;
+}

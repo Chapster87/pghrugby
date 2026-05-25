@@ -1,35 +1,42 @@
 "use client"
 
 import { Button } from "@medusajs/ui"
-
 import OrderCard from "../order-card"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
 import { HttpTypes } from "@medusajs/types"
+
+import s from "./style.module.css"
 
 const OrderOverview = ({ orders }: { orders: HttpTypes.StoreOrder[] }) => {
   if (orders?.length) {
     return (
-      <div className="flex flex-col gap-y-8 w-full">
-        {orders.map((o) => (
-          <div
-            key={o.id}
-            className="border-b border-gray-200 pb-6 last:pb-0 last:border-none"
-          >
-            <OrderCard order={o} />
-          </div>
-        ))}
+      <div className={s.orderOverviewWrapper}>
+        <div className={s.orderList}>
+          {orders.map((o) => (
+            <div
+              key={o.id}
+              style={{
+                borderBottom: "1px solid var(--color-grey-200)",
+                paddingBottom: "24px",
+              }}
+            >
+              <OrderCard order={o} />
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
 
   return (
-    <div
-      className="w-full flex flex-col items-center gap-y-4"
-      data-testid="no-orders-container"
-    >
-      <h2 className="text-base leading-6 font-semibold">Nothing to see here</h2>
-      <p>You don&apos;t have any orders yet, let us change that {":)"}</p>
-      <div className="mt-4">
+    <div className={s.emptyState} data-testid="no-orders-container">
+      <Heading level="h2" display="h6">
+        Nothing to see here
+      </Heading>
+      <Text>You don't have any orders yet, let us change that {":)"}</Text>
+      <div style={{ marginTop: "16px" }}>
         <LocalizedClientLink href="/" passHref>
           <Button data-testid="continue-shopping-button">
             Continue shopping

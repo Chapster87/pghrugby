@@ -1,0 +1,9 @@
+.form {
+  width: 100%;
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}

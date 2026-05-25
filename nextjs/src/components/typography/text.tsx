@@ -14,6 +14,7 @@ const Text: React.FC<TextProps> = ({
   size = "default",
   children,
   className,
+  ...props
 }) => {
   const Component = variant
 
@@ -27,6 +28,7 @@ const Text: React.FC<TextProps> = ({
         },
         className
       )}
+      {...props}
     >
       {children}
     </Component>

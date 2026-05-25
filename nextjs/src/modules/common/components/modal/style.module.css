@@ -1,0 +1,105 @@
+.dialogOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgb(
+    from var(--color-black) r g b / 0.75
+  ); /* bg-opacity-75 */
+  backdrop-filter: blur(8px); /* backdrop-blur-md */
+  height: 100vh;
+}
+
+.modalContainer {
+  position: fixed;
+  inset: 0;
+  overflow-y: hidden;
+}
+
+.panelWrapper {
+  display: flex;
+  min-height: 100%;
+  height: 100%;
+  justify-content: center;
+  padding: 16px; /* p-4 */
+  text-align: center;
+}
+
+.panelWrapperCenter {
+  align-items: center;
+}
+
+.panelWrapperStart {
+  align-items: flex-start;
+}
+
+.dialogPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  transform: translateY(0);
+  padding: 20px; /* p-5 */
+  text-align: left;
+  vertical-align: middle;
+  transition: all 0.3s ease-out; /* transition-all */
+  max-height: 75vh;
+  height: fit-content;
+}
+
+.dialogPanelSmall {
+  max-width: 448px; /* max-w-md */
+}
+
+.dialogPanelMedium {
+  max-width: 672px; /* max-w-xl */
+}
+
+.dialogPanelLarge {
+  max-width: 768px; /* max-w-3xl */
+}
+
+.dialogPanelTransparent {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.dialogPanelWhite {
+  background-color: var(--color-white);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1); /* shadow-xl */
+  border: 1px solid var(--color-border);
+  border-radius: 8px; /* rounded-rounded */
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titleText {
+  font-size: 16px; /* text-base */
+  line-height: 24px; /* leading-6 */
+  font-weight: 600; /* font-semibold */
+}
+
+.descriptionWrapper {
+  display: flex;
+  color: var(--color-text-base);
+  align-items: center;
+  justify-content: center;
+  padding-top: 8px; /* pt-2 */
+  padding-bottom: 16px; /* pb-4 */
+  height: 100%;
+}
+
+.bodyWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.footerWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px; /* gap-x-4 */
+}

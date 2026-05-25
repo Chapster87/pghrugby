@@ -1,0 +1,98 @@
+.container {
+  position: relative;
+}
+
+.button {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  text-align: left;
+  background-color: var(--color-white);
+  cursor: default;
+  border: 1px solid var(--border-base);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.15s ease-in-out;
+}
+
+.button:focus-visible {
+  ring: 2px;
+  ring-color: var(--color-white);
+  ring-opacity: 0.75;
+  ring-offset: 2px;
+  ring-offset-color: var(--color-gray-300);
+  border-color: var(--color-gray-300);
+}
+
+.buttonText {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chevron {
+  transition: transform 0.2s ease-in-out;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.options {
+  position: absolute;
+  z-index: 20;
+  width: 100%;
+  overflow: auto;
+  background-color: var(--color-white);
+  border: 1px solid var(--border-base);
+  border-top: 0;
+  max-height: 240px;
+  outline: none;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.option {
+  cursor: default;
+  user-select: none;
+  position: relative;
+  padding: 16px 40px 16px 24px;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.option:hover {
+  background-color: var(--bg-subtle-hover);
+}
+
+.optionContent {
+  display: flex;
+  column-gap: 16px;
+  align-items: flex-start;
+}
+
+.optionInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.optionName {
+  text-align: left;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.optionCompany {
+  color: var(--fg-base);
+}
+
+.optionAddress {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-top: 8px;
+}

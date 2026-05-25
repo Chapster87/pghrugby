@@ -1,7 +1,10 @@
 import contentStyles from "@/styles/content.module.css"
 import Image from "next/image"
 import PortableText from "@/components/PortableText"
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
 import { extractPlainText, isPortableText } from "@/lib/util/portableTextUtils"
+import s from "./style.module.css"
 
 // JSON-LD schema.org structured data
 function generateStructuredData(data: any) {
@@ -39,7 +42,7 @@ function generateStructuredData(data: any) {
 export default function Example({ data }: { data: any }) {
   const structuredData = generateStructuredData(data)
   return (
-    <article className={`${contentStyles.contentBlock}`}>
+    <article className={`${contentStyles.contentBlock} ${s.exampleArticle}`}>
       <div className="prose">
         {/* Structured data for SEO */}
         {structuredData && (
@@ -51,47 +54,57 @@ export default function Example({ data }: { data: any }) {
 
         {/* Featured image with proper alt text */}
         {data.featuredMedia?.asset?.url && (
-          <div className="mb-6 relative aspect-video w-full">
+          <div className={s.featuredImageWrapper}>
             <Image
               src={data.featuredMedia.asset.url}
               alt={data.featuredMedia.alt || data.title || "Featured image"}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               priority
-              className="object-cover rounded-lg"
+              className={s.featuredImage}
             />
           </div>
         )}
 
-        <header className="mb-8">
-          <h1>{data.title}</h1>
+        <header className={s.header}>
+          <Heading level="h1">{data.title}</Heading>
 
           {isPortableText(data.excerpt) && (
-            <div className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
+            <div className={s.excerpt}>
               <PortableText value={data.excerpt} />
             </div>
           )}
 
-          <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <div className={s.meta}>
             {data.date && (
               <time dateTime={new Date(data.date).toISOString()}>
-                Published: {new Date(data.date).toLocaleDateString()}
+                <Text variant="span" size="sm">
+                  Published: {new Date(data.date).toLocaleDateString()}
+                </Text>
               </time>
             )}
 
             {data.modified && data.date !== data.modified && (
               <time dateTime={new Date(data.modified).toISOString()}>
-                Updated: {new Date(data.modified).toLocaleDateString()}
+                <Text variant="span" size="sm">
+                  Updated: {new Date(data.modified).toLocaleDateString()}
+                </Text>
               </time>
             )}
 
             {data.author?.name && (
-              <address className="not-italic">By: {data.author.name}</address>
+              <address>
+                <Text variant="span" size="sm">
+                  By: {data.author.name}
+                </Text>
+              </address>
             )}
 
             {data.status && (
-              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded-sm text-xs">
-                {data.status}
+              <span className={s.statusBadge}>
+                <Text variant="span" size="sm">
+                  {data.status}
+                </Text>
               </span>
             )}
           </div>

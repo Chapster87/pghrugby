@@ -1,0 +1,38 @@
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%; /* w-full */
+  margin-top: 48px; /* mt-12 */
+}
+
+.paginationControls {
+  display: flex;
+  gap: 12px; /* gap-3 */
+  align-items: flex-end; /* items-end */
+}
+
+.pageButton {
+  font-size: 20px; /* txt-xlarge-plus */
+  color: var(--color-grey-500); /* text-ui-fg-muted */
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    color: var(--color-grey-700); /* hover:text-ui-fg-subtle */
+  }
+
+  &:disabled {
+    color: var(--color-grey-900); /* text-ui-fg-base */
+    cursor: default;
+  }
+}
+
+.ellipsis {
+  font-size: 20px; /* txt-xlarge-plus */
+  color: var(--color-grey-500); /* text-ui-fg-muted */
+  align-items: center;
+  cursor: default;
+}

@@ -1,11 +1,14 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useState, useEffect } from "react"
 import { createTransferRequest } from "@lib/data/orders"
-import { Text, Heading, Input, Button, IconButton, Toaster } from "@medusajs/ui"
+import { IconButton, Input } from "@medusajs/ui"
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import { CheckCircleMiniSolid, XCircleSolid } from "@medusajs/icons"
-import { useEffect, useState } from "react"
+
+import s from "./style.module.css"
 
 export default function TransferRequestForm() {
   const [showSuccess, setShowSuccess] = useState(false)
@@ -23,54 +26,50 @@ export default function TransferRequestForm() {
   }, [state.success, state.order])
 
   return (
-    <div className="flex flex-col gap-y-4 w-full">
-      <div className="grid sm:grid-cols-2 items-center gap-x-8 gap-y-4 w-full">
-        <div className="flex flex-col gap-y-1">
-          <Heading level="h3" className="text-lg text-neutral-950">
-            Order transfers
-          </Heading>
-          <Text className="text-neutral-500">
-            Can&apos;t find the order you are looking for?
+    <div className={s.formWrapper}>
+      <div className={s.formGrid}>
+        <div className={s.textSection}>
+          <Heading level="h3">Order transfers</Heading>
+          <Text>
+            Can't find the order you are looking for?
             <br /> Connect an order to your account.
           </Text>
         </div>
-        <form
-          action={formAction}
-          className="flex flex-col gap-y-1 sm:items-end"
-        >
-          <div className="flex flex-col gap-y-2 w-full">
-            <Input className="w-full" name="order_id" placeholder="Order ID" />
-            <SubmitButton
-              variant="secondary"
-              className="w-fit whitespace-nowrap self-end"
-            >
+        <form action={formAction} className={s.formSection}>
+          <div className={s.inputGroup}>
+            <Input
+              className="w-full"
+              name="order_id"
+              placeholder="Order ID"
+              required
+            />
+            <SubmitButton variant="secondary" className={s.submitButton}>
               Request transfer
             </SubmitButton>
           </div>
         </form>
       </div>
       {!state.success && state.error && (
-        <Text className="text-rose-500 text-right">{state.error}</Text>
+        <Text className={s.errorMessage}>{state.error}</Text>
       )}
       {showSuccess && (
-        <div className="flex justify-between p-4 bg-neutral-50 shadow-borders-base w-full self-stretch items-center">
-          <div className="flex gap-x-2 items-center">
-            <CheckCircleMiniSolid className="w-4 h-4 text-emerald-500" />
-            <div className="flex flex-col gap-y-1">
-              <Text className="text-medim-pl text-neutral-950">
+        <div className={s.successMessage}>
+          <div className={s.successInfo}>
+            <CheckCircleMiniSolid className={`w-4 h-4 ${s.successIcon}`} />
+            <div className={s.successText}>
+              <Text className="font-semibold">
                 Transfer for order {state.order?.id} requested
               </Text>
-              <Text className="text-neutral-600">
+              <Text size="sm">
                 Transfer request email sent to {state.order?.email}
               </Text>
             </div>
           </div>
           <IconButton
             variant="transparent"
-            className="h-fit"
             onClick={() => setShowSuccess(false)}
           >
-            <XCircleSolid className="w-4 h-4 text-neutral-500" />
+            <XCircleSolid className="w-4 h-4" />
           </IconButton>
         </div>
       )}

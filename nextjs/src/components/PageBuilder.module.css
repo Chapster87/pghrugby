@@ -1,0 +1,34 @@
+.textAlignLeft {
+  display: block;
+  text-align: left;
+}
+
+.textAlignCenter {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+.textAlignRight {
+  display: block;
+  text-align: right;
+}
+
+.linkGroup {
+  margin-top: 16px; /* my-4 */
+  margin-bottom: 16px; /* my-4 */
+  display: flex;
+  gap: 16px; /* gap-4 */
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+.justifyEnd {
+  justify-content: flex-end;
+}
+
+.justifyStart {
+  justify-content: flex-start;
+}
