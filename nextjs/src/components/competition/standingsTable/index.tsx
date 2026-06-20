@@ -1,71 +1,53 @@
-"use client"
+import { executeQuery } from "@/lib/forgecms/execute-query"
+import { sortStandings } from "@/lib/helpers/standings-calc"
 
-import { useEffect, useState } from "react"
-import { client } from "@/sanity/lib/client"
 import { standingsQuery } from "./standings.query"
+import clsx from "clsx"
 import s from "./styles.module.css"
 
 interface TeamData {
-  team: {
-    _id: string
-    teamName: string
-    teamLogo: {
-      asset: {
-        url: string
-      }
-    }
-  }
-  gamesPlayed: number
-  wins: number
-  losses: number
-  draws: number
-  pointsFor: number
-  pointsAgainst: number
-  difference: number
-  bonusPointTries: number
-  bonusPointLoss: number
-  forfeits: number
+  team_id: string
+  team_name: string
+  is_focused: string
+  gp: number
+  w: number
+  l: number
+  t: number
+  pf: number
+  pa: number
+  pd: number
+  bt: number
+  bl: number
+  ff: number
   points: number
-  leaguePointsPerGame: number
+  league_points_per_game: number
 }
 
 interface StandingsTableProps {
-  league: string
-  division: string
+  leagueSlug: string
+  divisionSlug: string
   seasonYear: number
   seasonName: string
 }
 
-const StandingsTable: React.FC<StandingsTableProps> = ({
-  league,
-  division,
+export async function StandingsTable({
+  leagueSlug,
+  divisionSlug,
   seasonYear,
   seasonName,
-}) => {
-  const [standings, setStandings] = useState<TeamData[]>([])
-  const [loading, setLoading] = useState(true)
+}: StandingsTableProps) {
+  const standings = await executeQuery(
+    standingsQuery(leagueSlug, divisionSlug, seasonYear, seasonName)
+  )
 
-  useEffect(() => {
-    const fetchStandings = async () => {
-      const standingsData = await client.fetch(
-        standingsQuery(league, division, seasonYear, seasonName)
-      )
+  const { division, league, league_standings, season } =
+    standings.standingsCollection.edges[0].node
 
-      const sortedStandings = (standingsData[0]?.teams || []).sort(
-        (a: TeamData, b: TeamData) => {
-          if (b.points !== a.points) {
-            return b.points - a.points // Sort by points descending
-          }
-          return a.pointsAgainst - b.pointsAgainst // Sort by pointsAgainst ascending if points are tied
-        }
-      )
+  const typedLeagueStandings = league_standings as TeamData[]
 
-      setStandings(sortedStandings)
-      setLoading(false)
-    }
+  const processedStandings = sortStandings(typedLeagueStandings)
 
-    fetchStandings()
-  }, [league, division, seasonYear, seasonName])
+  console.log("Standings Data:", standings)
 
   const toKebabCase = (str: string) => {
     return str
@@ -74,17 +56,13 @@ const StandingsTable: React.FC<StandingsTableProps> = ({
       .replace(/(^-|-$)/g, "")
   }
 
-  if (loading) {
-    return <div>Loading...</div>
-  }
-
   return (
     <div>
       <table className={s.standingsTable}>
         <thead>
           <tr>
-            <th colSpan={13} className={`${s.primaryHeader}`}>
-              {`${league} ${division} - ${seasonName} ${seasonYear}`}
+            <th colSpan={14} className={`${s.primaryHeader}`}>
+              {`${league.name} ${division.name} - ${season.display_name}`}
             </th>
           </tr>
           <tr>
@@ -99,46 +77,54 @@ const StandingsTable: React.FC<StandingsTableProps> = ({
             <th>PD</th>
             <th>BT</th>
             <th>BL</th>
+            <th>FF</th>
             <th>Pts</th>
             <th>LPPG</th>
           </tr>
         </thead>
         <tbody>
-          {standings.map((teamData) => (
-            <tr
-              key={teamData.team._id}
-              className={s[toKebabCase(teamData.team.teamName)]}
-            >
-              <td>{standings.indexOf(teamData) + 1}</td>
-              <td className={s.teamName}>
-                <div className={`${s.teamName}`}>
-                  <img
+          {processedStandings.map((teamData, index) => {
+            const isFocusTeam = teamData.is_focused
+            return (
+              <tr
+                key={teamData.team_id}
+                className={clsx(
+                  {
+                    [s.focusTeam]: isFocusTeam,
+                  },
+                  s[toKebabCase(teamData.team_name)]
+                )}
+              >
+                <td>{index + 1}</td>
+                <td className={s.teamName}>
+                  <div className={`${s.teamName}`}>
+                    {/* <img
                     src={teamData.team.teamLogo.asset.url}
                     alt={`${teamData.team.teamName} logo`}
                     width={26}
                     height={26}
                     style={{ marginRight: "8px" }}
-                  />
-                  {teamData.team.teamName}
-                </div>
-              </td>
-              <td>{teamData.gamesPlayed}</td>
-              <td>{teamData.wins}</td>
-              <td>{teamData.losses}</td>
-              <td>{teamData.draws}</td>
-              <td>{teamData.pointsFor}</td>
-              <td>{teamData.pointsAgainst}</td>
-              <td>{teamData.difference}</td>
-              <td>{teamData.bonusPointTries}</td>
-              <td>{teamData.bonusPointLoss}</td>
-              <td>{teamData.points}</td>
-              <td>{teamData.leaguePointsPerGame.toFixed(2)}</td>
-            </tr>
-          ))}
+                  /> */}
+                    {teamData.team_name}
+                  </div>
+                </td>
+                <td>{teamData.gp}</td>
+                <td>{teamData.w}</td>
+                <td>{teamData.l}</td>
+                <td>{teamData.t}</td>
+                <td>{teamData.pf}</td>
+                <td>{teamData.pa}</td>
+                <td>{teamData.pd}</td>
+                <td>{teamData.bt}</td>
+                <td>{teamData.bl}</td>
+                <td>{teamData.ff}</td>
+                <td>{teamData.calculatedPoints}</td>
+                <td>{teamData.calculatedLPPG.toFixed(2)}</td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </div>
   )
 }
-
-export default StandingsTable

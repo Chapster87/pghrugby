@@ -5,46 +5,36 @@ export const standingsQuery = (
   seasonName: string
 ) => {
   return `
-    *[_type == "standings" && season->year == ${seasonYear} && season->season == "${seasonName}" && league->shortName == "${leagueShortName}" && division->shortName == "${divisionShortName}"] {
-      _id,
-      league-> {
-        _id,
-        name,
-        shortName
-      },
-      division-> {
-        _id,
-        name,
-        shortName
-      },
-      season-> {
-        _id,
-        name,
-        year
-      },
-      teams[] {
-        team-> {
-          _id,
-          teamName,
-          teamLogo {
-            asset-> {
-              url
-            }
-          }
-        },
-        gamesPlayed,
-        wins,
-        losses,
-        draws,
-        pointsFor,
-        pointsAgainst,
-        difference,
-        bonusPointTries,
-        bonusPointLoss,
-        forfeits,
-        points,
-        leaguePointsPerGame
+  query StandingsQuery {
+    standingsCollection(where: {
+      league: { slug: "${leagueShortName}" },
+      division: { slug: "${divisionShortName}" },
+      season: { 
+        year: ${seasonYear},
+        season: "${seasonName}"
       }
-    } | order(points desc, pointsAgainst asc)
-  `
+    }) {
+      edges {
+        node {
+          league {
+            name
+            slug
+            short_name
+          }
+          season {
+            year
+            display_name
+            season
+          }
+          division {
+            short_name
+            name
+            slug
+          }
+          league_standings
+        }
+      }
+    }
+  }
+`
 }

@@ -1,7 +1,7 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import Heading from "@components/typography/heading"
 import contentStyles from "@/styles/content.module.css"
-import StandingsTable from "@/components/competition/standingsTable"
+import { StandingsTable } from "@/components/competition/standingsTable"
 import s from "./styles.module.css"
 
 /**
@@ -34,23 +34,23 @@ export default function MensStandings() {
       <Heading level="h1">Men's Rugby Season Standings</Heading>
 
       <StandingsTable
-        league="Men's"
-        division="D1"
+        leagueSlug="midwest-mens-rugby"
+        divisionSlug="div_1"
+        seasonYear={2025}
+        seasonName="Fall"
+      />
+      {/* <StandingsTable
+        leagueSlug="midwest_mens_rugby"
+        divisionSlug="D3"
         seasonYear={2025}
         seasonName="Fall"
       />
       <StandingsTable
-        league="Men's"
-        division="D3"
+        leagueSlug="midwest_mens_rugby"
+        divisionSlug="D4"
         seasonYear={2025}
         seasonName="Fall"
-      />
-      <StandingsTable
-        league="Men's"
-        division="D4"
-        seasonYear={2025}
-        seasonName="Fall"
-      />
+      /> */}
     </div>
   )
 }

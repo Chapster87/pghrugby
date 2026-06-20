@@ -2,7 +2,8 @@ import type { Metadata, ResolvingMetadata } from "next"
 import Heading from "@components/typography/heading"
 import contentStyles from "@/styles/content.module.css"
 import { client } from "@/sanity/lib/client"
-import { scheduleQuery } from "./schedule.query"
+import { teamsQuery, scheduleQuery } from "./schedule.query"
+import { executeQuery } from "@/lib/forgecms/execute-query"
 import { MatchCountdown } from "@/components/competition/countdown"
 import s from "./styles.module.css"
 
@@ -55,6 +56,10 @@ export async function generateMetadata(
 }
 
 export default async function MensSchedule() {
+  const teams = await executeQuery(teamsQuery)
+
+  console.log("Teams:", teams)
+
   const schedule: Match[] = await client.fetch(scheduleQuery)
 
   const formattedSchedule = await Promise.all(
