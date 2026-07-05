@@ -6,15 +6,12 @@ import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 import { executeQuery } from "@/lib/datocms/executeQuery"
 import { StructuredText } from "react-datocms"
-import { fetchFromSanity } from "@/sanity/client"
-import PageBuilder from "@/components/PageBuilder"
-import { homepageQuery, homeQuery, latestContentQuery } from "./homepage.query"
+import { homeQuery, latestContentQuery } from "./homepage.query"
 import { CloudinaryImage } from "@/types/datocms"
 import { ResultOf, readFragment } from "@/lib/datocms/graphql"
 import { getCloudinaryImageProps } from "@/utils/cloudinary"
 import contentStyles from "@/styles/content.module.css"
 import { CardSlider } from "@/components/content/card-slider"
-import generateExcerpt from "@/lib/util/generateExcerpt"
 import VideoBg from "./video-bg"
 import { fileFieldFragment } from "@fragments/blocks"
 import { StructuredArticleData } from "@/types/structured-data"
@@ -34,7 +31,6 @@ type PageProps = {
 export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // Fetch metadata from Sanity
   const { isEnabled } = await draftMode()
 
   const { homepage: page } = await executeQuery(homeQuery, {
@@ -147,21 +143,23 @@ function generateStructuredData(page: any): StructuredArticleData {
 
 function formatContentSliderData(latestContent: any[]) {
   const formattedContent = latestContent.map((item) => {
-    const formattedExcerpt = item.excerpt || generateExcerpt(item.content) || ""
+    // const formattedExcerpt = item.wpexcerpt || generateExcerpt(item.content) || ""
+    const formattedExcerpt = item.wpexcerpt || ""
     const truncatedExcerpt =
       formattedExcerpt.length > 175
         ? formattedExcerpt.slice(0, 175) + "[…]"
         : formattedExcerpt
 
     return {
-      type: item._type,
+      type: "post",
       title: item.title,
       slug: item.slug,
       date: item.date,
       excerpt: truncatedExcerpt,
-      featuredMedia: item.featuredMedia,
+      featuredMedia: item.featuredImage,
     }
   })
+
   return {
     title: "Latest Content",
     items: formattedContent,
@@ -186,35 +184,20 @@ export default async function Home({ params }: PageProps) {
     includeDrafts: isDraftModeEnabled,
   })
 
-  console.log("page", page)
-
   if (!page) {
     notFound()
   }
 
-  const dataSanity = await fetchFromSanity(
-    homepageQuery,
-    isDraftModeEnabled
-      ? {
-          perspective: "previewDrafts",
-          useCdn: false,
-          stega: true,
-        }
-      : undefined
-  )
-
-  const latestContent = await fetchFromSanity(
+  const { allArticles: latestArticles } = await executeQuery(
     latestContentQuery,
-    isDraftModeEnabled
-      ? {
-          perspective: "previewDrafts",
-          useCdn: false,
-          stega: true,
-        }
-      : undefined
+    {
+      variables: {},
+      excludeInvalid: false,
+      includeDrafts: isDraftModeEnabled,
+    }
   )
 
-  const contentSliderData = formatContentSliderData(latestContent || [])
+  const contentSliderData = formatContentSliderData(latestArticles || [])
 
   return (
     <div className={`${s.homepage}`}>
@@ -222,7 +205,6 @@ export default async function Home({ params }: PageProps) {
       <VideoBg />
 
       <div className={`dark ${contentStyles.contentBlock} ${s.homepageHero}`}>
-        {/* <PageBuilder data={dataSanity.pageBuilder} /> */}
         {page.content && (
           <StructuredText
             data={page.content}

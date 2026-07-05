@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { executeQuery } from "@/lib/forgecms/execute-query"
 import { sortStandings } from "@/lib/helpers/standings-calc"
 
@@ -8,6 +9,9 @@ import s from "./styles.module.css"
 interface TeamData {
   team_id: string
   team_name: string
+  team_logo: {
+    url: string
+  }
   is_focused: string
   gp: number
   w: number
@@ -98,13 +102,13 @@ export async function StandingsTable({
                 <td>{index + 1}</td>
                 <td className={s.teamName}>
                   <div className={`${s.teamName}`}>
-                    {/* <img
-                    src={teamData.team.teamLogo.asset.url}
-                    alt={`${teamData.team.teamName} logo`}
-                    width={26}
-                    height={26}
-                    style={{ marginRight: "8px" }}
-                  /> */}
+                    <Image
+                      src={teamData.team_logo.url}
+                      alt={`${teamData.team_name} logo`}
+                      width={26}
+                      height={26}
+                      style={{ marginRight: "8px" }}
+                    />
                     {teamData.team_name}
                   </div>
                 </td>

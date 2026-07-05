@@ -6,10 +6,10 @@ import { Arrow, Dot } from "../slider-nav"
 import clsx from "clsx"
 import s from "./styles.module.css"
 
-type ContentCard = {
+type CardSliderItem = {
   type: string
   title: string
-  slug: { current: string; _type: "slug" }
+  slug: string
   date: string
   excerpt: string
   featuredMedia: string
@@ -28,7 +28,7 @@ const slideWidthCalc = `calc((100% - ${
 export function CardSlider({
   data,
 }: {
-  data: { title: string; items: ContentCard[] }
+  data: { title: string; items: CardSliderItem[] }
 }) {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -67,9 +67,9 @@ export function CardSlider({
         <Arrow direction="left" />
       </button>
       <div className={s.cardSlider} ref={containerRef}>
-        {data.items.map((item: ContentCard, idx: number) => (
+        {data.items.map((item: CardSliderItem, idx: number) => (
           <div
-            key={item.slug.current}
+            key={item.slug}
             ref={(el) => {
               slideRefs.current[idx] = el
             }}
@@ -79,7 +79,7 @@ export function CardSlider({
               gap: `${GAP_PX}px`,
             }}
           >
-            <ContentCard data={item} />
+            <ContentCard data={{ ...item, slug: item.slug }} />
           </div>
         ))}
       </div>

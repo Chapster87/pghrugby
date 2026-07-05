@@ -1,30 +1,5 @@
-import { seoFragment } from "@sanity-fragments/seo-fragment"
 import { graphql } from "@/lib/datocms/graphql"
 import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
-
-export const homepageQuery = `
-  *[_type == "homepage"][0]{
-    pageBuilder[] {
-      ...,
-      _type == "linkGroup" => {
-        ...,
-        links[] {
-          _type,
-          text,
-          openInNewTab,
-          customLink,
-          route,
-          asButton,
-          style,
-          reference-> {
-            _id, title, slug, _type
-          }
-        }
-      }
-    },
-    ${seoFragment}
-  }
-`
 
 export const homeQuery = graphql(
   `
@@ -56,33 +31,16 @@ export const homeQuery = graphql(
   [fileFieldFragment, blocksFragment]
 )
 
-export const latestContentQueryDato = graphql(
+export const latestContentQuery = graphql(
   `
     query ArticlesQuery {
       allArticles(orderBy: [_createdAt_ASC], first: 8) {
         slug
+        title
+        featuredImage
+        wpexcerpt
+        _updatedAt
       }
     }
   `
 )
-
-// Query to fetch the last 8 pages or posts added by date
-export const latestContentQuery = `
-  *[_type in ['post'] && !(_id match "draft.*") && (!defined(excludeFromHomepageSlider) || excludeFromHomepageSlider != true)]|order(date desc)[0...8]{
-    _id,
-    _type,
-    title,
-    slug,
-    date,
-    modified,
-    status,
-    content,
-    excerpt,
-    featuredMedia,
-    sticky,
-    author,
-    categories,
-    tags,
-    seo
-  }
-`

@@ -1,3 +1,5 @@
+@layer base, components, utilities;
+
 @import "./variables.css";
 @import "./custom-media.css";
 @import "./theming.css";

@@ -2,9 +2,9 @@ import type { Metadata, ResolvingMetadata } from "next"
 import Link from "@components/link"
 import Heading from "@components/typography/heading"
 import contentStyles from "@/styles/content.module.css"
+import { linksQuery } from "./links.query"
+import { executeQuery } from "@/lib/forgecms/execute-query"
 import s from "./styles.module.css"
-
-import { client } from "@/sanity/lib/client"
 
 /**
  * Generate metadata for the page.
@@ -30,76 +30,58 @@ export async function generateMetadata(
   } satisfies Metadata
 }
 
-// Fetch Linktree data from Sanity
-async function getLinktreeData() {
-  return client.fetch(
-    `*[_type == "linktree"]{
-      primaryGroupTitle,
-      primaryLinks[]{
-        label,
-        "url": coalesce(route, customLink, internalLink->slug.current),
-        openInNewTab
-      },
-      secondaryGroupTitle,
-      secondaryLinks[]{
-        label,
-        "url": coalesce(route, customLink, internalLink->slug.current),
-        openInNewTab
-      }
-    }[0]`
-  )
-}
-
 export default async function LinksPage() {
-  const linktreeData = await getLinktreeData()
+  const { linktree: linkTreeData } = await executeQuery(linksQuery)
+
+  console.log("Links Data:", linkTreeData)
 
   return (
     <div className={`${contentStyles.contentBlock} ${s.linktreeMain}`}>
-      {/* <h1 className={s.linktreeTitle}>Pittsburgh Rugby Links</h1> */}
+      <h1 className={s.linktreeTitle}>Pittsburgh Rugby Links</h1>
       <ul className={s.linkList}>
-        {linktreeData && (
-          <>
-            <li className={s.linktreeLinkGroup}>
-              <Heading className={s.linktreeGroupTitle} level="h2">
-                {linktreeData.primaryGroupTitle}:
-              </Heading>
-              <ul className={s.linktreeLinksList}>
-                {linktreeData.primaryLinks.map((link: any) => (
-                  <li key={link.url} className={s.linktreeLinkItem}>
-                    <Link
-                      href={link.url}
-                      className={s.linktreeLink}
-                      target={link.openInNewTab ? "_blank" : "_self"}
-                      buttonStyle
-                      variant="primary"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-            <li className={s.linktreeLinkGroup}>
-              <Heading className={s.linktreeGroupTitle} level="h2">
-                {linktreeData.secondaryGroupTitle}:
-              </Heading>
-              <ul className={s.linktreeLinksList}>
-                {linktreeData.secondaryLinks.map((link: any) => (
-                  <li key={link.url} className={s.linktreeLinkItem}>
-                    <Link
-                      href={link.url}
-                      className={s.linktreeLink}
-                      target={link.openInNewTab ? "_blank" : "_self"}
-                      buttonStyle
-                      variant="primary"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          </>
+        {linkTreeData?.top_links && (
+          <li className={s.linktreeLinkGroup}>
+            <Heading className={s.linktreeGroupTitle} level="h2">
+              Top Links:
+            </Heading>
+            <ul className={s.linktreeLinksList}>
+              {linkTreeData.top_links.map((link: any) => (
+                <li key={link.routePath} className={s.linktreeLinkItem}>
+                  <Link
+                    href={link.routePath}
+                    className={s.linktreeLink}
+                    // target={link.openInNewTab ? "_blank" : "_self"}
+                    buttonStyle
+                    variant="primary"
+                  >
+                    {link.labelOverride}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </li>
+        )}
+        {linkTreeData?.club_info && (
+          <li className={s.linktreeLinkGroup}>
+            <Heading className={s.linktreeGroupTitle} level="h2">
+              Club Info:
+            </Heading>
+            <ul className={s.linktreeLinksList}>
+              {linkTreeData.club_info.map((link: any) => (
+                <li key={link.routePath} className={s.linktreeLinkItem}>
+                  <Link
+                    href={link.routePath}
+                    className={s.linktreeLink}
+                    // target={link.openInNewTab ? "_blank" : "_self"}
+                    buttonStyle
+                    variant="primary"
+                  >
+                    {link.labelOverride}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </li>
         )}
       </ul>
     </div>

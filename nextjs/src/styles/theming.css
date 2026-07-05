@@ -1,3 +1,5 @@
-.dark {
-  color: var(--color-white);
+@layer base {
+  .dark {
+    color: var(--color-white);
+  }
 }
