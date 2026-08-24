@@ -10,9 +10,9 @@ import * as Form from "@radix-ui/react-form"
 import s from "./style.module.css"
 
 export type SocialMedia = {
-  facebook: string
-  instagram: string
-  twitter: string
+  facebookUrl: string
+  instagramUrl: string
+  twitterUrl: string
 }
 
 export default function ContactForm({
@@ -81,10 +81,10 @@ export default function ContactForm({
         <ul className={s.socialLinks}>
           {socialsData && (
             <>
-              {socialsData.facebook && (
+              {socialsData.facebookUrl && (
                 <li>
                   <Link
-                    href={socialsData.facebook}
+                    href={socialsData.facebookUrl}
                     target="_blank"
                     className={s.socialLink}
                   >
@@ -95,10 +95,10 @@ export default function ContactForm({
                   </Link>
                 </li>
               )}
-              {socialsData.instagram && (
+              {socialsData.instagramUrl && (
                 <li>
                   <Link
-                    href={socialsData.instagram}
+                    href={socialsData.instagramUrl}
                     target="_blank"
                     className={s.socialLink}
                   >
@@ -109,10 +109,10 @@ export default function ContactForm({
                   </Link>
                 </li>
               )}
-              {socialsData.twitter && (
+              {socialsData.twitterUrl && (
                 <li>
                   <Link
-                    href={socialsData.twitter}
+                    href={socialsData.twitterUrl}
                     target="_blank"
                     className={s.socialLink}
                   >

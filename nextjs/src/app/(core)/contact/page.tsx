@@ -1,7 +1,8 @@
 "use server"
 
 import type { Metadata, ResolvingMetadata } from "next"
-import { client } from "@/sanity/lib/client"
+import { socialsQuery } from "./contact.query"
+import { executeQuery } from "@/lib/forgecms/execute-query"
 import SidebarLayout from "@/layouts/sidebar"
 import Heading from "@components/typography/heading"
 import Text from "@/components/typography/text"
@@ -39,14 +40,10 @@ export async function generateMetadata(
   } satisfies Metadata
 }
 
-const socialsQuery = `*[_type == "socialMedia"] | order(publishedAt desc)[0] {
-  facebook,
-  instagram,
-  twitter
-}`
-
 export default async function ContactUs() {
-  const socials = await client.fetch(socialsQuery)
+  const { socialSettings } = await executeQuery(socialsQuery)
+
+  console.log("Socials Data:", socialSettings)
   return (
     <SidebarLayout>
       <div className={`${contentStyles.contentBlock} ${s.contactPage}`}>
@@ -67,7 +64,7 @@ export default async function ContactUs() {
         </div>
 
         <div className={s.contactForm}>
-          <ContactForm socialsData={socials} />
+          <ContactForm socialsData={socialSettings} />
         </div>
       </div>
     </SidebarLayout>
