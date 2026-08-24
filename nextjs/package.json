@@ -65,6 +65,7 @@
     "sanity-plugin-simpler-color-input": "^3.1.1",
     "sanity-plugin-table-of-contents": "^1.0.1",
     "server-only": "^0.0.1",
+    "stripe": "^22.5.0",
     "webpack": "^5.97.1"
   },
   "devDependencies": {

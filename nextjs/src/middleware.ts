@@ -107,9 +107,12 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Skip middleware for DatoCMS plugin and Sanity Studio
+  // PROTOTYPE: /prototype routes also skip — the spike must run without the
+  // Medusa backend (which this middleware depends on). Remove with the spike.
   if (
     pathname.startsWith("/private-datocms-plugin") ||
-    pathname.startsWith("/studio")
+    pathname.startsWith("/studio") ||
+    pathname.startsWith("/prototype")
   ) {
     return NextResponse.next()
   }
