@@ -14,7 +14,7 @@
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
     "prototype:orders": "tsx src/lib/prototype-orders/tui.ts",
-    "generate-schema": "pnpm gql-tada generate schema \"https://graphql.datocms.com/\" --header \"Authorization: Bearer 766711dc62f66a373381710df7b5ba\" --output \"./schema.graphql\"",
+    "generate-schema": "node ./scripts/generate-datocms-schema.mjs",
     "generate-typings": "pnpm gql-tada generate output"
   },
   "dependencies": {

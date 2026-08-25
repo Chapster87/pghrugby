@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY)
+/**
+ * Contact-form email via Resend.
+ * API key is server-only (RESEND_API_KEY) — never NEXT_PUBLIC_.
+ * From-address must be a verified domain sender; submitter goes on replyTo.
+ */
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+const DEFAULT_FROM_EMAIL = "web@pghrugby.com"
 
 // Map context values to designated email addresses
 const CONTEXT_EMAILS: Record<string, string> = {
@@ -28,11 +35,26 @@ const CONTEXT_SUBJECTS: Record<string, string> = {
   website: "Website Question or Technical Issue",
 }
 
+/**
+ * POST /api/send-contact-email
+ * Sends a club contact-form message via Resend.
+ *
+ * @param req - JSON body: { name, email, message, context }
+ * @returns Success JSON or an error payload with HTTP status
+ */
 export async function POST(req: Request) {
   try {
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json(
+        { error: "RESEND_API_KEY is not set" },
+        { status: 500 }
+      )
+    }
+
     const { name, email, message, context } = await req.json()
-    const from = `${name} <${email}>`
     const to = CONTEXT_EMAILS[context] || CONTEXT_EMAILS["general"]
+    const fromAddress = process.env.RESEND_FROM_EMAIL || DEFAULT_FROM_EMAIL
+    const from = `Pittsburgh Forge Rugby Club <${fromAddress}>`
 
     const subject = `Website Message - From: ${
       CONTEXT_SUBJECTS[context] || CONTEXT_SUBJECTS["general"]
@@ -44,6 +66,7 @@ export async function POST(req: Request) {
     const data = await resend.emails.send({
       from,
       to,
+      replyTo: email ? `${name} <${email}>` : undefined,
       subject,
       html,
     })
