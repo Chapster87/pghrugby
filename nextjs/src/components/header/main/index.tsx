@@ -1,10 +1,9 @@
 "use client"
 
-import { Suspense, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import Link from "next/link"
-import MiniCart from "@/components/mini-cart"
 import Crest from "@svg/Crest"
 import s from "./style.module.css"
 
@@ -12,15 +11,9 @@ interface NavProps {
   title: string
   mainNav: React.ReactNode
   mobileNav: React.ReactNode
-  cart?: any
 }
 
-export default function HeaderMain({
-  title,
-  mainNav,
-  mobileNav,
-  cart,
-}: NavProps) {
+export default function HeaderMain({ title, mainNav, mobileNav }: NavProps) {
   const headerRef = useRef<HTMLDivElement>(null)
 
   // Determine if current page is home based on slug
@@ -62,19 +55,9 @@ export default function HeaderMain({
           >
             Account
           </Link>
-          <Suspense
-            fallback={
-              <Link
-                href="/cart"
-                className={s.navLink}
-                data-testid="nav-cart-link"
-              >
-                Cart (0)
-              </Link>
-            }
-          >
-            <MiniCart cart={cart} />
-          </Suspense>
+          <Link href="/cart" className={s.navLink} data-testid="nav-cart-link">
+            Cart
+          </Link>
         </div>
       </div>
     </header>

@@ -9,10 +9,9 @@ import s from "./style.module.css"
 
 interface NavProps {
   title: string
-  cart?: any
 }
 
-export default function HeaderMain({ title, cart }: NavProps) {
+export default function HeaderMain({ title }: NavProps) {
   const headerRef = useRef<HTMLDivElement>(null)
 
   // Determine if current page is home based on slug

@@ -3,7 +3,6 @@ import HeaderMain from "./main"
 import { MainNav, MobileNav } from "./nav"
 import { client } from "@/sanity/lib/client"
 import { navQuery } from "./nav.query"
-import { retrieveCart } from "@lib/data/cart"
 import { urlBuilder } from "@/lib/util/url"
 
 const settingsQuery = `*[_type == "settings"] | order(publishedAt desc)[0] {
@@ -28,7 +27,6 @@ interface FormattedNavData {
 export default async function Header() {
   const settings = await client.fetch(settingsQuery)
   const navigation = await client.fetch(navQuery)
-  const cart = await retrieveCart().catch(() => null)
   const siteTitle = settings?.title || "Pittsburgh Rugby"
   const formattedNavData: FormattedNavData = {
     navigation:
@@ -66,7 +64,6 @@ export default async function Header() {
         title={siteTitle}
         mainNav={<MainNav formattedNavData={formattedNavData} />}
         mobileNav={<MobileNav formattedNavData={formattedNavData} />}
-        cart={cart}
       />
     </>
   )

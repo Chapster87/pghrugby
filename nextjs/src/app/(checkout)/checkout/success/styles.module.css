@@ -1,0 +1,98 @@
+.main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 16px 80px;
+}
+
+.title {
+  font-size: 2rem;
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+
+.lede {
+  font-size: 1.05rem;
+  margin: 0 0 32px;
+}
+
+.card {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  margin: 0 0 16px;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  margin: 24px 0 12px;
+}
+
+.meta {
+  margin: 0 0 8px;
+}
+
+.metaRow {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.metaRow dt {
+  opacity: 0.7;
+}
+
+.metaRow dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
+
+.muted {
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 8px 8px 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.num {
+  text-align: right;
+}
+
+.registration {
+  margin-top: 8px;
+}
+
+.payload {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 0.85rem;
+  overflow-x: auto;
+}
+
+.error {
+  color: #b91c1c;
+  margin: 16px 0;
+}
+
+.link {
+  text-decoration: underline;
+}

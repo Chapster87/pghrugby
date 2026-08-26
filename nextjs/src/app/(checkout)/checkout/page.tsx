@@ -1,41 +1,85 @@
-import { retrieveCart } from "@lib/data/cart"
-import { retrieveCustomer } from "@lib/data/customer"
-import SidebarLayout from "@/layouts/sidebar"
-import PaymentWrapper from "@modules/checkout/components/payment-wrapper"
-import CheckoutForm from "@modules/checkout/templates/checkout-form"
-import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
-import { Metadata } from "next"
-import { notFound } from "next/navigation"
-import contentStyles from "@/styles/content.module.css"
+"use client"
+
+import { Suspense, useCallback } from "react"
+
+import {
+  EmbeddedCheckout,
+  EmbeddedCheckoutProvider,
+} from "@stripe/react-stripe-js"
+import { loadStripe } from "@stripe/stripe-js"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+
 import s from "./styles.module.css"
 
-export const metadata: Metadata = {
-  title: "Checkout",
-}
+/**
+ * Embedded Checkout page — mounts Stripe's full-page embedded Checkout via the
+ * React provider (`@stripe/stripe-js` + `@stripe/react-stripe-js`, upgraded to
+ * the embedded Checkout line as part of the checkout module replacement).
+ *
+ * The session is created server-side (`POST /api/checkout/sessions`) from the
+ * server-authoritative cart; on successful payment Stripe redirects to the
+ * return_url set on the session (/checkout/success?session_id=...).
+ */
 
-export default async function Checkout() {
-  const cart = await retrieveCart()
+const PUBLISHABLE_KEY =
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
+  process.env.NEXT_PUBLIC_STRIPE_KEY
 
-  if (!cart) {
-    return notFound()
-  }
+const stripePromise = PUBLISHABLE_KEY ? loadStripe(PUBLISHABLE_KEY) : null
 
-  const customer = await retrieveCustomer()
+function CheckoutInner() {
+  const searchParams = useSearchParams()
+  const cartRef = searchParams.get("cartRef")
+
+  const fetchClientSecret = useCallback(async () => {
+    const res = await fetch("/api/checkout/sessions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ cartRef }),
+    })
+    const data = await res.json()
+    if (!res.ok) {
+      throw new Error(data.error ?? "Failed to create Checkout Session")
+    }
+    return data.clientSecret as string
+  }, [cartRef])
 
   return (
-    <div className={s.checkoutPage}>
-      <div className={contentStyles.primary}>
-        <div className={`${contentStyles.contentBlock}`}>
-          <PaymentWrapper cart={cart}>
-            <CheckoutForm cart={cart} customer={customer} />
-          </PaymentWrapper>
+    <main className={s.checkoutMain}>
+      <h1 className={s.title}>Checkout</h1>
+
+      {!cartRef ? (
+        <p className={s.hint}>
+          No cart to check out — go back to the{" "}
+          <Link href="/cart" className={s.link}>
+            cart
+          </Link>{" "}
+          and build one first.
+        </p>
+      ) : !stripePromise ? (
+        <p className={s.error}>
+          Stripe is not configured — set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY in
+          your environment.
+        </p>
+      ) : (
+        <div className={s.frame}>
+          <EmbeddedCheckoutProvider
+            stripe={stripePromise}
+            options={{ fetchClientSecret }}
+          >
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
         </div>
-      </div>
-      <div className={contentStyles.secondary}>
-        <div className={`${contentStyles.contentBlock}`}>
-          <CheckoutSummary cart={cart} />
-        </div>
-      </div>
-    </div>
+      )}
+    </main>
+  )
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<p className={s.hint}>Loading checkout…</p>}>
+      <CheckoutInner />
+    </Suspense>
   )
 }

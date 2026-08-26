@@ -1,13 +1,40 @@
-.checkoutPage {
-  display: grid;
-  grid-template-columns: 1fr;
+.checkoutMain {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
 
-  @media (--viewport-lg-up) {
-    max-width: var(--container-max-width);
-    width: 100%;
-    grid-template-columns: 3fr 1fr;
-    gap: 24px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.title {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+
+/**
+ * The embedded Checkout is an iframe that adapts to its container's width
+ * (form + order summary side by side when wide). Wrapping it in the site's
+ * white content-card treatment keeps it from floating as a bare box on the
+ * dark site background.
+ */
+.frame {
+  background-color: var(--color-white);
+  border-radius: 8px;
+  box-shadow: 0 0 0.5rem 0 #000;
+  padding: 8px;
+}
+
+.hint {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin: 24px 0;
+}
+
+.link {
+  text-decoration: underline;
+}
+
+.error {
+  color: #b91c1c;
+  margin: 24px 0;
 }

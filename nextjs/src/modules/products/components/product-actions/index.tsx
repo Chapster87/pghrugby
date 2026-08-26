@@ -1,22 +1,16 @@
 "use client"
 
-import { addToCart } from "@lib/data/cart"
-import { useIntersection } from "@lib/hooks/use-in-view"
 import { HttpTypes } from "@medusajs/types"
-// import { Button } from "@medusajs/ui"
 import Button from "@/components/button"
 import Divider from "@modules/common/components/divider"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
 import { isEqual } from "lodash"
-import { useParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
-import MobileActions from "./mobile-actions"
 import ProductForm from "@modules/products/components/product-form"
 import { VariantWithDigitalProduct } from "../../../../types/global"
 import { getDigitalProductPreview } from "../../../../lib/data/products"
-import GolfOutingForm from "@modules/products/components/product-form/golf-outing"
-import QuantitySelector from "@/components/quantity-selector"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -37,13 +31,10 @@ export default function ProductActions({
   product,
   disabled,
 }: ProductActionsProps) {
+  const router = useRouter()
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
-  const [isAdding, setIsAdding] = useState(false)
-  const [cartMessage, setCartMessage] = useState<string | undefined>(undefined)
-  const [quantity, setQuantity] = useState(1)
   const [meta, setMeta] = useState<Record<string, any>>({})
   const [formValid, setFormValid] = useState(true)
-  const countryCode = useParams().countryCode as string
 
   // If there is only 1 variant, preselect the options
   useEffect(() => {
@@ -72,37 +63,16 @@ export default function ProductActions({
     }))
   }
 
-  //check if the selected options produce a valid variant
-  const isValidVariant = useMemo(() => {
-    return product.variants?.some((v) => {
-      const variantOptions = optionsAsKeymap(v.options)
-      return isEqual(variantOptions, options)
+  const actionsRef = useRef<HTMLDivElement>(null)
+
+  interface HandleChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
+
+  const handleChange = (e: HandleChangeEvent) => {
+    setMeta({
+      ...meta,
+      [e.target.name]: { displayName: e.target.title, value: e.target.value },
     })
-  }, [product.variants, options])
-
-  // check if the selected variant is in stock
-  const inStock = useMemo(() => {
-    // If we don't manage inventory, we can always add to cart
-    if (selectedVariant && !selectedVariant.manage_inventory) {
-      return true
-    }
-
-    // If we allow back orders on the variant, we can add to cart
-    if (selectedVariant?.allow_backorder) {
-      return true
-    }
-
-    // If there is inventory available, we can add to cart
-    if (
-      selectedVariant?.manage_inventory &&
-      (selectedVariant?.inventory_quantity || 0) > 0
-    ) {
-      return true
-    }
-
-    // Otherwise, we can't add to cart
-    return false
-  }, [selectedVariant])
+  }
 
   const handleDownloadPreview = async () => {
     if (!selectedVariant?.digital_product) {
@@ -118,50 +88,11 @@ export default function ProductActions({
     }
   }
 
-  const actionsRef = useRef<HTMLDivElement>(null)
-
-  const inView = useIntersection(actionsRef, "0px")
-
-  interface Meta {
-    [key: string]: string
-  }
-
-  interface HandleChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
-
-  const handleChange = (e: HandleChangeEvent) => {
-    setMeta({
-      ...meta,
-      [e.target.name]: { displayName: e.target.title, value: e.target.value },
-    })
-  }
-
-  // add the selected variant to the cart
-  const handleAddToCart = async () => {
-    if (!selectedVariant?.id) return null
-
-    setIsAdding(true)
-    setCartMessage(undefined) // Clear any previous messages
-
-    // Flatten the meta object to be a simple key-value store
-    // const flattenedMeta = Object.entries(meta).reduce((acc, [key, value]) => {
-    //   acc[key] = value.value
-    //   return acc
-    // }, {} as Record<string, string>)
-
-    try {
-      await addToCart({
-        variantId: selectedVariant.id,
-        quantity,
-        countryCode,
-        metadata: meta,
-      })
-      setCartMessage("Item added to cart successfully!")
-    } catch (error: any) {
-      console.error("Failed to add to cart:", error)
-      setCartMessage(error.message || "Failed to add item to cart.")
-    } finally {
-      setIsAdding(false)
-    }
+  // The Medusa cart is gone — orders now flow through the Stripe-backed cart
+  // and embedded Checkout. This page (demo merch catalog) renders as a product
+  // info page and points buyers at the store cart.
+  const goToCart = () => {
+    router.push("/cart")
   }
 
   return (
@@ -179,7 +110,7 @@ export default function ProductActions({
                       updateOption={setOptionValue}
                       title={option.title ?? ""}
                       data-testid="product-options"
-                      disabled={!!disabled || isAdding}
+                      disabled={!!disabled}
                     />
                   </div>
                 )
@@ -197,10 +128,6 @@ export default function ProductActions({
           setFormValid={setFormValid}
         />
 
-        {/* {product.handle === "golf-outing" && (
-          <GolfOutingForm meta={meta} changeForm={handleChange} />
-        )} */}
-
         {selectedVariant?.digital_product && (
           <Button
             onClick={handleDownloadPreview}
@@ -211,53 +138,14 @@ export default function ProductActions({
           </Button>
         )}
 
-        <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
-
         <Button
-          onClick={handleAddToCart}
-          disabled={
-            !inStock ||
-            !selectedVariant ||
-            !!disabled ||
-            isAdding ||
-            !isValidVariant ||
-            !formValid
-          }
+          onClick={goToCart}
           variant="primary"
           className="w-full h-10"
-          isLoading={isAdding}
           data-testid="add-product-button"
         >
-          {!selectedVariant && !options
-            ? "Select variant"
-            : !inStock || !isValidVariant
-            ? "Out of stock"
-            : !formValid
-            ? "Complete required fields"
-            : "Add to cart"}
+          Order at the club store →
         </Button>
-        {cartMessage && (
-          <div
-            className={`text-sm text-center ${
-              cartMessage.includes("successfully")
-                ? "text-green-500"
-                : "text-red-500"
-            }`}
-          >
-            {cartMessage}
-          </div>
-        )}
-        <MobileActions
-          product={product}
-          variant={selectedVariant}
-          options={options}
-          updateOptions={setOptionValue}
-          inStock={inStock}
-          handleAddToCart={handleAddToCart}
-          isAdding={isAdding}
-          show={!inView}
-          optionsDisabled={!!disabled || isAdding}
-        />
       </div>
     </>
   )
