@@ -51,6 +51,50 @@ export async function insertIgnoreDuplicates<T extends Record<string, unknown>>(
   }
 }
 
+/**
+ * PATCHes a row via PostgREST — the only write tool the event handlers use,
+ * and it touches mutable status columns only (`payment_status`,
+ * `session_status`, `refunded_amount`, `refund_status`, `updated_at`); the
+ * frozen first-write columns are never updated here (never
+ * `resolution=merge-duplicates`, which would clobber them). Returns the
+ * updated row, or null when no row matched the filter.
+ */
+export async function updateRow<T extends Record<string, unknown>>(
+  table: "orders" | "carts",
+  column: string,
+  value: string,
+  updates: Partial<T>
+): Promise<T | null> {
+  const { supabaseUrl, serviceRoleKey } = supabaseConfig()
+
+  const res = await fetch(
+    `${supabaseUrl}/rest/v1/${table}?${column}=eq.${encodeURIComponent(
+      value
+    )}&select=*`,
+    {
+      method: "PATCH",
+      headers: {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(updates),
+      cache: "no-store",
+    }
+  )
+
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "")
+    throw new Error(
+      `PostgREST update ${table} failed (${res.status}): ${detail}`
+    )
+  }
+
+  const rows = (await res.json()) as T[]
+  return rows[0] ?? null
+}
+
 /** Selects a single row (or null) by a unique column equality filter. */
 export async function selectRow<T extends Record<string, unknown>>(
   table: "orders" | "carts",

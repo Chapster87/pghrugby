@@ -14,8 +14,7 @@
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
     "generate-schema": "node ./scripts/generate-datocms-schema.mjs",
-    "generate-typings": "pnpm gql-tada generate output",
-    "prototype:events": "tsx src/lib/prototype-events/tui.ts"
+    "generate-typings": "pnpm gql-tada generate output"
   },
   "dependencies": {
     "@datocms/cda-client": "^0.2.10",

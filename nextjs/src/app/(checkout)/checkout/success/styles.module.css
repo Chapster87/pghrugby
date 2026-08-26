@@ -1,35 +1,110 @@
-.main {
+/* /checkout/success — the winning return-page variant from the Stripe
+   edge-cases prototype: hero header + order receipt + styled registration
+   details on a white rounded container (the checkout layout's body background
+   is dark). */
+
+.innerBody {
   max-width: 760px;
-  margin: 0 auto;
-  padding: 48px 16px 80px;
+  margin: 48px auto 120px;
+  background: var(--color-white);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  padding: 32px;
+
+  @media (--viewport-sm) {
+    margin: 24px 12px 110px;
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
 }
 
-.title {
+/* Tone plumbing: each state sets --tone (accent) and --tone-ink (text on it). */
+.toneSuccess {
+  --tone: var(--color-success);
+  --tone-ink: var(--color-white);
+}
+.toneWarning {
+  --tone: var(--color-warning);
+  --tone-ink: var(--color-grey-900);
+}
+.toneDanger {
+  --tone: var(--color-danger);
+  --tone-ink: var(--color-white);
+}
+.toneInfo {
+  --tone: var(--color-info);
+  --tone-ink: var(--color-white);
+}
+.toneNeutral {
+  --tone: var(--color-grey-600);
+  --tone-ink: var(--color-white);
+}
+
+/* ---- Status hero ---- */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px 0 8px;
+}
+
+.heroIcon {
+  color: var(--tone);
+  margin-bottom: 16px;
+}
+
+.heroHeading {
   font-size: 2rem;
-  line-height: 1.2;
-  margin: 0 0 16px;
+  margin: 0 0 12px;
 }
 
-.lede {
+.heroMessage {
   font-size: 1.05rem;
-  margin: 0 0 32px;
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 0 24px;
+  opacity: 0.85;
 }
+
+.heroCta {
+  display: inline-flex;
+  align-items: center;
+  background: var(--tone);
+  color: var(--tone-ink);
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.heroDetails {
+  width: 100%;
+  max-width: 640px;
+  margin: 40px auto 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ---- Order receipt ---- */
 
 .card {
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--color-grey-300);
   border-radius: 8px;
-  padding: 24px;
-  margin-bottom: 32px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
 }
 
 .cardTitle {
-  font-size: 1.25rem;
-  margin: 0 0 16px;
-}
-
-.sectionTitle {
-  font-size: 1rem;
-  margin: 24px 0 12px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px;
+  opacity: 0.6;
 }
 
 .meta {
@@ -41,22 +116,17 @@
   gap: 12px;
   justify-content: space-between;
   padding: 6px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--color-grey-200);
 }
 
 .metaRow dt {
-  opacity: 0.7;
+  opacity: 0.65;
 }
 
 .metaRow dd {
   margin: 0;
-  text-align: right;
   font-weight: 600;
-}
-
-.muted {
-  opacity: 0.6;
-  font-weight: 400;
+  text-align: right;
 }
 
 .table {
@@ -69,30 +139,54 @@
 .table td {
   text-align: left;
   padding: 8px 8px 8px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--color-grey-200);
 }
 
 .num {
   text-align: right;
 }
 
-.registration {
-  margin-top: 8px;
+.totalRow {
+  font-weight: 600;
+}
+
+.grandTotal {
+  color: var(--tone);
+}
+
+/* ---- Registration details (styled, not raw JSON) ---- */
+
+.regList {
+  margin: 0;
+}
+
+.regRow {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--color-grey-200);
+}
+
+.regRow:last-child {
+  border-bottom: none;
+}
+
+.regLabel {
+  font-weight: 600;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+.regValue {
+  margin: 0;
+  text-align: right;
 }
 
 .payload {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--color-grey-100);
   border-radius: 6px;
   padding: 12px;
   font-size: 0.85rem;
   overflow-x: auto;
-}
-
-.error {
-  color: #b91c1c;
-  margin: 16px 0;
-}
-
-.link {
-  text-decoration: underline;
 }
