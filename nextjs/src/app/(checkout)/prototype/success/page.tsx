@@ -1,7 +1,15 @@
 import { Suspense } from "react"
 
-import { ORDER_STATES, VariantA, VariantB, VariantC, type OrderState } from "./variants"
+import {
+  ORDER_STATES,
+  VariantA,
+  VariantB,
+  VariantC,
+  type OrderState,
+} from "./variants"
 import { PrototypeSwitcher } from "./prototype-switcher"
+
+import s from "./styles.module.css"
 
 /**
  * PROTOTYPE — throwaway route (/prototype/success) for the Stripe edge-cases
@@ -27,9 +35,11 @@ export default async function PrototypeSuccessPage({
 
   return (
     <>
-      {variant === "A" && <VariantA state={state} />}
-      {variant === "B" && <VariantB state={state} />}
-      {variant === "C" && <VariantC state={state} />}
+      <div className={s.innerBody}>
+        {variant === "A" && <VariantA state={state} />}
+        {variant === "B" && <VariantB state={state} />}
+        {variant === "C" && <VariantC state={state} />}
+      </div>
 
       {process.env.NODE_ENV !== "production" && (
         <Suspense fallback={null}>
