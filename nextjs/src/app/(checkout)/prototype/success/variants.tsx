@@ -146,7 +146,11 @@ export const FIXTURE_ORDER: FixtureOrder = {
   flow: "golf",
   currency: "USD",
   lineItems: [
-    { description: "Golf outing — registration", quantity: 2, amountTotal: 11000 },
+    {
+      description: "Golf outing — registration",
+      quantity: 2,
+      amountTotal: 11000,
+    },
     { description: "Drink band", quantity: 1, amountTotal: 1500 },
   ],
   amountTotal: 12500,
@@ -171,7 +175,10 @@ export function formatMoney(cents: number, currency = "USD"): string {
 /** Variant C step derivation: where is the customer in the flow? */
 export function stepsFor(
   state: OrderState
-): { label: string; status: "done" | "current" | "pending" | "failed" | "expired" | "neutral" }[] {
+): {
+  label: string
+  status: "done" | "current" | "pending" | "failed" | "expired" | "neutral"
+}[] {
   if (state === "notfound") {
     return [
       { label: "Cart", status: "neutral" },
@@ -180,11 +187,7 @@ export function stepsFor(
     ]
   }
   const payment =
-    state === "open"
-      ? "current"
-      : state === "expired"
-      ? "expired"
-      : "done"
+    state === "open" ? "current" : state === "expired" ? "expired" : "done"
   const confirmation =
     state === "paid" || state === "refunded"
       ? "done"
@@ -198,6 +201,170 @@ export function stepsFor(
     { label: "Payment", status: payment },
     { label: "Confirmation", status: confirmation },
   ]
+}
+
+// ---------------------------------------------------------------------------
+// Shared content blocks: the order receipt and the registration details.
+// ---------------------------------------------------------------------------
+
+/** Friendly division labels for the tournament registration shape (mirrors the
+ *  sc7s-* skus in lib/checkout/catalog.ts; falls back to the raw sku). */
+const DIVISION_LABELS: Record<string, string> = {
+  "sc7s-mens-open": "SC7s Men's Open",
+  "sc7s-mens-social": "SC7s Men's Social",
+  "sc7s-mens-super-social": "SC7s Men's Super Social",
+  "sc7s-womens-open": "SC7s Women's Open",
+  "sc7s-mens-additional-side": "SC7s Men's Additional Side",
+  "sc7s-womens-additional-side": "SC7s Women's Additional Side",
+}
+
+/** Renders a { name, email } person as "Name · email", or a fallback. */
+function personLabel(value: unknown): string {
+  if (value && typeof value === "object") {
+    const person = value as { name?: unknown; email?: unknown }
+    const parts = [person.name, person.email].filter(
+      (part): part is string => typeof part === "string" && part.length > 0
+    )
+    if (parts.length > 0) return parts.join(" · ")
+  }
+  return "Not provided"
+}
+
+function strOr(value: unknown): string {
+  return typeof value === "string" && value.length > 0 ? value : "Not provided"
+}
+
+/** The dense order receipt (meta + line items + totals) used by variants A and B. */
+function OrderReceipt({
+  order,
+  statusLabel,
+}: {
+  order: FixtureOrder
+  statusLabel: string
+}) {
+  return (
+    <section className={s.card}>
+      <h2 className={s.cardTitle}>Order receipt</h2>
+      <dl className={s.meta}>
+        <div className={s.metaRow}>
+          <dt>Order reference</dt>
+          <dd>{order.sessionId}</dd>
+        </div>
+        <div className={s.metaRow}>
+          <dt>Customer</dt>
+          <dd>
+            {order.customerName} · {order.customerEmail}
+          </dd>
+        </div>
+        <div className={s.metaRow}>
+          <dt>Status</dt>
+          <dd>{statusLabel}</dd>
+        </div>
+      </dl>
+
+      <table className={s.table}>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th className={s.num}>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {order.lineItems.map((item) => (
+            <tr key={item.description}>
+              <td>{item.description}</td>
+              <td>{item.quantity}</td>
+              <td className={s.num}>
+                {formatMoney(item.amountTotal, order.currency)}
+              </td>
+            </tr>
+          ))}
+          {order.amountTax > 0 && (
+            <tr>
+              <td>Tax</td>
+              <td>—</td>
+              <td className={s.num}>
+                {formatMoney(order.amountTax, order.currency)}
+              </td>
+            </tr>
+          )}
+          <tr className={s.totalRow}>
+            <td colSpan={2}>Total</td>
+            <td className={`${s.num} ${s.grandTotal}`}>
+              {formatMoney(order.amountTotal, order.currency)}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  )
+}
+
+/**
+ * Registration details rendered as readable data, not raw JSON. Handles the
+ * two known flow shapes (golf = captain + golfers, tournament = division +
+ * team name + contact); anything else falls back to the payload as-is.
+ */
+function RegistrationDetails({
+  registration,
+}: {
+  registration: Record<string, unknown>
+}) {
+  const golfers = registration.golfers
+  if (Array.isArray(golfers)) {
+    return (
+      <section className={s.card}>
+        <h2 className={s.cardTitle}>Registration details</h2>
+        <dl className={s.regList}>
+          <div className={s.regRow}>
+            <dt className={s.regLabel}>Captain</dt>
+            <dd className={s.regValue}>{personLabel(registration.captain)}</dd>
+          </div>
+          <div className={s.regRow}>
+            <dt className={s.regLabel}>Golfers ({golfers.length})</dt>
+            {golfers.map((golfer, i) => (
+              <dd key={i} className={s.regValue}>
+                {personLabel(golfer)}
+              </dd>
+            ))}
+          </div>
+        </dl>
+      </section>
+    )
+  }
+
+  if (typeof registration.division === "string") {
+    const division = registration.division
+    return (
+      <section className={s.card}>
+        <h2 className={s.cardTitle}>Registration details</h2>
+        <dl className={s.regList}>
+          <div className={s.regRow}>
+            <dt className={s.regLabel}>Division</dt>
+            <dd className={s.regValue}>
+              {DIVISION_LABELS[division] ?? division}
+            </dd>
+          </div>
+          <div className={s.regRow}>
+            <dt className={s.regLabel}>Team name</dt>
+            <dd className={s.regValue}>{strOr(registration.teamName)}</dd>
+          </div>
+          <div className={s.regRow}>
+            <dt className={s.regLabel}>Contact</dt>
+            <dd className={s.regValue}>{personLabel(registration.contact)}</dd>
+          </div>
+        </dl>
+      </section>
+    )
+  }
+
+  return (
+    <section className={s.card}>
+      <h2 className={s.cardTitle}>Registration details</h2>
+      <pre className={s.payload}>{JSON.stringify(registration, null, 2)}</pre>
+    </section>
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -221,71 +388,9 @@ export function VariantA({ state }: { state: OrderState }) {
 
       {order && (
         <>
-          <section className={s.card}>
-            <h2 className={s.cardTitle}>Order receipt</h2>
-            <dl className={s.meta}>
-              <div className={s.metaRow}>
-                <dt>Order reference</dt>
-                <dd>{order.sessionId}</dd>
-              </div>
-              <div className={s.metaRow}>
-                <dt>Customer</dt>
-                <dd>
-                  {order.customerName} · {order.customerEmail}
-                </dd>
-              </div>
-              <div className={s.metaRow}>
-                <dt>Status</dt>
-                <dd>
-                  {view.label} {state === "processing" ? "(pending)" : ""}
-                </dd>
-              </div>
-            </dl>
-
-            <table className={s.table}>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Qty</th>
-                  <th className={s.num}>Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {order.lineItems.map((item) => (
-                  <tr key={item.description}>
-                    <td>{item.description}</td>
-                    <td>{item.quantity}</td>
-                    <td className={s.num}>
-                      {formatMoney(item.amountTotal, order.currency)}
-                    </td>
-                  </tr>
-                ))}
-                {order.amountTax > 0 && (
-                  <tr>
-                    <td>Tax</td>
-                    <td>—</td>
-                    <td className={s.num}>
-                      {formatMoney(order.amountTax, order.currency)}
-                    </td>
-                  </tr>
-                )}
-                <tr className={s.totalRow}>
-                  <td colSpan={2}>Total</td>
-                  <td className={`${s.num} ${s.grandTotal}`}>
-                    {formatMoney(order.amountTotal, order.currency)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
+          <OrderReceipt order={order} statusLabel={view.label} />
           {order.registration && (
-            <section className={s.card}>
-              <h2 className={s.cardTitle}>Registration details</h2>
-              <pre className={s.payload}>
-                {JSON.stringify(order.registration, null, 2)}
-              </pre>
-            </section>
+            <RegistrationDetails registration={order.registration} />
           )}
         </>
       )}
@@ -300,8 +405,9 @@ export function VariantA({ state }: { state: OrderState }) {
 }
 
 // ---------------------------------------------------------------------------
-// Variant B — "Status hero": the outcome is the story. Big icon + headline +
-// one action; the order summary hides behind a disclosure.
+// Variant B — "Status hero + receipt": the outcome is the story up top (big
+// icon + headline + one action), then the order receipt and registration
+// details below. The merged direction the human picked.
 // ---------------------------------------------------------------------------
 
 export function VariantB({ state }: { state: OrderState }) {
@@ -319,23 +425,12 @@ export function VariantB({ state }: { state: OrderState }) {
       </Link>
 
       {order && (
-        <details className={s.summaryToggle}>
-          <summary>Order summary — {formatMoney(order.amountTotal, order.currency)}</summary>
-          <ul className={s.summaryList}>
-            {order.lineItems.map((item) => (
-              <li key={item.description} className={s.summaryItem}>
-                <span>
-                  {item.description} × {item.quantity}
-                </span>
-                <span>{formatMoney(item.amountTotal, order.currency)}</span>
-              </li>
-            ))}
-            <li className={s.summaryItem}>
-              <span>Reference</span>
-              <span>{order.sessionId}</span>
-            </li>
-          </ul>
-        </details>
+        <div className={s.heroDetails}>
+          <OrderReceipt order={order} statusLabel={view.label} />
+          {order.registration && (
+            <RegistrationDetails registration={order.registration} />
+          )}
+        </div>
       )}
     </div>
   )
@@ -408,7 +503,10 @@ export function VariantC({ state }: { state: OrderState }) {
             <ul className={s.nextList}>
               {state === "processing" && (
                 <>
-                  <li>We’re waiting for the bank transfer to clear (1–3 business days).</li>
+                  <li>
+                    We’re waiting for the bank transfer to clear (1–3 business
+                    days).
+                  </li>
                   <li>You’ll get a confirmation email the moment it lands.</li>
                 </>
               )}
@@ -418,8 +516,14 @@ export function VariantC({ state }: { state: OrderState }) {
                   <li>The registration details above are locked in.</li>
                 </>
               )}
-              {state === "refunded" && <li>The refund is on its way back to the original payment method.</li>}
-              {(state === "unpaid" || state === "open" || state === "expired") && (
+              {state === "refunded" && (
+                <li>
+                  The refund is on its way back to the original payment method.
+                </li>
+              )}
+              {(state === "unpaid" ||
+                state === "open" ||
+                state === "expired") && (
                 <li>Nothing was charged — no payment went through.</li>
               )}
             </ul>

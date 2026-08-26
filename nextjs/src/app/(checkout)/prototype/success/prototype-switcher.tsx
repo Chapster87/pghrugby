@@ -20,7 +20,7 @@ const VARIANTS = ["A", "B", "C"] as const
 
 const VARIANT_NAMES: Record<(typeof VARIANTS)[number], string> = {
   A: "Receipt",
-  B: "Status hero",
+  B: "Hero + receipt",
   C: "Stepper",
 }
 
