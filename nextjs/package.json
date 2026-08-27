@@ -18,6 +18,7 @@
     "provision:stripe": "node ./scripts/provision-stripe-catalog.mjs",
     "provision:stripe:apply": "node ./scripts/provision-stripe-catalog.mjs --apply",
     "scan:woocommerce": "node ./scripts/scan-woocommerce.mjs",
+    "legacy-pages:cleanup": "node ./scripts/delete-legacy-datocms-pages.mjs",
     "prototype:datocms-models": "tsx src/lib/prototype-datocms-models/run.ts"
   },
   "dependencies": {
