@@ -17,7 +17,8 @@
     "generate-typings": "pnpm gql-tada generate output",
     "provision:stripe": "node ./scripts/provision-stripe-catalog.mjs",
     "provision:stripe:apply": "node ./scripts/provision-stripe-catalog.mjs --apply",
-    "scan:woocommerce": "node ./scripts/scan-woocommerce.mjs"
+    "scan:woocommerce": "node ./scripts/scan-woocommerce.mjs",
+    "prototype:datocms-models": "tsx src/lib/prototype-datocms-models/run.ts"
   },
   "dependencies": {
     "@datocms/cda-client": "^0.2.10",
