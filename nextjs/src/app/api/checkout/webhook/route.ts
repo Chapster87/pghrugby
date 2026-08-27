@@ -7,7 +7,7 @@ import {
   recordOrder,
   updateOrderPaymentStatus,
 } from "@/lib/checkout/record-order"
-import { stripe } from "@/lib/checkout/stripe"
+import { stripe, STRIPE_WEBHOOK_SECRET } from "@/lib/checkout/stripe"
 
 /**
  * POST /api/checkout/webhook
@@ -33,12 +33,13 @@ import { stripe } from "@/lib/checkout/stripe"
  * frozen first-write columns.
  *
  * To test locally: `stripe listen --forward-to localhost:8000/api/checkout/webhook`
- * and use the printed `whsec_...` as STRIPE_WEBHOOK_SECRET.
+ * and use the printed `whsec_...` as STRIPE_WEBHOOK_SECRET (test branch) or
+ * STRIPE_WEBHOOK_SECRET_TEST with STRIPE_ENV=test.
  */
 
 export async function POST(request: Request) {
   const signature = request.headers.get("stripe-signature")
-  const secret = process.env.STRIPE_WEBHOOK_SECRET
+  const secret = STRIPE_WEBHOOK_SECRET
 
   if (!stripe) {
     return NextResponse.json(

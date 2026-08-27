@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 
 import { findCatalogItem } from "@/lib/checkout/catalog"
 import { getCart } from "@/lib/checkout/cart-store"
-import { CHECKOUT_BASE_URL, stripe } from "@/lib/checkout/stripe"
+import { CHECKOUT_BASE_URL, isLiveStripe, stripe } from "@/lib/checkout/stripe"
 
 /**
  * POST /api/checkout/sessions  { cartRef }
@@ -54,10 +54,12 @@ export async function POST(request: Request) {
       mode: "payment",
       line_items: cart.items.map((item) => {
         const catalogItem = findCatalogItem(item.sku)
-        // Prefer the live Stripe Price once provisioned; fall back to inline
-        // price_data (server-catalog amounts) until then — amounts are always
-        // server-side, never client-dictated.
-        return catalogItem?.priceId
+        // Live account (STRIPE_ENV=live): prefer the provisioned Stripe Price
+        // once the catalog ticket lands the priceIds. Test mode falls back to
+        // inline price_data (server-catalog amounts) because a test key can't
+        // reference live Prices — amounts are always server-side, never
+        // client-dictated.
+        return isLiveStripe && catalogItem?.priceId
           ? { price: catalogItem.priceId, quantity: item.quantity }
           : {
               price_data: {

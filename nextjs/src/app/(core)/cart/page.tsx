@@ -124,9 +124,9 @@ export default function CartPage() {
               Season dues
             </Heading>
             <p className={s.description}>
-              {CHECKOUT_CATALOG.dues.label} —{" "}
+              {CHECKOUT_CATALOG.dues.fall.label} —{" "}
               <strong>
-                ${(CHECKOUT_CATALOG.dues.unitAmount / 100).toFixed(2)}
+                ${(CHECKOUT_CATALOG.dues.fall.unitAmount / 100).toFixed(2)}
               </strong>
               . Add an optional fixed-amount club donation to the same payment.
             </p>
@@ -267,9 +267,9 @@ export default function CartPage() {
               Steel City 7s tournament entry
             </Heading>
             <p className={s.description}>
-              One team entry per division. Rates: $350 entry, $325 additional
-              side (the +$50 late rate is an operational price swap at the
-              deadline).
+              One team entry per division. Rates: $400 entry, $375 additional
+              side (the +$50 late rate is in effect; standard rates return via
+              an operational price swap).
             </p>
 
             <div className={s.field}>

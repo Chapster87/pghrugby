@@ -14,7 +14,10 @@
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
     "generate-schema": "node ./scripts/generate-datocms-schema.mjs",
-    "generate-typings": "pnpm gql-tada generate output"
+    "generate-typings": "pnpm gql-tada generate output",
+    "provision:stripe": "node ./scripts/provision-stripe-catalog.mjs",
+    "provision:stripe:apply": "node ./scripts/provision-stripe-catalog.mjs --apply",
+    "scan:woocommerce": "node ./scripts/scan-woocommerce.mjs"
   },
   "dependencies": {
     "@datocms/cda-client": "^0.2.10",

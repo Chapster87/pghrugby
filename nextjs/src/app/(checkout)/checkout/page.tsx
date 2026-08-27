@@ -22,7 +22,13 @@ import s from "./styles.module.css"
  * return_url set on the session (/checkout/success?session_id=...).
  */
 
+// Mirror the server-side STRIPE_ENV selector (build-time inlined). The session
+// is created with the matching secret key, so the publishable key must come
+// from the same account pair.
 const PUBLISHABLE_KEY =
+  (process.env.NEXT_PUBLIC_STRIPE_ENV === "live"
+    ? process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_LIVE
+    : process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_TEST) ||
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
   process.env.NEXT_PUBLIC_STRIPE_KEY
 

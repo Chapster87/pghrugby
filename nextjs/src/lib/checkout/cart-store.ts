@@ -65,10 +65,12 @@ export function buildCart(input: {
   let registration: unknown
 
   if (input.flow === "dues") {
+    // Default season until the storefront/product tickets build a season picker.
+    const season = CHECKOUT_CATALOG.dues.fall
     items.push({
-      sku: CHECKOUT_CATALOG.dues.sku,
-      label: CHECKOUT_CATALOG.dues.label,
-      unitAmount: CHECKOUT_CATALOG.dues.unitAmount,
+      sku: season.sku,
+      label: season.label,
+      unitAmount: season.unitAmount,
       quantity: 1,
     })
 
@@ -97,7 +99,12 @@ export function buildCart(input: {
 
     for (const addon of input.addons ?? []) {
       const item = CHECKOUT_CATALOG.golf[addon]
-      items.push({ sku: item.sku, label: item.label, unitAmount: item.unitAmount, quantity: 1 })
+      items.push({
+        sku: item.sku,
+        label: item.label,
+        unitAmount: item.unitAmount,
+        quantity: 1,
+      })
     }
 
     // The per-golfer payload rides beside the session, never in Stripe
@@ -128,9 +135,19 @@ export function buildCart(input: {
     }
   }
 
-  const total = items.reduce((sum, item) => sum + item.unitAmount * item.quantity, 0)
+  const total = items.reduce(
+    (sum, item) => sum + item.unitAmount * item.quantity,
+    0
+  )
 
-  return { cartRef, flow: input.flow, currency: CHECKOUT_CURRENCY, items, total, registration }
+  return {
+    cartRef,
+    flow: input.flow,
+    currency: CHECKOUT_CURRENCY,
+    items,
+    total,
+    registration,
+  }
 }
 
 /** Persists a computed cart. */
