@@ -1,0 +1,56 @@
+"use server"
+
+import FooterClient from "./footer-client"
+import SponsorBar from "@components/sponsor-bar"
+import { client } from "@/sanity/lib/client"
+import { footerNavQuery } from "./footer.nav.query"
+import { urlBuilder } from "@/lib/util/url"
+import { FormattedNavData, NavItem, SubMenuItem } from "./types"
+
+const footerSocialsQuery = `*[_type == "socialMedia"] | order(publishedAt desc)[0] {
+  facebook,
+  instagram,
+  twitter,
+  youtube
+}`
+
+export default async function Footer() {
+  const socials = await client.fetch(footerSocialsQuery)
+  const navigation = await client.fetch(footerNavQuery)
+  const formattedNavData: FormattedNavData = {
+    navigation:
+      navigation?.footerNav?.map((menu: any): NavItem => {
+        return {
+          label: menu.overrideTitle || menu.item?.title,
+          url:
+            menu.route || // Prioritize route if defined
+            (menu.item?.slug?.current
+              ? urlBuilder(menu.item._type, menu.item.slug.current)
+              : "#"),
+          route: menu.route || undefined, // Added route handling
+          openInNewTab: menu.openInNewTab || false,
+          submenu:
+            menu.submenu?.map((subItem: any): SubMenuItem => {
+              return {
+                label: subItem.overrideTitle || subItem.item?.title,
+                url:
+                  subItem.route || // Prioritize route if defined
+                  (subItem.item?.slug?.current
+                    ? urlBuilder(subItem.item._type, subItem.item.slug.current)
+                    : "#"),
+                route: subItem.route || undefined, // Added route handling
+                openInNewTab: subItem.openInNewTab || false,
+              }
+            }) || [],
+        }
+      }) || [],
+  }
+
+  return (
+    <FooterClient
+      sponsorBar={<SponsorBar />}
+      socialMedia={socials}
+      formattedNavData={formattedNavData}
+    />
+  )
+}

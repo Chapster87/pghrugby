@@ -30,8 +30,8 @@ The plugin's communication with the DatoCMS UI is now robust, but backend persis
 
 ## Key Files
 
-- `pghrugby/nextjs/src/app/(plugin)/private-datocms-plugin/_plugin/entrypoints/LinkPicker.tsx`: Primary logic and UI.
-- `pghrugby/nextjs/src/app/(plugin)/private-datocms-plugin/_plugin/main.tsx`: Entry point and SDK registration.
+- `pghrugby/src/app/(plugin)/private-datocms-plugin/_plugin/entrypoints/LinkPicker.tsx`: Primary logic and UI.
+- `pghrugby/src/app/(plugin)/private-datocms-plugin/_plugin/main.tsx`: Entry point and SDK registration.
 
 ## Suggested Skills
 

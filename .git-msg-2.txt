@@ -1,0 +1,9 @@
+Consolidate workspace files and rules into the repo
+
+Move the workspace root into pghrugby: all 34 agent skills
+(.agents/skills), AGENTS.md, CONTEXT-MAP.md, skills-lock.json, and
+CONTEXT.md. Rename .clinerules to .rules and fold the guidance into
+one source of truth: AGENTS.md holds the conventions, .rules holds the
+component-styling and folder-organization details, and the GitHub
+Copilot instructions file is deleted. The workspace root now holds
+nothing beyond the repo.

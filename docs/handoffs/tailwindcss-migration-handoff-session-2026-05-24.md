@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document summarizes the progress made in migrating Tailwind CSS to CSS Modules within the `pghrugby/nextjs` directory, building upon the previous session documented in `docs/handoffs/tailwindcss-migration-handoff-session-2026-05-23.md`. The core objective remains the complete removal of Tailwind CSS usage.
+This document summarizes the progress made in migrating Tailwind CSS to CSS Modules within the `pghrugby` directory, building upon the previous session documented in `docs/handoffs/tailwindcss-migration-handoff-session-2026-05-23.md`. The core objective remains the complete removal of Tailwind CSS usage.
 
 ## Technical Standards Summary
 
@@ -23,33 +23,33 @@ This session focused on continuing the migration of common UI components and re-
 
 **Modules / Components Migrated in this Session:**
 
-- `pghrugby/nextjs/src/components/PortableText.tsx`: Converted inline Tailwind classes and JSX properties to CSS Modules in `pghrugby/nextjs/src/components/PortableText.module.css`.
-- `pghrugby/nextjs/src/modules/categories/templates/index.tsx`: Converted inline Tailwind classes and JSX properties to CSS Modules in `pghrugby/nextjs/src/modules/categories/templates/style.module.css`.
-- `pghrugby/nextjs/src/modules/home/components/featured-products/product-rail/index.tsx`: Converted inline Tailwind classes and JSX properties to CSS Modules in `pghrugby/nextjs/src/modules/home/components/featured-products/product-rail/style.module.css`.
-- `pghrugby/nextjs/src/modules/store/components/pagination/index.tsx`: Converted inline Tailwind classes and JSX properties to CSS Modules in `pghrugby/nextjs/src/modules/store/components/pagination/style.module.css`.
-- `pghrugby/nextjs/src/app/(core)/styleguide/page.tsx`: Converted inline Tailwind classes and JSX properties to CSS Modules in `pghrugby/nextjs/src/app/(core)/styleguide/styles.module.css`.
-- `pghrugby/nextjs/src/components/badge/index.tsx`: Converted inline Tailwind-related style properties to CSS Modules in `pghrugby/nextjs/src/components/badge/styles.module.css`.
-- `pghrugby/nextjs/src/components/contact-form/index.tsx`: Converted inline Tailwind classes to CSS Modules in `pghrugby/nextjs/src/components/contact-form/style.module.css`.
-- `pghrugby/nextjs/src/components/header/top/index.tsx`: Verified no direct Tailwind classes found, already using CSS Modules.
-- `pghrugby/nextjs/src/components/mini-cart/index.tsx`: Verified no direct Tailwind classes found, already using CSS Modules.
-- `pghrugby/nextjs/src/components/header-checkout/main/index.tsx`: Converted inline Tailwind classes to CSS Modules in `pghrugby/nextjs/src/components/header-checkout/main/style.module.css`.
-- `pghrugby/nextjs/src/components/content/card-slider/index.tsx`: Verified no direct Tailwind classes found, already using CSS Modules.
-- `pghrugby/nextjs/src/components/footer/footer-client.tsx`: Converted inline Tailwind-related classes (`2xl:container`, `txt-compact-small`) to CSS Modules in `pghrugby/nextjs/src/components/footer/style.module.css`.
-- `pghrugby/nextjs/src/components/PageBuilder.tsx`: Converted inline Tailwind classes to CSS Modules in `pghrugby/nextjs/src/components/PageBuilder.module.css`.
-- `pghrugby/nextjs/src/components/sponsor-bar/index.tsx`: Converted `lg:container` to CSS Modules in `pghrugby/nextjs/src/components/sponsor-bar/style.module.css`.
-- `pghrugby/nextjs/src/components/competition/scheduleTable/index.tsx`: Converted `align-center`, `align-right` to CSS Modules in `pghrugby/nextjs/src/components/competition/scheduleTable/styles.module.css`.
-- `pghrugby/nextjs/src/components/header/nav/index.tsx`: Converted multiple Tailwind classes in `NavigationMenu.Root`, `NavigationMenu.Trigger`, and `MobileNavSummary` to CSS Modules in `pghrugby/nextjs/src/components/header/nav/style.module.css`.
-- `pghrugby/nextjs/src/components/competition/countdown/index.tsx`: Converted `flex items-center justify-between gap-4` and `w-full h-full object-contain` to CSS Modules in `pghrugby/nextjs/src/components/competition/countdown/styles.module.css`.
+- `pghrugby/src/components/PortableText.tsx`: Converted inline Tailwind classes and JSX properties to CSS Modules in `pghrugby/src/components/PortableText.module.css`.
+- `pghrugby/src/modules/categories/templates/index.tsx`: Converted inline Tailwind classes and JSX properties to CSS Modules in `pghrugby/src/modules/categories/templates/style.module.css`.
+- `pghrugby/src/modules/home/components/featured-products/product-rail/index.tsx`: Converted inline Tailwind classes and JSX properties to CSS Modules in `pghrugby/src/modules/home/components/featured-products/product-rail/style.module.css`.
+- `pghrugby/src/modules/store/components/pagination/index.tsx`: Converted inline Tailwind classes and JSX properties to CSS Modules in `pghrugby/src/modules/store/components/pagination/style.module.css`.
+- `pghrugby/src/app/(core)/styleguide/page.tsx`: Converted inline Tailwind classes and JSX properties to CSS Modules in `pghrugby/src/app/(core)/styleguide/styles.module.css`.
+- `pghrugby/src/components/badge/index.tsx`: Converted inline Tailwind-related style properties to CSS Modules in `pghrugby/src/components/badge/styles.module.css`.
+- `pghrugby/src/components/contact-form/index.tsx`: Converted inline Tailwind classes to CSS Modules in `pghrugby/src/components/contact-form/style.module.css`.
+- `pghrugby/src/components/header/top/index.tsx`: Verified no direct Tailwind classes found, already using CSS Modules.
+- `pghrugby/src/components/mini-cart/index.tsx`: Verified no direct Tailwind classes found, already using CSS Modules.
+- `pghrugby/src/components/header-checkout/main/index.tsx`: Converted inline Tailwind classes to CSS Modules in `pghrugby/src/components/header-checkout/main/style.module.css`.
+- `pghrugby/src/components/content/card-slider/index.tsx`: Verified no direct Tailwind classes found, already using CSS Modules.
+- `pghrugby/src/components/footer/footer-client.tsx`: Converted inline Tailwind-related classes (`2xl:container`, `txt-compact-small`) to CSS Modules in `pghrugby/src/components/footer/style.module.css`.
+- `pghrugby/src/components/PageBuilder.tsx`: Converted inline Tailwind classes to CSS Modules in `pghrugby/src/components/PageBuilder.module.css`.
+- `pghrugby/src/components/sponsor-bar/index.tsx`: Converted `lg:container` to CSS Modules in `pghrugby/src/components/sponsor-bar/style.module.css`.
+- `pghrugby/src/components/competition/scheduleTable/index.tsx`: Converted `align-center`, `align-right` to CSS Modules in `pghrugby/src/components/competition/scheduleTable/styles.module.css`.
+- `pghrugby/src/components/header/nav/index.tsx`: Converted multiple Tailwind classes in `NavigationMenu.Root`, `NavigationMenu.Trigger`, and `MobileNavSummary` to CSS Modules in `pghrugby/src/components/header/nav/style.module.css`.
+- `pghrugby/src/components/competition/countdown/index.tsx`: Converted `flex items-center justify-between gap-4` and `w-full h-full object-contain` to CSS Modules in `pghrugby/src/components/competition/countdown/styles.module.css`.
 
 ## Key Contributions of this Session
 
 - **Extensive Tailwind Class Migration**: Successfully migrated Tailwind CSS classes from a significant number of components and files to their respective CSS Modules.
-- **TypeScript Environment Fix**: Resolved global TypeScript errors (e.g., "Cannot find global type 'Promise'") by reinstalling dependencies in `pghrugby/nextjs`, which corrected the environment setup.
+- **TypeScript Environment Fix**: Resolved global TypeScript errors (e.g., "Cannot find global type 'Promise'") by reinstalling dependencies in `pghrugby`, which corrected the environment setup.
 - **Application Rendering Restored**: The application now loads and renders the style guide page successfully after resolving the environment issues and initial migrations.
 
 ## Comprehensive Tailwind CSS Audit
 
-A comprehensive `search_files` audit was conducted across `pghrugby/nextjs` using a broad regex pattern to identify all remaining Tailwind CSS class patterns in relevant file types (`.js`, `.jsx`, `.ts`, `.tsx`, `.html`, `.css`).
+A comprehensive `search_files` audit was conducted across `pghrugby` using a broad regex pattern to identify all remaining Tailwind CSS class patterns in relevant file types (`.js`, `.jsx`, `.ts`, `.tsx`, `.html`, `.css`).
 
 **Audit Results:**
 
@@ -60,7 +60,7 @@ This increased count reflects a more thorough scan, confirming that the tool is 
 
 ## Current Blockers / Known Issues
 
-- **Remaining Tailwind Configuration Files**: `pghrugby/nextjs/tailwind.config.js` and parts of `pghrugby/nextjs/postcss.config.js` still exist and need to be removed or cleaned up once all custom Tailwind class usage is confirmed to be eliminated from _all_ application files.
+- **Remaining Tailwind Configuration Files**: `pghrugby/tailwind.config.js` and parts of `pghrugby/postcss.config.js` still exist and need to be removed or cleaned up once all custom Tailwind class usage is confirmed to be eliminated from _all_ application files.
 - **"2 Issues" Badge**: A "2 Issues" badge appeared on the styleguide page. This needs further investigation to determine its origin and whether it's related to remaining Tailwind classes or other application-specific issues.
 - **Persistent TypeScript Errors (Ignored)**: As per user instructions, several persistent TypeScript compilation errors (e.g., `Property 'map' does not exist on type 'NavItem[]'`, `Cannot find name 'window'`) have been noted but ignored to prioritize Tailwind conversion. These will need to be addressed separately after the migration is complete.
 
@@ -69,7 +69,7 @@ This increased count reflects a more thorough scan, confirming that the tool is 
 1.  **Systematic Migration of Remaining Tailwind Classes**: Continue reviewing the files identified in the comprehensive audit (especially those outside the `components`, `modules`, `app` directories) and systematically migrate any remaining custom Tailwind classes to CSS Modules where appropriate.
 2.  **Investigate "2 Issues" Badge**: Determine the cause of the "2 Issues" badge displayed on the styleguide page. This might involve inspecting the element in the browser developer tools (if possible) or searching the codebase for its implementation.
 3.  **Verify Application Functionality**: Once all custom Tailwind classes are believed to be removed from the application, restart the development server and launch the browser to perform a thorough visual and functional verification of the entire frontend application.
-4.  **Final Tailwind Configuration Cleanup**: After confirming _zero_ remaining custom Tailwind CSS class usages in the application, proceed to delete `pghrugby/nextjs/tailwind.config.js` and remove Tailwind-related configurations from `pghrugby/nextjs/postcss.config.js`.
+4.  **Final Tailwind Configuration Cleanup**: After confirming _zero_ remaining custom Tailwind CSS class usages in the application, proceed to delete `pghrugby/tailwind.config.js` and remove Tailwind-related configurations from `pghrugby/postcss.config.js`.
 5.  **Address Ignored TypeScript Errors**: Once Tailwind migration is complete, revisit and resolve the persistent TypeScript errors that were temporarily ignored. I think there may be something fundementally wrong with our compiler or something associated with our typescript version
 
 ## Suggested Skills

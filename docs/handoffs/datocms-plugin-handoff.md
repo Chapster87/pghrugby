@@ -21,8 +21,8 @@ The plugin is fully functional and the "Record Picker" is stable.
 
 ## Key Files
 
-- `pghrugby/nextjs/src/app/(plugin)/private-datocms-plugin/_plugin/entrypoints/LinkPicker.tsx`: Primary field editor component.
-- `pghrugby/nextjs/src/app/(plugin)/private-datocms-plugin/_plugin/main.tsx`: Plugin entry point and SDK hook registration.
+- `pghrugby/src/app/(plugin)/private-datocms-plugin/_plugin/entrypoints/LinkPicker.tsx`: Primary field editor component.
+- `pghrugby/src/app/(plugin)/private-datocms-plugin/_plugin/main.tsx`: Plugin entry point and SDK hook registration.
 
 ## Pending Work / Next Steps
 
