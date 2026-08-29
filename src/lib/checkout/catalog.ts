@@ -211,3 +211,22 @@ export function findCatalogItem(sku: string): CatalogItem | undefined {
   }
   return undefined
 }
+
+/**
+ * Catalog items selectable for a product record's sku. Exact match wins; when
+ * a product has no direct sku (e.g. `donation-club` — a Stripe product with
+ * several prices), returns every catalog item whose sku starts with
+ * `<sku>-` (the preset variants). Empty when the product isn't sellable yet.
+ */
+export function findCatalogItemsForProduct(sku: string): CatalogItem[] {
+  const exact = findCatalogItem(sku)
+  if (exact) return [exact]
+  const flat = [
+    ...Object.values(CHECKOUT_CATALOG.dues),
+    ...Object.values(CHECKOUT_CATALOG.golf),
+    ...CHECKOUT_CATALOG.tournament.divisions,
+    ...CHECKOUT_CATALOG.donationPresets,
+    ...CHECKOUT_CATALOG.events,
+  ]
+  return flat.filter((item) => item.sku.startsWith(`${sku}-`))
+}

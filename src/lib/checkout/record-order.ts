@@ -177,12 +177,10 @@ export async function recordOrder(
     ? await getCart(session.client_reference_id)
     : null
 
-  // Cart-derived flow (dues | golf | tournament); cartless sessions fall back
-  // to the first line item's product family metadata (membership Payment Links,
-  // donation Buy Buttons).
-  const flow: OrderFlow | null = cart
-    ? (cart.flow as OrderFlow)
-    : deriveFlow(session)
+  // Order flow is derived from the first line item's Stripe product `family`
+  // metadata (dues | golf | tournament | donation | membership) — the cart's
+  // `flow` is only a PDP-slug reporting tag and never drives this.
+  const flow: OrderFlow | null = deriveFlow(session)
 
   const order = buildOrderRecord(session, flow, cart?.registration ?? null)
 

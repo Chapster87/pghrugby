@@ -277,6 +277,103 @@ input CreatedAtFilter {
 
 scalar CustomData
 
+input DataCollectorModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  title: StringFilter
+  OR: [DataCollectorModelFilter]
+  AND: [DataCollectorModelFilter]
+}
+
+enum DataCollectorModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  title_ASC
+  title_DESC
+}
+
+"""Record of type Data Collector (data_collector)"""
+type DataCollectorRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  formFields: [DataFieldRecord!]!
+  id: ItemId!
+  title: String
+}
+
+"""Block of type Data Field (data_field)"""
+type DataFieldRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  fieldName: String
+  fieldType: String
+  id: ItemId!
+  label: String
+  max: IntType
+  options(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  placeholder: String
+  repeatable: BooleanType!
+  required: BooleanType!
+}
+
 """A ISO 8601 compliant datetime value"""
 scalar DateTime
 
@@ -2891,10 +2988,29 @@ type MembershipRecord implements RecordInterface {
 
 scalar MetaTagAttributes
 
+enum MuxThumbnailFitMode {
+  preserve
+  stretch
+  crop
+  smartcrop
+  pad
+}
+
 enum MuxThumbnailFormatType {
   jpg
   png
   gif
+}
+
+enum MuxThumbnailRotation {
+  """Rotate 90° clockwise"""
+  ROTATE_90
+
+  """Rotate 180° clockwise"""
+  ROTATE_180
+
+  """Rotate 270° clockwise"""
+  ROTATE_270
 }
 
 """Specifies how to filter by image orientation"""
@@ -3146,6 +3262,159 @@ input PositionFilter {
   neq: IntType
 }
 
+input ProductDetailPageModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  description: TextFilter
+  pageComponents: LinksFilter
+  slug: SlugFilter
+  title: StringFilter
+  OR: [ProductDetailPageModelFilter]
+  AND: [ProductDetailPageModelFilter]
+}
+
+enum ProductDetailPageModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  title_ASC
+  title_DESC
+}
+
+union ProductDetailPageModelPageComponentsField = DataCollectorRecord | ProductRecord
+
+"""Record of type Product Detail Page (product_detail_page)"""
+type ProductDetailPageRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  description(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  id: ItemId!
+  pageComponents: [ProductDetailPageModelPageComponentsField!]!
+  slug: String
+  title: String
+}
+
+input ProductModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  longDescription: TextFilter
+  priceId: StringFilter
+  shortDescription: TextFilter
+  sku: StringFilter
+  title: StringFilter
+  OR: [ProductModelFilter]
+  AND: [ProductModelFilter]
+}
+
+enum ProductModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  priceId_ASC
+  priceId_DESC
+  sku_ASC
+  sku_DESC
+  title_ASC
+  title_DESC
+}
+
+"""Record of type Product (product)"""
+type ProductRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  longDescription(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  priceId: String
+  shortDescription(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
+  sku: String
+  title: String
+}
+
 """Specifies how to filter by publication datetime"""
 input PublishedAtFilter {
   """
@@ -3201,6 +3470,13 @@ type Query {
   ): CollectionMetadata!
 
   """Returns meta information regarding a record collection"""
+  _allDataCollectorsMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: DataCollectorModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
   _allPageOldsMeta(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -3212,6 +3488,20 @@ type Query {
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
     filter: PageModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
+  _allProductDetailPagesMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: ProductDetailPageModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
+  _allProductsMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: ProductModelFilter
   ): CollectionMetadata!
 
   """Returns meta information regarding an assets collection"""
@@ -3292,6 +3582,25 @@ type Query {
   ): [CategoryRecord!]!
 
   """Returns a collection of records"""
+  allDataCollectors(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: DataCollectorModelFilter
+    orderBy: [DataCollectorModelOrderBy] = [_updatedAt_DESC]
+  ): [DataCollectorRecord!]!
+
+  """Returns a collection of records"""
   allPageOlds(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -3328,6 +3637,44 @@ type Query {
     filter: PageModelFilter
     orderBy: [PageModelOrderBy] = [_updatedAt_DESC]
   ): [PageRecord!]!
+
+  """Returns a collection of records"""
+  allProductDetailPages(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: ProductDetailPageModelFilter
+    orderBy: [ProductDetailPageModelOrderBy] = [_updatedAt_DESC]
+  ): [ProductDetailPageRecord!]!
+
+  """Returns a collection of records"""
+  allProducts(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: ProductModelFilter
+    orderBy: [ProductModelOrderBy] = [_updatedAt_DESC]
+  ): [ProductRecord!]!
 
   """Returns a collection of assets"""
   allUploads(
@@ -3431,6 +3778,19 @@ type Query {
     orderBy: [CategoryModelOrderBy] = [position_ASC]
   ): CategoryRecord
 
+  """Returns a specific record"""
+  dataCollector(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: DataCollectorModelFilter
+    orderBy: [DataCollectorModelOrderBy] = [_updatedAt_DESC]
+  ): DataCollectorRecord
+
   """Returns the single instance record"""
   homepage(
     """The locale to use to fetch the field's content"""
@@ -3489,6 +3849,32 @@ type Query {
     filter: PageOldModelFilter
     orderBy: [PageOldModelOrderBy] = [_updatedAt_DESC]
   ): PageOldRecord
+
+  """Returns a specific record"""
+  product(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: ProductModelFilter
+    orderBy: [ProductModelOrderBy] = [_updatedAt_DESC]
+  ): ProductRecord
+
+  """Returns a specific record"""
+  productDetailPage(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: ProductDetailPageModelFilter
+    orderBy: [ProductDetailPageModelOrderBy] = [_updatedAt_DESC]
+  ): ProductDetailPageRecord
 
   """Returns a specific asset"""
   upload(
@@ -4251,13 +4637,41 @@ type UploadVideoField {
   ): String
   muxAssetId: String!
   muxPlaybackId: String!
+
+  """
+  Default poster frame, in seconds into the video. Resolves to the record-level field override when present, otherwise the upload-level default. `null` means Mux's default (middle of the video).
+  """
+  posterTime: Float
   streamingUrl: String!
   thumbhash: String
   thumbnailUrl(
-    """
-    The file extension of the requested image format. Either png, jpg or gif
-    """
+    """The file extension of the requested image. Either jpg, png or gif"""
     format: MuxThumbnailFormatType = jpg
+
+    """
+    Maps to the Mux `time` param: seconds into the video to grab the frame. When omitted, the upload's poster time is auto-injected (not applied to gif)
+    """
+    time: Float
+
+    """Maps to the Mux `width` param: thumbnail width in pixels"""
+    width: Int
+
+    """Maps to the Mux `height` param: thumbnail height in pixels"""
+    height: Int
+
+    """
+    Maps to the Mux `fit_mode` param: how the image fits the given dimensions
+    """
+    fitMode: MuxThumbnailFitMode
+
+    """Maps to the Mux `rotate` param: clockwise rotation in degrees"""
+    rotate: MuxThumbnailRotation
+
+    """Maps to the Mux `flip_v` param: flip the image vertically"""
+    flipV: Boolean
+
+    """Maps to the Mux `flip_h` param: flip the image horizontally"""
+    flipH: Boolean
   ): String!
   title(
     """The locale to use to fetch the field's content"""

@@ -2,23 +2,25 @@ import "server-only"
 
 import { randomUUID } from "node:crypto"
 
-import {
-  CHECKOUT_CATALOG,
-  CHECKOUT_CURRENCY,
-  CHECKOUT_MAX_GOLFERS,
-} from "./catalog"
+import { CHECKOUT_CURRENCY, findCatalogItem } from "./catalog"
 import { insertIgnoreDuplicates, selectRow } from "./supabase"
 
 /**
  * Server-authoritative cart store, backed by the Supabase `carts` table.
  *
- * The client only sends selections; the server validates them against the
- * catalog and computes the line items and total. The cart is persisted so the
+ * The client only sends selections (sku + quantity) plus an optional
+ * registration payload; the server validates every sku against the catalog and
+ * computes the line items and total. The cart is persisted so the
  * checkout-session route can replay it (even across server restarts) and the
  * webhook can re-join the registration payload via `client_reference_id`.
+ *
+ * `flow` is a reporting tag only (the PDP slug, e.g. "golf-outing") — it never
+ * drives cart building. Order flow is derived from Stripe product family
+ * metadata at record time (see recordOrder).
  */
 
-export type CheckoutFlow = "dues" | "golf" | "tournament"
+/** Safety bound per line quantity; the real cap (e.g. max golfers) lives in the DataCollector form definition. */
+const MAX_LINE_QUANTITY = 100
 
 export type CheckoutCartItem = {
   sku: string
@@ -30,109 +32,61 @@ export type CheckoutCartItem = {
 
 export type CheckoutCart = {
   cartRef: string
-  flow: CheckoutFlow
+  /** PDP slug this cart was built on (reporting tag only). */
+  flow: string
   currency: string
   items: CheckoutCartItem[]
   /** Minor units (cents). */
   total: number
-  /** Flow-specific form payload (golf: captain + golfers; tournament: team + division + contact). */
+  /** Form payload from the PDP's DataCollector (golf: captain + golfers; SC7s: team + contact). */
   registration?: unknown
+}
+
+export type CheckoutSelection = {
+  sku: string
+  quantity: number
 }
 
 type CartRow = {
   cart_ref: string
-  flow: CheckoutFlow
+  flow: string
   currency: string
   line_items: CheckoutCartItem[]
   total: number
   registration: unknown
 }
 
-/** Builds a cart from client selections, validating everything against the catalog. */
+/** Builds a cart from client selections, validating every sku against the catalog. */
 export function buildCart(input: {
-  flow: CheckoutFlow
-  quantity?: number
-  donationPresetIndex?: number
-  addons?: ("mulligan" | "drinkBand")[]
-  golfers?: { name: string; email: string }[]
-  captain?: { name: string; email: string }
-  division?: string
-  teamName?: string
-  contact?: { name: string; email: string }
+  pdp: string
+  selections: CheckoutSelection[]
+  registration?: unknown
 }): CheckoutCart {
-  const cartRef = `cart-${input.flow}-${randomUUID().slice(0, 12)}`
+  if (!input.pdp) {
+    throw new Error("pdp is required")
+  }
+  if (!Array.isArray(input.selections) || input.selections.length === 0) {
+    throw new Error("at least one selection is required")
+  }
+
+  const cartRef = `cart-${input.pdp}-${randomUUID().slice(0, 12)}`
   const items: CheckoutCartItem[] = []
-  let registration: unknown
 
-  if (input.flow === "dues") {
-    // Default season until the storefront/product tickets build a season picker.
-    const season = CHECKOUT_CATALOG.dues.fall
-    items.push({
-      sku: season.sku,
-      label: season.label,
-      unitAmount: season.unitAmount,
-      quantity: 1,
-    })
-
-    if (typeof input.donationPresetIndex === "number") {
-      const preset = CHECKOUT_CATALOG.donationPresets[input.donationPresetIndex]
-      if (preset) {
-        items.push({
-          sku: preset.sku,
-          label: preset.label,
-          unitAmount: preset.unitAmount,
-          quantity: 1,
-        })
-      }
+  for (const selection of input.selections) {
+    const catalogItem = findCatalogItem(selection.sku)
+    if (!catalogItem) {
+      throw new Error(`"${selection.sku}" is not in the checkout catalog`)
     }
-  } else if (input.flow === "golf") {
     const quantity = Math.min(
-      Math.max(1, input.quantity ?? 1),
-      CHECKOUT_MAX_GOLFERS
+      Math.max(1, Math.floor(selection.quantity || 1)),
+      MAX_LINE_QUANTITY
     )
     items.push({
-      sku: CHECKOUT_CATALOG.golf.registration.sku,
-      label: CHECKOUT_CATALOG.golf.registration.label,
-      unitAmount: CHECKOUT_CATALOG.golf.registration.unitAmount,
+      sku: catalogItem.sku,
+      label: catalogItem.label,
+      unitAmount: catalogItem.unitAmount,
       quantity,
     })
-
-    for (const addon of input.addons ?? []) {
-      const item = CHECKOUT_CATALOG.golf[addon]
-      items.push({
-        sku: item.sku,
-        label: item.label,
-        unitAmount: item.unitAmount,
-        quantity: 1,
-      })
-    }
-
-    // The per-golfer payload rides beside the session, never in Stripe
-    // metadata — re-joined at record time via client_reference_id.
-    registration = {
-      captain: input.captain ?? null,
-      golfers: (input.golfers ?? []).slice(0, quantity),
-    }
-  } else if (input.flow === "tournament") {
-    const division = CHECKOUT_CATALOG.tournament.divisions.find(
-      (d) => d.sku === input.division
-    )
-    if (!division) {
-      throw new Error("division is not a valid catalog tournament division")
-    }
-
-    items.push({
-      sku: division.sku,
-      label: division.label,
-      unitAmount: division.unitAmount,
-      quantity: 1,
-    })
-
-    registration = {
-      division: division.sku,
-      teamName: input.teamName ?? null,
-      contact: input.contact ?? null,
-    }
   }
 
   const total = items.reduce(
@@ -142,11 +96,11 @@ export function buildCart(input: {
 
   return {
     cartRef,
-    flow: input.flow,
+    flow: input.pdp,
     currency: CHECKOUT_CURRENCY,
     items,
     total,
-    registration,
+    registration: input.registration,
   }
 }
 

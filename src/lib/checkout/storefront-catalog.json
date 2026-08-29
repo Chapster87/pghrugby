@@ -1,0 +1,157 @@
+{
+  "flows": [
+    { "slug": "dues", "title": "Season Dues" },
+    { "slug": "golf-outing", "title": "Golf Outing" },
+    { "slug": "steel-city-7s", "title": "Steel City 7s" },
+    { "slug": "donate", "title": "Donate" }
+  ],
+  "products": [
+    {
+      "sku": "dues-fall",
+      "label": "Fall 2026 Season Dues",
+      "wcSlug": "dues-fall",
+      "pdp": "dues",
+      "kind": "primary"
+    },
+    {
+      "sku": "dues-spring",
+      "label": "Spring Season Dues",
+      "wcSlug": "dues-spring",
+      "pdp": "dues",
+      "kind": "primary"
+    },
+    {
+      "sku": "dues-summer",
+      "label": "Summer Season Dues",
+      "wcSlug": null,
+      "pdp": "dues",
+      "kind": "primary"
+    },
+    {
+      "sku": "golf-outing-registration",
+      "label": "Golf Outing Registration",
+      "wcSlug": "golf-outing-registration",
+      "pdp": "golf-outing",
+      "kind": "primary"
+    },
+    {
+      "sku": "golf-outing-mulligan",
+      "label": "Golf Outing — Mulligan (4 + contest entry)",
+      "wcSlug": "mulligan",
+      "pdp": "golf-outing",
+      "kind": "addon"
+    },
+    {
+      "sku": "golf-outing-drink-band",
+      "label": "Golf Outing — All You Can Drink",
+      "wcSlug": "golf-outing-all-you-can-drink",
+      "pdp": "golf-outing",
+      "kind": "addon"
+    },
+    {
+      "sku": "sc7s-mens-open",
+      "label": "SC7s Men's Open",
+      "wcSlug": "sc7s-mens-open-division",
+      "pdp": "steel-city-7s",
+      "kind": "primary"
+    },
+    {
+      "sku": "sc7s-mens-social",
+      "label": "SC7s Men's Social",
+      "wcSlug": "sc7s-mens-social-division",
+      "pdp": "steel-city-7s",
+      "kind": "primary"
+    },
+    {
+      "sku": "sc7s-mens-super-social",
+      "label": "SC7s Men's Super Social",
+      "wcSlug": "sc7s-mens-super-social-division",
+      "pdp": "steel-city-7s",
+      "kind": "primary"
+    },
+    {
+      "sku": "sc7s-womens-open",
+      "label": "SC7s Women's Open",
+      "wcSlug": "sc7s-womens-open-division",
+      "pdp": "steel-city-7s",
+      "kind": "primary"
+    },
+    {
+      "sku": "sc7s-womens-social",
+      "label": "SC7s Women's Social",
+      "wcSlug": "sc7s-womens-social-division",
+      "pdp": "steel-city-7s",
+      "kind": "primary"
+    },
+    {
+      "sku": "sc7s-mens-additional-side",
+      "label": "SC7s Men's Additional Side",
+      "wcSlug": "sc7s-mens-additional-side",
+      "pdp": "steel-city-7s",
+      "kind": "addon"
+    },
+    {
+      "sku": "sc7s-womens-additional-side",
+      "label": "SC7s Women's Additional Side",
+      "wcSlug": "sc7s-womens-additional-side",
+      "pdp": "steel-city-7s",
+      "kind": "addon"
+    },
+    {
+      "sku": "donation-club",
+      "label": "Club Donation",
+      "wcSlug": "club-donation",
+      "pdp": "donate",
+      "kind": "primary"
+    },
+    {
+      "sku": "donation-pass-the-hat",
+      "label": "\"Pass the Hat\" Fund",
+      "wcSlug": "pass-the-hat",
+      "pdp": "donate",
+      "kind": "primary"
+    },
+    {
+      "sku": "ballpark-day-adult",
+      "label": "Forge Day at the Ballpark — Adult",
+      "wcSlug": "ballpark-day-adult",
+      "pdp": null,
+      "kind": "primary"
+    },
+    {
+      "sku": "ballpark-ticket-16-under",
+      "label": "Forge Day at the Ballpark — 16 & Under",
+      "wcSlug": "ballpark-ticket-16-under",
+      "pdp": null,
+      "kind": "primary"
+    },
+    {
+      "sku": "nfl-survivor-pool-ticket",
+      "label": "NFL Survivor Pool — Ticket",
+      "wcSlug": "nfl-survivor-pool-ticket",
+      "pdp": null,
+      "kind": "primary"
+    },
+    {
+      "sku": "nfl-survivor-pool-insurance",
+      "label": "NFL Survivor Pool — Insurance",
+      "wcSlug": "nfl-survivor-pool-insurance",
+      "pdp": null,
+      "kind": "primary"
+    },
+    {
+      "sku": "steel-city-7s-bar-crawl",
+      "label": "Steel City 7s Bar Crawl",
+      "wcSlug": "steel-city-7s-bar-crawl",
+      "pdp": null,
+      "kind": "primary"
+    },
+    {
+      "sku": "annual-forge-pig-roast",
+      "label": "Annual Forge Pig Roast Ticket",
+      "wcSlug": "annual-forge-pig-roast",
+      "pdp": null,
+      "kind": "primary"
+    }
+  ]
+}
