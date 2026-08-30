@@ -4,7 +4,7 @@ import PortableText from "@/components/PortableText"
 import Heading from "@/components/typography/heading"
 import Text from "@/components/typography/text"
 import { extractPlainText, isPortableText } from "@/lib/util/portableTextUtils"
-import s from "./style.module.css"
+import s from "./example-page.module.css"
 
 // JSON-LD schema.org structured data
 function generateStructuredData(data: any) {

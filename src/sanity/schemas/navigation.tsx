@@ -19,7 +19,7 @@ export const navigation = defineType({
             {
               name: "item",
               type: "reference",
-              to: [{ type: "page" }, { type: "post" }, { type: "product" }],
+              to: [{ type: "page" }, { type: "post" }],
               title: "Menu Item",
             },
             {
@@ -47,11 +47,7 @@ export const navigation = defineType({
                     {
                       name: "item",
                       type: "reference",
-                      to: [
-                        { type: "page" },
-                        { type: "post" },
-                        { type: "product" },
-                      ],
+                      to: [{ type: "page" }, { type: "post" }],
                       title: "Submenu Item",
                     },
                     {
@@ -175,7 +171,7 @@ export const navigation = defineType({
             {
               name: "item",
               type: "reference",
-              to: [{ type: "page" }, { type: "post" }, { type: "product" }],
+              to: [{ type: "page" }, { type: "post" }],
               title: "Menu Item",
             },
             {
@@ -203,11 +199,7 @@ export const navigation = defineType({
                     {
                       name: "item",
                       type: "reference",
-                      to: [
-                        { type: "page" },
-                        { type: "post" },
-                        { type: "product" },
-                      ],
+                      to: [{ type: "page" }, { type: "post" }],
                       title: "Submenu Item",
                     },
                     {

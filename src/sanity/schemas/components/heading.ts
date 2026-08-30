@@ -119,11 +119,7 @@ export const heading = defineType({
                     name: "reference",
                     type: "reference",
                     title: "Reference",
-                    to: [
-                      { type: "page" },
-                      { type: "post" },
-                      { type: "product" },
-                    ],
+                    to: [{ type: "page" }, { type: "post" }],
                   },
                 ],
               },

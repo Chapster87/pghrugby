@@ -7,7 +7,6 @@ import { calendar } from "./calendar"
 import { category } from "./category"
 import { column, columns } from "./components/columns"
 import { division } from "./division"
-import { form } from "./form"
 import { formField } from "./components/formField"
 import { heading } from "./components/heading"
 import { homepage } from "./pages/homepage"
@@ -24,7 +23,6 @@ import { page } from "./page"
 import { pageBuilder } from "./components/pageBuilder"
 import { portableText } from "./components/portableText"
 import { post } from "./post"
-import { product } from "./product"
 import { richText } from "./components/richText"
 import { season } from "./season"
 import { seo } from "./seo"
@@ -47,7 +45,6 @@ export const schema: SchemaPluginOptions = {
     column,
     columns,
     division,
-    form,
     formField,
     heading,
     homepage,
@@ -64,7 +61,6 @@ export const schema: SchemaPluginOptions = {
     pageBuilder,
     portableText,
     post,
-    product,
     richText,
     season,
     seo,
@@ -76,6 +72,4 @@ export const schema: SchemaPluginOptions = {
     tag,
     team,
   ],
-  templates: (templates) =>
-    templates.filter((template) => template.schemaType !== "product"),
 }

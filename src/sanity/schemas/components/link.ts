@@ -14,7 +14,7 @@ export const link = defineType({
     {
       name: "reference",
       type: "reference",
-      to: [{ type: "page" }, { type: "post" }, { type: "product" }],
+      to: [{ type: "page" }, { type: "post" }],
       title: "Internal Link",
     },
     {

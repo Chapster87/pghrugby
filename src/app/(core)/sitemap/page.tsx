@@ -41,6 +41,15 @@ const staticRoutes = [
   { href: "/styleguide", label: "Style Guide" },
 ]
 
+// Storefront flow pages — clean root URLs (the /product/* internals are
+// rewritten away and excluded from the sitemap; see next.config.js).
+const storefrontRoutes = [
+  { href: "/dues", label: "Season Dues" },
+  { href: "/golf-outing", label: "Golf Outing" },
+  { href: "/steel-city-7s", label: "Steel City 7s" },
+  { href: "/donate", label: "Donate" },
+]
+
 // Fetch all blog slugs from Sanity
 async function getAllBlogPosts() {
   return client.fetch(
@@ -74,6 +83,16 @@ export default async function SiteMap() {
             <Link href={route.href}>{route.label}</Link>
           </li>
         ))}
+        <li>
+          <span className="font-semibold">Storefront:</span>
+          <ul className="ml-4 list-disc">
+            {storefrontRoutes.map((route) => (
+              <li key={route.href}>
+                <Link href={route.href}>{route.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </li>
         <li>
           <span className="font-semibold">Blog Posts:</span>
           <ul className="ml-4 list-disc">

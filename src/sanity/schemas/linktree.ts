@@ -31,7 +31,7 @@ export const linktree = defineType({
             {
               name: "internalLink",
               type: "reference",
-              to: [{ type: "page" }, { type: "post" }, { type: "product" }],
+              to: [{ type: "page" }, { type: "post" }],
               title: "Internal Link",
             },
             {
@@ -107,7 +107,7 @@ export const linktree = defineType({
             {
               name: "internalLink",
               type: "reference",
-              to: [{ type: "page" }, { type: "post" }, { type: "product" }],
+              to: [{ type: "page" }, { type: "post" }],
               title: "Internal Link",
             },
             {

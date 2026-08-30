@@ -1,7 +1,6 @@
 import type { StructureBuilder, StructureResolver } from "sanity/structure"
 import {
   FaAddressCard,
-  FaBox,
   FaBuilding,
   FaBuildingColumns,
   FaCalendarDays,
@@ -37,7 +36,6 @@ const DISABLED_TYPES = [
   "category",
   "division",
   "event",
-  "formType",
   "homepage",
   "league",
   "linktree",
@@ -46,7 +44,6 @@ const DISABLED_TYPES = [
   "navigation",
   "page",
   "post",
-  "product",
   "season",
   "seo",
   "settings",
@@ -102,21 +99,6 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                     .schemaType("membership")
                     .documentId("membershipContent")
                 ),
-            ])
-        ),
-      S.listItem()
-        .title("Products")
-        .icon(FaBox)
-        .child(
-          S.list()
-            .title("Products")
-            .items([
-              S.documentTypeListItem("product")
-                .title("Product Pages")
-                .icon(FaFile),
-              S.documentTypeListItem("formType")
-                .title("Forms")
-                .icon(FaPenToSquare),
             ])
         ),
       S.listItem()

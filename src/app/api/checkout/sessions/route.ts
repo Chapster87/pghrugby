@@ -54,21 +54,28 @@ export async function POST(request: Request) {
       mode: "payment",
       line_items: cart.items.map((item) => {
         const catalogItem = findCatalogItem(item.sku)
-        // Live account (STRIPE_ENV=live): prefer the provisioned Stripe Price
-        // once the catalog ticket lands the priceIds. Test mode falls back to
-        // inline price_data (server-catalog amounts) because a test key can't
-        // reference live Prices — amounts are always server-side, never
-        // client-dictated.
-        return isLiveStripe && catalogItem?.priceId
-          ? { price: catalogItem.priceId, quantity: item.quantity }
-          : {
-              price_data: {
-                currency: cart.currency,
-                product_data: { name: item.label },
-                unit_amount: item.unitAmount,
-              },
-              quantity: item.quantity,
-            }
+        // Live account (STRIPE_ENV=live): every line item must resolve to a
+        // provisioned Stripe Price (see the catalog ticket + catalog.ts). Fail
+        // loudly instead of falling back to inline price_data — a fallback
+        // would silently mint an ad-hoc price in the live account. Test mode
+        // uses inline price_data because a test key can't reference live
+        // Prices; amounts are always server-side, never client-dictated.
+        if (isLiveStripe) {
+          if (!catalogItem?.priceId) {
+            throw new Error(
+              `No live Stripe Price id for sku "${item.sku}" — provision it via scripts/provision-stripe-catalog.mjs or fix catalog.ts`
+            )
+          }
+          return { price: catalogItem.priceId, quantity: item.quantity }
+        }
+        return {
+          price_data: {
+            currency: cart.currency,
+            product_data: { name: item.label },
+            unit_amount: item.unitAmount,
+          },
+          quantity: item.quantity,
+        }
       }),
       // Required for embedded_page; Stripe substitutes {CHECKOUT_SESSION_ID}
       // on redirect.
