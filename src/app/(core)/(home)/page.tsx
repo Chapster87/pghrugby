@@ -5,7 +5,6 @@ import { draftMode } from "next/headers"
 import { executeQuery } from "@/lib/datocms/executeQuery"
 import { StructuredText } from "react-datocms"
 import { homeQuery, latestContentQuery } from "./homepage.query"
-import { CloudinaryImage } from "@/types/datocms"
 import { ResultOf, readFragment } from "@/lib/datocms/graphql"
 import { getCloudinaryImageProps } from "@/utils/cloudinary"
 import contentStyles from "@/styles/content.module.css"
@@ -13,6 +12,7 @@ import { CardSlider } from "@/components/content/card-slider"
 import VideoBg from "./video-bg"
 import { fileFieldFragment } from "@fragments/blocks"
 import { StructuredArticleData } from "@/types/structured-data"
+import CloudinaryImageRenderer from "@/components/cloudinary-image-renderer"
 import s from "./style.module.css"
 
 type PageContentBlocks = NonNullable<
@@ -148,7 +148,7 @@ function formatContentSliderData(latestContent: any[]) {
       type: "post",
       title: item.title,
       slug: item.slug,
-      date: item.date,
+      date: item.creationDate || item._updatedAt,
       excerpt: truncatedExcerpt,
       featuredMedia: item.featuredImage,
     }
@@ -198,25 +198,21 @@ export default async function Home() {
               switch (typedRecord.__typename) {
                 case "ExternalImageBlockRecord":
                   if (typedRecord.cloudinary) {
-                    const image = typedRecord.cloudinary as CloudinaryImage
-                    return (
-                      <Image
-                        src={image.secure_url}
-                        alt={image.public_id}
-                        width={image.width ?? undefined}
-                        height={image.height ?? undefined}
-                      />
-                    )
+                    const image = typedRecord.cloudinary as any
+                    return CloudinaryImageRenderer({
+                      src: image.secure_url,
+                      alt: image.public_id,
+                      width: image.width,
+                      height: image.height,
+                    })
                   } else if (typedRecord.url) {
                     const image = getCloudinaryImageProps(typedRecord.url)
-                    return (
-                      <Image
-                        src={image.url}
-                        alt=""
-                        width={image.width ?? undefined}
-                        height={image.height ?? undefined}
-                      />
-                    )
+                    return CloudinaryImageRenderer({
+                      src: image.url,
+                      alt: "",
+                      width: image.width,
+                      height: image.height,
+                    })
                   }
 
                   return null

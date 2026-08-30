@@ -1,7 +1,12 @@
 import Heading from "@components/typography/heading"
 import sidebarStyles from "../../sidebar.module.css"
 
-export default function SidebarPosts({ posts }: { posts: any[] }) {
+type SidebarPost = {
+  slug: string | null
+  title: string | null
+}
+
+export default function SidebarPosts({ posts }: { posts: SidebarPost[] }) {
   return (
     <div className={sidebarStyles.widget}>
       <Heading level="h3" className={sidebarStyles.sidebarHeader}>
@@ -9,8 +14,8 @@ export default function SidebarPosts({ posts }: { posts: any[] }) {
       </Heading>
       <ul className={`light ${sidebarStyles.sidebarList}`}>
         {posts.map((post) => (
-          <li key={post._id}>
-            <a href={`/post/${post.slug.current}`}>{post.title}</a>
+          <li key={post.slug}>
+            <a href={`/post/${post.slug}`}>{post.title}</a>
           </li>
         ))}
       </ul>

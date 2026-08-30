@@ -1,28 +1,51 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
-import { client } from "@sanity/client"
 import SidebarLayout from "@/layouts/sidebar"
-import PortableText from "@/components/PortableText"
-import { parseSanityImageRef } from "@/sanity/lib/utils"
-import { sanityFetch } from "@/sanity/lib/live"
-import { postPagesSlugs, postQuery } from "./posts.query"
-import { isPortableText } from "@/lib/util/portableTextUtils"
+import Image from "next/image"
+import { executeQuery } from "@/lib/datocms/executeQuery"
+import { StructuredText } from "react-datocms"
+import { postSlugs, postQuery } from "./posts.query"
 import ShareBar from "@/components/share-bar"
+import Heading from "@/components/typography/heading"
+import Text from "@/components/typography/text"
+import { CloudinaryImage } from "@/types/datocms"
+import { ResultOf, readFragment } from "@/lib/datocms/graphql"
+import { getCloudinaryImageProps } from "@/utils/cloudinary"
+import { fileFieldFragment } from "@fragments/blocks"
+import { StructuredArticleData } from "@/types/structured-data"
+import CloudinaryImageRenderer from "@/components/cloudinary-image-renderer"
 
 import contentStyles from "@/styles/content.module.css"
 import s from "./styles.module.css"
+
+type PostContentBlocks = NonNullable<
+  NonNullable<ResultOf<typeof postQuery>["article"]>["content"]
+>["blocks"][number]
+
+type PostProps = {
+  params: Promise<{ slug: string }>
+}
+
+/**
+ * Strip HTML tags from a string. Used for WordPress-authored excerpts
+ * (wpexcerpt), which arrive as rendered HTML.
+ * @param html - The HTML string to strip, if any.
+ * @returns The plain-text content, trimmed, or an empty string.
+ */
+function stripHtml(html?: string | null): string {
+  return html ? html.replace(/<[^>]*>/g, "").trim() : ""
+}
 
 /**
  * Generate the static params for the page.
  * Always use published content here.
  */
 export async function generateStaticParams() {
-  const { data } = await sanityFetch({
-    query: postPagesSlugs,
-    perspective: "published",
-    stega: false,
+  const { allArticles: data } = await executeQuery(postSlugs, {
+    includeDrafts: false,
   })
+
   return data
 }
 
@@ -30,284 +53,288 @@ export async function generateStaticParams() {
  * Generate metadata for the page.
  */
 export async function generateMetadata(
-  props: { params: { slug: string } },
+  props: PostProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { isEnabled } = await draftMode()
   const { slug } = await props.params
-  const data = await client.fetch(
-    postQuery,
-    { slug },
-    {
-      perspective: isEnabled ? "previewDrafts" : "published",
-      stega: false,
-    }
-  )
 
-  if (!data?._id) {
+  const { article } = await executeQuery(postQuery, {
+    variables: { slug },
+    excludeInvalid: false,
+    includeDrafts: isEnabled,
+  })
+
+  if (!article) {
     return {}
-  }
-
-  const seo = data?.seo
-
-  // Handle ogImage as either a string or Sanity image object
-  let ogImageUrl: string | undefined = undefined
-  if (seo?.ogImage) {
-    if (
-      typeof seo.ogImage === "object" &&
-      seo.ogImage !== null &&
-      "asset" in seo.ogImage
-    ) {
-      ogImageUrl = parseSanityImageRef(
-        (seo.ogImage as { asset: { _ref: string } }).asset._ref
-      )
-    } else if (typeof seo.ogImage === "string") {
-      ogImageUrl = seo.ogImage
-    }
   }
 
   // Build canonical URL using current URL and slug
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
   url.pathname = `/post/${slug}`
 
-  // Format date for structured data if available
-  const publishDate = data?.date ? new Date(data.date).toISOString() : undefined
-  const modifiedDate = data?.modified
-    ? new Date(data.modified).toISOString()
+  const publishDate = article.creationDate
+    ? new Date(article.creationDate).toISOString()
+    : undefined
+  const modifiedDate = article._updatedAt
+    ? new Date(article._updatedAt).toISOString()
     : undefined
 
+  const structuredData = generateStructuredData(article, slug)
+
+  const ogImageUrl =
+    article.metaImage &&
+    Array.isArray(article.metaImage) &&
+    article.metaImage[0]?.url
+      ? article.metaImage[0].url
+      : undefined
+
   return {
-    title: seo?.title
-      ? `${seo?.title} | Pittsburgh Forge Rugby Club`
-      : `${data?.title} | Pittsburgh Forge Rugby Club`,
-    description: seo?.description,
-    authors: [{ name: data?.author?.name || "Pittsburgh Forge Rugby Club" }],
+    title: article.metaTitle || `${article.title || ""} | Pittsburgh Forge Rugby Club`,
+    description: article.metaDescription || undefined,
     alternates: {
-      canonical: seo?.canonicalUrl || url.toString(),
+      canonical: article.canonicalUrl || url.toString(),
     },
     openGraph: {
-      title: seo?.ogTitle ?? seo?.title ?? undefined,
-      description: seo?.ogDescription ?? seo?.description ?? undefined,
-      url: seo?.ogUrl || url.toString(),
+      title: article.metaTitle || article.title || undefined,
+      description:
+        article.metaDescription || stripHtml(article.wpexcerpt) || undefined,
+      url: article.canonicalUrl || url.toString(),
       images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
       type: "article",
       publishedTime: publishDate,
       modifiedTime: modifiedDate,
-      authors: data?.author?.name
-        ? [data.author.name]
-        : ["Pittsburgh Forge Rugby Club"],
+      authors: article.author?.name ? [article.author.name] : [],
     },
     twitter: {
-      title: seo?.twitterTitle ?? seo?.title ?? data?.title ?? undefined,
-      description: seo?.twitterDescription ?? seo?.description ?? undefined,
-      images: seo?.twitterImage
-        ? [
-            {
-              url:
-                typeof seo.twitterImage === "string"
-                  ? seo.twitterImage
-                  : ogImageUrl ?? "",
-            },
-          ]
-        : ogImageUrl
-        ? [{ url: ogImageUrl }]
-        : undefined,
+      title: article.metaTitle || article.title || undefined,
+      description:
+        article.metaDescription || stripHtml(article.wpexcerpt) || undefined,
+      images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
+    },
+    other: {
+      "application/ld+json": JSON.stringify(structuredData),
     },
   } satisfies Metadata
 }
 
 // JSON-LD schema.org structured data
-function generateStructuredData(data: any) {
-  if (!data) return null
+function generateStructuredData(
+  article: any,
+  slug: string
+): StructuredArticleData {
+  const imageUrl =
+    (article.metaImage &&
+      Array.isArray(article.metaImage) &&
+      article.metaImage.length > 0 &&
+      article.metaImage[0].url) ||
+    "https://pghrugby.com/logo.png"
 
-  const { seo = {} } = data
+  const publishDate = article.creationDate
+    ? new Date(article.creationDate).toISOString()
+    : ""
+  const modifiedDate = article._updatedAt
+    ? new Date(article._updatedAt).toISOString()
+    : ""
 
-  // Handle ogImage as either a string or Sanity image object
-  let ogImageUrl: string = "https://pghrugby.com/logo.png"
-  if (seo?.ogImage) {
-    if (
-      typeof seo.ogImage === "object" &&
-      seo.ogImage !== null &&
-      "asset" in seo.ogImage
-    ) {
-      ogImageUrl =
-        parseSanityImageRef(
-          (seo.ogImage as { asset: { _ref: string } }).asset._ref
-        ) || ogImageUrl
-    } else if (typeof seo.ogImage === "string") {
-      ogImageUrl = seo.ogImage
-    }
-  }
-
-  const publishDate = data?.date ? new Date(data.date).toISOString() : undefined
-  const modifiedDate = data?.modified
-    ? new Date(data.modified).toISOString()
-    : undefined
+  const headline =
+    article.metaTitle ||
+    (article.title ? `${article.title} | Pittsburgh Forge Rugby Club` : "")
+  const description =
+    article.metaDescription || stripHtml(article.wpexcerpt)
 
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: seo?.title
-      ? `${seo.title} | Pittsburgh Forge Rugby Club`
-      : `${data?.title} | Pittsburgh Forge Rugby Club`,
-    description: seo?.description || "",
-    image: ogImageUrl,
-    datePublished: publishDate || "",
-    dateModified: modifiedDate || "",
-    author:
-      data.author?.name || "Pittsburgh Forge Rugby Club"
-        ? {
-            "@type": "Person",
-            name: data.author.name || "Pittsburgh Forge Rugby Club",
-          }
-        : undefined,
+    headline,
+    description,
+    image: imageUrl,
+    datePublished: publishDate,
+    dateModified: modifiedDate,
+    author: article.author?.name
+      ? {
+          "@type": "Person",
+          name: article.author.name,
+        }
+      : undefined,
     publisher: {
       "@type": "Organization",
       name: "Pittsburgh Forge Rugby Club",
       logo: {
         "@type": "ImageObject",
-        url: ogImageUrl,
+        url: imageUrl,
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": seo?.canonicalUrl || `https://pghrugby.com/${data.slug}`,
+      "@id": article.canonicalUrl || `https://pghrugby.com/post/${slug}`,
     },
-    keywords:
-      Array.isArray(data.tags) && data.tags.length > 0
-        ? data.tags
-            .map((tag: any) => tag.title || tag._ref || "")
-            .filter(Boolean)
-        : [],
   }
 }
 
-export default async function PostPage(props: { params: { slug: string } }) {
-  const { isEnabled } = await draftMode()
-  const { slug } = await props.params
-  const data = await client.fetch(
-    postQuery,
-    { slug },
-    isEnabled
-      ? {
-          perspective: "previewDrafts",
-          useCdn: false,
-          stega: true,
-        }
-      : undefined
-  )
+export default async function PostPage({ params }: PostProps) {
+  const { slug } = await params
+  const { isEnabled: isDraftModeEnabled } = await draftMode()
 
-  if (!data?._id) {
-    return notFound()
+  const { article } = await executeQuery(postQuery, {
+    variables: { slug },
+    excludeInvalid: false,
+    includeDrafts: isDraftModeEnabled,
+    baseEditingUrl: true,
+  })
+
+  if (!article) {
+    notFound()
   }
 
-  const structuredData = generateStructuredData(data)
-
   const shareUrl =
-    data.seo?.canonicalUrl || `https://pghrugby.com//post/${slug}`
-  const shareTitle = data.seo?.title
-    ? `${data.seo.title} | Pittsburgh Forge Rugby Club`
-    : `${data?.title} | Pittsburgh Forge Rugby Club`
+    article.canonicalUrl || `https://pghrugby.com/post/${slug}`
+  const shareTitle = article.metaTitle
+    ? article.metaTitle
+    : `${article.title ?? ""} | Pittsburgh Forge Rugby Club`
+
+  const excerpt = stripHtml(article.wpexcerpt)
+  const tags = Array.isArray(article.tags) ? (article.tags as string[]) : []
 
   return (
     <SidebarLayout>
-      <article className={`${contentStyles.contentBlock} ${s.content}`}>
+      <article className={`${contentStyles.contentBlock} ${s.pageContent}`}>
         <div className="prose">
-          {/* Structured data for SEO */}
-          {structuredData && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify(structuredData),
-              }}
-            />
-          )}
+          <header className={s.header}>
+            <Heading level="h1">{article.title}</Heading>
 
-          {/* Featured image */}
-          {/* {data.featuredMedia && (
-          <div className="mb-6 relative aspect-video w-full">
-            <CoverImage image={data.featuredMedia} priority />
-          </div>
-        )} */}
+            {excerpt && (
+              <p className={s.excerpt}>
+                <Text size="lg">{excerpt}</Text>
+              </p>
+            )}
 
-          <header className="mb-8">
-            <h1>{data.title}</h1>
-
-            <p className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-4">
-              {data.excerpt}
-            </p>
-
-            <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
-              {data.date && (
-                <time dateTime={new Date(data.date).toISOString()}>
-                  Published: {new Date(data.date).toLocaleDateString()}
+            <div className={s.meta}>
+              {article.creationDate && (
+                <time dateTime={new Date(article.creationDate).toISOString()}>
+                  <Text variant="span" size="sm">
+                    Published:{" "}
+                    {new Date(article.creationDate).toLocaleDateString()}
+                  </Text>
                 </time>
               )}
 
-              {data.modified && data.date !== data.modified && (
-                <time dateTime={new Date(data.modified).toISOString()}>
-                  Updated: {new Date(data.modified).toLocaleDateString()}
+              {article._updatedAt && article.creationDate && (
+                <time dateTime={new Date(article._updatedAt).toISOString()}>
+                  <Text variant="span" size="sm">
+                    Updated: {new Date(article._updatedAt).toLocaleDateString()}
+                  </Text>
                 </time>
               )}
 
-              {data.author?.name && (
-                <address className="not-italic">By: {data.author.name}</address>
-              )}
-
-              {data.status && (
-                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded-sm text-xs">
-                  {data.status}
-                </span>
-              )}
-
-              {data.sticky && (
-                <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900 rounded-sm text-xs">
-                  Featured
-                </span>
+              {article.author?.name && (
+                <address>
+                  <Text variant="span" size="sm">
+                    By: {article.author.name}
+                  </Text>
+                </address>
               )}
             </div>
 
-            {/* Categories and Tags */}
-            {Array.isArray(data.categories) && data.categories.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                <span className="text-sm text-gray-600 dark:text-gray-300">
+            {article.categories.length > 0 && (
+              <div className={s.meta}>
+                <Text variant="span" size="sm">
                   Categories:
-                </span>
-                {data.categories.map((cat: any, index: number) => (
-                  <span
-                    key={index}
-                    className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm"
-                  >
-                    {cat.title || cat._ref || ""}
-                  </span>
+                </Text>
+                {article.categories.map((category) => (
+                  <Text key={category.name} variant="span" size="sm">
+                    {category.name}
+                  </Text>
                 ))}
               </div>
             )}
 
-            {Array.isArray(data.tags) && data.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                <span className="text-sm text-gray-600 dark:text-gray-300">
+            {tags.length > 0 && (
+              <div className={s.meta}>
+                <Text variant="span" size="sm">
                   Tags:
-                </span>
-                {data.tags.map((tag: any, index: number) => (
-                  <span
-                    key={index}
-                    className="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm"
-                  >
-                    {tag.title || tag._ref || ""}
-                  </span>
+                </Text>
+                {tags.map((tag) => (
+                  <Text key={tag} variant="span" size="sm">
+                    {tag}
+                  </Text>
                 ))}
               </div>
             )}
           </header>
 
           <div className="">
-            {isPortableText(data.content) ? (
-              <PortableText value={data.content} />
-            ) : (
-              <p>No content available.</p>
+            {article.content && (
+              <StructuredText
+                data={article.content}
+                renderBlock={({ record }) => {
+                  const typedRecord = record as PostContentBlocks
+                  switch (typedRecord.__typename) {
+                    case "ExternalImageBlockRecord":
+                      if (typedRecord.cloudinary) {
+                        const image = typedRecord.cloudinary as CloudinaryImage
+                        return CloudinaryImageRenderer({
+                          src: image.secure_url,
+                          alt: image.public_id,
+                          width: image.width,
+                          height: image.height,
+                        })
+                      } else if (typedRecord.url) {
+                        const image = getCloudinaryImageProps(typedRecord.url)
+                        return CloudinaryImageRenderer({
+                          src: image.url,
+                          alt: "",
+                          width: image.width,
+                          height: image.height,
+                        })
+                      }
+
+                      return null
+                    case "ImageBlockRecord":
+                      if (typedRecord.asset) {
+                        const asset = readFragment(
+                          fileFieldFragment,
+                          typedRecord.asset
+                        )
+                        return <Image src={asset.url} alt={asset.alt || ""} />
+                      }
+                      return null
+                    case "ImageGalleryBlockRecord":
+                      return (
+                        <div>
+                          {typedRecord.assets.map((maskedAsset) => {
+                            const asset = readFragment(
+                              fileFieldFragment,
+                              maskedAsset
+                            )
+                            return (
+                              <Image
+                                key={asset.id}
+                                src={asset.url}
+                                alt={asset.alt || ""}
+                              />
+                            )
+                          })}
+                        </div>
+                      )
+                    case "VideoBlockRecord":
+                      if (typedRecord.asset) {
+                        const asset = readFragment(
+                          fileFieldFragment,
+                          typedRecord.asset
+                        )
+                        // For videos, returning a link/player to the video.
+                        return <video controls src={asset.url}></video>
+                      }
+                      return null
+                    default:
+                      return null
+                  }
+                }}
+              />
             )}
           </div>
+
           <ShareBar url={shareUrl} title={shareTitle} />
         </div>
       </article>

@@ -10,7 +10,7 @@ import Example from "./example-page"
 import ShareBar from "@/components/share-bar"
 import Heading from "@/components/typography/heading"
 import Text from "@/components/typography/text"
-import { CloudinaryImage } from "@/types/datocms"
+import CloudinaryImageRenderer from "@/components/cloudinary-image-renderer"
 import { ResultOf, readFragment } from "@/lib/datocms/graphql"
 import { getCloudinaryImageProps } from "@/utils/cloudinary"
 import { fileFieldFragment } from "@fragments/blocks"
@@ -43,7 +43,7 @@ export async function generateStaticParams() {
  * Generate metadata for the page.
  */
 export async function generateMetadata(
-  props: { params: { slug: string } },
+  props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { isEnabled } = await draftMode()
@@ -246,25 +246,21 @@ export default async function Page({ params }: PageProps) {
                   switch (typedRecord.__typename) {
                     case "ExternalImageBlockRecord":
                       if (typedRecord.cloudinary) {
-                        const image = typedRecord.cloudinary as CloudinaryImage
-                        return (
-                          <Image
-                            src={image.secure_url}
-                            alt={image.public_id}
-                            width={image.width ?? undefined}
-                            height={image.height ?? undefined}
-                          />
-                        )
+                        const image = typedRecord.cloudinary as any
+                        return CloudinaryImageRenderer({
+                          src: image.secure_url,
+                          alt: image.public_id,
+                          width: image.width,
+                          height: image.height,
+                        })
                       } else if (typedRecord.url) {
                         const image = getCloudinaryImageProps(typedRecord.url)
-                        return (
-                          <Image
-                            src={image.url}
-                            alt=""
-                            width={image.width ?? undefined}
-                            height={image.height ?? undefined}
-                          />
-                        )
+                        return CloudinaryImageRenderer({
+                          src: image.url,
+                          alt: "",
+                          width: image.width,
+                          height: image.height,
+                        })
                       }
 
                       return null

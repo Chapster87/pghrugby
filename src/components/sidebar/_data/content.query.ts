@@ -1,20 +1,11 @@
-// Query to fetch the last 8 pages or posts added by date
-export const latestContentQuery = `
-  *[_type in ['post'] && !(_id match "draft.*") && (!defined(excludeFromHomepageSlider) || excludeFromHomepageSlider != true)]|order(date desc)[0...5]{
-    _id,
-    _type,
-    title,
-    slug,
-    date,
-    modified,
-    status,
-    content,
-    excerpt,
-    featuredMedia,
-    sticky,
-    author,
-    categories,
-    tags,
-    seo
+import { graphql } from "@/lib/datocms/graphql"
+
+// Latest published articles for the sidebar "Latest Posts" widget.
+export const latestContentQuery = graphql(`
+  query LatestPostsQuery {
+    allArticles(filter: { _status: { eq: published } }, orderBy: [_updatedAt_DESC], first: 5) {
+      slug
+      title
+    }
   }
-`
+`)

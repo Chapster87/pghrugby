@@ -1,0 +1,28 @@
+.pageContent {
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.excerpt {
+  margin-bottom: 16px;
+  color: var(--color-grey-600);
+
+  :global(.dark) & {
+    color: var(--color-grey-500);
+  }
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--color-grey-600);
+  font-size: 14px;
+
+  :global(.dark) & {
+    color: var(--color-grey-500);
+  }
+}

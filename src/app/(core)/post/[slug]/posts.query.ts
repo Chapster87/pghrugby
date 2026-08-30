@@ -1,43 +1,45 @@
-import { defineQuery } from "next-sanity"
-import { seoFragment } from "@sanity-fragments/seo-fragment"
+import { graphql } from "@/lib/datocms/graphql"
+import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
 
-const postFields = /* groq */ `
-  _id,
-  "status": select(_originalId in path("drafts.**") => "draft", "published"),
-  "title": coalesce(title, "Untitled"),
-  "slug": slug.current,
-  excerpt,
-  coverImage,
-  featuredMedia,
-  sticky,
-  categories[]->{title},
-  tags[]->{title},
-  "date": coalesce(date, _updatedAt),
-  "modified": coalesce(date, _updatedAt),
-  "author": author->{name},
-  ${seoFragment}
-`
-
-const linkReference = /* groq */ `
-  _type == "link" => {
-    "post": post->slug.current
-  }
-`
-
-export const postQuery = defineQuery(`
-  *[_type == "post" && slug.current == $slug] [0] {
-    content[]{
-    ...,
-    markDefs[]{
-      ...,
-      ${linkReference}
+export const postSlugs = graphql(`
+  query PostSlugsQuery {
+    allArticles(filter: { _status: { eq: published } }, orderBy: [_updatedAt_DESC]) {
+      slug
     }
-  },
-    ${postFields}
   }
 `)
 
-export const postPagesSlugs = defineQuery(`
-  *[_type == "post" && defined(slug.current)]
-  {"slug": slug.current}
-`)
+export const postQuery = graphql(
+  `
+    query PostQuery($slug: String!) {
+      article(filter: { slug: { eq: $slug } }) {
+        title
+        author {
+          name
+        }
+        canonicalUrl
+        creationDate
+        _updatedAt
+        wpexcerpt
+        featuredImage
+        metaDescription
+        metaImage
+        metaKeywords
+        metaRobots
+        metaTitle
+        tags
+        categories {
+          name
+          slug
+        }
+        content {
+          value
+          blocks {
+            ...BlocksFragment
+          }
+        }
+      }
+    }
+  `,
+  [fileFieldFragment, blocksFragment]
+)

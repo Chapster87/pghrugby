@@ -1,7 +1,8 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
 
-import { client } from "@/sanity/lib/client"
+import { executeQuery } from "@/lib/datocms/executeQuery"
+import { graphql } from "@/lib/datocms/graphql"
 
 /**
  * Generate metadata for the page.
@@ -50,29 +51,43 @@ const storefrontRoutes = [
   { href: "/donate", label: "Donate" },
 ]
 
-// Fetch all blog slugs from Sanity
-async function getAllBlogPosts() {
-  return client.fetch(
-    `*[_type == "post" && defined(slug.current)]{
-      "slug": slug.current,
+const allArticlesSlugs = graphql(`
+  query SitemapArticlesQuery {
+    allArticles(filter: { _status: { eq: published } }, orderBy: [_updatedAt_DESC]) {
+      slug
       title
-    } | order(_createdAt desc)`
-  )
+    }
+  }
+`)
+
+const allPagesSlugs = graphql(`
+  query SitemapPagesQuery {
+    allPages(filter: { _status: { eq: published } }, orderBy: [_updatedAt_DESC]) {
+      slug
+      title
+    }
+  }
+`)
+
+// Fetch all published article slugs from DatoCMS
+async function getAllBlogPosts() {
+  const { allArticles } = await executeQuery(allArticlesSlugs, {
+    includeDrafts: false,
+  })
+  return (allArticles ?? []).map((a) => ({ slug: a.slug, title: a.title }))
 }
 
-// Fetch all sanity pages with slugs
-async function getAllSanityPages() {
-  return client.fetch(
-    `*[_type == "page" && defined(slug.current)]{
-      "slug": slug.current,
-      title
-    } | order(_createdAt desc)`
-  )
+// Fetch all published page slugs from DatoCMS
+async function getAllPages() {
+  const { allPages } = await executeQuery(allPagesSlugs, {
+    includeDrafts: false,
+  })
+  return (allPages ?? []).map((p) => ({ slug: p.slug, title: p.title }))
 }
 
 export default async function SiteMap() {
   const blogPosts = await getAllBlogPosts()
-  const sanityPages = await getAllSanityPages()
+  const allPages = await getAllPages()
 
   return (
     <div className="py-12">
@@ -108,7 +123,7 @@ export default async function SiteMap() {
         <li>
           <span className="font-semibold">Pages:</span>
           <ul className="ml-4 list-disc">
-            {sanityPages.map((page: any) => (
+            {allPages.map((page: any) => (
               <li key={page.slug}>
                 <Link href={`/${page.slug}`}>{page.title || page.slug}</Link>
               </li>

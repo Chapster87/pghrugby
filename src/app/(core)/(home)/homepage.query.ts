@@ -39,6 +39,7 @@ export const latestContentQuery = graphql(
         title
         featuredImage
         wpexcerpt
+        creationDate
         _updatedAt
       }
     }
