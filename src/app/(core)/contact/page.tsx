@@ -12,7 +12,7 @@ import contentStyles from "@/styles/content.module.css"
 import s from "./styles.module.css"
 
 export async function generateMetadata(
-  props: { params: { slug: string } },
+  props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { slug } = await props.params

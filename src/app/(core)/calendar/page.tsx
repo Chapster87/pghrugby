@@ -6,7 +6,7 @@ import axios from "axios"
  * Generate metadata for the page.
  */
 export async function generateMetadata(
-  props: { params: { slug: string } },
+  props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")

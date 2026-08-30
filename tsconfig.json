@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["dom", "dom.iterable", "ES2015", "ES2017", "ESNext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "ES2015",
+      "ES2017",
+      "ESNext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -12,20 +18,42 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@components/*": ["./src/components/*"],
-      "@fragments/*": ["./src/fragments/*"],
-      "@layouts/*": ["./src/layouts/*"],
-      "@sanity-fragments/*": ["./src/sanity/fragments/*"],
-      "@lib/*": ["./src/lib/*"],
-      "@modules/*": ["./src/modules/*"],
-      "@styles/*": ["./src/styles/*"],
-      "@svg/*": ["./src/svg/*"],
-      "@sanity/*": ["./src/sanity/*"],
-      "@types/*": ["./src/types/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@fragments/*": [
+        "./src/fragments/*"
+      ],
+      "@layouts/*": [
+        "./src/layouts/*"
+      ],
+      "@sanity-fragments/*": [
+        "./src/sanity/fragments/*"
+      ],
+      "@lib/*": [
+        "./src/lib/*"
+      ],
+      "@modules/*": [
+        "./src/modules/*"
+      ],
+      "@styles/*": [
+        "./src/styles/*"
+      ],
+      "@svg/*": [
+        "./src/svg/*"
+      ],
+      "@sanity/*": [
+        "./src/sanity/*"
+      ],
+      "@types/*": [
+        "./src/types/*"
+      ]
     },
     "plugins": [
       {
@@ -38,7 +66,13 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules",
     ".next",

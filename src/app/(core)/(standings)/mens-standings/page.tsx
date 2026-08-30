@@ -8,7 +8,7 @@ import s from "./styles.module.css"
  * Generate metadata for the page.
  */
 export async function generateMetadata(
-  props: { params: { slug: string } },
+  props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // Build canonical URL using current URL and slug
