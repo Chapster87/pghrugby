@@ -13,7 +13,7 @@ export const teamsQuery = `
             short_name
           }
           # Resolved Division record (Polymorphic fix applied)
-          divison {
+          division {
             name
             short_name
           }
