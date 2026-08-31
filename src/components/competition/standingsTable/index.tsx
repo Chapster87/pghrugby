@@ -9,9 +9,9 @@ import s from "./styles.module.css"
 interface TeamData {
   team_id: string
   team_name: string
-  team_logo: {
+  team_logo?: {
     url: string
-  }
+  } | null
   is_focused: string
   gp: number
   w: number
@@ -44,8 +44,20 @@ export async function StandingsTable({
     standingsQuery(leagueSlug, divisionSlug, seasonYear, seasonName)
   )
 
-  const { division, league, league_standings, season } =
-    standings.standingsCollection.edges[0].node
+  const node = standings.standingsCollection?.edges?.[0]?.node
+
+  if (!node) {
+    console.warn(
+      `No standings found for league=${leagueSlug} division=${divisionSlug} season=${seasonYear} ${seasonName}`
+    )
+    return (
+      <div>
+        <p>No standings available for this league and division yet.</p>
+      </div>
+    )
+  }
+
+  const { division, league, league_standings, season } = node
 
   const typedLeagueStandings = league_standings as TeamData[]
 
@@ -102,13 +114,15 @@ export async function StandingsTable({
                 <td>{index + 1}</td>
                 <td className={s.teamName}>
                   <div className={`${s.teamName}`}>
-                    <Image
-                      src={teamData.team_logo.url}
-                      alt={`${teamData.team_name} logo`}
-                      width={26}
-                      height={26}
-                      style={{ marginRight: "8px" }}
-                    />
+                    {teamData.team_logo?.url && (
+                      <Image
+                        src={teamData.team_logo.url}
+                        alt={`${teamData.team_name} logo`}
+                        width={26}
+                        height={26}
+                        style={{ marginRight: "8px" }}
+                      />
+                    )}
                     {teamData.team_name}
                   </div>
                 </td>

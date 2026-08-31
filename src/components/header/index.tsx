@@ -1,15 +1,14 @@
 import HeaderTop from "./top"
 import HeaderMain from "./main"
 import { MainNav, MobileNav } from "./nav"
-import { client } from "@/sanity/lib/client"
-import { navQuery } from "./nav.query"
-import { urlBuilder } from "@/lib/util/url"
+import { executeQuery } from "@/lib/forgecms/execute-query"
+import {
+  mapNavNodes,
+  siteNavigationQuery,
+  siteSettingsQuery,
+} from "@/lib/forgecms/chrome.query"
 
-const settingsQuery = `*[_type == "settings"] | order(publishedAt desc)[0] {
-  title
-}`
-
-interface SubMenuItem {
+export interface SubMenuItem {
   label: string
   url: string
   route?: string // Added route property
@@ -20,41 +19,14 @@ export interface NavItem extends SubMenuItem {
   submenu: SubMenuItem[]
 }
 
-interface FormattedNavData {
-  navigation: NavItem[]
-}
-
 export default async function Header() {
-  const settings = await client.fetch(settingsQuery)
-  const navigation = await client.fetch(navQuery)
-  const siteTitle = settings?.title || "Pittsburgh Rugby"
-  const formattedNavData: FormattedNavData = {
-    navigation:
-      navigation?.mainNav?.map((menu: any): NavItem => {
-        return {
-          label: menu.overrideTitle || menu.item?.title,
-          url:
-            menu.route || // Prioritize route if defined
-            (menu.item?.slug?.current
-              ? urlBuilder(menu.item._type, menu.item.slug.current)
-              : "#"),
-          route: menu.route || undefined, // Added route handling
-          openInNewTab: menu.openInNewTab || false,
-          submenu:
-            menu.submenu?.map((subItem: any): SubMenuItem => {
-              return {
-                label: subItem.overrideTitle || subItem.item?.title,
-                url:
-                  subItem.route || // Prioritize route if defined
-                  (subItem.item?.slug?.current
-                    ? urlBuilder(subItem.item._type, subItem.item.slug.current)
-                    : "#"),
-                route: subItem.route || undefined, // Added route handling
-                openInNewTab: subItem.openInNewTab || false,
-              }
-            }) || [],
-        }
-      }) || [],
+  const [{ siteSettings }, { site_navigation }] = await Promise.all([
+    executeQuery(siteSettingsQuery),
+    executeQuery(siteNavigationQuery),
+  ])
+  const siteTitle = siteSettings?.defaultPageTitle || "Pittsburgh Rugby"
+  const formattedNavData = {
+    navigation: mapNavNodes(site_navigation?.header),
   }
 
   return (

@@ -1,24 +1,10 @@
 import HeaderMain from "./main"
-import { client } from "@/sanity/lib/client"
-
-const settingsQuery = `*[_type == "settings"] | order(publishedAt desc)[0] {
-  title
-}`
-
-interface SubMenuItem {
-  label: string
-  url: string
-  route?: string // Added route property
-  openInNewTab: boolean
-}
-
-export interface NavItem extends SubMenuItem {
-  submenu: SubMenuItem[]
-}
+import { executeQuery } from "@/lib/forgecms/execute-query"
+import { siteSettingsQuery } from "@/lib/forgecms/chrome.query"
 
 export default async function Header() {
-  const settings = await client.fetch(settingsQuery)
-  const siteTitle = settings?.title || "Pittsburgh Rugby"
+  const { siteSettings } = await executeQuery(siteSettingsQuery)
+  const siteTitle = siteSettings?.defaultPageTitle || "Pittsburgh Rugby"
 
   return <HeaderMain title={siteTitle} />
 }

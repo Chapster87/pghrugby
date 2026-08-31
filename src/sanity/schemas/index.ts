@@ -14,11 +14,9 @@ import { imageWithCaption } from "./components/imageWithCaption"
 import { league } from "./league"
 import { link } from "./components/link"
 import { linkGroup } from "./components/linkGroup"
-import { linktree } from "./linktree"
 import { match } from "./match"
 import { mediaText } from "./components/mediaText"
 import { membership } from "./pages/membership"
-import { navigation } from "./navigation"
 import { page } from "./page"
 import { pageBuilder } from "./components/pageBuilder"
 import { portableText } from "./components/portableText"
@@ -26,10 +24,6 @@ import { post } from "./post"
 import { richText } from "./components/richText"
 import { season } from "./season"
 import { seo } from "./seo"
-import { settings } from "./settings"
-import { socialMedia } from "./socialMedia"
-import { sponsor } from "./sponsor"
-import { sponsorBar } from "./sponsorBar"
 import standings from "./standings"
 import { tag } from "./tag"
 import { team } from "./team"
@@ -52,11 +46,9 @@ export const schema: SchemaPluginOptions = {
     league,
     link,
     linkGroup,
-    linktree,
     match,
     mediaText,
     membership,
-    navigation,
     page,
     pageBuilder,
     portableText,
@@ -64,10 +56,6 @@ export const schema: SchemaPluginOptions = {
     richText,
     season,
     seo,
-    settings,
-    socialMedia,
-    sponsor,
-    sponsorBar,
     standings,
     tag,
     team,
