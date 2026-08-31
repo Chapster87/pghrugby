@@ -15,6 +15,8 @@
     "provision:stripe:apply": "node ./scripts/provision-stripe-catalog.mjs --apply",
     "scan:woocommerce": "node ./scripts/scan-woocommerce.mjs",
     "legacy-pages:cleanup": "node ./scripts/delete-legacy-datocms-pages.mjs",
+    "supabase:query": "node --env-file=.env.local scripts/supabase-query.mjs",
+    "supabase:inspect-forgecms": "node --env-file=.env.local scripts/inspect-forgecms.mjs",
     "prototype:datocms-models": "tsx src/lib/prototype-datocms-models/run.ts"
   },
   "dependencies": {
