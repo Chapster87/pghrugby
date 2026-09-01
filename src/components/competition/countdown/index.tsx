@@ -1,27 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { client } from "@/sanity/lib/client"
-import { matchQuery } from "./match.query"
-import Heading from "@/components/typography/heading"
-import Text from "@/components/typography/text"
+import { useEffect, useMemo, useState } from "react"
 import clsx from "clsx"
+
+import type { ForgeCmsMatch } from "@/lib/forgecms/competition.query"
+import Heading from "@components/typography/heading"
+import Text from "@components/typography/text"
 import s from "./styles.module.css"
-
-interface Team {
-  name: string
-  logo: string
-}
-
-interface MatchData {
-  forgeHome: boolean
-  league: { name: string; shortName: string }
-  division: { name: string; shortName: string }
-  homeTeam: Team
-  awayTeam: Team
-  matchDate: Date
-  venue?: string
-}
 
 interface TimeLeft {
   days: number
@@ -30,20 +15,12 @@ interface TimeLeft {
   seconds: number
 }
 
-interface MatchProps {
-  league: string
-  division: string
-  seasonYear: number
-  seasonName: string
+interface MatchCountdownProps {
+  /** The next upcoming match for this surface (null when none scheduled). */
+  match: ForgeCmsMatch | null
 }
 
-export function MatchCountdown({
-  league,
-  division,
-  seasonYear,
-  seasonName,
-}: MatchProps) {
-  const [matchData, setMatchData] = useState<MatchData | null>(null)
+export function MatchCountdown({ match }: MatchCountdownProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -51,61 +28,24 @@ export function MatchCountdown({
     seconds: 0,
   })
 
-  useEffect(() => {
-    const fetchMatchData = async () => {
-      try {
-        const results = await client.fetch(
-          matchQuery(league, division, seasonYear, seasonName)
-        )
-
-        if (results && results.length > 0) {
-          const data = results[0]
-
-          const isForgeHome = data.homeTeam?.teamName?.includes("Forge")
-          const isForgeAway = data.awayTeam?.teamName?.includes("Forge")
-
-          setMatchData({
-            forgeHome: isForgeHome,
-            league: {
-              name: data.league?.name,
-              shortName: data.league?.shortName,
-            },
-            division: {
-              name: data.division?.name,
-              shortName: data.division?.shortName,
-            },
-            homeTeam: {
-              name: data.homeTeam?.teamName,
-              logo: data.homeTeam?.teamLogo?.asset?.url,
-            },
-            awayTeam: {
-              name: data.awayTeam?.teamName,
-              logo: data.awayTeam?.teamLogo?.asset?.url,
-            },
-            matchDate: new Date(data.eventDateTime),
-            venue:
-              isForgeHome || isForgeAway
-                ? isForgeHome
-                  ? "Home"
-                  : "Away"
-                : data.name,
-          })
-        } else {
-          console.warn("No match data found or query returned an empty array.")
-        }
-      } catch (error) {
-        console.error("Error fetching match data:", error)
-      }
-    }
-
-    fetchMatchData()
-  }, [league, division, seasonYear, seasonName])
+  const isForgeHome = match?.home_team?.team_name?.includes("Forge")
+  const isForgeAway = match?.away_team?.team_name?.includes("Forge")
+  const venue =
+    isForgeHome || isForgeAway
+      ? isForgeHome
+        ? "Home"
+        : "Away"
+      : match?.event_name ?? ""
+  const matchDate = useMemo(
+    () => (match ? new Date(match.match_date_time) : null),
+    [match]
+  )
 
   useEffect(() => {
-    if (!matchData) return
+    if (!matchDate) return
 
     const calculateTimeLeft = (): TimeLeft => {
-      const difference = matchData.matchDate.getTime() - new Date().getTime()
+      const difference = matchDate.getTime() - new Date().getTime()
 
       if (difference > 0) {
         return {
@@ -124,7 +64,7 @@ export function MatchCountdown({
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [matchData])
+  }, [matchDate])
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
@@ -134,61 +74,57 @@ export function MatchCountdown({
     })
   }
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    })
-  }
-
   const padNumber = (num: number) => String(num).padStart(2, "0")
 
-  if (!matchData) {
+  if (!match) {
     return
   }
 
   return (
     <div className={s.countdown}>
       <Heading level="h2" className={s.divisionHeader}>
-        {matchData.league.shortName} {matchData.division.name}
+        {match.league?.short_name} {match.division?.name}
       </Heading>
 
       <div className={s.mainContent}>
         <div className={s.contentTop}>
           <Heading level="h5" className={s.venue}>
-            {matchData.venue}
+            {venue}
           </Heading>
 
           <Text className={s.matchDate}>
-            {formatDate(matchData.matchDate).toUpperCase()}
-            {/* -{" "}{formatTime(matchData.matchDate).toUpperCase()} */}
+            {matchDate && formatDate(matchDate).toUpperCase()}
+            {/* -{" "}{formatTime(matchDate).toUpperCase()} */}
           </Text>
 
           <div className={s.teams}>
             <div className={s.teamDisplay}>
-              {matchData.venue === "Home" ? (
+              {venue === "Home" ? (
                 <>
                   <div className={s.teamLogo}>
                     <img
-                      src={matchData.homeTeam.logo || "/placeholder.svg"}
-                      alt={matchData.homeTeam.name}
+                      src={
+                        match.home_team?.team_logo?.url || "/placeholder.svg"
+                      }
+                      alt={match.home_team?.team_name || "Home team"}
                       className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
                   <div className={s.matchup}>
                     <Text className={s.teamName}>
-                      {matchData.homeTeam.name}
+                      {match.home_team?.team_name}
                     </Text>
                     <div className={s.vs}>VS</div>
                     <Text className={s.teamName}>
-                      {matchData.awayTeam.name}
+                      {match.away_team?.team_name}
                     </Text>
                   </div>
                   <div className={s.teamLogo}>
                     <img
-                      src={matchData.awayTeam.logo || "/placeholder.svg"}
-                      alt={matchData.awayTeam.name}
+                      src={
+                        match.away_team?.team_logo?.url || "/placeholder.svg"
+                      }
+                      alt={match.away_team?.team_name || "Away team"}
                       className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
@@ -197,24 +133,28 @@ export function MatchCountdown({
                 <>
                   <div className={s.teamLogo}>
                     <img
-                      src={matchData.awayTeam.logo || "/placeholder.svg"}
-                      alt={matchData.awayTeam.name}
+                      src={
+                        match.away_team?.team_logo?.url || "/placeholder.svg"
+                      }
+                      alt={match.away_team?.team_name || "Away team"}
                       className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
                   <div className={s.matchup}>
                     <Text className={s.teamName}>
-                      {matchData.awayTeam.name}
+                      {match.away_team?.team_name}
                     </Text>
                     <div className={s.vs}>@</div>
                     <Text className={s.teamName}>
-                      {matchData.homeTeam.name}
+                      {match.home_team?.team_name}
                     </Text>
                   </div>
                   <div className={s.teamLogo}>
                     <img
-                      src={matchData.homeTeam.logo || "/placeholder.svg"}
-                      alt={matchData.homeTeam.name}
+                      src={
+                        match.home_team?.team_logo?.url || "/placeholder.svg"
+                      }
+                      alt={match.home_team?.team_name || "Home team"}
                       className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
