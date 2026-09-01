@@ -12,14 +12,12 @@ Built with Next.js (App Router), with content and commerce spread across:
   and taxonomy.
 - **ForgeCMS** — site chrome + competition (nav, footer, settings, sponsors,
   teams, matches, schedules, standings, links, socials).
-- **Sanity** — legacy nav/footer/posts source until the migration tickets land
-  (see the wayfinder map, issue #1).
 - **Supabase** — the `orders` table (and `carts`), written service-role only.
 
 The repo is self-contained at its root — the Next.js app, `src/`, `scripts/`,
-`sanity.config.ts`, `schema.graphql` (generated DatoCMS schema), `supabase/`,
-and the WordPress→CMS `migrations/` all live here. `migrations/` is preserved
-until the WordPress content migration is confirmed landed.
+`schema.graphql` (generated DatoCMS schema), `supabase/`, and the WordPress→CMS
+`migrations/` all live here. `migrations/` is preserved until the WordPress
+content migration is confirmed landed.
 
 ## Setup
 

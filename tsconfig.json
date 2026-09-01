@@ -33,9 +33,6 @@
       "@layouts/*": [
         "./src/layouts/*"
       ],
-      "@sanity-fragments/*": [
-        "./src/sanity/fragments/*"
-      ],
       "@lib/*": [
         "./src/lib/*"
       ],
@@ -47,9 +44,6 @@
       ],
       "@svg/*": [
         "./src/svg/*"
-      ],
-      "@sanity/*": [
-        "./src/sanity/*"
       ],
       "@types/*": [
         "./src/types/*"

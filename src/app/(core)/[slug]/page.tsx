@@ -6,7 +6,6 @@ import Image from "next/image"
 import { executeQuery } from "@/lib/datocms/executeQuery"
 import { StructuredText } from "react-datocms"
 import { pageSlugs, pageQuery } from "./pages.query"
-import Example from "./example-page"
 import ShareBar from "@/components/share-bar"
 import Heading from "@/components/typography/heading"
 import Text from "@/components/typography/text"
@@ -183,10 +182,6 @@ export default async function Page({ params }: PageProps) {
   const shareTitle = page?.metaTitle
     ? page.metaTitle
     : `${page?.title ?? ""} | Pittsburgh Forge Rugby Club`
-
-  if (slug === "example") {
-    return <Example data={page} />
-  }
 
   return (
     <SidebarLayout>

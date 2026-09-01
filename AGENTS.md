@@ -7,10 +7,9 @@ the repo root). Coding conventions and domain rules follow.
 
 A single, self-contained Next.js application for the Pittsburgh Forge Rugby
 Club, rooted at the repo root (`src/`, configs, `scripts/`, `migrations/`).
-Commerce and content come from Stripe, DatoCMS, ForgeCMS, Sanity (legacy,
-interim), and Supabase (`orders`/`carts`). Medusa, Strapi, and the Medusa-era
-storefront are removed — never reintroduce them or their patterns. All changes
-stay within this repository.
+Commerce and content come from Stripe, DatoCMS, ForgeCMS, and Supabase
+(`orders`/`carts`). Medusa, Strapi, and Sanity are removed — never reintroduce
+them or their patterns. All changes stay within this repository.
 
 ## Coding conventions
 

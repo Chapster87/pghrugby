@@ -35,10 +35,6 @@ const nextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
-      {
-        protocol: "https",
-        hostname: "cdn.sanity.io",
-      },
     ],
   },
   // beforeFiles: PDP clean URLs win over root [slug] pages (products own slugs).

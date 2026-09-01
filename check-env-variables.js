@@ -34,11 +34,6 @@ const requiredEnvs = [
     key: "FORGECMS_API_TOKEN",
     description: "ForgeCMS Content Delivery API token",
   },
-  {
-    key: "NEXT_PUBLIC_SANITY_PROJECT_ID",
-    description:
-      "Sanity project id (nav/footer/posts until the Sanity teardown)",
-  },
 ]
 
 function checkEnvVariables() {

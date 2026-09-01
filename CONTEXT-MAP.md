@@ -9,7 +9,7 @@ This map defines the domain contexts in the repository.
 - **Path**: `.` (repo root — the Next.js app is flattened to the root)
 - **Description**: Next.js app for the Pittsburgh Forge Rugby Club — marketing
   pages, editorial posts, and Stripe-backed buyable flows. Consumes Stripe,
-  DatoCMS, ForgeCMS, Sanity (legacy), and Supabase (`orders`/`carts`).
+  DatoCMS, ForgeCMS, and Supabase (`orders`/`carts`).
 - **Context File**: `CONTEXT.md`
 - **Agent docs**: `docs/agents/`; **handoffs**: `docs/handoffs/`
 - **ADRs**: `docs/adr/` (if/when added)
