@@ -1,0 +1,792 @@
+[
+  {
+    "source_team_id": 4134,
+    "name": "Akron RFC",
+    "slug": "akron-rfc",
+    "abbreviation": null,
+    "league_ids": [
+      518,
+      567
+    ],
+    "season_ids": [
+      515,
+      538,
+      574
+    ]
+  },
+  {
+    "source_team_id": 3914,
+    "name": "Buffalo Women’s Rugby Club",
+    "slug": "buffalo-womens-rugby-club",
+    "abbreviation": null,
+    "league_ids": [
+      567
+    ],
+    "season_ids": [
+      515,
+      538,
+      568
+    ]
+  },
+  {
+    "source_team_id": 4576,
+    "name": "Canton Rugby",
+    "slug": "canton-rugby",
+    "abbreviation": null,
+    "league_ids": [
+      520
+    ],
+    "season_ids": [
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 3921,
+    "name": "Chicago Griffins",
+    "slug": "chicago-rugby-club",
+    "abbreviation": null,
+    "league_ids": [
+      514
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 4015,
+    "name": "Chicago Lions Men D1",
+    "slug": "chicago-lions-men-d1",
+    "abbreviation": null,
+    "league_ids": [
+      514
+    ],
+    "season_ids": [
+      515
+    ]
+  },
+  {
+    "source_team_id": 4112,
+    "name": "Chicago Lions Women D1",
+    "slug": "chicago-lions-women-d1",
+    "abbreviation": null,
+    "league_ids": [
+      523
+    ],
+    "season_ids": [
+      515
+    ]
+  },
+  {
+    "source_team_id": 5649,
+    "name": "Chicago North Shore",
+    "slug": "chicago-north-shore",
+    "abbreviation": null,
+    "league_ids": [
+      523,
+      539
+    ],
+    "season_ids": [
+      574
+    ]
+  },
+  {
+    "source_team_id": 5645,
+    "name": "Cincinnati Kelts",
+    "slug": "cincinnati-kelts",
+    "abbreviation": null,
+    "league_ids": [
+      575
+    ],
+    "season_ids": [
+      574
+    ]
+  },
+  {
+    "source_team_id": 3959,
+    "name": "Cincinnati Kelts Women’s Rugby",
+    "slug": "cincinnati-kelts-womens-rugby",
+    "abbreviation": null,
+    "league_ids": [
+      539,
+      519
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 4024,
+    "name": "Cincinnati Wolfhounds",
+    "slug": "cincinnati-wolfhounds",
+    "abbreviation": null,
+    "league_ids": [
+      514
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 4017,
+    "name": "Cleveland Crusaders D1",
+    "slug": "cleveland-crusaders-d1",
+    "abbreviation": null,
+    "league_ids": [
+      514
+    ],
+    "season_ids": [
+      515,
+      538
+    ]
+  },
+  {
+    "source_team_id": 4025,
+    "name": "Cleveland Crusaders D3",
+    "slug": "cleveland-crusaders-d3",
+    "abbreviation": null,
+    "league_ids": [
+      520
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 4101,
+    "name": "Cleveland Iron Maidens",
+    "slug": "cleveland-iron-maidens",
+    "abbreviation": null,
+    "league_ids": [
+      567
+    ],
+    "season_ids": [
+      515,
+      574
+    ]
+  },
+  {
+    "source_team_id": 4137,
+    "name": "Cleveland Rovers RFC D3",
+    "slug": "cleveland-rovers-rfc-d3",
+    "abbreviation": null,
+    "league_ids": [
+      520
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 4527,
+    "name": "Cleveland Rovers RFC D4",
+    "slug": "cleveland-rovers-rfc-d4",
+    "abbreviation": null,
+    "league_ids": [],
+    "season_ids": [
+      538
+    ]
+  },
+  {
+    "source_team_id": 4522,
+    "name": "Columbus (IN) RFC",
+    "slug": "columbus-in-rfc",
+    "abbreviation": null,
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      538,
+      568
+    ]
+  },
+  {
+    "source_team_id": 4528,
+    "name": "Columbus Castaways D4",
+    "slug": "columbus-castaways-d4",
+    "abbreviation": null,
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      538,
+      568
+    ]
+  },
+  {
+    "source_team_id": 5647,
+    "name": "Columbus Coyotes",
+    "slug": "columbus-coyotes",
+    "abbreviation": null,
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      574
+    ]
+  },
+  {
+    "source_team_id": 4133,
+    "name": "Columbus Rugby Club",
+    "slug": "columbus-rugby-club",
+    "abbreviation": null,
+    "league_ids": [
+      518
+    ],
+    "season_ids": [
+      515
+    ]
+  },
+  {
+    "source_team_id": 3957,
+    "name": "Columbus Women’s Rugby",
+    "slug": "columbus-womens-rugby",
+    "abbreviation": null,
+    "league_ids": [
+      539,
+      519,
+      567
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 5635,
+    "name": "Dayton Area Rugby Club",
+    "slug": "dayton-area-rugby-club-women",
+    "abbreviation": "DARC",
+    "league_ids": [
+      567
+    ],
+    "season_ids": [
+      574
+    ]
+  },
+  {
+    "source_team_id": 4526,
+    "name": "Dayton Area Rugby Club",
+    "slug": "dayton-area-rugby-club",
+    "abbreviation": "DARC",
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      538,
+      568
+    ]
+  },
+  {
+    "source_team_id": 4521,
+    "name": "Detroit Rugby Football Club – Men D4",
+    "slug": "detroit-rugby-football-club-men-d4",
+    "abbreviation": null,
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      538
+    ]
+  },
+  {
+    "source_team_id": 3963,
+    "name": "Detroit Rugby Football Club – Womens",
+    "slug": "detroit-rugby-football-club-womens",
+    "abbreviation": null,
+    "league_ids": [
+      539,
+      519
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 4027,
+    "name": "Detroit Tradesmen D1",
+    "slug": "detroit-tradesmen-d1",
+    "abbreviation": null,
+    "league_ids": [
+      514
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 4520,
+    "name": "Detroit Tradesmen D3",
+    "slug": "detroit-tradesmen-d3",
+    "abbreviation": null,
+    "league_ids": [
+      520
+    ],
+    "season_ids": []
+  },
+  {
+    "source_team_id": 5443,
+    "name": "Erie RFC",
+    "slug": "erie-rfc",
+    "abbreviation": "ERFC",
+    "league_ids": [
+      520
+    ],
+    "season_ids": [
+      574
+    ]
+  },
+  {
+    "source_team_id": 4581,
+    "name": "Findlay RFC",
+    "slug": "findlay-rfc",
+    "abbreviation": null,
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 5430,
+    "name": "Grand Rapids Growlers",
+    "slug": "grand-rapids-growlers",
+    "abbreviation": "GRRFC",
+    "league_ids": [
+      539
+    ],
+    "season_ids": [
+      574
+    ]
+  },
+  {
+    "source_team_id": 4139,
+    "name": "Greensburg RFC",
+    "slug": "greensburg-rfc",
+    "abbreviation": null,
+    "league_ids": [
+      520
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 4094,
+    "name": "Harrisburg Rugby Club",
+    "slug": "harrisburg-rugby-club",
+    "abbreviation": null,
+    "league_ids": [],
+    "season_ids": []
+  },
+  {
+    "source_team_id": 4097,
+    "name": "Harrisburg Rugby Club Men",
+    "slug": "harrisburg-rugby-club-men",
+    "abbreviation": null,
+    "league_ids": [],
+    "season_ids": []
+  },
+  {
+    "source_team_id": 4098,
+    "name": "Harrisburg Rugby Club Women",
+    "slug": "harrisburg-rugby-club-men-women",
+    "abbreviation": null,
+    "league_ids": [],
+    "season_ids": [
+      515
+    ]
+  },
+  {
+    "source_team_id": 5442,
+    "name": "Indianapolis Impalas D1",
+    "slug": "indianapolis-impalas-d1",
+    "abbreviation": null,
+    "league_ids": [
+      514
+    ],
+    "season_ids": [
+      574
+    ]
+  },
+  {
+    "source_team_id": 3907,
+    "name": "Indianapolis Impalas D2",
+    "slug": "indianapolis-impalas-d2",
+    "abbreviation": null,
+    "league_ids": [
+      518
+    ],
+    "season_ids": [
+      515
+    ]
+  },
+  {
+    "source_team_id": 5105,
+    "name": "Indianapolis Impalas D4",
+    "slug": "indianapolis-impalas-d4",
+    "abbreviation": null,
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      568
+    ]
+  },
+  {
+    "source_team_id": 4106,
+    "name": "Kent State Women’s Rugby Club",
+    "slug": "kent-state-womens-rugby-club",
+    "abbreviation": null,
+    "league_ids": [],
+    "season_ids": [
+      515
+    ]
+  },
+  {
+    "source_team_id": 4517,
+    "name": "Marysville RFC",
+    "slug": "marysville-rfc",
+    "abbreviation": "MRFC",
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      538,
+      574
+    ]
+  },
+  {
+    "source_team_id": 5112,
+    "name": "Metropolis Valkyries",
+    "slug": "metropolis-valkyries",
+    "abbreviation": null,
+    "league_ids": [
+      523
+    ],
+    "season_ids": [
+      568
+    ]
+  },
+  {
+    "source_team_id": 5013,
+    "name": "North Buffalo Ninjas",
+    "slug": "north-buffalo-ninjas",
+    "abbreviation": null,
+    "league_ids": [
+      567
+    ],
+    "season_ids": [
+      568
+    ]
+  },
+  {
+    "source_team_id": 3894,
+    "name": "Pittsburgh Forge D1 Men",
+    "slug": "pittsburgh-forge-d1-men",
+    "abbreviation": null,
+    "league_ids": [
+      514
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 3913,
+    "name": "Pittsburgh Forge D1 Women",
+    "slug": "pittsburgh-forge-d1-women",
+    "abbreviation": null,
+    "league_ids": [
+      569,
+      539,
+      519,
+      577
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 3909,
+    "name": "Pittsburgh Forge D2 Men",
+    "slug": "pittsburgh-forge-d2-men",
+    "abbreviation": null,
+    "league_ids": [
+      518
+    ],
+    "season_ids": [
+      515
+    ]
+  },
+  {
+    "source_team_id": 4973,
+    "name": "Pittsburgh Forge D2 Women",
+    "slug": "pittsburgh-forge-d2-women",
+    "abbreviation": null,
+    "league_ids": [
+      567,
+      576
+    ],
+    "season_ids": [
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 3912,
+    "name": "Pittsburgh Forge D3 Men",
+    "slug": "pittsburgh-forge-d3-men",
+    "abbreviation": null,
+    "league_ids": [
+      520,
+      575
+    ],
+    "season_ids": [
+      515,
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 4510,
+    "name": "Pittsburgh Forge D4 Men",
+    "slug": "pittsburgh-forge-d4-men",
+    "abbreviation": null,
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      538,
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 3918,
+    "name": "Pittsburgh Forge Women – Gold",
+    "slug": "pittsburgh-forge-women-gold",
+    "abbreviation": null,
+    "league_ids": [
+      522
+    ],
+    "season_ids": [
+      515,
+      538
+    ]
+  },
+  {
+    "source_team_id": 5445,
+    "name": "Pittsburgh Harlequins",
+    "slug": "pittsburgh-harlequins",
+    "abbreviation": "PHRFC",
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      574
+    ]
+  },
+  {
+    "source_team_id": 4135,
+    "name": "Presque Isle RFC",
+    "slug": "presque-isle-rfc",
+    "abbreviation": null,
+    "league_ids": [
+      520
+    ],
+    "season_ids": [
+      515,
+      538,
+      568
+    ]
+  },
+  {
+    "source_team_id": 4132,
+    "name": "Queen City Rugby Club",
+    "slug": "queen-city-rugby-club",
+    "abbreviation": null,
+    "league_ids": [
+      518
+    ],
+    "season_ids": [
+      515
+    ]
+  },
+  {
+    "source_team_id": 4990,
+    "name": "Rochester Renegades",
+    "slug": "rochester-renegades",
+    "abbreviation": null,
+    "league_ids": [
+      567
+    ],
+    "season_ids": [
+      568
+    ]
+  },
+  {
+    "source_team_id": 5018,
+    "name": "South Buffalo Rugby",
+    "slug": "south-buffalo-rugby",
+    "abbreviation": null,
+    "league_ids": [
+      567
+    ],
+    "season_ids": [
+      568
+    ]
+  },
+  {
+    "source_team_id": 4136,
+    "name": "South Pittsburgh Hooligans RFC D3",
+    "slug": "south-pittsburgh-hooligans-rfc-d3",
+    "abbreviation": "South Pittsburgh",
+    "league_ids": [
+      520
+    ],
+    "season_ids": [
+      515,
+      538,
+      568
+    ]
+  },
+  {
+    "source_team_id": 5636,
+    "name": "South Pittsburgh Hooligans RFC D4",
+    "slug": "south-pittsburgh-hooligans-rfc-d4",
+    "abbreviation": "South Pittsburgh",
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      568,
+      574
+    ]
+  },
+  {
+    "source_team_id": 5107,
+    "name": "St. Louis Bombers",
+    "slug": "st-louis-bombers",
+    "abbreviation": null,
+    "league_ids": [
+      569
+    ],
+    "season_ids": [
+      568
+    ]
+  },
+  {
+    "source_team_id": 4815,
+    "name": "TBD",
+    "slug": "tbd",
+    "abbreviation": "TBD",
+    "league_ids": [
+      543,
+      523
+    ],
+    "season_ids": [
+      515,
+      538,
+      557
+    ]
+  },
+  {
+    "source_team_id": 4674,
+    "name": "University of Cincinnati WRFC",
+    "slug": "ucwrfc",
+    "abbreviation": null,
+    "league_ids": [
+      522
+    ],
+    "season_ids": [
+      538
+    ]
+  },
+  {
+    "source_team_id": 4828,
+    "name": "Utah Vipers",
+    "slug": "utah-vipers",
+    "abbreviation": "UTAH",
+    "league_ids": [
+      523
+    ],
+    "season_ids": [
+      557
+    ]
+  },
+  {
+    "source_team_id": 5016,
+    "name": "Uticuse Rugby Club",
+    "slug": "uticuse-rugby-club",
+    "abbreviation": null,
+    "league_ids": [
+      567
+    ],
+    "season_ids": [
+      568
+    ]
+  },
+  {
+    "source_team_id": 4669,
+    "name": "Westside Outcasts",
+    "slug": "westside-outcasts",
+    "abbreviation": null,
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      538,
+      568
+    ]
+  },
+  {
+    "source_team_id": 5020,
+    "name": "Ypsilanti Rugby Club",
+    "slug": "ypsilanti-rugby-club",
+    "abbreviation": null,
+    "league_ids": [
+      541
+    ],
+    "season_ids": [
+      568
+    ]
+  }
+]

@@ -1,0 +1,118 @@
+{
+  "leagues": [
+    {
+      "id": 514,
+      "name": "Midwest Premiership - D1 Men",
+      "slug": "midwest-premiership-men"
+    },
+    {
+      "id": 518,
+      "name": "Midwest Men's D2",
+      "slug": "midwest-mens-d2"
+    },
+    {
+      "id": 519,
+      "name": "Midwest Women's D1 & D2 Hybrid",
+      "slug": "midwest-womens-d1-d2-hybrid"
+    },
+    {
+      "id": 520,
+      "name": "Midwest Men's D3",
+      "slug": "midwest-mens-d3"
+    },
+    {
+      "id": 522,
+      "name": "Women's Friendly",
+      "slug": "womens-friendly"
+    },
+    {
+      "id": 523,
+      "name": "Midwest Women's D1 Playoffs",
+      "slug": "midwest-playoffs-women-d1"
+    },
+    {
+      "id": 539,
+      "name": "Midwest Premiership - D1 Women",
+      "slug": "midwest-premiership-women"
+    },
+    {
+      "id": 541,
+      "name": "Midwest Men's D4",
+      "slug": "midwest-mens-d4"
+    },
+    {
+      "id": 543,
+      "name": "Midwest Men's D4 Playoffs",
+      "slug": "midwest-playoffs-men-d4"
+    },
+    {
+      "id": 567,
+      "name": "Midwest Women's D2",
+      "slug": "midwest-womens-d2"
+    },
+    {
+      "id": 569,
+      "name": "Midwest Men's D1 Playoffs",
+      "slug": "midwest-playoffs-men-d1"
+    },
+    {
+      "id": 575,
+      "name": "Midwest Men's D3 Playoffs",
+      "slug": "midwest-playoffs-men-d3"
+    },
+    {
+      "id": 576,
+      "name": "Midwest Women's D2 Playoffs",
+      "slug": "midwest-womens-d2-playoffs"
+    },
+    {
+      "id": 577,
+      "name": "Women's D1 Nationals",
+      "slug": "nationals-womens-d1"
+    }
+  ],
+  "seasons": [
+    {
+      "id": 515,
+      "name": "2022 Fall",
+      "slug": "2022-fall"
+    },
+    {
+      "id": 538,
+      "name": "2023 Fall",
+      "slug": "2023-fall"
+    },
+    {
+      "id": 557,
+      "name": "2024 Spring",
+      "slug": "2024-spring"
+    },
+    {
+      "id": 568,
+      "name": "2024 Fall",
+      "slug": "2024-fall"
+    },
+    {
+      "id": 574,
+      "name": "2025 Fall",
+      "slug": "2025-fall"
+    }
+  ],
+  "venues": [
+    {
+      "id": 517,
+      "name": "Phillip-Murray Field",
+      "slug": "phillip-murray-field"
+    },
+    {
+      "id": 521,
+      "name": "Red Lobster Stadium",
+      "slug": "red-lobster-stadium"
+    },
+    {
+      "id": 558,
+      "name": "Round Rock Multipurpose Complex",
+      "slug": "round-rock-multipurpose-complex"
+    }
+  ]
+}

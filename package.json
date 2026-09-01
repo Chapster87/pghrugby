@@ -14,6 +14,7 @@
     "provision:stripe": "node ./scripts/provision-stripe-catalog.mjs",
     "provision:stripe:apply": "node ./scripts/provision-stripe-catalog.mjs --apply",
     "scan:woocommerce": "node ./scripts/scan-woocommerce.mjs",
+    "competition:extract": "node ./scripts/competition-migration/extract.mjs",
     "legacy-pages:cleanup": "node ./scripts/delete-legacy-datocms-pages.mjs",
     "supabase:query": "node --env-file=.env.local scripts/supabase-query.mjs",
     "supabase:inspect-forgecms": "node --env-file=.env.local scripts/inspect-forgecms.mjs",

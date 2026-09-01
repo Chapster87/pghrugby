@@ -1,0 +1,4800 @@
+[
+  {
+    "match_date_time": "2022-08-27T15:00:56.000Z",
+    "league": "Women's Friendly",
+    "division": null,
+    "season": "2022 Fall",
+    "match_type": "friendly",
+    "home_team": "Cleveland Iron Maidens",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Cleveland Iron Maidens vs Pittsburgh Forge Women",
+    "slug": "cleveland-iron-maidens-vs-pittsburgh-forge",
+    "home_team_score": 19,
+    "away_team_score": 72,
+    "source": {
+      "event_id": 4102,
+      "link": "https://pghrugby.com/blog/event/2022/08/27/cleveland-iron-maidens-vs-pittsburgh-forge",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-08-27T11:00:56",
+      "date_gmt": "2022-08-27T15:00:56",
+      "team_ids": {
+        "home": 4101,
+        "away": 3913
+      },
+      "league_ids": [
+        522
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "4101": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-08-27T19:00:52.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Chicago Lions Men D1",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Chicago Lions vs Pittsburgh Forge D1 Men",
+    "slug": "chicago-lions-vs-pittsburgh-forge",
+    "home_team_score": 29,
+    "away_team_score": 21,
+    "source": {
+      "event_id": 4020,
+      "link": "https://pghrugby.com/blog/event/2022/08/27/chicago-lions-vs-pittsburgh-forge",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-08-27T15:00:52",
+      "date_gmt": "2022-08-27T19:00:52",
+      "team_ids": {
+        "home": 4015,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4015,
+      "outcome": {
+        "3894": "loss",
+        "4015": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-09-03T17:00:38.000Z",
+    "league": "Midwest Men's D2",
+    "division": "D2",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D2 Men",
+    "away_team": "Queen City Rugby Club",
+    "event_name": "Pittsburgh Forge D2 Men vs Queen City Rugby Club",
+    "slug": "pittsburgh-forge-d2-men-vs-queen-city-rugby-club",
+    "home_team_score": null,
+    "away_team_score": null,
+    "source": {
+      "event_id": 4140,
+      "link": "https://pghrugby.com/blog/event/2022/09/03/pittsburgh-forge-d2-men-vs-queen-city-rugby-club",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-03T13:00:38",
+      "date_gmt": "2022-09-03T17:00:38",
+      "team_ids": {
+        "home": 3909,
+        "away": 4132
+      },
+      "league_ids": [
+        518
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": null,
+      "outcome": null
+    }
+  },
+  {
+    "match_date_time": "2022-09-03T19:00:40.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Cincinnati Wolfhounds",
+    "event_name": "Pittsburgh Forge D1 Men vs Cincinnati Wolfhounds",
+    "slug": "pittsburgh-forge-vs-cincinnati-wolfhounds",
+    "home_team_score": 37,
+    "away_team_score": 7,
+    "source": {
+      "event_id": 4028,
+      "link": "https://pghrugby.com/blog/event/2022/09/03/pittsburgh-forge-vs-cincinnati-wolfhounds",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-03T15:00:40",
+      "date_gmt": "2022-09-03T19:00:40",
+      "team_ids": {
+        "home": 3894,
+        "away": 4024
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3894,
+      "outcome": {
+        "3894": "win",
+        "4024": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-09-10T15:00:52.000Z",
+    "league": "Midwest Women's D1 & D2 Hybrid",
+    "division": "Div 1 & 2 Hybrid",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Cincinnati Kelts Women’s Rugby",
+    "event_name": "Pittsburgh Forge Women vs Cincinnati Kelts",
+    "slug": "pittsburgh-forge-vs-cincinnati-kelts",
+    "home_team_score": 29,
+    "away_team_score": 25,
+    "source": {
+      "event_id": 3977,
+      "link": "https://pghrugby.com/blog/event/2022/09/10/pittsburgh-forge-vs-cincinnati-kelts",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-10T11:00:52",
+      "date_gmt": "2022-09-10T15:00:52",
+      "team_ids": {
+        "home": 3913,
+        "away": 3959
+      },
+      "league_ids": [
+        519
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3959": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-09-10T17:00:40.000Z",
+    "league": "Women's Friendly",
+    "division": null,
+    "season": "2022 Fall",
+    "match_type": "friendly",
+    "home_team": "Pittsburgh Forge Women – Gold",
+    "away_team": "Cincinnati Kelts Women’s Rugby",
+    "event_name": "Pittsburgh Forge – Gold vs Cincinnati Kelts",
+    "slug": "pittsburgh-forge-gold-vs-cincinnati-kelts-b",
+    "home_team_score": 10,
+    "away_team_score": 33,
+    "source": {
+      "event_id": 4104,
+      "link": "https://pghrugby.com/blog/event/2022/09/10/pittsburgh-forge-gold-vs-cincinnati-kelts-b",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-10T13:00:40",
+      "date_gmt": "2022-09-10T17:00:40",
+      "team_ids": {
+        "home": 3918,
+        "away": 3959
+      },
+      "league_ids": [
+        522
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3959,
+      "outcome": {
+        "3918": "loss",
+        "3959": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-09-10T17:00:56.000Z",
+    "league": "Midwest Men's D2",
+    "division": "D2",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Akron RFC",
+    "away_team": "Pittsburgh Forge D2 Men",
+    "event_name": "Akron RFC vs Pittsburgh Forge D2 Men",
+    "slug": "akron-rfc-vs-pittsburgh-forge-d2-men",
+    "home_team_score": null,
+    "away_team_score": null,
+    "source": {
+      "event_id": 4142,
+      "link": "https://pghrugby.com/blog/event/2022/09/10/akron-rfc-vs-pittsburgh-forge-d2-men",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-10T13:00:56",
+      "date_gmt": "2022-09-10T17:00:56",
+      "team_ids": {
+        "home": 4134,
+        "away": 3909
+      },
+      "league_ids": [
+        518
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": null,
+      "outcome": null
+    }
+  },
+  {
+    "match_date_time": "2022-09-10T18:00:14.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Cleveland Crusaders D1",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Cleveland Crusaders vs Pittsburgh Forge D1 Men",
+    "slug": "cleveland-crusaders-d1-vs-pittsburgh-forge",
+    "home_team_score": 34,
+    "away_team_score": 42,
+    "source": {
+      "event_id": 4029,
+      "link": "https://pghrugby.com/blog/event/2022/09/10/cleveland-crusaders-d1-vs-pittsburgh-forge",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-10T14:00:14",
+      "date_gmt": "2022-09-10T18:00:14",
+      "team_ids": {
+        "home": 4017,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3894,
+      "outcome": {
+        "3894": "win",
+        "4017": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-09-17T15:00:14.000Z",
+    "league": "Women's Friendly",
+    "division": null,
+    "season": "2022 Fall",
+    "match_type": "friendly",
+    "home_team": "Pittsburgh Forge Women – Gold",
+    "away_team": "Kent State Women’s Rugby Club",
+    "event_name": "Pittsburgh Forge – Gold vs Kent State Women’s Rugby Club",
+    "slug": "pittsburgh-forge-gold-vs-kent-state-womens-rugby-club",
+    "home_team_score": 62,
+    "away_team_score": 21,
+    "source": {
+      "event_id": 4108,
+      "link": "https://pghrugby.com/blog/event/2022/09/17/pittsburgh-forge-gold-vs-kent-state-womens-rugby-club",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-17T11:00:14",
+      "date_gmt": "2022-09-17T15:00:14",
+      "team_ids": {
+        "home": 3918,
+        "away": 4106
+      },
+      "league_ids": [
+        522
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3918,
+      "outcome": {
+        "3918": "win",
+        "4106": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-09-17T18:00:39.000Z",
+    "league": "Midwest Men's D2",
+    "division": "D2",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D2 Men",
+    "away_team": "Columbus Rugby Club",
+    "event_name": "Pittsburgh Forge D2 Men vs Columbus Rugby Club",
+    "slug": "pittsburgh-forge-d2-men-vs-columbus-rugby-club",
+    "home_team_score": null,
+    "away_team_score": null,
+    "source": {
+      "event_id": 4143,
+      "link": "https://pghrugby.com/blog/event/2022/09/17/pittsburgh-forge-d2-men-vs-columbus-rugby-club",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-17T14:00:39",
+      "date_gmt": "2022-09-17T18:00:39",
+      "team_ids": {
+        "home": 3909,
+        "away": 4133
+      },
+      "league_ids": [
+        518
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": null,
+      "outcome": null
+    }
+  },
+  {
+    "match_date_time": "2022-09-17T20:00:10.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Chicago Griffins",
+    "event_name": "Pittsburgh Forge D1 Men vs Chicago Griffins",
+    "slug": "pittsburgh-forge-vs-chicago-griffins",
+    "home_team_score": 22,
+    "away_team_score": 26,
+    "source": {
+      "event_id": 4030,
+      "link": "https://pghrugby.com/blog/event/2022/09/17/pittsburgh-forge-vs-chicago-griffins",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-17T16:00:10",
+      "date_gmt": "2022-09-17T20:00:10",
+      "team_ids": {
+        "home": 3894,
+        "away": 3921
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3921,
+      "outcome": {
+        "3894": "loss",
+        "3921": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-09-24T15:00:28.000Z",
+    "league": "Midwest Women's D1 & D2 Hybrid",
+    "division": "Div 1 & 2 Hybrid",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Detroit Rugby Football Club – Womens",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Detroit RFC vs Pittsburgh Forge Women",
+    "slug": "detroit-rfc-vs-pittsburgh-forge",
+    "home_team_score": 25,
+    "away_team_score": 34,
+    "source": {
+      "event_id": 3978,
+      "link": "https://pghrugby.com/blog/event/2022/09/24/detroit-rfc-vs-pittsburgh-forge",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-24T11:00:28",
+      "date_gmt": "2022-09-24T15:00:28",
+      "team_ids": {
+        "home": 3963,
+        "away": 3913
+      },
+      "league_ids": [
+        519
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3963": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-09-24T17:00:04.000Z",
+    "league": "Midwest Men's D2",
+    "division": "D2",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Indianapolis Impalas D2",
+    "away_team": "Pittsburgh Forge D2 Men",
+    "event_name": "Indianapolis Impalas vs Pittsburgh Forge D2 Men",
+    "slug": "indianapolis-impalas-vs-pittsburgh-forge-d2-men",
+    "home_team_score": null,
+    "away_team_score": null,
+    "source": {
+      "event_id": 4144,
+      "link": "https://pghrugby.com/blog/event/2022/09/24/indianapolis-impalas-vs-pittsburgh-forge-d2-men",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-24T13:00:04",
+      "date_gmt": "2022-09-24T17:00:04",
+      "team_ids": {
+        "home": 3907,
+        "away": 3909
+      },
+      "league_ids": [
+        518
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": null,
+      "outcome": null
+    }
+  },
+  {
+    "match_date_time": "2022-09-24T17:00:56.000Z",
+    "league": "Women's Friendly",
+    "division": null,
+    "season": "2022 Fall",
+    "match_type": "friendly",
+    "home_team": "Detroit Rugby Football Club – Womens",
+    "away_team": "Pittsburgh Forge Women – Gold",
+    "event_name": "Detroit RFC vs Pittsburgh Forge – Gold",
+    "slug": "detroit-rfc-vs-pittsburgh-forge-gold",
+    "home_team_score": 5,
+    "away_team_score": 19,
+    "source": {
+      "event_id": 4109,
+      "link": "https://pghrugby.com/blog/event/2022/09/24/detroit-rfc-vs-pittsburgh-forge-gold",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-24T13:00:56",
+      "date_gmt": "2022-09-24T17:00:56",
+      "team_ids": {
+        "home": 3963,
+        "away": 3918
+      },
+      "league_ids": [
+        522
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": 3918,
+      "outcome": {
+        "3918": "win",
+        "3963": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-09-24T18:00:58.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Detroit Tradesmen D1",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Detroit Tradesmen vs Pittsburgh Forge D1 Men",
+    "slug": "detroit-tradesmen-vs-pittsburgh-forge",
+    "home_team_score": 34,
+    "away_team_score": 17,
+    "source": {
+      "event_id": 4031,
+      "link": "https://pghrugby.com/blog/event/2022/09/24/detroit-tradesmen-vs-pittsburgh-forge",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-09-24T14:00:58",
+      "date_gmt": "2022-09-24T18:00:58",
+      "team_ids": {
+        "home": 4027,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4027,
+      "outcome": {
+        "3894": "loss",
+        "4027": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-10-08T15:00:25.000Z",
+    "league": "Women's Friendly",
+    "division": null,
+    "season": "2022 Fall",
+    "match_type": "friendly",
+    "home_team": "Pittsburgh Forge Women – Gold",
+    "away_team": "Harrisburg Rugby Club Women",
+    "event_name": "Pittsburgh Forge – Gold vs Harrisburg Rugby Club",
+    "slug": "pittsburgh-forge-vs-harrisburg-rugby-club",
+    "home_team_score": 22,
+    "away_team_score": 84,
+    "source": {
+      "event_id": 4099,
+      "link": "https://pghrugby.com/blog/event/2022/10/08/pittsburgh-forge-vs-harrisburg-rugby-club",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-10-08T11:00:25",
+      "date_gmt": "2022-10-08T15:00:25",
+      "team_ids": {
+        "home": 3918,
+        "away": 4098
+      },
+      "league_ids": [
+        522
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": 4098,
+      "outcome": {
+        "3918": "loss",
+        "4098": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-10-08T16:00:52.000Z",
+    "league": "Midwest Men's D2",
+    "division": "D2",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D2 Men",
+    "away_team": "Akron RFC",
+    "event_name": "Pittsburgh Forge D2 Men vs Akron RFC",
+    "slug": "pittsburgh-forge-d2-men-vs-akron-rfc",
+    "home_team_score": null,
+    "away_team_score": null,
+    "source": {
+      "event_id": 4145,
+      "link": "https://pghrugby.com/blog/event/2022/10/08/pittsburgh-forge-d2-men-vs-akron-rfc",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-10-08T12:00:52",
+      "date_gmt": "2022-10-08T16:00:52",
+      "team_ids": {
+        "home": 3909,
+        "away": 4134
+      },
+      "league_ids": [
+        518
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": null,
+      "outcome": null
+    }
+  },
+  {
+    "match_date_time": "2022-10-08T17:00:44.000Z",
+    "league": "Midwest Women's D1 & D2 Hybrid",
+    "division": "Div 1 & 2 Hybrid",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Columbus Women’s Rugby",
+    "event_name": "Pittsburgh Forge Women vs Columbus Women’s Rugby",
+    "slug": "pittsburgh-forge-vs-columbus-womens-rugby",
+    "home_team_score": 62,
+    "away_team_score": 29,
+    "source": {
+      "event_id": 4110,
+      "link": "https://pghrugby.com/blog/event/2022/10/08/pittsburgh-forge-vs-columbus-womens-rugby",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-10-08T13:00:44",
+      "date_gmt": "2022-10-08T17:00:44",
+      "team_ids": {
+        "home": 3913,
+        "away": 3957
+      },
+      "league_ids": [
+        519
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3957": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-10-08T20:00:59.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Chicago Lions Men D1",
+    "event_name": "Pittsburgh Forge D1 Men vs Chicago Lions",
+    "slug": "pittsburgh-forge-vs-chicago-lions",
+    "home_team_score": 21,
+    "away_team_score": 33,
+    "source": {
+      "event_id": 4037,
+      "link": "https://pghrugby.com/blog/event/2022/10/08/pittsburgh-forge-vs-chicago-lions",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-10-08T16:00:59",
+      "date_gmt": "2022-10-08T20:00:59",
+      "team_ids": {
+        "home": 3894,
+        "away": 4015
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4015,
+      "outcome": {
+        "3894": "loss",
+        "4015": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-10-15T16:00:55.000Z",
+    "league": "Midwest Women's D1 & D2 Hybrid",
+    "division": "Div 1 & 2 Hybrid",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Buffalo Women’s Rugby Club",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Buffalo Women’s Rugby Club vs Pittsburgh Forge Women",
+    "slug": "buffalo-womens-rugby-club-vs-pittsburgh-forge-women",
+    "home_team_score": 15,
+    "away_team_score": 36,
+    "source": {
+      "event_id": 3917,
+      "link": "https://pghrugby.com/blog/event/2022/10/15/buffalo-womens-rugby-club-vs-pittsburgh-forge-women",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-10-15T12:00:55",
+      "date_gmt": "2022-10-15T16:00:55",
+      "team_ids": {
+        "home": 3914,
+        "away": 3913
+      },
+      "league_ids": [
+        519
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3914": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-10-15T17:00:38.000Z",
+    "league": "Midwest Men's D2",
+    "division": "D2",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Queen City Rugby Club",
+    "away_team": "Pittsburgh Forge D2 Men",
+    "event_name": "Queen City Rugby Club vs Pittsburgh Forge D2 Men",
+    "slug": "queen-city-rugby-club-vs-pittsburgh-forge-d2-men",
+    "home_team_score": null,
+    "away_team_score": null,
+    "source": {
+      "event_id": 4146,
+      "link": "https://pghrugby.com/blog/event/2022/10/15/queen-city-rugby-club-vs-pittsburgh-forge-d2-men",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-10-15T13:00:38",
+      "date_gmt": "2022-10-15T17:00:38",
+      "team_ids": {
+        "home": 4132,
+        "away": 3909
+      },
+      "league_ids": [
+        518
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": null,
+      "outcome": null
+    }
+  },
+  {
+    "match_date_time": "2022-10-15T19:00:42.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Cincinnati Wolfhounds",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Cincinnati Wolfhounds vs Pittsburgh Forge D1 Men",
+    "slug": "cincinnati-wolfhounds-vs-pittsburgh-forge",
+    "home_team_score": 54,
+    "away_team_score": 17,
+    "source": {
+      "event_id": 4040,
+      "link": "https://pghrugby.com/blog/event/2022/10/15/cincinnati-wolfhounds-vs-pittsburgh-forge",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-10-15T15:00:42",
+      "date_gmt": "2022-10-15T19:00:42",
+      "team_ids": {
+        "home": 4024,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": 4024,
+      "outcome": {
+        "3894": "loss",
+        "4024": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-10-22T16:00:58.000Z",
+    "league": "Midwest Men's D2",
+    "division": "D2",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D2 Men",
+    "away_team": "Indianapolis Impalas D2",
+    "event_name": "Pittsburgh Forge D2 Men vs Indianapolis Impalas",
+    "slug": "pittsburgh-forge-vs-indianapolis-impalas",
+    "home_team_score": 17,
+    "away_team_score": 42,
+    "source": {
+      "event_id": 3920,
+      "link": "https://pghrugby.com/blog/event/2022/10/22/pittsburgh-forge-vs-indianapolis-impalas",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-10-22T12:00:58",
+      "date_gmt": "2022-10-22T16:00:58",
+      "team_ids": {
+        "home": 3909,
+        "away": 3907
+      },
+      "league_ids": [
+        518
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3907,
+      "outcome": {
+        "3907": "win",
+        "3909": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-10-22T18:00:07.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Cleveland Crusaders D1",
+    "event_name": "Pittsburgh Forge D1 Men vs Cleveland Crusaders",
+    "slug": "pittsburgh-forge-vs-cleveland-crusaders",
+    "home_team_score": 38,
+    "away_team_score": 26,
+    "source": {
+      "event_id": 3902,
+      "link": "https://pghrugby.com/blog/event/2022/10/22/pittsburgh-forge-vs-cleveland-crusaders",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2022-10-22T14:00:07",
+      "date_gmt": "2022-10-22T18:00:07",
+      "team_ids": {
+        "home": 3894,
+        "away": 4017
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3894,
+      "outcome": {
+        "3894": "win",
+        "4017": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-10-29T17:00:40.000Z",
+    "league": "Midwest Men's D2",
+    "division": "D2",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Columbus Rugby Club",
+    "away_team": "Pittsburgh Forge D2 Men",
+    "event_name": "Columbus Rugby Club vs Pittsburgh Forge D2 Men",
+    "slug": "columbus-rugby-club-vs-pittsburgh-forge-d2-men",
+    "home_team_score": null,
+    "away_team_score": null,
+    "source": {
+      "event_id": 4147,
+      "link": "https://pghrugby.com/blog/event/2022/10/29/columbus-rugby-club-vs-pittsburgh-forge-d2-men",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-10-29T13:00:40",
+      "date_gmt": "2022-10-29T17:00:40",
+      "team_ids": {
+        "home": 4133,
+        "away": 3909
+      },
+      "league_ids": [
+        518
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [],
+      "winner": null,
+      "outcome": null
+    }
+  },
+  {
+    "match_date_time": "2022-10-29T19:00:57.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Chicago Griffins",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Chicago Griffins vs Pittsburgh Forge D1 Men",
+    "slug": "chicago-rugby-club-vs-pittsburgh-forge",
+    "home_team_score": 62,
+    "away_team_score": 7,
+    "source": {
+      "event_id": 3923,
+      "link": "https://pghrugby.com/blog/event/2022/10/29/chicago-rugby-club-vs-pittsburgh-forge",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-10-29T15:00:57",
+      "date_gmt": "2022-10-29T19:00:57",
+      "team_ids": {
+        "home": 3921,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        521
+      ],
+      "winner": 3921,
+      "outcome": {
+        "3894": "loss",
+        "3921": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-11-05T17:00:22.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Detroit Tradesmen D1",
+    "event_name": "Pittsburgh Forge D1 Men vs Detroit Tradesmen",
+    "slug": "pittsburgh-forge-vs-detroit-tradesmen",
+    "home_team_score": 41,
+    "away_team_score": 29,
+    "source": {
+      "event_id": 4041,
+      "link": "https://pghrugby.com/blog/event/2022/11/05/pittsburgh-forge-vs-detroit-tradesmen",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-11-05T13:00:22",
+      "date_gmt": "2022-11-05T17:00:22",
+      "team_ids": {
+        "home": 3894,
+        "away": 4027
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3894,
+      "outcome": {
+        "3894": "win",
+        "4027": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2022-11-05T17:00:57.000Z",
+    "league": "Midwest Women's D1 Playoffs",
+    "division": "D1",
+    "season": "2022 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Chicago Lions Women D1",
+    "event_name": "Pittsburgh Forge D1 Women vs Chicago Lions",
+    "slug": "pittsburgh-forge-vs-chicago-lions-2",
+    "home_team_score": 24,
+    "away_team_score": 38,
+    "source": {
+      "event_id": 4113,
+      "link": "https://pghrugby.com/blog/event/2022/11/05/pittsburgh-forge-vs-chicago-lions-2",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2022-11-05T13:00:57",
+      "date_gmt": "2022-11-05T17:00:57",
+      "team_ids": {
+        "home": 3913,
+        "away": 4112
+      },
+      "league_ids": [
+        523
+      ],
+      "season_ids": [
+        515
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4112,
+      "outcome": {
+        "3913": "loss",
+        "4112": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-08-26T16:30:56.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D4 Men",
+    "away_team": "Marysville RFC",
+    "event_name": "Forge Men D4 vs Marysville",
+    "slug": "pittsburgh-forge-men-d4-vs-marysville",
+    "home_team_score": 120,
+    "away_team_score": 5,
+    "source": {
+      "event_id": 4529,
+      "link": "https://pghrugby.com/blog/event/2023/08/26/pittsburgh-forge-men-d4-vs-marysville",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-08-26T12:30:56",
+      "date_gmt": "2023-08-26T16:30:56",
+      "team_ids": {
+        "home": 4510,
+        "away": 4517
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "4517": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-08-26T18:30:10.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Cleveland Crusaders D1",
+    "event_name": "Forge Men D1 vs Cleveland Crusaders",
+    "slug": "pittsburgh-forge-men-d1-vs-cleveland-crusaders-2",
+    "home_team_score": 21,
+    "away_team_score": 17,
+    "source": {
+      "event_id": 4508,
+      "link": "https://pghrugby.com/blog/event/2023/08/26/pittsburgh-forge-men-d1-vs-cleveland-crusaders-2",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-08-26T14:30:10",
+      "date_gmt": "2023-08-26T18:30:10",
+      "team_ids": {
+        "home": 3894,
+        "away": 4017
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3894,
+      "outcome": {
+        "3894": "win",
+        "4017": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-08-26T20:30:31.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D3 Men",
+    "away_team": "Cleveland Crusaders D3",
+    "event_name": "Forge Men D3 vs Cleveland Crusaders",
+    "slug": "pittsburgh-forge-men-d3-vs-cleveland-crusaders-3",
+    "home_team_score": 28,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 4515,
+      "link": "https://pghrugby.com/blog/event/2023/08/26/pittsburgh-forge-men-d3-vs-cleveland-crusaders-3",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-08-26T16:30:31",
+      "date_gmt": "2023-08-26T20:30:31",
+      "team_ids": {
+        "home": 3912,
+        "away": 4025
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3912,
+      "outcome": {
+        "3912": "win",
+        "4025": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-02T16:00:18.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Columbus (IN) RFC",
+    "away_team": "Pittsburgh Forge D4 Men",
+    "event_name": "Columbus (IN) vs Forge Men D4",
+    "slug": "columbus-in-vs-forge-men-d4",
+    "home_team_score": 0,
+    "away_team_score": 28,
+    "source": {
+      "event_id": 4557,
+      "link": "https://pghrugby.com/blog/event/2023/09/02/columbus-in-vs-forge-men-d4",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-02T12:00:18",
+      "date_gmt": "2023-09-02T16:00:18",
+      "team_ids": {
+        "home": 4522,
+        "away": 4510
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "4522": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-02T16:00:45.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Detroit Rugby Football Club – Womens",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Detroit RFC vs Forge Women D1",
+    "slug": "detroit-rfc-vs-pittsburgh-forge-women-d12",
+    "home_team_score": 10,
+    "away_team_score": 30,
+    "source": {
+      "event_id": 4531,
+      "link": "https://pghrugby.com/blog/event/2023/09/02/detroit-rfc-vs-pittsburgh-forge-women-d12",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-02T12:00:45",
+      "date_gmt": "2023-09-02T16:00:45",
+      "team_ids": {
+        "home": 3963,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3963": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-02T18:00:27.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Cincinnati Wolfhounds",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Cincinnati Wolfhounds vs Forge Men D1",
+    "slug": "cincinnati-wolfhounds-vs-pittsburgh-forge-men-d1-2",
+    "home_team_score": 61,
+    "away_team_score": 14,
+    "source": {
+      "event_id": 4530,
+      "link": "https://pghrugby.com/blog/event/2023/09/02/cincinnati-wolfhounds-vs-pittsburgh-forge-men-d1-2",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-02T14:00:27",
+      "date_gmt": "2023-09-02T18:00:27",
+      "team_ids": {
+        "home": 4024,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 4024,
+      "outcome": {
+        "3894": "loss",
+        "4024": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-09T16:00:59.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Columbus Women’s Rugby",
+    "event_name": "Forge Women D1 vs Columbus Women’s Rugby",
+    "slug": "pittsburgh-forge-women-d1-vs-columbus-womens-rugby-2",
+    "home_team_score": 40,
+    "away_team_score": 5,
+    "source": {
+      "event_id": 4532,
+      "link": "https://pghrugby.com/blog/event/2023/09/09/pittsburgh-forge-women-d1-vs-columbus-womens-rugby-2",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-09T12:00:59",
+      "date_gmt": "2023-09-09T16:00:59",
+      "team_ids": {
+        "home": 3913,
+        "away": 3957
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3957": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-09T17:00:11.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "South Pittsburgh Hooligans RFC D3",
+    "away_team": "Pittsburgh Forge D3 Men",
+    "event_name": "South Pittsburgh Hooligans RFC vs Forge Men D3",
+    "slug": "south-pittsburgh-hooligans-rfc-vs-forge-men-d3",
+    "home_team_score": 68,
+    "away_team_score": 21,
+    "source": {
+      "event_id": 4559,
+      "link": "https://pghrugby.com/blog/event/2023/09/09/south-pittsburgh-hooligans-rfc-vs-forge-men-d3",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-09T13:00:11",
+      "date_gmt": "2023-09-09T17:00:11",
+      "team_ids": {
+        "home": 4136,
+        "away": 3912
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 4136,
+      "outcome": {
+        "3912": "loss",
+        "4136": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-09T18:00:05.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Detroit Tradesmen D1",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Detroit Tradesmen vs Forge Men D1",
+    "slug": "detroit-tradesmen-vs-forge-men-d1",
+    "home_team_score": 52,
+    "away_team_score": 19,
+    "source": {
+      "event_id": 4558,
+      "link": "https://pghrugby.com/blog/event/2023/09/09/detroit-tradesmen-vs-forge-men-d1",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-09T14:00:05",
+      "date_gmt": "2023-09-09T18:00:05",
+      "team_ids": {
+        "home": 4027,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 4027,
+      "outcome": {
+        "3894": "loss",
+        "4027": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-09T18:00:38.000Z",
+    "league": "Women's Friendly",
+    "division": null,
+    "season": "2023 Fall",
+    "match_type": "friendly",
+    "home_team": "Pittsburgh Forge Women – Gold",
+    "away_team": "Columbus Women’s Rugby",
+    "event_name": "Forge Women – Gold vs Columbus Women’s Rugby",
+    "slug": "forge-women-gold-vs-columbus-womens-rugby",
+    "home_team_score": 19,
+    "away_team_score": 17,
+    "source": {
+      "event_id": 4548,
+      "link": "https://pghrugby.com/blog/event/2023/09/09/forge-women-gold-vs-columbus-womens-rugby",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-09T14:00:38",
+      "date_gmt": "2023-09-09T18:00:38",
+      "team_ids": {
+        "home": 3918,
+        "away": 3957
+      },
+      "league_ids": [
+        522
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3918,
+      "outcome": {
+        "3918": "win",
+        "3957": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-16T14:00:08.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D3 Men",
+    "away_team": "Greensburg RFC",
+    "event_name": "Forge Men D3 vs Greensburg RFC",
+    "slug": "forge-men-d3-vs-greensburg-rfc",
+    "home_team_score": 75,
+    "away_team_score": 3,
+    "source": {
+      "event_id": 4561,
+      "link": "https://pghrugby.com/blog/event/2023/09/16/forge-men-d3-vs-greensburg-rfc",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-16T10:00:08",
+      "date_gmt": "2023-09-16T14:00:08",
+      "team_ids": {
+        "home": 3912,
+        "away": 4139
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4139,
+      "outcome": {
+        "3912": "loss",
+        "4139": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-16T14:00:26.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Buffalo Women’s Rugby Club",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Buffalo Rugby Club vs Forge Women D1",
+    "slug": "buffalo-rugby-club-vs-forge-women-d1",
+    "home_team_score": 5,
+    "away_team_score": 62,
+    "source": {
+      "event_id": 4538,
+      "link": "https://pghrugby.com/blog/event/2023/09/16/buffalo-rugby-club-vs-forge-women-d1",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-16T10:00:26",
+      "date_gmt": "2023-09-16T14:00:26",
+      "team_ids": {
+        "home": 3914,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3914": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-16T16:00:35.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D4 Men",
+    "away_team": "Detroit Rugby Football Club – Men D4",
+    "event_name": "Forge Men D4 vs Detroit RFC",
+    "slug": "forge-men-d4-vs-detroit-rfc",
+    "home_team_score": 66,
+    "away_team_score": 26,
+    "source": {
+      "event_id": 4562,
+      "link": "https://pghrugby.com/blog/event/2023/09/16/forge-men-d4-vs-detroit-rfc",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-16T12:00:35",
+      "date_gmt": "2023-09-16T16:00:35",
+      "team_ids": {
+        "home": 4510,
+        "away": 4521
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "4521": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-16T18:00:05.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Chicago Griffins",
+    "event_name": "Forge Men D1 vs Chicago Griffins",
+    "slug": "forge-men-d1-vs-chicago-griffins",
+    "home_team_score": 12,
+    "away_team_score": 32,
+    "source": {
+      "event_id": 4560,
+      "link": "https://pghrugby.com/blog/event/2023/09/16/forge-men-d1-vs-chicago-griffins",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-16T14:00:05",
+      "date_gmt": "2023-09-16T18:00:05",
+      "team_ids": {
+        "home": 3894,
+        "away": 3921
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3921,
+      "outcome": {
+        "3894": "loss",
+        "3921": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-23T16:00:01.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Cincinnati Kelts Women’s Rugby",
+    "event_name": "Forge Women D1 vs Cincinnati Kelts",
+    "slug": "forge-women-d1-vs-cincinnati-kelts",
+    "home_team_score": 43,
+    "away_team_score": 5,
+    "source": {
+      "event_id": 4539,
+      "link": "https://pghrugby.com/blog/event/2023/09/23/forge-women-d1-vs-cincinnati-kelts",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-23T12:00:01",
+      "date_gmt": "2023-09-23T16:00:01",
+      "team_ids": {
+        "home": 3913,
+        "away": 3959
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3959": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-23T17:00:55.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Cleveland Rovers RFC D3",
+    "away_team": "Pittsburgh Forge D3 Men",
+    "event_name": "Cleveland Rovers vs Forge Men D3",
+    "slug": "cleveland-rovers-vs-forge-men-d3",
+    "home_team_score": 41,
+    "away_team_score": 31,
+    "source": {
+      "event_id": 4568,
+      "link": "https://pghrugby.com/blog/event/2023/09/23/cleveland-rovers-vs-forge-men-d3",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-23T13:00:55",
+      "date_gmt": "2023-09-23T17:00:55",
+      "team_ids": {
+        "home": 4137,
+        "away": 3912
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 4137,
+      "outcome": {
+        "3912": "loss",
+        "4137": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-23T19:00:41.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Cleveland Rovers RFC D4",
+    "away_team": "Pittsburgh Forge D4 Men",
+    "event_name": "Cleveland Rovers vs Forge Men D4",
+    "slug": "cleveland-rovers-vs-forge-men-d4",
+    "home_team_score": 0,
+    "away_team_score": 28,
+    "source": {
+      "event_id": 4569,
+      "link": "https://pghrugby.com/blog/event/2023/09/23/cleveland-rovers-vs-forge-men-d4",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-23T15:00:41",
+      "date_gmt": "2023-09-23T19:00:41",
+      "team_ids": {
+        "home": 4527,
+        "away": 4510
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "4527": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-30T17:00:08.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Presque Isle RFC",
+    "away_team": "Pittsburgh Forge D3 Men",
+    "event_name": "Presque Isle RFC vs Forge Men D3",
+    "slug": "presque-isle-rfc-vs-forge-men-d3",
+    "home_team_score": 12,
+    "away_team_score": 77,
+    "source": {
+      "event_id": 4574,
+      "link": "https://pghrugby.com/blog/event/2023/09/30/presque-isle-rfc-vs-forge-men-d3",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-30T13:00:08",
+      "date_gmt": "2023-09-30T17:00:08",
+      "team_ids": {
+        "home": 4135,
+        "away": 3912
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 3912,
+      "outcome": {
+        "3912": "win",
+        "4135": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-09-30T18:00:58.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Cleveland Crusaders D1",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Cleveland Crusaders vs Forge Men D1",
+    "slug": "cleveland-crusaders-vs-forge-men-d1",
+    "home_team_score": 19,
+    "away_team_score": 31,
+    "source": {
+      "event_id": 4570,
+      "link": "https://pghrugby.com/blog/event/2023/09/30/cleveland-crusaders-vs-forge-men-d1",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-09-30T14:00:58",
+      "date_gmt": "2023-09-30T18:00:58",
+      "team_ids": {
+        "home": 4017,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 3894,
+      "outcome": {
+        "3894": "win",
+        "4017": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-07T15:30:11.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Detroit Rugby Football Club – Womens",
+    "event_name": "Forge Women D1 vs Detroit RFC",
+    "slug": "forge-women-d1-vs-detroit-rfc",
+    "home_team_score": 53,
+    "away_team_score": 15,
+    "source": {
+      "event_id": 4540,
+      "link": "https://pghrugby.com/blog/event/2023/10/07/forge-women-d1-vs-detroit-rfc",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-07T11:30:11",
+      "date_gmt": "2023-10-07T15:30:11",
+      "team_ids": {
+        "home": 3913,
+        "away": 3963
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3963": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-07T17:00:25.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Dayton Area Rugby Club",
+    "away_team": "Pittsburgh Forge D4 Men",
+    "event_name": "Dayton Area RC vs Forge Men D4",
+    "slug": "dayton-area-rc-vs-forge-men-d4",
+    "home_team_score": 28,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 4579,
+      "link": "https://pghrugby.com/blog/event/2023/10/07/dayton-area-rc-vs-forge-men-d4",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-07T13:00:25",
+      "date_gmt": "2023-10-07T17:00:25",
+      "team_ids": {
+        "home": 4526,
+        "away": 4510
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 4526,
+      "outcome": {
+        "4510": "loss",
+        "4526": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-07T18:00:23.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Cincinnati Wolfhounds",
+    "event_name": "Forge Men D1 vs Cincinnati Wolfhounds",
+    "slug": "forge-men-d1-vs-cincinnati-wolfhounds",
+    "home_team_score": 43,
+    "away_team_score": 40,
+    "source": {
+      "event_id": 4571,
+      "link": "https://pghrugby.com/blog/event/2023/10/07/forge-men-d1-vs-cincinnati-wolfhounds",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-07T14:00:23",
+      "date_gmt": "2023-10-07T18:00:23",
+      "team_ids": {
+        "home": 3894,
+        "away": 4024
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3894,
+      "outcome": {
+        "3894": "win",
+        "4024": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-14T16:00:32.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D3 Men",
+    "away_team": "Canton Rugby",
+    "event_name": "Forge Men D3 vs Canton Rugby",
+    "slug": "forge-men-d3-vs-canton-rugby",
+    "home_team_score": 40,
+    "away_team_score": 14,
+    "source": {
+      "event_id": 4578,
+      "link": "https://pghrugby.com/blog/event/2023/10/14/forge-men-d3-vs-canton-rugby",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-14T12:00:32",
+      "date_gmt": "2023-10-14T16:00:32",
+      "team_ids": {
+        "home": 3912,
+        "away": 4576
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3912,
+      "outcome": {
+        "3912": "win",
+        "4576": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-14T16:00:33.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Columbus Women’s Rugby",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Columbus Women’s Rugby vs Forge Women D1",
+    "slug": "columbus-womens-rugby-vs-forge-women-d1",
+    "home_team_score": 27,
+    "away_team_score": 8,
+    "source": {
+      "event_id": 4541,
+      "link": "https://pghrugby.com/blog/event/2023/10/14/columbus-womens-rugby-vs-forge-women-d1",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-14T12:00:33",
+      "date_gmt": "2023-10-14T16:00:33",
+      "team_ids": {
+        "home": 3957,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 3957,
+      "outcome": {
+        "3913": "loss",
+        "3957": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-14T16:00:33.000Z",
+    "league": "Women's Friendly",
+    "division": null,
+    "season": "2023 Fall",
+    "match_type": "friendly",
+    "home_team": "Columbus Women’s Rugby",
+    "away_team": "Pittsburgh Forge Women – Gold",
+    "event_name": "Columbus Women’s Rugby vs Forge Women D1 (Copy)",
+    "slug": "columbus-womens-rugby-vs-forge-women-gold",
+    "home_team_score": 5,
+    "away_team_score": 26,
+    "source": {
+      "event_id": 4666,
+      "link": "https://pghrugby.com/blog/event/2023/10/14/columbus-womens-rugby-vs-forge-women-gold",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-14T12:00:33",
+      "date_gmt": "2023-10-14T16:00:33",
+      "team_ids": {
+        "home": 3957,
+        "away": 3918
+      },
+      "league_ids": [
+        522
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 3957,
+      "outcome": {
+        "3918": "win",
+        "3957": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-14T18:00:07.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Detroit Tradesmen D1",
+    "event_name": "Forge Men D1 vs Detroit Tradesmen",
+    "slug": "forge-men-d1-vs-detroit-tradesmen",
+    "home_team_score": 23,
+    "away_team_score": 30,
+    "source": {
+      "event_id": 4572,
+      "link": "https://pghrugby.com/blog/event/2023/10/14/forge-men-d1-vs-detroit-tradesmen",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-14T14:00:07",
+      "date_gmt": "2023-10-14T18:00:07",
+      "team_ids": {
+        "home": 3894,
+        "away": 4027
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4027,
+      "outcome": {
+        "3894": "loss",
+        "4027": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-14T19:00:10.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D4 Men",
+    "away_team": "Columbus Castaways D4",
+    "event_name": "Forge Men D4 vs Columbus Castaways",
+    "slug": "forge-men-d4-vs-columbus-castaways-d4",
+    "home_team_score": 38,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 4583,
+      "link": "https://pghrugby.com/blog/event/2023/10/14/forge-men-d4-vs-columbus-castaways-d4",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-14T15:00:10",
+      "date_gmt": "2023-10-14T19:00:10",
+      "team_ids": {
+        "home": 4510,
+        "away": 4528
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "4528": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-21T15:00:50.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Buffalo Women’s Rugby Club",
+    "event_name": "Forge Women D1 vs Buffalo Rugby Club",
+    "slug": "forge-women-d1-vs-buffalo-rugby-club",
+    "home_team_score": 70,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 4542,
+      "link": "https://pghrugby.com/blog/event/2023/10/21/forge-women-d1-vs-buffalo-rugby-club",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-21T11:00:50",
+      "date_gmt": "2023-10-21T15:00:50",
+      "team_ids": {
+        "home": 3913,
+        "away": 3914
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3914": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-21T17:00:08.000Z",
+    "league": "Midwest Men's D4 Playoffs",
+    "division": "D4",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D4 Men",
+    "away_team": "Detroit Rugby Football Club – Men D4",
+    "event_name": "Forge Men D4 vs Detroit RFC",
+    "slug": "forge-men-d4-vs-detroit-rfc-2",
+    "home_team_score": 28,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 4667,
+      "link": "https://pghrugby.com/blog/event/2023/10/21/forge-men-d4-vs-detroit-rfc-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2023-10-21T13:00:08",
+      "date_gmt": "2023-10-21T17:00:08",
+      "team_ids": {
+        "home": 4510,
+        "away": 4521
+      },
+      "league_ids": [
+        543
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "4521": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-21T18:00:38.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Chicago Griffins",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Chicago Griffins vs Forge Men D1",
+    "slug": "chicago-griffins-vs-forge-men-d1",
+    "home_team_score": 48,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 4573,
+      "link": "https://pghrugby.com/blog/event/2023/10/21/chicago-griffins-vs-forge-men-d1",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-21T14:00:38",
+      "date_gmt": "2023-10-21T18:00:38",
+      "team_ids": {
+        "home": 3921,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [
+        521
+      ],
+      "winner": 3921,
+      "outcome": {
+        "3894": "loss",
+        "3921": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-28T15:00:57.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Cincinnati Kelts Women’s Rugby",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Cincinnati Kelts vs Forge Women D1",
+    "slug": "cincinnati-kelts-vs-forge-women-d1",
+    "home_team_score": 21,
+    "away_team_score": 22,
+    "source": {
+      "event_id": 4543,
+      "link": "https://pghrugby.com/blog/event/2023/10/28/cincinnati-kelts-vs-forge-women-d1",
+      "status": "publish",
+      "minutes": "0",
+      "date": "2023-10-28T11:00:57",
+      "date_gmt": "2023-10-28T15:00:57",
+      "team_ids": {
+        "home": 3959,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3959": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-28T17:00:31.000Z",
+    "league": "Midwest Men's D4 Playoffs",
+    "division": "D4",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Westside Outcasts",
+    "away_team": "Pittsburgh Forge D4 Men",
+    "event_name": "Westside Outcasts vs Forge Men D4",
+    "slug": "westside-outcasts-vs-forge-men-d4",
+    "home_team_score": 62,
+    "away_team_score": 21,
+    "source": {
+      "event_id": 4673,
+      "link": "https://pghrugby.com/blog/event/2023/10/28/westside-outcasts-vs-forge-men-d4",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2023-10-28T13:00:31",
+      "date_gmt": "2023-10-28T17:00:31",
+      "team_ids": {
+        "home": 4669,
+        "away": 4510
+      },
+      "league_ids": [
+        543
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 4669,
+      "outcome": {
+        "4510": "loss",
+        "4669": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-10-28T18:00:59.000Z",
+    "league": "Women's Friendly",
+    "division": null,
+    "season": "2023 Fall",
+    "match_type": "friendly",
+    "home_team": "University of Cincinnati WRFC",
+    "away_team": "Pittsburgh Forge Women – Gold",
+    "event_name": "UCWRFC vs Forge Women – Gold",
+    "slug": "ucwrfc-vs-forge-women-gold",
+    "home_team_score": 12,
+    "away_team_score": 5,
+    "source": {
+      "event_id": 4677,
+      "link": "https://pghrugby.com/blog/event/2023/10/28/ucwrfc-vs-forge-women-gold",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2023-10-28T14:00:59",
+      "date_gmt": "2023-10-28T18:00:59",
+      "team_ids": {
+        "home": 4674,
+        "away": 3918
+      },
+      "league_ids": [
+        522
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 4674,
+      "outcome": {
+        "3918": "loss",
+        "4674": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-11-04T17:00:36.000Z",
+    "league": "Midwest Women's D1 Playoffs",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Chicago Lions Women D1",
+    "event_name": "Forge Women D1 vs Chicago Lions",
+    "slug": "forge-women-d1-vs-chicago-lions",
+    "home_team_score": 16,
+    "away_team_score": 12,
+    "source": {
+      "event_id": 4678,
+      "link": "https://pghrugby.com/blog/event/2023/11/04/forge-women-d1-vs-chicago-lions",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2023-11-04T13:00:36",
+      "date_gmt": "2023-11-04T17:00:36",
+      "team_ids": {
+        "home": 3913,
+        "away": 4112
+      },
+      "league_ids": [
+        523
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "4112": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2023-11-11T19:00:18.000Z",
+    "league": "Midwest Women's D1 Playoffs",
+    "division": "D1",
+    "season": "2023 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Columbus Women’s Rugby",
+    "event_name": "Forge Women D1 vs Columbus Women’s Rugby",
+    "slug": "forge-women-d1-vs-columbus-womens-rugby",
+    "home_team_score": 28,
+    "away_team_score": 5,
+    "source": {
+      "event_id": 4681,
+      "link": "https://pghrugby.com/blog/event/2023/11/11/forge-women-d1-vs-columbus-womens-rugby",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2023-11-11T14:00:18",
+      "date_gmt": "2023-11-11T19:00:18",
+      "team_ids": {
+        "home": 3913,
+        "away": 3957
+      },
+      "league_ids": [
+        523
+      ],
+      "season_ids": [
+        538
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3957": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-05-17T18:00:06.000Z",
+    "league": "Women's D1 Nationals",
+    "division": "D1",
+    "season": "2023 Fall, 2024 Spring",
+    "match_type": "competitive",
+    "home_team": "Utah Vipers",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Forge Women D1 vs Utah Vipers",
+    "slug": "forge-women-d1-vs-utah-vipers",
+    "home_team_score": 31,
+    "away_team_score": 22,
+    "source": {
+      "event_id": 4816,
+      "link": "https://pghrugby.com/blog/event/2024/05/17/forge-women-d1-vs-utah-vipers",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-05-17T14:00:06",
+      "date_gmt": "2024-05-17T18:00:06",
+      "team_ids": {
+        "home": 4828,
+        "away": 3913
+      },
+      "league_ids": [
+        577
+      ],
+      "season_ids": [
+        538,
+        557
+      ],
+      "venue_ids": [
+        558
+      ],
+      "winner": 4828,
+      "outcome": {
+        "3913": "loss",
+        "4828": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-08-24T17:00:23.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Cleveland Crusaders D3",
+    "away_team": "Pittsburgh Forge D3 Men",
+    "event_name": "Forge Men D3 @ Cleveland Crusaders",
+    "slug": "cleveland-crusaders-vs-forge-men-d3",
+    "home_team_score": 10,
+    "away_team_score": 33,
+    "source": {
+      "event_id": 5011,
+      "link": "https://pghrugby.com/blog/event/2024/08/24/cleveland-crusaders-vs-forge-men-d3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-08-24T13:00:23",
+      "date_gmt": "2024-08-24T17:00:23",
+      "team_ids": {
+        "home": 4025,
+        "away": 3912
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 3912,
+      "outcome": {
+        "3912": "win",
+        "4025": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-08-31T16:00:13.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D4 Men",
+    "away_team": "South Pittsburgh Hooligans RFC D3",
+    "event_name": "Forge Men D4 vs South Pittsburgh Hooligans RFC",
+    "slug": "forge-men-d4-vs-south-pittsburgh-hooligans-rfc",
+    "home_team_score": 35,
+    "away_team_score": 24,
+    "source": {
+      "event_id": 5012,
+      "link": "https://pghrugby.com/blog/event/2024/08/31/forge-men-d4-vs-south-pittsburgh-hooligans-rfc",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-08-31T12:00:13",
+      "date_gmt": "2024-08-31T16:00:13",
+      "team_ids": {
+        "home": 4510,
+        "away": 4136
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4510,
+      "outcome": {
+        "4136": "loss",
+        "4510": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-08-31T18:00:37.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D3 Men",
+    "away_team": "South Pittsburgh Hooligans RFC D3",
+    "event_name": "Forge Men D3 vs South Pittsburgh Hooligans RFC",
+    "slug": "forge-men-d3-vs-south-pittsburgh-hooligans-rfc",
+    "home_team_score": 26,
+    "away_team_score": 20,
+    "source": {
+      "event_id": 5036,
+      "link": "https://pghrugby.com/blog/event/2024/08/31/forge-men-d3-vs-south-pittsburgh-hooligans-rfc",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-08-31T14:00:37",
+      "date_gmt": "2024-08-31T18:00:37",
+      "team_ids": {
+        "home": 3912,
+        "away": 4136
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3912,
+      "outcome": {
+        "3912": "win",
+        "4136": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-07T16:00:03.000Z",
+    "league": "Midwest Women's D2",
+    "division": "D2",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Rochester Renegades",
+    "away_team": "Pittsburgh Forge D2 Women",
+    "event_name": "Forge Women D2 @ Rochester Renegades",
+    "slug": "rochester-renegades-vs-forge-women",
+    "home_team_score": 79,
+    "away_team_score": 3,
+    "source": {
+      "event_id": 4992,
+      "link": "https://pghrugby.com/blog/event/2024/09/07/rochester-renegades-vs-forge-women",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-07T12:00:03",
+      "date_gmt": "2024-09-07T16:00:03",
+      "team_ids": {
+        "home": 4990,
+        "away": 4973
+      },
+      "league_ids": [
+        567
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 4990,
+      "outcome": {
+        "4973": "loss",
+        "4990": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-07T16:00:47.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Detroit Rugby Football Club – Womens",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Forge Women D1 @ Detroit RFC",
+    "slug": "detroit-rfc-vs-forge-women-d1",
+    "home_team_score": 7,
+    "away_team_score": 47,
+    "source": {
+      "event_id": 4988,
+      "link": "https://pghrugby.com/blog/event/2024/09/07/detroit-rfc-vs-forge-women-d1",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-07T12:00:47",
+      "date_gmt": "2024-09-07T16:00:47",
+      "team_ids": {
+        "home": 3963,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3963": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-07T17:00:20.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Findlay RFC",
+    "away_team": "Pittsburgh Forge D4 Men",
+    "event_name": "Forge Men D4 @ Findlay RFC",
+    "slug": "findlay-rfc-vs-forge-men-d4",
+    "home_team_score": 64,
+    "away_team_score": 19,
+    "source": {
+      "event_id": 5041,
+      "link": "https://pghrugby.com/blog/event/2024/09/07/findlay-rfc-vs-forge-men-d4",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-07T13:00:20",
+      "date_gmt": "2024-09-07T17:00:20",
+      "team_ids": {
+        "home": 4581,
+        "away": 4510
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 4581,
+      "outcome": {
+        "4510": "loss",
+        "4581": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-07T18:00:13.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Cincinnati Wolfhounds",
+    "event_name": "Forge Men D1 vs Cincinnati Wolfhounds",
+    "slug": "forge-men-d1-vs-cincinnati-wolfhounds-2",
+    "home_team_score": 32,
+    "away_team_score": 29,
+    "source": {
+      "event_id": 5010,
+      "link": "https://pghrugby.com/blog/event/2024/09/07/forge-men-d1-vs-cincinnati-wolfhounds-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-07T14:00:13",
+      "date_gmt": "2024-09-07T18:00:13",
+      "team_ids": {
+        "home": 3894,
+        "away": 4024
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3894,
+      "outcome": {
+        "3894": "win",
+        "4024": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-14T16:00:07.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Columbus Women’s Rugby",
+    "event_name": "Forge Women D1 vs Columbus Women’s Rugby",
+    "slug": "forge-women-d1-vs-columbus-womens-rugby-2",
+    "home_team_score": 25,
+    "away_team_score": 38,
+    "source": {
+      "event_id": 5022,
+      "link": "https://pghrugby.com/blog/event/2024/09/14/forge-women-d1-vs-columbus-womens-rugby-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-14T12:00:07",
+      "date_gmt": "2024-09-14T16:00:07",
+      "team_ids": {
+        "home": 3913,
+        "away": 3957
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 3957,
+      "outcome": {
+        "3913": "loss",
+        "3957": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-14T17:00:27.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Greensburg RFC",
+    "away_team": "Pittsburgh Forge D3 Men",
+    "event_name": "Forge Men D3 @ Greensburg RFC",
+    "slug": "greensburg-rfc-vs-forge-men-d3",
+    "home_team_score": 31,
+    "away_team_score": 22,
+    "source": {
+      "event_id": 5037,
+      "link": "https://pghrugby.com/blog/event/2024/09/14/greensburg-rfc-vs-forge-men-d3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-14T13:00:27",
+      "date_gmt": "2024-09-14T17:00:27",
+      "team_ids": {
+        "home": 4139,
+        "away": 3912
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 4139,
+      "outcome": {
+        "3912": "loss",
+        "4139": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-14T18:00:26.000Z",
+    "league": "Midwest Women's D2",
+    "division": "D2",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D2 Women",
+    "away_team": "North Buffalo Ninjas",
+    "event_name": "Forge Women D2 vs North Buffalo",
+    "slug": "forge-women-d2-vs-north-buffalo",
+    "home_team_score": 38,
+    "away_team_score": 25,
+    "source": {
+      "event_id": 5032,
+      "link": "https://pghrugby.com/blog/event/2024/09/14/forge-women-d2-vs-north-buffalo",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-14T14:00:26",
+      "date_gmt": "2024-09-14T18:00:26",
+      "team_ids": {
+        "home": 4973,
+        "away": 5013
+      },
+      "league_ids": [
+        567
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4973,
+      "outcome": {
+        "4973": "win",
+        "5013": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-14T18:00:56.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Detroit Tradesmen D1",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Forge Men D1 @ Detroit Tradesmen",
+    "slug": "detroit-tradesmen-vs-forge-men-d1-2",
+    "home_team_score": 79,
+    "away_team_score": 6,
+    "source": {
+      "event_id": 5027,
+      "link": "https://pghrugby.com/blog/event/2024/09/14/detroit-tradesmen-vs-forge-men-d1-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-14T14:00:56",
+      "date_gmt": "2024-09-14T18:00:56",
+      "team_ids": {
+        "home": 4027,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 4027,
+      "outcome": {
+        "3894": "loss",
+        "4027": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-21T16:00:41.000Z",
+    "league": "Midwest Women's D2",
+    "division": "D2",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D2 Women",
+    "away_team": "Uticuse Rugby Club",
+    "event_name": "Forge Women D2 vs Uticuse Rugby Club",
+    "slug": "forge-women-d2-vs-uticuse-rugby-club",
+    "home_team_score": 28,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 5033,
+      "link": "https://pghrugby.com/blog/event/2024/09/21/forge-women-d2-vs-uticuse-rugby-club",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-21T12:00:41",
+      "date_gmt": "2024-09-21T16:00:41",
+      "team_ids": {
+        "home": 4973,
+        "away": 5016
+      },
+      "league_ids": [
+        567
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4973,
+      "outcome": {
+        "4973": "win",
+        "5016": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-21T18:00:51.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D3 Men",
+    "away_team": "Cleveland Rovers RFC D3",
+    "event_name": "Forge Men D3 vs Cleveland Rovers",
+    "slug": "forge-men-d3-vs-cleveland-rovers",
+    "home_team_score": 14,
+    "away_team_score": 62,
+    "source": {
+      "event_id": 5038,
+      "link": "https://pghrugby.com/blog/event/2024/09/21/forge-men-d3-vs-cleveland-rovers",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-21T14:00:51",
+      "date_gmt": "2024-09-21T18:00:51",
+      "team_ids": {
+        "home": 3912,
+        "away": 4137
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4137,
+      "outcome": {
+        "3912": "loss",
+        "4137": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-21T20:00:02.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Chicago Griffins",
+    "event_name": "Forge Men D1 vs Chicago Griffins",
+    "slug": "forge-men-d1-vs-chicago-griffins-2",
+    "home_team_score": 22,
+    "away_team_score": 29,
+    "source": {
+      "event_id": 5028,
+      "link": "https://pghrugby.com/blog/event/2024/09/21/forge-men-d1-vs-chicago-griffins-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-21T16:00:02",
+      "date_gmt": "2024-09-21T20:00:02",
+      "team_ids": {
+        "home": 3894,
+        "away": 3921
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3921,
+      "outcome": {
+        "3894": "loss",
+        "3921": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-28T15:00:48.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Cincinnati Kelts Women’s Rugby",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Forge Women D1 @ Cincinnati Kelts",
+    "slug": "cincinnati-kelts-vs-forge-women-d1-2",
+    "home_team_score": 5,
+    "away_team_score": 48,
+    "source": {
+      "event_id": 5023,
+      "link": "https://pghrugby.com/blog/event/2024/09/28/cincinnati-kelts-vs-forge-women-d1-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-28T11:00:48",
+      "date_gmt": "2024-09-28T15:00:48",
+      "team_ids": {
+        "home": 3959,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3959": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-28T17:00:06.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Cincinnati Wolfhounds",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Forge Men D1 @ Cincinnati Wolfhounds",
+    "slug": "cincinnati-wolfhounds-vs-forge-men-d1",
+    "home_team_score": 69,
+    "away_team_score": 12,
+    "source": {
+      "event_id": 5029,
+      "link": "https://pghrugby.com/blog/event/2024/09/28/cincinnati-wolfhounds-vs-forge-men-d1",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-28T13:00:06",
+      "date_gmt": "2024-09-28T17:00:06",
+      "team_ids": {
+        "home": 4024,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 4024,
+      "outcome": {
+        "3894": "loss",
+        "4024": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-28T17:00:08.000Z",
+    "league": "Midwest Women's D2",
+    "division": "D2",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "South Buffalo Rugby",
+    "away_team": "Pittsburgh Forge D2 Women",
+    "event_name": "Forge Women D2 @ South Buffalo Rugby",
+    "slug": "south-buffalo-rugby-vs-forge-women-d2",
+    "home_team_score": 28,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 5034,
+      "link": "https://pghrugby.com/blog/event/2024/09/28/south-buffalo-rugby-vs-forge-women-d2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-28T13:00:08",
+      "date_gmt": "2024-09-28T17:00:08",
+      "team_ids": {
+        "home": 5018,
+        "away": 4973
+      },
+      "league_ids": [
+        567
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 5018,
+      "outcome": {
+        "4973": "loss",
+        "5018": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-28T17:00:27.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D3 Men",
+    "away_team": "Presque Isle RFC",
+    "event_name": "Forge Men D3 vs Presque Isle RFC",
+    "slug": "forge-men-d3-vs-presque-isle-rfc",
+    "home_team_score": 47,
+    "away_team_score": 20,
+    "source": {
+      "event_id": 5039,
+      "link": "https://pghrugby.com/blog/event/2024/09/28/forge-men-d3-vs-presque-isle-rfc",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-28T13:00:27",
+      "date_gmt": "2024-09-28T17:00:27",
+      "team_ids": {
+        "home": 3912,
+        "away": 4135
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3912,
+      "outcome": {
+        "3912": "win",
+        "4135": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-09-28T18:00:52.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Ypsilanti Rugby Club",
+    "away_team": "Pittsburgh Forge D4 Men",
+    "event_name": "Forge Men D4 @ Ypsilanti Rugby Club",
+    "slug": "ypsilanti-rugby-club-vs-forge-men-d4",
+    "home_team_score": 28,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 5042,
+      "link": "https://pghrugby.com/blog/event/2024/09/28/ypsilanti-rugby-club-vs-forge-men-d4",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-09-28T14:00:52",
+      "date_gmt": "2024-09-28T18:00:52",
+      "team_ids": {
+        "home": 5020,
+        "away": 4510
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 5020,
+      "outcome": {
+        "4510": "loss",
+        "5020": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-10-05T15:00:37.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Detroit Rugby Football Club – Womens",
+    "event_name": "Forge Women D1 vs Detroit RFC",
+    "slug": "forge-women-d1-vs-detroit-rfc-2",
+    "home_team_score": 45,
+    "away_team_score": 10,
+    "source": {
+      "event_id": 5024,
+      "link": "https://pghrugby.com/blog/event/2024/10/05/forge-women-d1-vs-detroit-rfc-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-10-05T11:00:37",
+      "date_gmt": "2024-10-05T15:00:37",
+      "team_ids": {
+        "home": 3913,
+        "away": 3963
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3963": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-10-05T17:00:05.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Detroit Tradesmen D1",
+    "event_name": "Forge Men D1 vs Detroit Tradesmen",
+    "slug": "forge-men-d1-vs-detroit-tradesmen-2",
+    "home_team_score": 14,
+    "away_team_score": 29,
+    "source": {
+      "event_id": 5030,
+      "link": "https://pghrugby.com/blog/event/2024/10/05/forge-men-d1-vs-detroit-tradesmen-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-10-05T13:00:05",
+      "date_gmt": "2024-10-05T17:00:05",
+      "team_ids": {
+        "home": 3894,
+        "away": 4027
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4027,
+      "outcome": {
+        "3894": "loss",
+        "4027": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-10-05T19:00:21.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D4 Men",
+    "away_team": "Columbus Castaways D4",
+    "event_name": "Forge Men D4 vs Columbus Castaways",
+    "slug": "forge-men-d4-vs-columbus-castaways",
+    "home_team_score": 76,
+    "away_team_score": 3,
+    "source": {
+      "event_id": 5043,
+      "link": "https://pghrugby.com/blog/event/2024/10/05/forge-men-d4-vs-columbus-castaways",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-10-05T15:00:21",
+      "date_gmt": "2024-10-05T19:00:21",
+      "team_ids": {
+        "home": 4510,
+        "away": 4528
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "4528": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-10-12T17:00:04.000Z",
+    "league": "Midwest Women's D2",
+    "division": "D2",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Buffalo Women’s Rugby Club",
+    "away_team": "Pittsburgh Forge D2 Women",
+    "event_name": "Forge Women D2 @ Buffalo Rugby Club",
+    "slug": "buffalo-rugby-club-vs-forge-women-d2",
+    "home_team_score": 108,
+    "away_team_score": 10,
+    "source": {
+      "event_id": 5035,
+      "link": "https://pghrugby.com/blog/event/2024/10/12/buffalo-rugby-club-vs-forge-women-d2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-10-12T13:00:04",
+      "date_gmt": "2024-10-12T17:00:04",
+      "team_ids": {
+        "home": 3914,
+        "away": 4973
+      },
+      "league_ids": [
+        567
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 3914,
+      "outcome": {
+        "3914": "win",
+        "4973": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-10-12T17:00:48.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Columbus Women’s Rugby",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Forge Women D1 @ Columbus Women’s Rugby",
+    "slug": "columbus-womens-rugby-vs-forge-women-d1-2",
+    "home_team_score": 47,
+    "away_team_score": 36,
+    "source": {
+      "event_id": 5025,
+      "link": "https://pghrugby.com/blog/event/2024/10/12/columbus-womens-rugby-vs-forge-women-d1-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-10-12T13:00:48",
+      "date_gmt": "2024-10-12T17:00:48",
+      "team_ids": {
+        "home": 3957,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 3957,
+      "outcome": {
+        "3913": "loss",
+        "3957": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-10-12T17:00:49.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Canton Rugby",
+    "away_team": "Pittsburgh Forge D3 Men",
+    "event_name": "Forge Men D3 @ Canton Rugby",
+    "slug": "canton-rugby-vs-forge-men-d3",
+    "home_team_score": 66,
+    "away_team_score": 12,
+    "source": {
+      "event_id": 5040,
+      "link": "https://pghrugby.com/blog/event/2024/10/12/canton-rugby-vs-forge-men-d3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-10-12T13:00:49",
+      "date_gmt": "2024-10-12T17:00:49",
+      "team_ids": {
+        "home": 4576,
+        "away": 3912
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 4576,
+      "outcome": {
+        "3912": "loss",
+        "4576": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-10-12T18:00:08.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Chicago Griffins",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Forge Men D1 @ Chicago Griffins",
+    "slug": "chicago-griffins-vs-forge-men-d1-2",
+    "home_team_score": 71,
+    "away_team_score": 8,
+    "source": {
+      "event_id": 5031,
+      "link": "https://pghrugby.com/blog/event/2024/10/12/chicago-griffins-vs-forge-men-d1-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-10-12T14:00:08",
+      "date_gmt": "2024-10-12T18:00:08",
+      "team_ids": {
+        "home": 3921,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        521
+      ],
+      "winner": 3921,
+      "outcome": {
+        "3894": "loss",
+        "3921": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-10-19T15:00:12.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Cincinnati Kelts Women’s Rugby",
+    "event_name": "Forge Women D1 vs Cincinnati Kelts",
+    "slug": "forge-women-d1-vs-cincinnati-kelts-2",
+    "home_team_score": 0,
+    "away_team_score": 28,
+    "source": {
+      "event_id": 5026,
+      "link": "https://pghrugby.com/blog/event/2024/10/19/forge-women-d1-vs-cincinnati-kelts-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-10-19T11:00:12",
+      "date_gmt": "2024-10-19T15:00:12",
+      "team_ids": {
+        "home": 3913,
+        "away": 3959
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 3959,
+      "outcome": {
+        "3913": "loss",
+        "3959": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-10-26T18:00:41.000Z",
+    "league": "Midwest Men's D1 Playoffs",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "St. Louis Bombers",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "St. Louis Bombers vs Forge Men D1",
+    "slug": "st-louis-bombers-vs-forge-men-d1",
+    "home_team_score": 83,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 5109,
+      "link": "https://pghrugby.com/blog/event/2024/10/26/st-louis-bombers-vs-forge-men-d1",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-10-26T14:00:41",
+      "date_gmt": "2024-10-26T18:00:41",
+      "team_ids": {
+        "home": 5107,
+        "away": 3894
+      },
+      "league_ids": [
+        569
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 5107,
+      "outcome": {
+        "3894": "loss",
+        "5107": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2024-11-02T18:00:34.000Z",
+    "league": "Midwest Women's D1 Playoffs",
+    "division": "D1",
+    "season": "2024 Fall",
+    "match_type": "competitive",
+    "home_team": "Metropolis Valkyries",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Forge Women D1 vs Metropolis Valkyries",
+    "slug": "forge-women-d1-vs-metropolis-valkyries",
+    "home_team_score": 50,
+    "away_team_score": 5,
+    "source": {
+      "event_id": 5111,
+      "link": "https://pghrugby.com/blog/event/2024/11/02/forge-women-d1-vs-metropolis-valkyries",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2024-11-02T14:00:34",
+      "date_gmt": "2024-11-02T18:00:34",
+      "team_ids": {
+        "home": 5112,
+        "away": 3913
+      },
+      "league_ids": [
+        523
+      ],
+      "season_ids": [
+        568
+      ],
+      "venue_ids": [],
+      "winner": 5112,
+      "outcome": {
+        "3913": "loss",
+        "5112": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-08-23T15:00:41.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Cincinnati Kelts Women’s Rugby",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Cincinnati Kelts vs Forge Women D1",
+    "slug": "cincinnati-kelts-vs-forge-women-d1-3",
+    "home_team_score": 0,
+    "away_team_score": 28,
+    "source": {
+      "event_id": 5383,
+      "link": "https://pghrugby.com/blog/event/2025/08/23/cincinnati-kelts-vs-forge-women-d1-3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-08-23T11:00:41",
+      "date_gmt": "2025-08-23T15:00:41",
+      "team_ids": {
+        "home": 3959,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3959": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-08-23T16:00:05.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D4 Men",
+    "away_team": "Findlay RFC",
+    "event_name": "Forge Men D4 vs Findlay RFC",
+    "slug": "forge-men-d4-vs-findlay-rfc",
+    "home_team_score": 50,
+    "away_team_score": 19,
+    "source": {
+      "event_id": 5393,
+      "link": "https://pghrugby.com/blog/event/2025/08/23/forge-men-d4-vs-findlay-rfc",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-08-23T12:00:05",
+      "date_gmt": "2025-08-23T16:00:05",
+      "team_ids": {
+        "home": 4510,
+        "away": 4581
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "4581": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-08-23T17:00:56.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Chicago Griffins",
+    "event_name": "Forge Men D1 vs Chicago Griffins",
+    "slug": "forge-men-d1-vs-chicago-griffins-3",
+    "home_team_score": 31,
+    "away_team_score": 31,
+    "source": {
+      "event_id": 5392,
+      "link": "https://pghrugby.com/blog/event/2025/08/23/forge-men-d1-vs-chicago-griffins-3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-08-23T13:00:56",
+      "date_gmt": "2025-08-23T17:00:56",
+      "team_ids": {
+        "home": 3894,
+        "away": 3921
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": null,
+      "outcome": {
+        "3894": "draw",
+        "3921": "draw"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-08-30T16:00:38.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Detroit Rugby Football Club – Womens",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Detroit RFC vs Forge Women D1",
+    "slug": "detroit-rfc-vs-forge-women-d1-2",
+    "home_team_score": 22,
+    "away_team_score": 60,
+    "source": {
+      "event_id": 5428,
+      "link": "https://pghrugby.com/blog/event/2025/08/30/detroit-rfc-vs-forge-women-d1-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-08-30T12:00:38",
+      "date_gmt": "2025-08-30T16:00:38",
+      "team_ids": {
+        "home": 3963,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3963": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-08-30T17:00:13.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Harlequins",
+    "away_team": "Pittsburgh Forge D4 Men",
+    "event_name": "Pittsburgh Harlequins vs Forge Men D4",
+    "slug": "pittsburgh-harlequins-vs-forge-men-d4",
+    "home_team_score": 0,
+    "away_team_score": 28,
+    "source": {
+      "event_id": 5458,
+      "link": "https://pghrugby.com/blog/event/2025/08/30/pittsburgh-harlequins-vs-forge-men-d4",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-08-30T13:00:13",
+      "date_gmt": "2025-08-30T17:00:13",
+      "team_ids": {
+        "home": 5445,
+        "away": 4510
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "5445": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-06T16:00:27.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Grand Rapids Growlers",
+    "event_name": "Forge Women D1 vs Growlers",
+    "slug": "forge-women-d1-vs-growlers",
+    "home_team_score": 23,
+    "away_team_score": 22,
+    "source": {
+      "event_id": 5432,
+      "link": "https://pghrugby.com/blog/event/2025/09/06/forge-women-d1-vs-growlers",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-06T12:00:27",
+      "date_gmt": "2025-09-06T16:00:27",
+      "team_ids": {
+        "home": 3913,
+        "away": 5430
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "5430": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-06T16:00:29.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D3 Men",
+    "away_team": "Cleveland Crusaders D3",
+    "event_name": "Forge Men D3 vs Cleveland Crusaders",
+    "slug": "forge-men-d3-vs-cleveland-crusaders-2",
+    "home_team_score": 28,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 5462,
+      "link": "https://pghrugby.com/blog/event/2025/09/06/forge-men-d3-vs-cleveland-crusaders-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-06T12:00:29",
+      "date_gmt": "2025-09-06T16:00:29",
+      "team_ids": {
+        "home": 3912,
+        "away": 4025
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3912,
+      "outcome": {
+        "3912": "win",
+        "4025": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-06T17:00:25.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D4 Men",
+    "away_team": "South Pittsburgh Hooligans RFC D3",
+    "event_name": "Forge Men D4 vs South Pittsburgh Hooligans RFC",
+    "slug": "forge-men-d4-vs-south-pittsburgh-hooligans-rfc-2",
+    "home_team_score": 66,
+    "away_team_score": 51,
+    "source": {
+      "event_id": 5459,
+      "link": "https://pghrugby.com/blog/event/2025/09/06/forge-men-d4-vs-south-pittsburgh-hooligans-rfc-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-06T13:00:25",
+      "date_gmt": "2025-09-06T17:00:25",
+      "team_ids": {
+        "home": 4510,
+        "away": 4136
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4510,
+      "outcome": {
+        "4136": "loss",
+        "4510": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-06T18:00:54.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Indianapolis Impalas D1",
+    "event_name": "Forge Men D1 vs Indianapolis Impalas D1",
+    "slug": "forge-men-d1-vs-indianapolis-impalas-d1",
+    "home_team_score": 27,
+    "away_team_score": 35,
+    "source": {
+      "event_id": 5467,
+      "link": "https://pghrugby.com/blog/event/2025/09/06/forge-men-d1-vs-indianapolis-impalas-d1",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-06T14:00:54",
+      "date_gmt": "2025-09-06T18:00:54",
+      "team_ids": {
+        "home": 3894,
+        "away": 5442
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 5442,
+      "outcome": {
+        "3894": "loss",
+        "5442": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-13T15:00:00.000Z",
+    "league": "Midwest Women's D2",
+    "division": "D2",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D2 Women",
+    "away_team": "Dayton Area Rugby Club",
+    "event_name": "Forge Women D2 vs Dayton Area RC",
+    "slug": "forge-women-d2-vs-dayton-area-rc",
+    "home_team_score": 73,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 5396,
+      "link": "https://pghrugby.com/blog/event/2025/09/13/forge-women-d2-vs-dayton-area-rc",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-13T11:00:00",
+      "date_gmt": "2025-09-13T15:00:00",
+      "team_ids": {
+        "home": 4973,
+        "away": 4526
+      },
+      "league_ids": [
+        567
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4973,
+      "outcome": {
+        "4526": "loss",
+        "4973": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-13T16:00:29.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Cincinnati Kelts Women’s Rugby",
+    "event_name": "Forge Women D1 vs Cincinnati Kelts",
+    "slug": "forge-women-d1-vs-cincinnati-kelts-3",
+    "home_team_score": 28,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 5433,
+      "link": "https://pghrugby.com/blog/event/2025/09/13/forge-women-d1-vs-cincinnati-kelts-3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-13T12:00:29",
+      "date_gmt": "2025-09-13T16:00:29",
+      "team_ids": {
+        "home": 3913,
+        "away": 3959
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3959": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-13T17:00:45.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Erie RFC",
+    "away_team": "Pittsburgh Forge D3 Men",
+    "event_name": "Erie Rugby vs Forge Men D3",
+    "slug": "erie-rugby-vs-forge-men-d3",
+    "home_team_score": 48,
+    "away_team_score": 45,
+    "source": {
+      "event_id": 5463,
+      "link": "https://pghrugby.com/blog/event/2025/09/13/erie-rugby-vs-forge-men-d3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-13T13:00:45",
+      "date_gmt": "2025-09-13T17:00:45",
+      "team_ids": {
+        "home": 5443,
+        "away": 3912
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 5443,
+      "outcome": {
+        "3912": "loss",
+        "5443": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-13T18:00:57.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Cincinnati Wolfhounds",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Cincinnati Wolfhounds vs Forge Men D1",
+    "slug": "cincinnati-wolfhounds-vs-forge-men-d1-2",
+    "home_team_score": 50,
+    "away_team_score": 33,
+    "source": {
+      "event_id": 5468,
+      "link": "https://pghrugby.com/blog/event/2025/09/13/cincinnati-wolfhounds-vs-forge-men-d1-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-13T14:00:57",
+      "date_gmt": "2025-09-13T18:00:57",
+      "team_ids": {
+        "home": 4024,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 4024,
+      "outcome": {
+        "3894": "loss",
+        "4024": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-20T17:00:40.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Cleveland Rovers RFC D3",
+    "away_team": "Pittsburgh Forge D3 Men",
+    "event_name": "Cleveland Rovers vs Forge Men D3",
+    "slug": "cleveland-rovers-vs-forge-men-d3-2",
+    "home_team_score": 76,
+    "away_team_score": 28,
+    "source": {
+      "event_id": 5464,
+      "link": "https://pghrugby.com/blog/event/2025/09/20/cleveland-rovers-vs-forge-men-d3-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-20T13:00:40",
+      "date_gmt": "2025-09-20T17:00:40",
+      "team_ids": {
+        "home": 4137,
+        "away": 3912
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 4137,
+      "outcome": {
+        "3912": "loss",
+        "4137": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-20T18:00:52.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Detroit Tradesmen D1",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Detroit Tradesmen vs Forge Men D1",
+    "slug": "detroit-tradesmen-vs-forge-men-d1-3",
+    "home_team_score": 80,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 5469,
+      "link": "https://pghrugby.com/blog/event/2025/09/20/detroit-tradesmen-vs-forge-men-d1-3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-20T14:00:52",
+      "date_gmt": "2025-09-20T18:00:52",
+      "team_ids": {
+        "home": 4027,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 4027,
+      "outcome": {
+        "3894": "loss",
+        "4027": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-27T15:00:29.000Z",
+    "league": "Midwest Women's D2",
+    "division": "D2",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Columbus Women’s Rugby",
+    "away_team": "Pittsburgh Forge D2 Women",
+    "event_name": "Columbus Women’s Rugby vs Forge Women D2",
+    "slug": "columbus-womens-rugby-vs-forge-women-d2",
+    "home_team_score": 19,
+    "away_team_score": 48,
+    "source": {
+      "event_id": 5423,
+      "link": "https://pghrugby.com/blog/event/2025/09/27/columbus-womens-rugby-vs-forge-women-d2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-27T11:00:29",
+      "date_gmt": "2025-09-27T15:00:29",
+      "team_ids": {
+        "home": 3957,
+        "away": 4973
+      },
+      "league_ids": [
+        567
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 4973,
+      "outcome": {
+        "3957": "loss",
+        "4973": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-27T16:00:08.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Columbus Women’s Rugby",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Columbus Women's Rugby vs Forge Women D1",
+    "slug": "columbus-womens-rugby-vs-forge-women-d1-3",
+    "home_team_score": 36,
+    "away_team_score": 24,
+    "source": {
+      "event_id": 5448,
+      "link": "https://pghrugby.com/blog/event/2025/09/27/columbus-womens-rugby-vs-forge-women-d1-3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-27T12:00:08",
+      "date_gmt": "2025-09-27T16:00:08",
+      "team_ids": {
+        "home": 3957,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 3957,
+      "outcome": {
+        "3913": "loss",
+        "3957": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-27T18:00:29.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Marysville RFC",
+    "away_team": "Pittsburgh Forge D4 Men",
+    "event_name": "Marysville vs Forge Men D4",
+    "slug": "marysville-vs-forge-men-d4",
+    "home_team_score": 22,
+    "away_team_score": 58,
+    "source": {
+      "event_id": 5460,
+      "link": "https://pghrugby.com/blog/event/2025/09/27/marysville-vs-forge-men-d4",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-27T14:00:29",
+      "date_gmt": "2025-09-27T18:00:29",
+      "team_ids": {
+        "home": 4517,
+        "away": 4510
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "4517": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-09-27T18:00:52.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Chicago Griffins",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Chicago Griffins vs Forge Men D1",
+    "slug": "chicago-griffins-vs-forge-men-d1-3",
+    "home_team_score": 89,
+    "away_team_score": 12,
+    "source": {
+      "event_id": 5471,
+      "link": "https://pghrugby.com/blog/event/2025/09/27/chicago-griffins-vs-forge-men-d1-3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-09-27T14:00:52",
+      "date_gmt": "2025-09-27T18:00:52",
+      "team_ids": {
+        "home": 3921,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        521
+      ],
+      "winner": 3921,
+      "outcome": {
+        "3894": "loss",
+        "3921": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-04T15:00:38.000Z",
+    "league": "Midwest Women's D2",
+    "division": "D2",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D2 Women",
+    "away_team": "Cleveland Iron Maidens",
+    "event_name": "Forge Women D2 vs Cleveland Iron Maidens",
+    "slug": "forge-women-d2-vs-cleveland-iron-maidens",
+    "home_team_score": 36,
+    "away_team_score": 66,
+    "source": {
+      "event_id": 5424,
+      "link": "https://pghrugby.com/blog/event/2025/10/04/forge-women-d2-vs-cleveland-iron-maidens",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-04T11:00:38",
+      "date_gmt": "2025-10-04T15:00:38",
+      "team_ids": {
+        "home": 4973,
+        "away": 4101
+      },
+      "league_ids": [
+        567
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4101,
+      "outcome": {
+        "4101": "win",
+        "4973": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-04T16:00:20.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Detroit Rugby Football Club – Womens",
+    "event_name": "Forge Women D1 vs Detroit RFC",
+    "slug": "forge-women-d1-vs-detroit-rfc-3",
+    "home_team_score": 67,
+    "away_team_score": 12,
+    "source": {
+      "event_id": 5449,
+      "link": "https://pghrugby.com/blog/event/2025/10/04/forge-women-d1-vs-detroit-rfc-3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-04T12:00:20",
+      "date_gmt": "2025-10-04T16:00:20",
+      "team_ids": {
+        "home": 3913,
+        "away": 3963
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3963": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-04T17:00:29.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D3 Men",
+    "away_team": "Greensburg RFC",
+    "event_name": "Forge Men D3 vs Greensburg RFC",
+    "slug": "forge-men-d3-vs-greensburg-rfc-2",
+    "home_team_score": 69,
+    "away_team_score": 25,
+    "source": {
+      "event_id": 5465,
+      "link": "https://pghrugby.com/blog/event/2025/10/04/forge-men-d3-vs-greensburg-rfc-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-04T13:00:29",
+      "date_gmt": "2025-10-04T17:00:29",
+      "team_ids": {
+        "home": 3912,
+        "away": 4139
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3912,
+      "outcome": {
+        "3912": "win",
+        "4139": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-04T19:00:27.000Z",
+    "league": "Midwest Men's D4",
+    "division": "D4",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D4 Men",
+    "away_team": "Columbus Coyotes",
+    "event_name": "Forge Men D4 vs Columbus Coyotes",
+    "slug": "forge-men-d4-vs-columbus-coyotes",
+    "home_team_score": 28,
+    "away_team_score": 0,
+    "source": {
+      "event_id": 5461,
+      "link": "https://pghrugby.com/blog/event/2025/10/04/forge-men-d4-vs-columbus-coyotes",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-04T15:00:27",
+      "date_gmt": "2025-10-04T19:00:27",
+      "team_ids": {
+        "home": 4510,
+        "away": 5647
+      },
+      "league_ids": [
+        541
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4510,
+      "outcome": {
+        "4510": "win",
+        "5647": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-11T15:00:58.000Z",
+    "league": "Midwest Women's D2",
+    "division": "D2",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Akron RFC",
+    "away_team": "Pittsburgh Forge D2 Women",
+    "event_name": "Akron RFC vs Forge Women D2",
+    "slug": "akron-rfc-vs-forge-women-d2",
+    "home_team_score": 44,
+    "away_team_score": 29,
+    "source": {
+      "event_id": 5425,
+      "link": "https://pghrugby.com/blog/event/2025/10/11/akron-rfc-vs-forge-women-d2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-11T11:00:58",
+      "date_gmt": "2025-10-11T15:00:58",
+      "team_ids": {
+        "home": 4134,
+        "away": 4973
+      },
+      "league_ids": [
+        567
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 4134,
+      "outcome": {
+        "4134": "win",
+        "4973": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-11T16:00:23.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Columbus Women’s Rugby",
+    "event_name": "Forge Women D1 vs Columbus Women's Rugby",
+    "slug": "forge-women-d1-vs-columbus-womens-rugby-3",
+    "home_team_score": 29,
+    "away_team_score": 26,
+    "source": {
+      "event_id": 5450,
+      "link": "https://pghrugby.com/blog/event/2025/10/11/forge-women-d1-vs-columbus-womens-rugby-3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-11T12:00:23",
+      "date_gmt": "2025-10-11T16:00:23",
+      "team_ids": {
+        "home": 3913,
+        "away": 3957
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "3957": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-11T18:00:33.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Cincinnati Wolfhounds",
+    "event_name": "Forge Men D1 vs Cincinnati Wolfhounds",
+    "slug": "forge-men-d1-vs-cincinnati-wolfhounds-3",
+    "home_team_score": 32,
+    "away_team_score": 32,
+    "source": {
+      "event_id": 5472,
+      "link": "https://pghrugby.com/blog/event/2025/10/11/forge-men-d1-vs-cincinnati-wolfhounds-3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-11T14:00:33",
+      "date_gmt": "2025-10-11T18:00:33",
+      "team_ids": {
+        "home": 3894,
+        "away": 4024
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": null,
+      "outcome": {
+        "3894": "draw",
+        "4024": "draw"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-11T19:00:35.000Z",
+    "league": "Midwest Men's D3",
+    "division": "D3",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D3 Men",
+    "away_team": "Canton Rugby",
+    "event_name": "Forge Men D3 vs Canton Rugby",
+    "slug": "forge-men-d3-vs-canton-rugby-2",
+    "home_team_score": 50,
+    "away_team_score": 12,
+    "source": {
+      "event_id": 5466,
+      "link": "https://pghrugby.com/blog/event/2025/10/11/forge-men-d3-vs-canton-rugby-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-11T15:00:35",
+      "date_gmt": "2025-10-11T19:00:35",
+      "team_ids": {
+        "home": 3912,
+        "away": 4576
+      },
+      "league_ids": [
+        520
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3912,
+      "outcome": {
+        "3912": "win",
+        "4576": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-18T05:00:48.000Z",
+    "league": "Midwest Men's D3 Playoffs",
+    "division": "D3",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Cincinnati Kelts",
+    "away_team": "Pittsburgh Forge D3 Men",
+    "event_name": "Cincinnati Kelts vs Forge Men D3",
+    "slug": "cincinnati-kelts-vs-forge-men-d3",
+    "home_team_score": 50,
+    "away_team_score": 12,
+    "source": {
+      "event_id": 5646,
+      "link": "https://pghrugby.com/blog/event/2025/10/18/cincinnati-kelts-vs-forge-men-d3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-18T01:00:48",
+      "date_gmt": "2025-10-18T05:00:48",
+      "team_ids": {
+        "home": 5645,
+        "away": 3912
+      },
+      "league_ids": [
+        575
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 5645,
+      "outcome": {
+        "3912": "loss",
+        "5645": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-18T16:00:21.000Z",
+    "league": "Midwest Premiership - D1 Women",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Grand Rapids Growlers",
+    "away_team": "Pittsburgh Forge D1 Women",
+    "event_name": "Grand Rapids Growlers vs Forge Women D1",
+    "slug": "grand-rapids-growlers-vs-forge-women-d1",
+    "home_team_score": 5,
+    "away_team_score": 38,
+    "source": {
+      "event_id": 5451,
+      "link": "https://pghrugby.com/blog/event/2025/10/18/grand-rapids-growlers-vs-forge-women-d1",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-18T12:00:21",
+      "date_gmt": "2025-10-18T16:00:21",
+      "team_ids": {
+        "home": 5430,
+        "away": 3913
+      },
+      "league_ids": [
+        539
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "5430": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-18T18:00:26.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Indianapolis Impalas D1",
+    "away_team": "Pittsburgh Forge D1 Men",
+    "event_name": "Indianapolis Impalas D1 vs Forge Men D1",
+    "slug": "indianapolis-impalas-d1-vs-forge-men-d1",
+    "home_team_score": 33,
+    "away_team_score": 31,
+    "source": {
+      "event_id": 5473,
+      "link": "https://pghrugby.com/blog/event/2025/10/18/indianapolis-impalas-d1-vs-forge-men-d1",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-18T14:00:26",
+      "date_gmt": "2025-10-18T18:00:26",
+      "team_ids": {
+        "home": 5442,
+        "away": 3894
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 5442,
+      "outcome": {
+        "3894": "loss",
+        "5442": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-25T16:00:53.000Z",
+    "league": "Midwest Women's D2 Playoffs",
+    "division": "D2",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Buffalo Women’s Rugby Club",
+    "away_team": "Pittsburgh Forge D2 Women",
+    "event_name": "Buffalo Rugby Club vs Forge Women D2",
+    "slug": "buffalo-rugby-club-vs-forge-women-d2-2",
+    "home_team_score": 40,
+    "away_team_score": 5,
+    "source": {
+      "event_id": 5643,
+      "link": "https://pghrugby.com/blog/event/2025/10/25/buffalo-rugby-club-vs-forge-women-d2-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-25T12:00:53",
+      "date_gmt": "2025-10-25T16:00:53",
+      "team_ids": {
+        "home": 3914,
+        "away": 4973
+      },
+      "league_ids": [
+        576
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": 3914,
+      "outcome": {
+        "3914": "win",
+        "4973": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-10-25T18:00:34.000Z",
+    "league": "Midwest Premiership - D1 Men",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Men",
+    "away_team": "Detroit Tradesmen D1",
+    "event_name": "Forge Men D1 vs Detroit Tradesmen",
+    "slug": "forge-men-d1-vs-detroit-tradesmen-3",
+    "home_team_score": 7,
+    "away_team_score": 50,
+    "source": {
+      "event_id": 5474,
+      "link": "https://pghrugby.com/blog/event/2025/10/25/forge-men-d1-vs-detroit-tradesmen-3",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-10-25T14:00:34",
+      "date_gmt": "2025-10-25T18:00:34",
+      "team_ids": {
+        "home": 3894,
+        "away": 4027
+      },
+      "league_ids": [
+        514
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 4027,
+      "outcome": {
+        "3894": "loss",
+        "4027": "win"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-11-08T17:00:41.000Z",
+    "league": "Midwest Women's D1 Playoffs",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Metropolis Valkyries",
+    "event_name": "Forge Women D1 vs Metropolis Valkyries",
+    "slug": "forge-women-d1-vs-metropolis-valkyries-2",
+    "home_team_score": 22,
+    "away_team_score": 20,
+    "source": {
+      "event_id": 5642,
+      "link": "https://pghrugby.com/blog/event/2025/11/08/forge-women-d1-vs-metropolis-valkyries-2",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-11-08T12:00:41",
+      "date_gmt": "2025-11-08T17:00:41",
+      "team_ids": {
+        "home": 3913,
+        "away": 5112
+      },
+      "league_ids": [
+        523
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [
+        517
+      ],
+      "winner": 3913,
+      "outcome": {
+        "3913": "win",
+        "5112": "loss"
+      }
+    }
+  },
+  {
+    "match_date_time": "2025-11-15T06:00:40.000Z",
+    "league": "Midwest Women's D1 Playoffs",
+    "division": "D1",
+    "season": "2025 Fall",
+    "match_type": "competitive",
+    "home_team": "Pittsburgh Forge D1 Women",
+    "away_team": "Chicago North Shore",
+    "event_name": "Forge Women D1 vs Chicago North Shore",
+    "slug": "forge-women-d1-vs-chicago-north-shore",
+    "home_team_score": null,
+    "away_team_score": null,
+    "source": {
+      "event_id": 5651,
+      "link": "https://pghrugby.com/blog/event/2025/11/15/forge-women-d1-vs-chicago-north-shore",
+      "status": "publish",
+      "minutes": "80",
+      "date": "2025-11-15T01:00:40",
+      "date_gmt": "2025-11-15T06:00:40",
+      "team_ids": {
+        "home": 3913,
+        "away": 5649
+      },
+      "league_ids": [
+        523
+      ],
+      "season_ids": [
+        574
+      ],
+      "venue_ids": [],
+      "winner": null,
+      "outcome": null
+    }
+  }
+]
