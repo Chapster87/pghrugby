@@ -23,54 +23,6 @@ export type Tag = {
   slug?: Slug
 }
 
-export type Standings = {
-  _id: string
-  _type: "standings"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  league?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "league"
-  }
-  division?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "division"
-  }
-  season?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "season"
-  }
-  teams?: Array<{
-    team?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "team"
-    }
-    gamesPlayed?: number
-    wins?: number
-    losses?: number
-    draws?: number
-    pointsFor?: number
-    pointsAgainst?: number
-    difference?: number
-    bonusPointTries?: number
-    bonusPointLoss?: number
-    forfeits?: number
-    points?: number
-    leaguePointsPerGame?: number
-    _type: "teamData"
-    _key: string
-  }>
-}
-
 export type SponsorBar = {
   _id: string
   _type: "sponsorBar"
@@ -496,93 +448,6 @@ export type MediaText = {
   text?: PortableText
 }
 
-export type Match = {
-  _id: string
-  _type: "match"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  eventDateTime?: string
-  league?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "league"
-  }
-  division?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "division"
-  }
-  season?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "season"
-  }
-  matchType?: "competitive" | "friendly"
-  homeTeam?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "team"
-  }
-  awayTeam?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "team"
-  }
-  name?: string
-  homeTeamScore?: number
-  awayTeamScore?: number
-}
-
-export type Team = {
-  _id: string
-  _type: "team"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  teamName?: string
-  teamLogo?: {
-    asset?: {
-      _ref: string
-      _type: "reference"
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset"
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: "image"
-  }
-  league?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "league"
-  }
-  division?: {
-    _ref: string
-    _type: "reference"
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: "division"
-  }
-  shortName?: string
-}
-
-export type Season = {
-  _id: string
-  _type: "season"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  year?: number
-  season?: "Fall" | "Spring"
-}
-
 export type Linktree = {
   _id: string
   _type: "linktree"
@@ -682,17 +547,6 @@ export type Link = {
   openInNewTab?: boolean
   asButton?: boolean
   style?: string
-}
-
-export type League = {
-  _id: string
-  _type: "league"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: string
-  slug?: Slug
-  shortName?: string
 }
 
 export type ImageWithCaption = {
@@ -1100,17 +954,6 @@ export type FormType = {
   }>
 }
 
-export type Division = {
-  _id: string
-  _type: "division"
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name?: string
-  slug?: Slug
-  shortName?: string
-}
-
 export type Columns = {
   _type: "columns"
   columns?: Array<
@@ -1431,7 +1274,6 @@ export type SanityAssetSourceData = {
 
 export type AllSanitySchemaTypes =
   | Tag
-  | Standings
   | SponsorBar
   | Sponsor
   | SocialMedia
@@ -1443,13 +1285,9 @@ export type AllSanitySchemaTypes =
   | Navigation
   | Membership
   | MediaText
-  | Match
-  | Team
-  | Season
   | Linktree
   | LinkGroup
   | Link
-  | League
   | ImageWithCaption
   | Homepage
   | Heading
@@ -1458,7 +1296,6 @@ export type AllSanitySchemaTypes =
   | Post
   | FormFieldType
   | FormType
-  | Division
   | Columns
   | Column
   | Category
@@ -1556,38 +1393,6 @@ export type PageQueryResult = {
 // Query: *[_type == "page" && defined(slug.current)]  {"slug": slug.current}
 export type PagesSlugsResult = Array<{
   slug: string | null
-}>
-
-// Source: ./src/app/(main)/matches/all/schedule.query.ts
-// Variable: scheduleQuery
-// Query: *[_type == "match"] {    _id,    eventDateTime,    league-> {      _id,      name    },    division-> {      _id,      name    },    season-> {      _id,      name    },    matchType,    homeTeam-> {      _id,      name    },    awayTeam-> {      _id,      name    },    name,    homeTeamScore,    awayTeamScore  } | order(eventDateTime asc)
-export type ScheduleQueryResult = Array<{
-  _id: string
-  eventDateTime: string | null
-  league: {
-    _id: string
-    name: string | null
-  } | null
-  division: {
-    _id: string
-    name: string | null
-  } | null
-  season: {
-    _id: string
-    name: null
-  } | null
-  matchType: "competitive" | "friendly" | null
-  homeTeam: {
-    _id: string
-    name: null
-  } | null
-  awayTeam: {
-    _id: string
-    name: null
-  } | null
-  name: string | null
-  homeTeamScore: number | null
-  awayTeamScore: number | null
 }>
 
 // Source: ./src/app/(main)/post/[slug]/posts.query.ts
@@ -2050,7 +1855,6 @@ declare module "@sanity/client" {
   interface SanityQueries {
     '*[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    date,\n    modified,\n    status,\n    pageBuilder,\n    content,\n    excerpt,\n    coverImage,\n    featuredMedia{\n      asset->{\n        url\n      },\n      alt\n    },\n    author->{name}\n    ,\n  seo {\n    title,\n    description,\n    keywords,\n    canonicalUrl,\n    robots,\n    ogTitle,\n    ogDescription,\n    ogImage,\n    ogUrl,\n    twitterTitle,\n    twitterDescription,\n    twitterImage\n  }\n\n  }': PageQueryResult
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
-    '\n  *[_type == "match"] {\n    _id,\n    eventDateTime,\n    league-> {\n      _id,\n      name\n    },\n    division-> {\n      _id,\n      name\n    },\n    season-> {\n      _id,\n      name\n    },\n    matchType,\n    homeTeam-> {\n      _id,\n      name\n    },\n    awayTeam-> {\n      _id,\n      name\n    },\n    name,\n    homeTeamScore,\n    awayTeamScore\n  } | order(eventDateTime asc)\n': ScheduleQueryResult
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  featuredMedia,\n  sticky,\n  categories[]->{title},\n  tags[]->{title},\n  "date": coalesce(date, _updatedAt),\n  "modified": coalesce(date, _updatedAt),\n  "author": author->{name},\n  \n  seo {\n    title,\n    description,\n    keywords,\n    canonicalUrl,\n    robots,\n    ogTitle,\n    ogDescription,\n    ogImage,\n    ogUrl,\n    twitterTitle,\n    twitterDescription,\n    twitterImage\n  }\n\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
     '*[_type == "product" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    description,\n    specs[] {\n      lang,\n      title,\n      content\n    },\n    addons {\n      title,\n      products[]-> {\n        title,\n        "slug": slug.current\n      }\n    },\n    form-> {\n      _id,\n      title\n    },\n    \n  seo {\n    title,\n    description,\n    keywords,\n    canonicalUrl,\n    robots,\n    ogTitle,\n    ogDescription,\n    ogImage,\n    ogUrl,\n    twitterTitle,\n    twitterDescription,\n    twitterImage\n  }\n\n  }': ProductContentQueryResult
@@ -2059,3 +1863,5 @@ declare module "@sanity/client" {
     '*[_type == "sponsorBar"] | order(publishedAt desc)[0] {\n    title,\n    items[] {\n      sponsor-> {\n        _id,\n        sponsorName,\n        sponsorLogo,\n        url,\n        nofollow,\n        openInNewTab,\n        width,\n        height\n      }\n    }\n  }': SponsorQueryResult
   }
 }
+
+

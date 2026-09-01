@@ -1,9 +1,6 @@
 import type { StructureBuilder, StructureResolver } from "sanity/structure"
 import {
   FaAddressCard,
-  FaBuilding,
-  FaBuildingColumns,
-  FaCalendarDays,
   FaFile,
   FaFilePen,
   FaFilter,
@@ -12,15 +9,13 @@ import {
   FaGears,
   FaHouseChimney,
   FaImages,
-  FaMedal,
+  FaLink,
   FaMoneyBill1Wave,
   FaPenToSquare,
-  FaPeopleGroup,
   FaRegCircleUser,
   FaShareNodes,
   FaTag,
   FaUserGroup,
-  FaLink,
 } from "react-icons/fa6"
 import pluralize from "pluralize-esm"
 
@@ -34,25 +29,19 @@ const DISABLED_TYPES = [
   "assist.instruction.context",
   "author",
   "category",
-  "division",
   "event",
   "homepage",
-  "league",
   "linktree",
-  "match",
   "media.tag",
   "navigation",
   "page",
   "post",
-  "season",
   "seo",
   "settings",
   "socialMedia",
   "sponsor",
   "sponsorBar",
-  "standings",
   "tag",
-  "team",
 ]
 
 export const structure: StructureResolver = (S: StructureBuilder) =>
@@ -99,31 +88,6 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
                     .schemaType("membership")
                     .documentId("membershipContent")
                 ),
-            ])
-        ),
-      S.listItem()
-        .title("Competition")
-        .icon(FaMedal)
-        .child(
-          S.list()
-            .title("Competition")
-            .items([
-              S.documentTypeListItem("match")
-                .title("Matches")
-                .icon(FaCalendarDays),
-              S.documentTypeListItem("standings")
-                .title("Standings")
-                .icon(FaMedal),
-              S.documentTypeListItem("team").title("Teams").icon(FaPeopleGroup),
-              S.documentTypeListItem("league")
-                .title("Leagues")
-                .icon(FaBuildingColumns),
-              S.documentTypeListItem("division")
-                .title("Divisions")
-                .icon(FaBuilding),
-              S.documentTypeListItem("season") // Added season schema
-                .title("Seasons")
-                .icon(FaCalendarDays),
             ])
         ),
       S.listItem()
