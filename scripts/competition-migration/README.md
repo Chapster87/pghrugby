@@ -31,18 +31,20 @@ files.
 
 ```jsonc
 {
-  "match_date_time": "2025-11-08T17:00:41.000Z",   // UTC (from date_gmt)
-  "league": "Midwest Women's D1 Playoffs",           // source league name(s)
-  "division": "D1",                                  // derived, see below
-  "season": "2025 Fall",                             // source season name(s)
-  "match_type": "competitive",                       // derived, see below
-  "home_team": "Pittsburgh Forge D1 Women",          // source team name
-  "away_team": "Metropolis Valkyries",               // source team name
+  "match_date_time": "2025-11-08T17:00:41.000Z", // UTC (from date_gmt)
+  "league": "Midwest Women's D1 Playoffs", // source league name(s)
+  "division": "D1", // derived, see below
+  "season": "2025 Fall", // source season name(s)
+  "match_type": "competitive", // derived, see below
+  "home_team": "Pittsburgh Forge D1 Women", // source team name
+  "away_team": "Metropolis Valkyries", // source team name
   "event_name": "Forge Women D1 vs Metropolis Valkyries",
   "slug": "forge-women-d1-vs-metropolis-valkyries-2",
-  "home_team_score": 22,                             // null when unplayed
+  "home_team_score": 22, // null when unplayed
   "away_team_score": 20,
-  "source": { /* raw keys — see below */ }
+  "source": {
+    /* raw keys — see below */
+  }
 }
 ```
 
@@ -62,14 +64,30 @@ files.
   "standings_table": [
     {
       "source_team_id": 4973,
-      "name": "Forge Women D2",     // inline source name (may differ from teams.json)
-      "pos": 2, "gp": 4, "w": 2, "l": 2, "d": 0,
-      "pf": 186, "pa": 129, "pd": 57,
-      "bt": 4, "bl": 0, "ff": 0, "pts": 12, "lppg": 3
+      "name": "Forge Women D2", // inline source name (may differ from teams.json)
+      "pos": 2,
+      "gp": 4,
+      "w": 2,
+      "l": 2,
+      "d": 0,
+      "pf": 186,
+      "pa": 129,
+      "pd": 57,
+      "bt": 4,
+      "bl": 0,
+      "ff": 0,
+      "pts": 12,
+      "lppg": 3
     }
   ],
-  "source": { "table_id": 5388, "link": "...", "status": "publish", "date": "...",
-              "league_ids": [567], "season_ids": [574] }
+  "source": {
+    "table_id": 5388,
+    "link": "...",
+    "status": "publish",
+    "date": "...",
+    "league_ids": [567],
+    "season_ids": [574]
+  }
 }
 ```
 
@@ -93,7 +111,7 @@ renames it. Stat values are coerced to numbers (`"-"`/blank → `null`).
 - **`match_date_time`**: UTC ISO-8601 from `date_gmt` (site-local `date` is
   kept in `source` for human review).
 - **`division`**: SportsPress has **no division taxonomy** — ForgeCMS does.
-  The division is encoded in the league term name, so it is *derived* from the
+  The division is encoded in the league term name, so it is _derived_ from the
   event/table's league via a fixed map (see `LEAGUE_DIVISION` in the script):
   `D1` (Premiership, D1 Playoffs, Nationals), `D2`, `D3`, `D4`,
   `Div 1 & 2 Hybrid`. The `Women's Friendly` league encodes no division →
@@ -127,18 +145,18 @@ renames it. Stat values are coerced to numbers (`"-"`/blank → `null`).
 
 ## Verification (2026-08-31 run)
 
-| Check | Result |
-|---|---|
-| events fetched vs `X-WP-Total` | 127 / 127 |
-| tables fetched vs `X-WP-Total` | 19 / 19 |
-| matches scored / unscored | 119 / 8 |
-| distinct teams / leagues / seasons in matches | 54 / 14 / 5 |
-| matches missing venue | 66 |
-| matches with derived division | 119 (8 friendly → null) |
-| standings with league+season / generic | 18 / 1 |
-| standings rows (total) | 165 |
-| sample spot-checks | event 5642 (Forge 22–20, 2025-11-08T17:00:41Z), table 5388 row (Forge Women D2, pos 2, pts 12), entity unescaping (`–`, `’`) ✓ |
-| rerun | deterministic (identical output) |
+| Check                                         | Result                                                                                                                         |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| events fetched vs `X-WP-Total`                | 127 / 127                                                                                                                      |
+| tables fetched vs `X-WP-Total`                | 19 / 19                                                                                                                        |
+| matches scored / unscored                     | 119 / 8                                                                                                                        |
+| distinct teams / leagues / seasons in matches | 54 / 14 / 5                                                                                                                    |
+| matches missing venue                         | 66                                                                                                                             |
+| matches with derived division                 | 119 (8 friendly → null)                                                                                                        |
+| standings with league+season / generic        | 18 / 1                                                                                                                         |
+| standings rows (total)                        | 165                                                                                                                            |
+| sample spot-checks                            | event 5642 (Forge 22–20, 2025-11-08T17:00:41Z), table 5388 row (Forge Women D2, pos 2, pts 12), entity unescaping (`–`, `’`) ✓ |
+| rerun                                         | deterministic (identical output)                                                                                               |
 
 ## Handoff
 
@@ -153,3 +171,29 @@ renames it. Stat values are coerced to numbers (`"-"`/blank → `null`).
   shape (`d` → `t`, add `team_id`/`team_name` refs, optional `team_logo`),
   skips table 3900, and inserts `matches` (FKs from chunk 3, `match_type`
   finalized against the select field, `slug` de-duplicated if needed).
+
+## Insert (import chunk 4 of 7)
+
+`scripts/competition-migration/insert.mjs` (`pnpm competition:insert`, with
+`--dry-run` to preview) writes the reconciled data to ForgeCMS via the shared
+service-role PostgREST client. Field shapes follow the ForgeCMS registry
+(`pnpm supabase:inspect-forgecms`) and the existing rows: `matches`
+references are single-element UUID arrays; `standings.league_standings` is
+the app's `standings_table` JSON shape (`l`/`t`/`w`/`bl`/`bt`/`ff`/`gp`/
+`pa`/`pd`/`pf` + `team_id`/`team_name`, `d` renamed `t`, blanks coerced to 0,
+`pos`/`pts`/`lppg` dropped — the app derives them at render time). The
+club's row in each table is marked `is_focused: true`.
+
+Idempotency: matches are keyed by `slug`; standings by `slug` + the
+(season, league, division) combo. A source match whose fixture already
+exists as a live row (same date + resolved home/away teams) is skipped —
+event 5471 (2025-09-27 Forge @ Griffins, the pre-seeded live row) — and live
+standings rows for combos the source covers (the two all-zero 2025 Fall D1
+placeholders) are updated in place rather than duplicated.
+
+Verified (2026-08-31 run): matches 127 (126 inserted + 1 pre-existing,
+fixture-skip 5471), standings 18 (16 inserted + 2 placeholders updated, 104
+real rows; table 3900's 61 junk rows skipped), 0 orphan FKs, friendly
+matches land on the Friendly division per issue 38, event 4816 → 2024
+Spring, Akron RFC resolved per record gender. Re-run is a no-op (no
+duplicates).

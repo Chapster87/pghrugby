@@ -1,0 +1,571 @@
+{
+  "leagues": {
+    "514": {
+      "source_name": "Midwest Premiership - D1 Men",
+      "forgecms_id": "2e982e0c-9602-4ff5-b88d-40e126e23ed5",
+      "forgecms_name": "Midwest Men's Rugby",
+      "status": "resolved",
+      "reason": "men's competition (Midwest Premiership - D1 Men)"
+    },
+    "518": {
+      "source_name": "Midwest Men's D2",
+      "forgecms_id": "2e982e0c-9602-4ff5-b88d-40e126e23ed5",
+      "forgecms_name": "Midwest Men's Rugby",
+      "status": "resolved",
+      "reason": "men's competition (Midwest Men's D2)"
+    },
+    "519": {
+      "source_name": "Midwest Women's D1 & D2 Hybrid",
+      "forgecms_id": "eebd09a5-aa17-4a24-b9a5-991cfead90be",
+      "forgecms_name": "Midwest Women's Rugby",
+      "status": "resolved",
+      "reason": "women's competition (Midwest Women's D1 & D2 Hybrid)"
+    },
+    "520": {
+      "source_name": "Midwest Men's D3",
+      "forgecms_id": "2e982e0c-9602-4ff5-b88d-40e126e23ed5",
+      "forgecms_name": "Midwest Men's Rugby",
+      "status": "resolved",
+      "reason": "men's competition (Midwest Men's D3)"
+    },
+    "522": {
+      "source_name": "Women's Friendly",
+      "forgecms_id": "eebd09a5-aa17-4a24-b9a5-991cfead90be",
+      "forgecms_name": "Midwest Women's Rugby",
+      "status": "resolved",
+      "reason": "women's competition (Women's Friendly)"
+    },
+    "523": {
+      "source_name": "Midwest Women's D1 Playoffs",
+      "forgecms_id": "eebd09a5-aa17-4a24-b9a5-991cfead90be",
+      "forgecms_name": "Midwest Women's Rugby",
+      "status": "resolved",
+      "reason": "women's competition (Midwest Women's D1 Playoffs)"
+    },
+    "539": {
+      "source_name": "Midwest Premiership - D1 Women",
+      "forgecms_id": "eebd09a5-aa17-4a24-b9a5-991cfead90be",
+      "forgecms_name": "Midwest Women's Rugby",
+      "status": "resolved",
+      "reason": "women's competition (Midwest Premiership - D1 Women)"
+    },
+    "541": {
+      "source_name": "Midwest Men's D4",
+      "forgecms_id": "2e982e0c-9602-4ff5-b88d-40e126e23ed5",
+      "forgecms_name": "Midwest Men's Rugby",
+      "status": "resolved",
+      "reason": "men's competition (Midwest Men's D4)"
+    },
+    "543": {
+      "source_name": "Midwest Men's D4 Playoffs",
+      "forgecms_id": "2e982e0c-9602-4ff5-b88d-40e126e23ed5",
+      "forgecms_name": "Midwest Men's Rugby",
+      "status": "resolved",
+      "reason": "men's competition (Midwest Men's D4 Playoffs)"
+    },
+    "567": {
+      "source_name": "Midwest Women's D2",
+      "forgecms_id": "eebd09a5-aa17-4a24-b9a5-991cfead90be",
+      "forgecms_name": "Midwest Women's Rugby",
+      "status": "resolved",
+      "reason": "women's competition (Midwest Women's D2)"
+    },
+    "569": {
+      "source_name": "Midwest Men's D1 Playoffs",
+      "forgecms_id": "2e982e0c-9602-4ff5-b88d-40e126e23ed5",
+      "forgecms_name": "Midwest Men's Rugby",
+      "status": "resolved",
+      "reason": "men's competition (Midwest Men's D1 Playoffs)"
+    },
+    "575": {
+      "source_name": "Midwest Men's D3 Playoffs",
+      "forgecms_id": "2e982e0c-9602-4ff5-b88d-40e126e23ed5",
+      "forgecms_name": "Midwest Men's Rugby",
+      "status": "resolved",
+      "reason": "men's competition (Midwest Men's D3 Playoffs)"
+    },
+    "576": {
+      "source_name": "Midwest Women's D2 Playoffs",
+      "forgecms_id": "eebd09a5-aa17-4a24-b9a5-991cfead90be",
+      "forgecms_name": "Midwest Women's Rugby",
+      "status": "resolved",
+      "reason": "women's competition (Midwest Women's D2 Playoffs)"
+    },
+    "577": {
+      "source_name": "Women's D1 Nationals",
+      "forgecms_id": "eebd09a5-aa17-4a24-b9a5-991cfead90be",
+      "forgecms_name": "Midwest Women's Rugby",
+      "status": "resolved",
+      "reason": "women's competition (Women's D1 Nationals)"
+    }
+  },
+  "divisions": {
+    "D1": {
+      "forgecms_id": "e6e740ac-6d26-4420-8a36-c255882d6ded",
+      "forgecms_name": "Premiership (Div 1)",
+      "status": "resolved"
+    },
+    "D2": {
+      "forgecms_id": "42b1a47e-1e4e-4f00-bb72-c198b4b527b6",
+      "forgecms_name": "Division 2",
+      "status": "resolved"
+    },
+    "D3": {
+      "forgecms_id": "799ad2c2-2cb6-46cb-b998-04d8dd4251e3",
+      "forgecms_name": "Division 3",
+      "status": "resolved"
+    },
+    "D4": {
+      "forgecms_id": "ad0743a7-7f85-4446-9400-7e827e3c0a28",
+      "forgecms_name": "Division 4",
+      "status": "resolved"
+    },
+    "Div 1 & 2 Hybrid": {
+      "forgecms_id": "f87e2934-872b-4a76-8967-e943dfb5d8a7",
+      "forgecms_name": "Division 1 & 2 Hybrid",
+      "status": "resolved"
+    },
+    "(friendly)": {
+      "forgecms_id": "ad4e8b82-96cd-420f-93bd-c25dd455935d",
+      "forgecms_name": "Friendly",
+      "status": "resolved",
+      "reason": "owner decision (issue 38): Women's Friendly matches use the Friendly division"
+    }
+  },
+  "seasons": {
+    "515": {
+      "source_name": "2022 Fall",
+      "forgecms_id": "dbb14117-1c8d-4b70-8120-c964c6fd3b90",
+      "forgecms_name": "2022 Fall",
+      "status": "resolved"
+    },
+    "538": {
+      "source_name": "2023 Fall",
+      "forgecms_id": "e23130ab-c960-4a8d-a3c4-fe4e35cb59a9",
+      "forgecms_name": "2023 Fall",
+      "status": "resolved"
+    },
+    "557": {
+      "source_name": "2024 Spring",
+      "forgecms_id": "b0000c90-1d0a-4172-b681-153eab393e8c",
+      "forgecms_name": "2024 Spring",
+      "status": "resolved"
+    },
+    "568": {
+      "source_name": "2024 Fall",
+      "forgecms_id": "0cafbbb8-ea8f-4de2-b816-ace5afb5138b",
+      "forgecms_name": "2024 Fall",
+      "status": "resolved"
+    },
+    "574": {
+      "source_name": "2025 Fall",
+      "forgecms_id": "4855b01b-c628-4d56-859b-ee073bac8899",
+      "forgecms_name": "2025 Fall",
+      "status": "resolved"
+    }
+  },
+  "teams": {
+    "3894": {
+      "source_name": "Pittsburgh Forge D1 Men",
+      "status": "resolved",
+      "forgecms_id": "44e4a691-57b2-4996-88cc-582f1c2ac0b7",
+      "forgecms_name": "Pittsburgh Forge",
+      "reason": "matched by name (Pittsburgh Forge) + league"
+    },
+    "3907": {
+      "source_name": "Indianapolis Impalas D2",
+      "status": "resolved",
+      "forgecms_id": "543920bc-27c5-445b-93f9-bef407bc9200",
+      "forgecms_name": "Indianapolis Impalas D2"
+    },
+    "3909": {
+      "source_name": "Pittsburgh Forge D2 Men",
+      "status": "resolved",
+      "forgecms_id": "f6652666-5710-4849-85ec-fc9da2f896ef",
+      "forgecms_name": "Pittsburgh Forge D2 Men"
+    },
+    "3912": {
+      "source_name": "Pittsburgh Forge D3 Men",
+      "status": "resolved",
+      "forgecms_id": "587a837c-763c-42f7-be02-9307e7c3ed46",
+      "forgecms_name": "Pittsburgh Forge D3 Men"
+    },
+    "3913": {
+      "source_name": "Pittsburgh Forge D1 Women",
+      "status": "resolved",
+      "forgecms_id": "693b6c0e-0ea8-4b43-8c87-8e19b7a65181",
+      "forgecms_name": "Pittsburgh Forge",
+      "reason": "matched by name (Pittsburgh Forge) + league"
+    },
+    "3914": {
+      "source_name": "Buffalo Women’s Rugby Club",
+      "status": "resolved",
+      "forgecms_id": "931831ae-c7ef-42e8-a76c-d798cee0d8ea",
+      "forgecms_name": "Buffalo Women's Rugby Club"
+    },
+    "3918": {
+      "source_name": "Pittsburgh Forge Women – Gold",
+      "status": "resolved",
+      "forgecms_id": "9721f8e6-2ccf-4c5f-9a77-68f14ce4e51a",
+      "forgecms_name": "Pittsburgh Forge Women - Gold"
+    },
+    "3921": {
+      "source_name": "Chicago Griffins",
+      "status": "resolved",
+      "forgecms_id": "de920646-85ef-4ef1-aae7-48b44ea5b45f",
+      "forgecms_name": "Chicago Griffins"
+    },
+    "3957": {
+      "source_name": "Columbus Women’s Rugby",
+      "status": "resolved",
+      "forgecms_id": "e3d41fc4-1ae8-46f9-806b-8a0b806bf7dc",
+      "forgecms_name": "Columbus Women's Rugby"
+    },
+    "3959": {
+      "source_name": "Cincinnati Kelts Women’s Rugby",
+      "status": "resolved",
+      "forgecms_id": "53c5f65e-15f8-4c5a-97e3-36ab46829594",
+      "forgecms_name": "Cincinnati Kelts Women's Rugby"
+    },
+    "3963": {
+      "source_name": "Detroit Rugby Football Club – Womens",
+      "status": "resolved",
+      "forgecms_id": "135c642d-a657-43ab-9a88-bfc76966f653",
+      "forgecms_name": "Detroit Rugby Football Club - Womens"
+    },
+    "4015": {
+      "source_name": "Chicago Lions Men D1",
+      "status": "resolved",
+      "forgecms_id": "c11d043c-5fc4-43b7-ad82-25693944dc06",
+      "forgecms_name": "Chicago Lions"
+    },
+    "4017": {
+      "source_name": "Cleveland Crusaders D1",
+      "status": "resolved",
+      "forgecms_id": "78796220-ca79-4b75-a7ee-90aa7afcb5e7",
+      "forgecms_name": "Cleveland Crusaders"
+    },
+    "4024": {
+      "source_name": "Cincinnati Wolfhounds",
+      "status": "resolved",
+      "forgecms_id": "b03c0c67-451a-44a1-beec-7741f6cecedb",
+      "forgecms_name": "Cincinnati Wolfhounds"
+    },
+    "4025": {
+      "source_name": "Cleveland Crusaders D3",
+      "status": "resolved",
+      "forgecms_id": "8b7d000e-a30c-4dfc-9004-db88e8b46125",
+      "forgecms_name": "Cleveland Crusaders"
+    },
+    "4027": {
+      "source_name": "Detroit Tradesmen D1",
+      "status": "resolved",
+      "forgecms_id": "bfe5852b-d643-43b5-a70d-5f53a98e8832",
+      "forgecms_name": "Detroit Tradesmen"
+    },
+    "4094": {
+      "source_name": "Harrisburg Rugby Club",
+      "status": "unmatched",
+      "reason": "Legacy duplicate — the source carries two records for the same men's club (4094 \"Harrisburg Rugby Club\" and 4097 \"Harrisburg Rugby Club Men\"); 4097 matches the ForgeCMS record exactly, 4094 is the generic predecessor. Gender-ambiguous and present only in the skipped generic table 3900, so no real row needs it — never duplicate the ForgeCMS Harrisburg Men record."
+    },
+    "4097": {
+      "source_name": "Harrisburg Rugby Club Men",
+      "status": "resolved",
+      "forgecms_id": "1e2b2276-f03b-453d-8737-4d5ad77a8050",
+      "forgecms_name": "Harrisburg Rugby Club Men"
+    },
+    "4098": {
+      "source_name": "Harrisburg Rugby Club Women",
+      "status": "resolved",
+      "forgecms_id": "1c16891e-fd72-4e42-bc57-6363b8beaae9",
+      "forgecms_name": "Harrisburg Rugby Club Women"
+    },
+    "4101": {
+      "source_name": "Cleveland Iron Maidens",
+      "status": "resolved",
+      "forgecms_id": "6780518c-75e9-4d6a-b854-6174fcd508d9",
+      "forgecms_name": "Cleveland Iron Maidens"
+    },
+    "4106": {
+      "source_name": "Kent State Women’s Rugby Club",
+      "status": "resolved",
+      "forgecms_id": "966631c6-61e2-4d73-b93d-bdd376ae8220",
+      "forgecms_name": "Kent State Women's Rugby Club"
+    },
+    "4112": {
+      "source_name": "Chicago Lions Women D1",
+      "status": "resolved",
+      "forgecms_id": "050399f2-4ec4-400b-a3f5-4c1006e02106",
+      "forgecms_name": "Chicago Lions"
+    },
+    "4132": {
+      "source_name": "Queen City Rugby Club",
+      "status": "resolved",
+      "forgecms_id": "d897dccf-d3ac-464e-8dc1-d44fdfe4c068",
+      "forgecms_name": "Queen City Rugby Club"
+    },
+    "4133": {
+      "source_name": "Columbus Rugby Club",
+      "status": "resolved",
+      "forgecms_id": "bbdb6fba-1cbc-44ed-a84e-3d14182d70a6",
+      "forgecms_name": "Columbus Rugby Club"
+    },
+    "4134": {
+      "source_name": "Akron RFC",
+      "status": "context",
+      "reason": "one source team spans the men's and women's sides — resolve per record by the record's league gender",
+      "by_league_gender": {
+        "men": {
+          "forgecms_id": "bbdfd198-53bb-464b-961d-fbdbf185d83c",
+          "forgecms_name": "Akron RFC"
+        },
+        "women": {
+          "forgecms_id": "745938e7-72ca-45f3-814d-bdf7a9d0eae2",
+          "forgecms_name": "Akron RFC"
+        }
+      }
+    },
+    "4135": {
+      "source_name": "Presque Isle RFC",
+      "status": "resolved",
+      "forgecms_id": "5daaeb8a-a30f-4f7b-9ffa-f054ec3d93c1",
+      "forgecms_name": "Presque Isle RFC"
+    },
+    "4136": {
+      "source_name": "South Pittsburgh Hooligans RFC D3",
+      "status": "resolved",
+      "forgecms_id": "258a9fed-3319-474f-8cb0-68a5cdb0d1aa",
+      "forgecms_name": "South Pittsburgh Hooligans RFC"
+    },
+    "4137": {
+      "source_name": "Cleveland Rovers RFC D3",
+      "status": "resolved",
+      "forgecms_id": "f4d07b74-bad9-48e3-9126-b72678d73af6",
+      "forgecms_name": "Cleveland Rovers RFC D3"
+    },
+    "4139": {
+      "source_name": "Greensburg RFC",
+      "status": "resolved",
+      "forgecms_id": "6af5ec46-4902-4c69-8394-876e37927c75",
+      "forgecms_name": "Greensburg RFC"
+    },
+    "4510": {
+      "source_name": "Pittsburgh Forge D4 Men",
+      "status": "resolved",
+      "forgecms_id": "469f24ca-36d8-4b21-9664-a81038ee1ba7",
+      "forgecms_name": "Pittsburgh Forge D4 Men"
+    },
+    "4517": {
+      "source_name": "Marysville RFC",
+      "status": "resolved",
+      "forgecms_id": "b530edb8-43b0-4026-828a-0517eaf11493",
+      "forgecms_name": "Marysville RFC"
+    },
+    "4520": {
+      "source_name": "Detroit Tradesmen D3",
+      "status": "unmatched",
+      "reason": "No ForgeCMS record — ForgeCMS has Detroit Tradesmen (D1) only; the source D3 squad has no D3 counterpart. Present only in the skipped generic table 3900, so no real row needs it."
+    },
+    "4521": {
+      "source_name": "Detroit Rugby Football Club – Men D4",
+      "status": "resolved",
+      "forgecms_id": "4c42a081-1965-4d0e-9e4b-5f8bf286f1ee",
+      "forgecms_name": "Detroit Rugby Football Club - Men"
+    },
+    "4522": {
+      "source_name": "Columbus (IN) RFC",
+      "status": "resolved",
+      "forgecms_id": "d6017f81-172b-4808-be0c-94a120aa932d",
+      "forgecms_name": "Columbus (IN) RFC"
+    },
+    "4526": {
+      "source_name": "Dayton Area Rugby Club",
+      "status": "resolved",
+      "forgecms_id": "25fcd281-3d98-4f38-9c81-59c0696f63ad",
+      "forgecms_name": "Dayton Area Rugby Club"
+    },
+    "4527": {
+      "source_name": "Cleveland Rovers RFC D4",
+      "status": "resolved",
+      "forgecms_id": "51767bc0-b686-49a7-bc66-7bb8c31e58c4",
+      "forgecms_name": "Cleveland Rovers RFC D4"
+    },
+    "4528": {
+      "source_name": "Columbus Castaways D4",
+      "status": "resolved",
+      "forgecms_id": "59ef4708-6f85-4473-8537-8e3b700af72b",
+      "forgecms_name": "Columbus Castaways D4"
+    },
+    "4576": {
+      "source_name": "Canton Rugby",
+      "status": "resolved",
+      "forgecms_id": "65a9e897-5290-44cd-afea-3332ac5b7645",
+      "forgecms_name": "Canton Rugby"
+    },
+    "4581": {
+      "source_name": "Findlay RFC",
+      "status": "resolved",
+      "forgecms_id": "95d196ca-4626-4f26-9436-38babd8bf6f2",
+      "forgecms_name": "Findlay RFC"
+    },
+    "4669": {
+      "source_name": "Westside Outcasts",
+      "status": "resolved",
+      "forgecms_id": "35303e1e-0cae-4c0e-be8d-b3623722a41a",
+      "forgecms_name": "Westside Outcasts"
+    },
+    "4674": {
+      "source_name": "University of Cincinnati WRFC",
+      "status": "resolved",
+      "forgecms_id": "94a39020-d5a5-4aa5-8a54-d61a70dd80ec",
+      "forgecms_name": "University of Cincinnati WRFC"
+    },
+    "4815": {
+      "source_name": "TBD",
+      "status": "resolved",
+      "forgecms_id": "b03cbe95-305d-43e0-8a18-de4738357c9d",
+      "forgecms_name": "TBD",
+      "reason": "matched by name (TBD)"
+    },
+    "4828": {
+      "source_name": "Utah Vipers",
+      "status": "resolved",
+      "forgecms_id": "461620b8-0d7b-4507-9916-9e08e16f7c3d",
+      "forgecms_name": "Utah Vipers"
+    },
+    "4973": {
+      "source_name": "Pittsburgh Forge D2 Women",
+      "status": "resolved",
+      "forgecms_id": "964a98e7-c766-4f0e-823f-49454f604a7c",
+      "forgecms_name": "Pittsburgh Forge D2 Women"
+    },
+    "4990": {
+      "source_name": "Rochester Renegades",
+      "status": "resolved",
+      "forgecms_id": "b42bb6e3-402e-4540-b332-8316ecbe0900",
+      "forgecms_name": "Rochester Renegades"
+    },
+    "5013": {
+      "source_name": "North Buffalo Ninjas",
+      "status": "resolved",
+      "forgecms_id": "1ac92be8-3547-4f5b-b4af-b23e262bb848",
+      "forgecms_name": "North Buffalo Ninjas"
+    },
+    "5016": {
+      "source_name": "Uticuse Rugby Club",
+      "status": "resolved",
+      "forgecms_id": "240981c7-5a03-4720-81b4-0e7fb1fb37af",
+      "forgecms_name": "Uticuse Rugby Club"
+    },
+    "5018": {
+      "source_name": "South Buffalo Rugby",
+      "status": "resolved",
+      "forgecms_id": "4a2cb59b-0ca9-4f65-b772-9a71f52f38b9",
+      "forgecms_name": "South Buffalo Rugby"
+    },
+    "5020": {
+      "source_name": "Ypsilanti Rugby Club",
+      "status": "resolved",
+      "forgecms_id": "ae7366fd-37b6-43db-acda-4adae0d1a320",
+      "forgecms_name": "Ypsilanti Rugby Club"
+    },
+    "5105": {
+      "source_name": "Indianapolis Impalas D4",
+      "status": "resolved",
+      "forgecms_id": "51db5519-3898-4d21-8842-f19d0563f2cc",
+      "forgecms_name": "Indianapolis Impalas D4"
+    },
+    "5107": {
+      "source_name": "St. Louis Bombers",
+      "status": "resolved",
+      "forgecms_id": "757b9398-072d-47ad-9566-54a9a42caa4c",
+      "forgecms_name": "St. Louis Bombers"
+    },
+    "5112": {
+      "source_name": "Metropolis Valkyries",
+      "status": "resolved",
+      "forgecms_id": "d26038b9-385c-413e-bad8-3b81573683e5",
+      "forgecms_name": "Metropolis Valkyries"
+    },
+    "5430": {
+      "source_name": "Grand Rapids Growlers",
+      "status": "resolved",
+      "forgecms_id": "6ba95008-f769-4b74-bd20-8940eee6600b",
+      "forgecms_name": "Grand Rapids Growlers"
+    },
+    "5442": {
+      "source_name": "Indianapolis Impalas D1",
+      "status": "resolved",
+      "forgecms_id": "652b961e-0354-43b6-8425-e1fe2927dce4",
+      "forgecms_name": "Indianapolis Impalas D1"
+    },
+    "5443": {
+      "source_name": "Erie RFC",
+      "status": "resolved",
+      "forgecms_id": "56f73589-20f5-49f1-b2da-52104474ae2b",
+      "forgecms_name": "Erie RFC"
+    },
+    "5445": {
+      "source_name": "Pittsburgh Harlequins",
+      "status": "resolved",
+      "forgecms_id": "21f33d85-425d-4a5b-8ec9-93610dc5e8c9",
+      "forgecms_name": "Pittsburgh Harlequins"
+    },
+    "5635": {
+      "source_name": "Dayton Area Rugby Club",
+      "status": "resolved",
+      "forgecms_id": "63403aae-5333-475a-ad07-c8e16edee7d1",
+      "forgecms_name": "Dayton Area Rugby Club"
+    },
+    "5636": {
+      "source_name": "South Pittsburgh Hooligans RFC D4",
+      "status": "resolved",
+      "forgecms_id": "987134c8-6d5c-43b2-92ce-f3b596026f44",
+      "forgecms_name": "South Pittsburgh Hooligans RFC D4"
+    },
+    "5645": {
+      "source_name": "Cincinnati Kelts",
+      "status": "resolved",
+      "forgecms_id": "bc32a858-1016-48c7-baca-fc1d7a49e342",
+      "forgecms_name": "Cincinnati Kelts"
+    },
+    "5647": {
+      "source_name": "Columbus Coyotes",
+      "status": "resolved",
+      "forgecms_id": "6a472a91-2551-4b14-b1ee-84486398bd18",
+      "forgecms_name": "Columbus Coyotes"
+    },
+    "5649": {
+      "source_name": "Chicago North Shore",
+      "status": "resolved",
+      "forgecms_id": "0b978ff9-b64a-4b17-96ac-fdb58929ba88",
+      "forgecms_name": "Chicago North Shore"
+    }
+  },
+  "season_overrides": {
+    "4816": 557
+  },
+  "verification": {
+    "source_teams_total": 61,
+    "source_teams_resolved": 59,
+    "source_teams_unmatched": 2,
+    "source_leagues_total": 14,
+    "source_seasons_total": 5,
+    "matches_total": 127,
+    "matches_team_failures": 0,
+    "matches_multi_season_events": [
+      4816
+    ],
+    "standings_tables_total": 19,
+    "standings_tables_skipped": [
+      3900
+    ],
+    "standings_rows_total": 165,
+    "standings_rows_skipped": 61,
+    "standings_row_failures": 0,
+    "forgecms_teams_total": 60,
+    "forgecms_teams_used": 60,
+    "forgecms_teams_unused": [],
+    "duplicate_forgecms_targets": []
+  }
+}
