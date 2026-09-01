@@ -1,0 +1,1 @@
+- Don't speak in litotes and don't use an irony. Utilize synecdoche.

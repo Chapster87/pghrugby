@@ -33,6 +33,7 @@ stay within this repository.
 
 ## Rules
 
+- General guidelines — `.rules/general-guidelines.md`
 - Component styling details — `.rules/component-styling.md`
 - Folder organization details — `.rules/folder-organization.md`
 
