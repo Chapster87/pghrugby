@@ -3,7 +3,9 @@ import { executeQuery } from "@/lib/forgecms/execute-query"
 import { siteSettingsQuery } from "@/lib/forgecms/chrome.query"
 
 export default async function Header() {
-  const { siteSettings } = await executeQuery(siteSettingsQuery)
+  const { siteSettings } = await executeQuery(siteSettingsQuery, {
+    graceful: true,
+  })
   const siteTitle = siteSettings?.defaultPageTitle || "Pittsburgh Rugby"
 
   return <HeaderMain title={siteTitle} />
