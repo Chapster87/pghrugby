@@ -42,8 +42,10 @@ Three runtime surfaces today, collapsing to **one** (`pghrugby/nextjs`) after Me
 | `NEXT_PUBLIC_SANITY_STUDIO_URL`                     | Sanity client/env                                                                    | Sanity               | **Die**                                                                                |
 | `SANITY_VIEWER_TOKEN`                               | draft-mode enable, Sanity live                                                       | Sanity               | **Die**                                                                                |
 | `STRAPI_GRAPHQL_ENDPOINT`                           | `src/lib/data/strapi.ts`                                                             | Strapi               | **Die**                                                                                |
-| `FORGECMS_API_URL`                                  | `src/lib/forgecms/execute-query.ts`                                                  | ForgeCMS             | **Stay**                                                                               |
-| `FORGECMS_API_TOKEN`                                | ForgeCMS GraphQL `x-api-key`                                                         | ForgeCMS             | **Stay**                                                                               |
+| `FORGECMS_API_URL`                                  | (retired) separate-process CDA base                                                  | ForgeCMS             | **Die** — embedded mount; see `forgecms-env-build-surface.md`                          |
+| `FORGECMS_API_TOKEN`                                | (retired) CDA x-api-key                                                              | ForgeCMS             | **Die** → `CMS_API_TOKEN`                                                              |
+| `CMS_API_TOKEN`                                     | site + `/admin/api/graphql` CDA `x-api-key`                                          | ForgeCMS             | **Stay**                                                                               |
+| `NEXT_PUBLIC_CMS_PRODUCT_NAME`                      | admin chrome wordmark                                                                | ForgeCMS             | **Stay** (optional; host sets `Pittsburgh Forge`)                                      |
 | `DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN`               | `src/lib/datocms/executeQuery.ts`                                                    | DatoCMS              | **Stay**                                                                               |
 | `DATOCMS_DRAFT_CONTENT_CDA_TOKEN`                   | draft/preview queries                                                                | DatoCMS              | **Stay**                                                                               |
 | `DATOCMS_BASE_EDITING_URL`                          | draft content-link overlays                                                          | DatoCMS              | **Stay**                                                                               |
@@ -122,9 +124,11 @@ DATOCMS_BASE_EDITING_URL=
 # CMA for schema gen / migrations (server/dev only):
 DATOCMS_CMA_TOKEN=
 
-# ForgeCMS (chrome + competition)
-FORGECMS_API_URL=
-FORGECMS_API_TOKEN=
+# ForgeCMS (embedded core at /admin — see forgecms-env-build-surface.md)
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+CMS_API_TOKEN=
+# Optional branding (set on this host):
+# NEXT_PUBLIC_CMS_PRODUCT_NAME=Pittsburgh Forge
 
 # Resend (contact form today; order email later if needed)
 RESEND_API_KEY=

@@ -1,7 +1,8 @@
 const c = require("ansi-colors")
 
 // Core runtime envs for the single Next.js app (see
-// docs/agents/environment-secrets-inventory.md § 3.1). Missing keys are
+// docs/agents/environment-secrets-inventory.md § 3.1 and
+// docs/agents/forgecms-env-build-surface.md). Missing keys are
 // warnings, not fatal: local dev legitimately runs with a partial .env.local
 // (e.g. live webhook secret pending). Deployments validate envs at their own
 // hosting layer.
@@ -27,12 +28,12 @@ const requiredEnvs = [
     description: "DatoCMS CDA token (published content)",
   },
   {
-    key: "FORGECMS_API_URL",
-    description: "ForgeCMS Content Delivery API URL",
+    key: "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    description: "Supabase anon key (embedded ForgeCMS client/auth)",
   },
   {
-    key: "FORGECMS_API_TOKEN",
-    description: "ForgeCMS Content Delivery API token",
+    key: "CMS_API_TOKEN",
+    description: "ForgeCMS CDA x-api-key (storefront + /admin/api/graphql)",
   },
 ]
 

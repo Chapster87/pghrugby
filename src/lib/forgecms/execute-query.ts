@@ -1,6 +1,24 @@
 import { request } from "graphql-request"
 
+import { getBaseURL } from "@lib/util/env"
+
 export const cmsCacheTag = "cms-content"
+
+/**
+ * Host mount for the embedded ForgeCMS core. Mirrors `src/proxy.ts` and
+ * `forgecore.json` `mountPath` — not an env var; the core hardcodes the same
+ * prefix until a producer-side change.
+ */
+export const CMS_MOUNT_PATH = "/admin" as const
+
+/**
+ * Absolute GraphQL endpoint for the embedded core CDA on this app.
+ * `${NEXT_PUBLIC_BASE_URL}/admin/api/graphql`
+ */
+export function getCmsGraphqlUrl(): string {
+  const base = getBaseURL().replace(/\/$/, "")
+  return `${base}${CMS_MOUNT_PATH}/api/graphql`
+}
 
 /**
  * Executes a GraphQL query against the CMS Content Delivery API.
@@ -24,11 +42,11 @@ export async function executeQuery<
     graceful?: boolean
   }
 ): Promise<Result> {
-  const url = `${process.env.FORGECMS_API_URL}/api/graphql`
+  const url = getCmsGraphqlUrl()
 
   const headers = {
     "Content-Type": "application/json",
-    "x-api-key": process.env.FORGECMS_API_TOKEN!,
+    "x-api-key": process.env.CMS_API_TOKEN!,
   }
 
   // Next.js Data Cache options
