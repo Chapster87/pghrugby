@@ -1,0 +1,31 @@
+.editorContent {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  height: 100%;
+  overflow: hidden;
+}
+
+.editorContent.withRightSidebar {
+  grid-template-columns: 280px 1fr 320px !important;
+}
+
+.sidebar {
+  background-color: var(--color-white);
+  border-right: 1px solid var(--color-grey-200);
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  padding: 16px 24px;
+  overflow-y: auto;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 40px;
+  color: var(--text-secondary);
+}

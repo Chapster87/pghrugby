@@ -1,0 +1,269 @@
+.container {
+  padding: 16px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--color-grey-200);
+}
+
+.titleGroup h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.emojiPrefix {
+  font-size: 28px;
+}
+
+.createButton {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.createButton:hover {
+  opacity: 0.9;
+}
+
+.tableWrapper {
+  background: var(--background);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  background-color: var(--color-grey-100);
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-grey-600);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background-color: var(--color-grey-100);
+}
+
+.recordName {
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.recordName:hover {
+  text-decoration: underline;
+}
+
+.mediaAssetThumb {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.mediaAssetImage {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+  object-fit: contain;
+}
+
+.statusDots {
+  display: inline-flex;
+  align-items: center;
+  display: none;
+}
+
+.statusDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--background);
+  box-sizing: content-box;
+}
+
+.statusDot + .statusDot {
+  margin-left: 1px;
+}
+
+.statusDot.draft {
+  background-color: #f59e0b;
+}
+
+.statusDot.published {
+  background-color: #10b981;
+}
+
+.statusDot.changed {
+  background-color: #3b82f6;
+}
+
+.statusTextDraft {
+  text-transform: capitalize;
+  font-size: 12px;
+  font-weight: 600;
+  color: #b45309;
+}
+
+.statusTextPublished {
+  text-transform: capitalize;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-green);
+}
+
+.statusTextChanged {
+  text-transform: capitalize;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e40af;
+}
+
+.actionsCell {
+  text-align: right;
+  width: 60px;
+}
+
+.actionsButton {
+  background: none;
+  border: none;
+  color: var(--color-grey-500);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionsButton:hover {
+  background-color: var(--color-grey-200);
+  color: var(--text-primary);
+}
+
+.empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-grey-500);
+}
+
+.singletonEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 24px;
+}
+
+.emptyCard {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-grey-200);
+  border-radius: 8px;
+  padding: 48px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.emptyIcon {
+  font-size: 48px;
+  color: var(--color-grey-400);
+  margin-bottom: 8px;
+}
+
+.emptyCard h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-grey-900);
+}
+
+.emptyCard p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-grey-600);
+  margin-bottom: 8px;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sortableHeader {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sortableHeader:hover {
+  background-color: var(--color-grey-200) !important;
+}
+
+.sortIconPlaceholder {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.sortableHeader:hover .sortIconPlaceholder {
+  opacity: 0.5;
+}
+
+.sortIconActive {
+  color: var(--color-primary);
+}
+
+.error {
+  color: var(--color-danger);
+  background-color: #fee2e2;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 24px;
+}
