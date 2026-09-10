@@ -45,34 +45,47 @@
 }
 
 .tableWrapper {
-  background: var(--background);
-  border: 1px solid var(--color-border);
+  background: var(--background, #fff);
+  /* Explicit grey + fallbacks: host `table`/`td` rules or an unresolved
+   * --color-border (invalidates the whole border-*) read as harsh black. */
+  border: 1px solid var(--color-grey-200, #d9d9de);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--box-shadow, 0 3px 3px rgba(56, 65, 74, 0.1));
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
+  border-spacing: 0;
   text-align: left;
+  /* Kill host/Bootstrap full-cell borders before we set row rules. */
+  border: none;
+}
+
+.table th,
+.table td {
+  border: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid var(--color-grey-200, #d9d9de);
+  border-color: var(--color-grey-200, #d9d9de);
 }
 
 .table th {
-  background-color: var(--color-grey-100);
+  background-color: var(--color-grey-100, #f3f3f9);
   padding: 12px 16px;
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--color-grey-600);
-  border-bottom: 1px solid var(--color-border);
+  color: var(--color-grey-600, #707073);
 }
 
 .table td {
   padding: 16px;
-  border-bottom: 1px solid var(--color-border);
   font-size: 14px;
-  color: var(--text-primary);
+  color: var(--text-primary, var(--color-grey-900, #222));
 }
 
 .table tr:last-child td {
@@ -80,7 +93,7 @@
 }
 
 .table tr:hover td {
-  background-color: var(--color-grey-100);
+  background-color: var(--color-grey-100, #f3f3f9);
 }
 
 .recordName {

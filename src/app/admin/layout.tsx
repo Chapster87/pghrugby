@@ -1,9 +1,17 @@
+import { Inter } from "next/font/google"
 import Navigation from "./components/navigation"
 import Header from "./components/header"
 import BreakpointIndicator from "./components/breakpoint-indicator"
 import { ToastContainer } from "./components/toast"
 
+import "./styles/globals.css"
 import s from "./styles.module.css"
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+})
 
 // The mounted admin is session- and DB-gated and read per-request, so the whole
 // /admin subtree must never be statically prerendered at build time. Forcing
@@ -14,10 +22,11 @@ export const dynamic = "force-dynamic"
 /**
  * Core-owned admin-chrome layout, rendered at the mount root.
  *
- * Deliberately html-free: the surrounding `<html>`/fonts/global CSS is owned
- * by the shell (`(site)` + `(cms)` isolation layouts in the template, or a
- * consumer's own root layout). This keeps the core subtree self-contained and
- * vendorable without dragging a root layout along.
+ * Deliberately html-free: the surrounding `<html>`/document shell is owned by
+ * the host (or the standalone `(cms)` / `(site)` isolation layouts). This layout
+ * owns core globals (tokens, typography, feather stroke rules) under
+ * `[data-forgecms]` so install does not require the host to import core CSS
+ * into the site root — and so host marketing tokens are not clobbered.
  */
 export default function AdminLayout({
   children,
@@ -25,7 +34,7 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className={s.site}>
+    <div className={`${s.site} ${inter.variable}`} data-forgecms>
       <BreakpointIndicator />
       <Navigation />
       <div className={s.primary}>

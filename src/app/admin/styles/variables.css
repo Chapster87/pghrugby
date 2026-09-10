@@ -1,4 +1,14 @@
-:root {
+/*
+ * Core design tokens — scoped so a single-root host keeps its own :root theme.
+ *
+ * [data-forgecms] covers the admin chrome tree (set on the mount layout root).
+ * :root:has([data-forgecms]) re-publishes the same tokens while admin is mounted
+ * so Radix portals attached to document.body still resolve var(--color-*).
+ * When the admin tree unmounts, the :has() rule stops matching and the host
+ * :root tokens win again — no permanent public-site bleed.
+ */
+[data-forgecms],
+:root:has([data-forgecms]) {
   --color-white: #ffffff;
   --color-grey-100: #f3f3f9;
   --color-grey-200: #d9d9de;
@@ -57,7 +67,10 @@
 }
 
 /* @media (prefers-color-scheme: dark) { */
-[data-theme="dark"] {
+[data-forgecms][data-theme="dark"],
+[data-forgecms] [data-theme="dark"],
+:root:has([data-forgecms][data-theme="dark"]),
+:root:has([data-forgecms] [data-theme="dark"]) {
   --color-primary: var(--color-blue);
 
   --background: var(--color-black);

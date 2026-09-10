@@ -3,6 +3,9 @@
   height: 100vh;
   display: flex;
   overflow: hidden;
+  /* Canvas color lives on the chrome root (not host body) under shared layouts. */
+  background-color: var(--color-grey-100);
+  color: var(--foreground);
 }
 
 .primary {
@@ -16,4 +19,5 @@
 .content {
   flex-grow: 1;
   overflow: auto;
+  background-color: var(--color-grey-100);
 }

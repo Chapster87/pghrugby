@@ -3,37 +3,66 @@
 @import "./_components/typography.css";
 @import "./_components/prose.css";
 
-html {
-  height: 100%;
-  scroll-behavior: smooth;
-}
+/*
+ * Admin surface styles loaded from the core mount layout.
+ *
+ * Cascade contract (must match pre-embed standalone):
+ * - Tokens: scoped to [data-forgecms] + :root:has(...) so hosts keep their
+ *   own :root theme when admin is unmounted (see variables.css).
+ * - Resets / element defaults: use :where([data-forgecms]) so scope adds
+ *   ZERO specificity — CSS modules beat them exactly as bare `*`/`a`/`ul`
+ *   did before. Never write bare `[data-forgecms] a` (that is (0,1,0)).
+ * - Do NOT set display/flex-direction on the chrome root — `.site` owns
+ *   the row layout (nav | primary).
+ */
 
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-inter);
-  background-color: var(--color-grey-100);
-  min-height: 100vh;
+/* Font + canvas on the chrome root and on :root while admin is mounted so
+ * Radix portals (tooltips/menus under document.body) inherit the same face. */
+[data-forgecms],
+:root:has([data-forgecms]) {
+  /* Fallback "Inter" covers portals: --font-inter is set on the chrome root
+   * via next/font, not inherited by body-mounted Radix content. */
+  font-family:
+    var(--font-inter, Inter),
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
+[data-forgecms] {
+  color: var(--foreground);
+  background-color: var(--color-grey-100);
+}
+
+/*
+ * Document chrome only while admin is mounted. The old bare `* { margin: 0 }`
+ * zeroed the UA's ~8px body margin; scoping resets under [data-forgecms] left
+ * body untouched and showed a gap around .site. :has keeps host public routes
+ * alone when admin is unmounted.
+ */
+html:has([data-forgecms]),
+body:has([data-forgecms]),
+body[data-forgecms] {
   margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
-/* @media (prefers-color-scheme: dark) { */
-[data-theme="dark"] {
-  html {
-    color-scheme: dark;
-  }
+/* Same reset the standalone body used: zero margin/padding at (0,0,0) via
+ * :where so component padding (buttons, nav links, avatar) always wins. */
+:where([data-forgecms]) *,
+:where([data-forgecms]) *::before,
+:where([data-forgecms]) *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+/* Feather stroke defaults for icons rendered from /feather-sprite.svg */
+:where([data-forgecms]) svg[class*="feather-icon"],
 svg[class*="feather-icon"] {
   stroke: currentColor;
   stroke-width: 2;
@@ -42,12 +71,29 @@ svg[class*="feather-icon"] {
   fill: none;
 }
 
-input:disabled,
-select:disabled,
-textarea:disabled {
+:where([data-forgecms]) input:disabled,
+:where([data-forgecms]) select:disabled,
+:where([data-forgecms]) textarea:disabled {
   cursor: not-allowed;
   background-color: var(--color-grey-50) !important;
   color: var(--color-grey-400) !important;
   border-color: var(--color-grey-200) !important;
   opacity: 0.8;
+}
+
+/*
+ * Host apps (Bootstrap, Tailwind preflight, marketing CSS) often style bare
+ * `table`/`th`/`td` with full 1px borders. That stacks with our row rules and
+ * reads as harsh grids on the consumer. Reset to a clean slate at (0,0,1) so
+ * CSS modules own the final border treatment.
+ */
+:where([data-forgecms]) table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: none;
+}
+
+:where([data-forgecms]) th,
+:where([data-forgecms]) td {
+  border: none;
 }

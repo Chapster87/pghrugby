@@ -53,10 +53,10 @@ export default function AuthStatus() {
             </div>
 
             <div className={s.userInfo}>
-              <Text className={s.userName}>
+              <Text variant="span" size="sm" className={s.userName}>
                 {user ? user.user_metadata.name : "Guest"}
               </Text>
-              <Text className={s.userEmail}>
+              <Text variant="span" size="sm" className={s.userEmail}>
                 {user ? user.email : "Logged Out"}
               </Text>
             </div>
