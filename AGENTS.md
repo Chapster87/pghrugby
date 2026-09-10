@@ -11,6 +11,21 @@ Commerce and content come from Stripe, DatoCMS, ForgeCMS, and Supabase
 (`orders`/`carts`). Medusa, Strapi, and Sanity are removed — never reintroduce
 them or their patterns. All changes stay within this repository.
 
+### ForgeCMS mounted core — do not edit
+
+`src/app/admin/**` is the **vendored ForgeCMS core** (`forgecms install` /
+`forgecms update`, marker `forgecore.json`). It is **wholesale-overwritten on
+update**. Agents must **never** create, edit, delete, or reformat files under
+`src/app/admin/**`.
+
+Host work stays outside that tree: root layout, route-group wrappers,
+`src/proxy.ts`, env, site libs, and seam plugins under `src/cms/` (see
+`docs/agents/forgecms-site-layer-custom-models.md`). Read the core only when
+needed for contracts or imports; never patch it in place.
+
+The only legitimate writers of `src/app/admin/**` are the forgecms CLI (install
+/ update). Do not hand-edit “just this one file” inside the mount.
+
 ## Coding conventions
 
 - **Indentation**: 2 spaces, never tabs.
