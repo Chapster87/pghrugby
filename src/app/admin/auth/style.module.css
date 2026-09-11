@@ -1,0 +1,17 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 440px;
+  /* `margin: auto` (not flex centering) keeps tall content reachable on
+     short viewports while still centering when it fits. */
+  margin: auto;
+  padding: 24px;
+}
+
+.title {
+  color: var(--color-white);
+  text-align: center;
+}

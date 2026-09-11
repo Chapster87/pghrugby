@@ -22,6 +22,8 @@ export interface CMSModel {
   model_name: string
   friendly_name: string
   table_name: string
+  /** Unique technical slug; the basis for the GraphQL type name. */
+  slug?: string
   has_draft_mode?: boolean
   is_singleton?: boolean
   [key: string]: unknown

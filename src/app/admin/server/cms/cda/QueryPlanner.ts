@@ -1,10 +1,21 @@
 import { SupabaseClient } from "@supabase/supabase-js"
 
 /**
+ * An in-flight fetch for one table. Callers that arrive in the same tick join it
+ * (via `ids`) so their sibling resolutions collapse into a single query.
+ */
+interface PendingBatch {
+  ids: Set<string>
+  scheduled: boolean
+  promise: Promise<void>
+}
+
+/**
  * BatchContext stores pre-fetched or cached data for the duration of a GraphQL request.
  */
 export interface BatchContext {
   cache: Map<string, Map<string, Record<string, unknown>>> // tableName -> (id -> record)
+  pending: Map<string, PendingBatch> // tableName -> in-flight batch
   supabase: SupabaseClient
 }
 
@@ -18,12 +29,20 @@ export class QueryPlanner {
   public static createBatchContext(supabase: SupabaseClient): BatchContext {
     return {
       cache: new Map(),
+      pending: new Map(),
       supabase,
     }
   }
 
   /**
    * Fetches a batch of records if they are not already in the cache.
+   *
+   * Requests for the same table that arrive in the same tick are coalesced into
+   * one query. GraphQL starts sibling field resolvers synchronously, so without
+   * this every reference at the same level issued its own fetch — the N+1 the
+   * planner exists to remove. The batch is drained on a microtask: callers that
+   * arrive later (after the drain) start a fresh batch.
+   *
    * @param context - The current BatchContext.
    * @param tableName - The table to fetch from.
    * @param ids - The IDs to fetch.
@@ -35,35 +54,62 @@ export class QueryPlanner {
   ): Promise<void> {
     if (!ids.length) return
 
-    if (!context.cache.has(tableName)) {
-      context.cache.set(tableName, new Map())
+    let tableCache = context.cache.get(tableName)
+    if (!tableCache) {
+      tableCache = new Map()
+      context.cache.set(tableName, tableCache)
     }
 
-    const tableCache = context.cache.get(tableName)!
     const missingIds = ids.filter((id) => !tableCache.has(id))
+    if (!missingIds.length) return
 
-    if (missingIds.length > 0) {
-      const { data, error } = await context.supabase
-        .from(tableName)
-        .select("*")
-        .in("id", missingIds)
-
-      if (error) {
-        console.error(
-          `QueryPlanner: Error fetching batch for ${tableName}`,
-          error
-        )
-        return
-      }
-
-      if (data) {
-        data.forEach((record: Record<string, unknown>) => {
-          if (record.id && typeof record.id === "string") {
-            tableCache.set(record.id, record)
-          }
-        })
-      }
+    let batch = context.pending.get(tableName)
+    if (!batch) {
+      batch = { ids: new Set(), scheduled: false, promise: Promise.resolve() }
+      context.pending.set(tableName, batch)
     }
+    missingIds.forEach((id) => batch.ids.add(id))
+
+    if (!batch.scheduled) {
+      batch.scheduled = true
+      const current = batch
+      const cache = tableCache
+      current.promise = Promise.resolve().then(async () => {
+        // Drop it first, so callers arriving once the fetch is under way start a
+        // fresh batch rather than joining a half-drained set.
+        context.pending.delete(tableName)
+        await QueryPlanner.fetchIds(context, tableName, cache, [...current.ids])
+      })
+    }
+
+    await batch.promise
+  }
+
+  /** Runs one `in` query and fills the table cache. */
+  private static async fetchIds(
+    context: BatchContext,
+    tableName: string,
+    tableCache: Map<string, Record<string, unknown>>,
+    ids: string[]
+  ): Promise<void> {
+    const { data, error } = await context.supabase
+      .from(tableName)
+      .select("*")
+      .in("id", ids)
+
+    if (error) {
+      console.error(
+        `QueryPlanner: Error fetching batch for ${tableName}`,
+        error
+      )
+      return
+    }
+
+    data?.forEach((record: Record<string, unknown>) => {
+      if (record.id && typeof record.id === "string") {
+        tableCache.set(record.id, record)
+      }
+    })
   }
 
   /**

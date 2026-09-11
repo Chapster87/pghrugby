@@ -83,39 +83,52 @@ export interface StandingsRow {
 
 export type StandingsData = StandingsRow[];
 
-export interface Matches {
+export interface Authors {
   id: string;
   created_at: string;
   updated_at: string;
   status: CMSStatus;
   _draft?: unknown;
-  home_team: Teams;
-  away_team: Teams;
-  match_date_time: string;
-  league: Leagues;
-  division: Divisions;
-  season: Seasons;
-  match_type?: string;
-  event_name: string;
+  created_by?: string;
+  name?: string;
+  updated_by?: string;
   slug: string;
-  home_team_score?: number;
-  away_team_score?: number;
+  bio?: string;
+  avatar_url?: string;
+  user_id?: unknown;
 }
 
-export interface Standings {
+export interface Boom {
   id: string;
   created_at: string;
   updated_at: string;
   status: CMSStatus;
   _draft?: unknown;
-  league: Leagues;
-  season: Seasons;
-  division: Divisions;
-  league_standings: StandingsData;
-  slug?: string;
 }
 
-export interface LinkTree {
+export interface Divisions {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  status: CMSStatus;
+  _draft?: unknown;
+  name: string;
+  slug: string;
+  short_name?: string;
+}
+
+export interface Leagues {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  status: CMSStatus;
+  _draft?: unknown;
+  name: string;
+  slug: string;
+  short_name?: string;
+}
+
+export interface Linktree {
   id: string;
   created_at: string;
   updated_at: string;
@@ -125,17 +138,23 @@ export interface LinkTree {
   club_info?: NavigationData;
 }
 
-export interface Sponsors {
+export interface Matches {
   id: string;
   created_at: string;
   updated_at: string;
   status: CMSStatus;
   _draft?: unknown;
-  name: string;
-  article?: unknown;
+  match_date_time: string;
+  league: Leagues;
+  division: Divisions;
+  season: Seasons;
+  match_type?: string;
+  home_team: Teams;
+  away_team: Teams;
+  event_name: string;
   slug: string;
-  logo: MediaAsset;
-  sponsor_url?: string;
+  home_team_score?: number;
+  away_team_score?: number;
 }
 
 export interface Pages {
@@ -145,23 +164,86 @@ export interface Pages {
   status: CMSStatus;
   _draft?: unknown;
   title: string;
-  color?: string;
-  tag_list?: string[];
-  page_link?: Pages;
-  seo?: SeoMetadata;
-  navigation?: NavigationData;
-  rich_text?: string;
-  media?: MediaAsset;
-  author?: Authors;
   slug: string;
-  content_dynamic?: ModularContentData;
-  long_text?: string;
-  standings_table?: StandingsData;
+  author?: Authors;
   modular_blocks?: ModularContentData;
+  content_dynamic?: ModularContentData;
   structured_text?: string;
+  long_text?: string;
+  color?: string;
+  media?: MediaAsset;
+  rich_text?: string;
+  tag_list?: string[];
+  seo?: SeoMetadata;
+  page_link?: Pages;
+  navigation?: NavigationData;
+  standings_table?: StandingsData;
 }
 
-export interface Boom {
+export interface Seasons {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  status: CMSStatus;
+  _draft?: unknown;
+  display_name?: string;
+  year?: number;
+  season?: string;
+  slug: string;
+}
+
+export interface SiteNavigation {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  status: CMSStatus;
+  _draft?: unknown;
+  header?: NavigationData;
+  footer?: NavigationData;
+}
+
+export interface Sponsors {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  status: CMSStatus;
+  _draft?: unknown;
+  name: string;
+  slug: string;
+  logo: MediaAsset;
+  sponsor_url?: string;
+  article?: unknown;
+}
+
+export interface Standings {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  status: CMSStatus;
+  _draft?: unknown;
+  season: Seasons;
+  slug?: string;
+  league: Leagues;
+  division: Divisions;
+  league_standings: StandingsData;
+}
+
+export interface Teams {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  status: CMSStatus;
+  _draft?: unknown;
+  team_name: string;
+  slug: string;
+  team_logo?: MediaAsset;
+  league?: Leagues;
+  division?: Divisions[];
+  seasons?: Seasons[];
+  short_name?: string;
+}
+
+export interface Testing {
   id: string;
   created_at: string;
   updated_at: string;
@@ -177,114 +259,21 @@ export interface TestingCopy {
   _draft?: unknown;
 }
 
-export interface Testing {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  status: CMSStatus;
-  _draft?: unknown;
-}
-
-export interface SiteNavigation {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  status: CMSStatus;
-  _draft?: unknown;
-  header?: NavigationData;
-  footer?: NavigationData;
-}
-
-export interface Authors {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  status: CMSStatus;
-  _draft?: unknown;
-  created_by?: string;
-  updated_by?: string;
-  bio?: string;
-  name?: string;
-  user_id?: unknown;
-  avatar_url?: string;
-  slug: string;
-}
-
-export interface SocialLinks {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  status: CMSStatus;
-  _draft?: unknown;
-  link_tree?: NavigationData;
-  slug: string;
-}
-
-export interface Seasons {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  status: CMSStatus;
-  _draft?: unknown;
-  year?: number;
-  display_name?: string;
-  season?: string;
-  slug: string;
-}
-
-export interface Leagues {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  status: CMSStatus;
-  _draft?: unknown;
-  name: string;
-  slug: string;
-  short_name?: string;
-}
-
-export interface Divisions {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  status: CMSStatus;
-  _draft?: unknown;
-  short_name?: string;
-  name: string;
-  slug: string;
-}
-
-export interface Teams {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  status: CMSStatus;
-  _draft?: unknown;
-  team_name: string;
-  league?: Leagues;
-  team_logo?: MediaAsset;
-  short_name?: string;
-  slug: string;
-  division?: Divisions[];
-  seasons?: Seasons[];
-}
-
 export interface CMSModelMap {
-  matches: Matches;
-  standings: Standings;
-  linktree: LinkTree;
-  sponsors: Sponsors;
-  pages: Pages;
-  boom: Boom;
-  testing_copy: TestingCopy;
-  testing: Testing;
-  site_navigation: SiteNavigation;
   authors: Authors;
-  social_links: SocialLinks;
-  seasons: Seasons;
-  leagues: Leagues;
+  boom: Boom;
   divisions: Divisions;
+  leagues: Leagues;
+  linktree: Linktree;
+  matches: Matches;
+  pages: Pages;
+  seasons: Seasons;
+  site_navigation: SiteNavigation;
+  sponsors: Sponsors;
+  standings: Standings;
   teams: Teams;
+  testing: Testing;
+  testing_copy: TestingCopy;
 }
 
 export type CMSModelName = keyof CMSModelMap;
@@ -306,8 +295,8 @@ export interface Test2 {
   created_at: string;
   updated_at: string;
   division: Divisions;
-  season: Seasons;
   league: Leagues;
+  season: Seasons;
 }
 
 export interface CMSBlockMap {

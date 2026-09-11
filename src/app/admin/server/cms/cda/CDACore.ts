@@ -20,6 +20,7 @@ import { CMSModel, ExtendedCMSField, ResolverFactory } from "./ResolverFactory"
 import { QueryPlanner } from "./QueryPlanner"
 import { FilterEngine } from "./FilterEngine"
 import { GraphQLJSON, MediaType } from "./schema-types"
+import { blockName, modelName } from "./type-names"
 
 export class CDACore {
   private supabase: SupabaseClient
@@ -49,6 +50,8 @@ export class CDACore {
     const validModels = this.models.filter(
       (m) => (m.friendly_name || m.model_name) && m.table_name
     )
+
+    this.assertUniqueTypeNames(validModels)
 
     this.resolverFactory = new ResolverFactory(this.supabase, validModels)
     this.filterEngine = new FilterEngine(
@@ -118,6 +121,64 @@ export class CDACore {
     this.blocks = (blocksRes.data as CMSBlock[]) || []
   }
 
+  /**
+   * Type names derive from unique technical ids (block `api_id`, model `slug`),
+   * so collisions within a namespace are impossible by construction. A
+   * cross-namespace collision is still possible — a block `hero` and a model
+   * `hero_block` both yield `HeroBlock` — and `new GraphQLSchema()` rejects
+   * duplicates with an opaque error, so detect any remaining collision up front
+   * and name the offenders.
+   */
+  private assertUniqueTypeNames(validModels: CMSModel[]) {
+    const contributors = new Map<string, string[]>()
+
+    const register = (name: string, descriptor: string) => {
+      const existing = contributors.get(name)
+      if (existing) existing.push(descriptor)
+      else contributors.set(name, [descriptor])
+    }
+
+    this.blocks.forEach((block) => {
+      register(
+        this.blockTypeName(block),
+        `block "${block.label}" (api_id: ${block.api_id})`
+      )
+    })
+
+    validModels.forEach((model) => {
+      const typeName = modelName(model)
+      const descriptor =
+        `model "${model.friendly_name || model.table_name}"` +
+        ` (table: ${model.table_name}, slug: ${model.slug})`
+      register(typeName, descriptor)
+      register(`${typeName}FilterInput`, descriptor)
+    })
+
+    const collisions = [...contributors.entries()].filter(
+      ([, sources]) => sources.length > 1
+    )
+    if (collisions.length === 0) return
+
+    const details = collisions
+      .map(([name, sources]) => `  - "${name}" \u2190 ${sources.join(", ")}`)
+      .join("\n")
+
+    throw new Error(
+      "CDACore: duplicate GraphQL type name(s) detected. These CMS entries " +
+        "derive the same GraphQL type, so schema generation cannot proceed:\n" +
+        `${details}\n` +
+        "Rename one of each colliding pair so their type names are unique."
+    )
+  }
+
+  /**
+   * GraphQL type name for a block. The name root comes from the block's unique
+   * `api_id` (see `type-names`); GraphQL alone adds the "Block" suffix.
+   */
+  private blockTypeName(block: CMSBlock): string {
+    return `${blockName(block)}Block`
+  }
+
   private generateBlockUnionType() {
     const types = Object.values(this.blockTypes)
     if (types.length === 0) return
@@ -137,7 +198,7 @@ export class CDACore {
           (b) => b.api_id === blockApiId || b.id === value._block_id
         )
         if (block) {
-          return this.toPascalCase(block.label) + "Block"
+          return this.blockTypeName(block)
         }
         return undefined
       },
@@ -185,7 +246,7 @@ export class CDACore {
 
   private generateBlockTypes(validModels: CMSModel[]) {
     this.blocks.forEach((block) => {
-      const typeName = this.toPascalCase(block.label) + "Block"
+      const typeName = this.blockTypeName(block)
       const blockFields = this.fields.filter((f) => f.block_id === block.id)
 
       this.blockTypes[block.id] = new GraphQLObjectType({
@@ -216,9 +277,7 @@ export class CDACore {
 
   private generateFilterInputTypes(validModels: CMSModel[]) {
     validModels.forEach((model) => {
-      const typeName = this.toPascalCase(
-        model.friendly_name || model.table_name
-      )
+      const typeName = modelName(model)
       this.filterInputTypes[model.id] = new GraphQLInputObjectType({
         name: `${typeName}FilterInput`,
         fields: () => {
@@ -269,9 +328,7 @@ export class CDACore {
   private generateModelObjectTypes(validModels: CMSModel[]) {
     validModels.forEach((model) => {
       try {
-        const typeName = this.toPascalCase(
-          model.friendly_name || model.table_name
-        )
+        const typeName = modelName(model)
         this.types[model.id] = new GraphQLObjectType({
           name: typeName,
           fields: () => {
@@ -632,14 +689,5 @@ export class CDACore {
         // seam, which default to jsonb storage; serve them as opaque JSON.
         return GraphQLJSON
     }
-  }
-
-  private toPascalCase(str: string) {
-    return str
-      .replace(/[^a-zA-Z0-9]/g, " ")
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join("")
-      .replace(/^[0-9]/, "M_")
   }
 }

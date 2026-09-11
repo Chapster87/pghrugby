@@ -1,25 +1,18 @@
-"use client"
-
-import { useState } from "react"
+import Heading from "../components/typography/heading"
 import AuthForm from "./_components/auth-form"
+import s from "./style.module.css"
 
 /**
- * Renders the authentication page.
- * This page allows users to sign in or sign up.
+ * Locked-down authentication page.
+ * Rendered on a black full-viewport shell without admin chrome.
  */
 export default function AuthPage() {
-  const [loading, _setLoading] = useState(false)
-  const [error, _setError] = useState<string | null>(null)
-
-  // @TODO: Implement email/password login, if desired, in AuthForm
-  // For now, focus on Google OAuth
-
   return (
-    <div>
-      <h1>Sign In</h1>
+    <div className={s.page}>
+      <Heading level="h1" display="h2" className={s.title}>
+        Sign In
+      </Heading>
       <AuthForm />
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
     </div>
   )
 }

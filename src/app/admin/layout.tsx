@@ -1,11 +1,9 @@
+import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import Navigation from "./components/navigation"
-import Header from "./components/header"
-import BreakpointIndicator from "./components/breakpoint-indicator"
+import AdminFrame from "./components/admin-frame"
 import { ToastContainer } from "./components/toast"
 
 import "./styles/globals.css"
-import s from "./styles.module.css"
 
 const inter = Inter({
   variable: "--font-inter",
@@ -20,6 +18,19 @@ const inter = Inter({
 export const dynamic = "force-dynamic"
 
 /**
+ * Keep the mounted admin out of search indexes.
+ *
+ * Metadata merges into whatever document head the host owns, so this travels
+ * with the subtree and needs no host SEO config. A host's `robots.txt` Disallow
+ * only reduces crawl load — this directive is what guarantees de-indexing. The
+ * public site's own indexing switch lives in `globals.site_settings.noIndex`;
+ * the admin is always noindex and is deliberately not configurable.
+ */
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+}
+
+/**
  * Core-owned admin-chrome layout, rendered at the mount root.
  *
  * Deliberately html-free: the surrounding `<html>`/document shell is owned by
@@ -27,6 +38,8 @@ export const dynamic = "force-dynamic"
  * owns core globals (tokens, typography, feather stroke rules) under
  * `[data-forgecms]` so install does not require the host to import core CSS
  * into the site root — and so host marketing tokens are not clobbered.
+ *
+ * Chrome (nav/header) is applied by `AdminFrame` for non-auth routes only.
  */
 export default function AdminLayout({
   children,
@@ -34,13 +47,8 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className={`${s.site} ${inter.variable}`} data-forgecms>
-      <BreakpointIndicator />
-      <Navigation />
-      <div className={s.primary}>
-        <Header />
-        <main className={s.content}>{children}</main>
-      </div>
+    <div className={inter.variable} data-forgecms>
+      <AdminFrame>{children}</AdminFrame>
       <ToastContainer />
     </div>
   )
