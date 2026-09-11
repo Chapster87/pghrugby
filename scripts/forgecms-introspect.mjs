@@ -1,15 +1,21 @@
-// Probe the local ForgeCMS GraphQL API and dump the schema model list.
-// Reads FORGECMS_API_URL / FORGECMS_API_TOKEN from .env.local.
+// Probe the embedded ForgeCMS GraphQL API and dump the schema model list.
+// Reads NEXT_PUBLIC_BASE_URL / CMS_API_TOKEN from .env.local.
+// CDA URL = ${NEXT_PUBLIC_BASE_URL}/admin/api/graphql (same-app mount).
 // Usage: node scripts/forgecms-introspect.mjs [--types | --fields]
 import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
+const CMS_MOUNT_PATH = "/admin"
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const env = parseEnv(fs.readFileSync(path.join(root, ".env.local"), "utf8"))
 
-const url = `${env.FORGECMS_API_URL}/api/graphql`
-const token = env.FORGECMS_API_TOKEN
+const base = (env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000").replace(
+  /\/$/,
+  ""
+)
+const url = `${base}${CMS_MOUNT_PATH}/api/graphql`
+const token = env.CMS_API_TOKEN
 
 const mode = process.argv[2] ?? "--fields"
 
@@ -54,7 +60,8 @@ async function main() {
 
   const types = json.data.__schema.types
   // Drop internal/object-helper boilerplate to keep output scannable.
-  const internal = /(__|Mutation|Subscription|Node|String|Int|Float|Boolean|ID|JSON|Date|DateTime|Time|Upload|GraphQL|Query$|_Input|_Payload|_Filters|_Field|_Args|_DynamicZone|_Entity|_Meta|_RelationInput|_ListFilters|Pagination|FilterInput|SortInput|PublicationState|_PageInfo|_FiltersInput|_Link|_Scalar)/
+  const internal =
+    /(__|Mutation|Subscription|Node|String|Int|Float|Boolean|ID|JSON|Date|DateTime|Time|Upload|GraphQL|Query$|_Input|_Payload|_Filters|_Field|_Args|_DynamicZone|_Entity|_Meta|_RelationInput|_ListFilters|Pagination|FilterInput|SortInput|PublicationState|_PageInfo|_FiltersInput|_Link|_Scalar)/
 
   const relevant = types
     .filter((t) => t.kind !== "SCALAR" && t.kind !== "INPUT_OBJECT")

@@ -1,0 +1,208 @@
+/*
+ * Base typography for the admin chrome.
+ *
+ * Specificity model (must match pre-embed standalone):
+ *   element defaults stay at (0,0,1) so CSS modules always win.
+ *   Scope via :where([data-forgecms]) adds ZERO specificity — same cascade
+ *   as the old bare `a` / `ul` / `p`.
+ *
+ * Do NOT write `[data-forgecms] a` — that is (0,1,0) and fights .navLink /
+ * .navList (green icons, list dots, blue hover).
+ *
+ * Utility classes (.h1 … .h6) stay top-level so `composes: h1 from global`
+ * keeps working. Element headings (h1 … h6) are :where-scoped so they don't
+ * restyle a host marketing page after admin CSS has loaded.
+ */
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family:
+    var(--font-inter, Inter),
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+  line-height: 1.2;
+}
+
+.h1 a,
+.h2 a,
+.h3 a,
+.h4 a,
+.h5 a,
+.h6 a,
+:where([data-forgecms]) h1 a,
+:where([data-forgecms]) h2 a,
+:where([data-forgecms]) h3 a,
+:where([data-forgecms]) h4 a,
+:where([data-forgecms]) h5 a,
+:where([data-forgecms]) h6 a {
+  text-decoration: none;
+}
+
+:where([data-forgecms]) h1,
+.h1 {
+  font-family:
+    var(--font-inter, Inter),
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+  line-height: 1.2;
+  font-size: 36px;
+
+  @media (--viewport-lg-up) {
+    font-size: 48px;
+  }
+}
+
+.h1-lg {
+  font-size: 32px;
+
+  @media (--viewport-lg-up) {
+    font-size: 64px;
+  }
+}
+
+:where([data-forgecms]) h2,
+.h2 {
+  font-family:
+    var(--font-inter, Inter),
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+  line-height: 1.2;
+  font-size: 30px;
+
+  @media (--viewport-lg-up) {
+    font-size: 36px;
+  }
+}
+
+:where([data-forgecms]) h3,
+.h3 {
+  font-family:
+    var(--font-inter, Inter),
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+  line-height: 1.2;
+  font-size: 24px;
+
+  @media (--viewport-lg-up) {
+    font-size: 30px;
+  }
+}
+
+:where([data-forgecms]) h4,
+.h4 {
+  font-family:
+    var(--font-inter, Inter),
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+  line-height: 1.2;
+  font-size: 18px;
+
+  @media (--viewport-lg-up) {
+    font-size: 20px;
+  }
+}
+
+:where([data-forgecms]) h5,
+.h5 {
+  font-family:
+    var(--font-inter, Inter),
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+  line-height: 1.2;
+  font-size: 16px;
+}
+
+:where([data-forgecms]) h6,
+.h6 {
+  font-family:
+    var(--font-inter, Inter),
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+  line-height: 1.2;
+}
+
+/* Element defaults — (0,0,1), modules always win */
+:where([data-forgecms]) p {
+  margin-top: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+:where([data-forgecms]) a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--color-blue-ada);
+    text-decoration: none;
+  }
+}
+
+:where([data-forgecms]) address {
+  margin-bottom: 1rem;
+  font-style: normal;
+  line-height: inherit;
+}
+
+:where([data-forgecms]) ol,
+:where([data-forgecms]) ul {
+  padding-left: 32px;
+}
+
+:where([data-forgecms]) ol,
+:where([data-forgecms]) ul,
+:where([data-forgecms]) dl {
+  margin-top: 0;
+}
+
+:where([data-forgecms]) ol ol,
+:where([data-forgecms]) ul ul,
+:where([data-forgecms]) ol ul,
+:where([data-forgecms]) ul ol {
+  margin-bottom: 0;
+}
+
+:where([data-forgecms]) ul {
+  list-style-type: disc;
+}
+
+:where([data-forgecms]) ol {
+  list-style-type: decimal;
+}
+
+:where([data-forgecms]) blockquote {
+  margin: 0 0 1rem;
+}

@@ -1,0 +1,137 @@
+.nav {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(from var(--color-black) r g b / 0.9);
+  padding: 8px 12px;
+}
+
+.navInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 100%;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 16px 0;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+  text-decoration: none;
+  color: rgb(from var(--color-white) r g b / 0.5);
+  border-radius: 4px;
+  padding: 12px;
+  transition:
+    color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
+
+  &:hover {
+    color: var(--color-white);
+    background-color: rgb(from var(--color-white) r g b / 0.1);
+  }
+
+  &.active {
+    color: var(--color-white);
+    background-color: rgb(from var(--color-white) r g b / 0.2);
+  }
+}
+
+.navLinkIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navLinkTitle {
+  display: none;
+}
+
+.tooltipContent {
+  /* Portaled to document.body — set face explicitly; don't rely on [data-forgecms] inheritance. */
+  font-family:
+    var(--font-inter, Inter),
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  background-color: var(--color-grey-900);
+  color: var(--color-white);
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+  z-index: 100;
+  border: 1px solid var(--color-grey-700);
+
+  /* Alternative Styles via data attributes or separate classes */
+  &.brand {
+    background-color: var(--color-primary);
+    border: none;
+  }
+
+  &.glass {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  &.outline {
+    background-color: var(--color-black);
+    border: 2px solid var(--color-primary);
+  }
+}
+
+.tooltipContent[data-state="delayed-open"][data-side="right"] {
+  animation-name: slideLeftAndFade;
+}
+
+.tooltipArrow {
+  fill: var(--color-grey-700);
+
+  .brand & {
+    fill: var(--color-primary);
+  }
+
+  .glass & {
+    fill: rgba(0, 0, 0, 0.8);
+  }
+
+  .outline & {
+    fill: var(--color-primary);
+  }
+}
+
+@keyframes slideLeftAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

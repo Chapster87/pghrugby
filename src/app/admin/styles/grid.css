@@ -1,0 +1,19 @@
+.global-grid-container {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  padding-left: 12px;
+  padding-right: 12px;
+
+  @media (min-width: 1024px) {
+    padding-left: 16px;
+    padding-right: 16px;
+    /* max-width: 1468px; */
+  }
+}
+
+.global-left-column {
+  display: grid;
+  grid-template-columns: 350px auto;
+  height: 100%;
+}

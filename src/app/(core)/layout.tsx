@@ -1,36 +1,27 @@
-import { getBaseURL } from "@lib/util/env"
-import { Metadata } from "next"
-
 import BreakpointIndicator from "@/components/breakpoint-indicator"
 import Footer from "@/components/footer"
 import Header from "@/components/header"
-import { lemonMilk } from "@/lib/fonts"
 
 import { Providers } from "../providers"
 
-import "@styles/globals.css"
-
-export const metadata: Metadata = {
-  metadataBase: new URL(getBaseURL()),
-}
-
-export default async function CoreLayout(props: { children: React.ReactNode }) {
+/**
+ * Layout for the `(core)` route group — the main public site. No <html>/<body>
+ * here: the root layout owns the document shell. This wrapper keeps the site's
+ * providers, breakpoint indicator, and header/footer chrome under it.
+ */
+export default function CoreLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html
-      lang="en"
-      className={`light ${lemonMilk.variable}`}
-      style={{ colorScheme: "light" }}
-    >
-      <body>
-        <Providers>
-          <BreakpointIndicator />
-          <div className="siteMain">
-            <Header />
-            {props.children}
-            <Footer />
-          </div>
-        </Providers>
-      </body>
-    </html>
+    <Providers>
+      <BreakpointIndicator />
+      <div className="siteMain">
+        <Header />
+        {children}
+        <Footer />
+      </div>
+    </Providers>
   )
 }

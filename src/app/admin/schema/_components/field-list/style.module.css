@@ -1,0 +1,307 @@
+.fieldListContainer {
+  padding-top: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.headerTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.syncHint {
+  font-size: 13px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.syncButton {
+  padding: 0 !important;
+  text-decoration: underline !important;
+}
+
+.fieldStack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.interleavedStack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100px;
+}
+
+.fieldCard {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 8px;
+  background-color: var(--color-white);
+  transition:
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+  gap: 20px;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--color-border);
+}
+
+.dragHandle {
+  color: var(--color-grey-400);
+  display: flex;
+  align-items: center;
+  cursor: grab;
+}
+
+.fieldIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.fieldIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.fieldContent {
+  flex-grow: 1;
+}
+
+.fieldMainInfo {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.fieldLabel {
+  font-weight: 600;
+  font-size: 16px;
+  color: #111;
+}
+
+.fieldLabelRequired::after {
+  content: "*";
+  color: var(--color-error);
+  margin-left: 2px;
+}
+
+.fieldName {
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.fieldTypeLabel {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.fieldActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.menuTrigger {
+  background: none;
+  border: none;
+  color: #6b7280;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #f3f4f6;
+    color: #111;
+  }
+}
+
+.fieldBadges {
+  display: flex;
+  gap: 8px;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.uniqueBadge {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.systemBadge {
+  background-color: #eef2ff;
+  color: #4f46e5;
+}
+
+/* Fieldset Grouping (Preferred style) */
+
+.fieldsetGroup {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.fieldsetGroup.isOver {
+  border: 2px dashed var(--color-primary);
+  background-color: rgba(var(--color-primary-rgb), 0.05);
+}
+
+.fieldsetCard {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: var(--color-grey-100);
+  transition: background-color 0.2s ease;
+  gap: 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.fieldsetGrip {
+  color: var(--color-grey-400);
+  display: flex;
+  align-items: center;
+  cursor: grab;
+}
+
+.fieldsetInfo {
+  flex-grow: 1;
+}
+
+.fieldsetLabelGroup {
+  display: flex;
+  align-items: center;
+}
+
+.fieldsetLabel {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-grey-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.groupNestedFields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background-color: transparent;
+  position: relative;
+}
+
+.actionButton {
+  color: var(--color-grey-400);
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.draggingOverlay {
+  pointer-events: none;
+  z-index: 1000;
+  width: 100%;
+  max-width: 800px;
+}
+
+.draggingOverlay > div {
+  box-shadow: var(--box-shadow-lg);
+  border-color: var(--color-primary) !important;
+  opacity: 1 !important;
+  background-color: var(--color-white) !important;
+  border-radius: 8px !important;
+}
+
+/* Modal and Menus */
+.menuContent {
+  min-width: 160px;
+  background-color: white;
+  border-radius: 6px;
+  padding: 5px;
+  box-shadow: var(--box-shadow-lg);
+  z-index: 1100;
+}
+
+.menuItem {
+  font-size: 14px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.menuItem[data-highlighted] {
+  background-color: #f3f4f6;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  padding: 32px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: var(--box-shadow-lg);
+}
+
+.emptyState {
+  padding: 32px;
+  text-align: center;
+  background-color: #f9fafb;
+  border: 2px dashed #e5e7eb;
+  border-radius: 8px;
+  color: #6b7280;
+}
