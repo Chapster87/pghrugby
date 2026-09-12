@@ -99,30 +99,35 @@ export default function FormControlsSpecimens() {
 
       <div className={s.group}>
         <h3 className={s.groupTitle}>Select</h3>
-        <Select.Root defaultValue="option1">
-          <Select.Trigger aria-label="Select an option">
-            <Select.Value placeholder="Choose an option" />
-            <Select.Icon />
-          </Select.Trigger>
-          <Select.Portal>
-            <Select.Content>
-              <Select.Viewport>
-                <Select.Item value="option1">
-                  <Select.ItemIndicator />
-                  <Select.ItemText>Option 1</Select.ItemText>
-                </Select.Item>
-                <Select.Item value="option2">
-                  <Select.ItemIndicator />
-                  <Select.ItemText>Option 2</Select.ItemText>
-                </Select.Item>
-                <Select.Item value="option3">
-                  <Select.ItemIndicator />
-                  <Select.ItemText>Option 3</Select.ItemText>
-                </Select.Item>
-              </Select.Viewport>
-            </Select.Content>
-          </Select.Portal>
-        </Select.Root>
+        <div className={s.stack}>
+          <label className={s.selectLabel} htmlFor="workbench-select">
+            Select an option
+          </label>
+          <Select.Root defaultValue="option1">
+            <Select.Trigger id="workbench-select">
+              <Select.Value placeholder="Choose an option" />
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content>
+                <Select.Viewport>
+                  <Select.Item value="option1">
+                    <Select.ItemIndicator />
+                    <Select.ItemText>Option 1</Select.ItemText>
+                  </Select.Item>
+                  <Select.Item value="option2">
+                    <Select.ItemIndicator />
+                    <Select.ItemText>Option 2</Select.ItemText>
+                  </Select.Item>
+                  <Select.Item value="option3">
+                    <Select.ItemIndicator />
+                    <Select.ItemText>Option 3</Select.ItemText>
+                  </Select.Item>
+                </Select.Viewport>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+        </div>
       </div>
 
       <div className={s.group}>

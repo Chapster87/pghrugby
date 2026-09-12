@@ -15,6 +15,12 @@
   gap: 8px;
 }
 
+.selectLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-grey-900);
+}
+
 .choice {
   display: flex;
   align-items: center;
@@ -30,15 +36,19 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  /* The label's default line box is taller than the 16px icon, which centred
+     the icon on the box rather than on the text. Match the icon so the two
+     centre on the same box. */
+  line-height: 16px;
 }
 
 .tooltipTrigger {
   display: inline-flex;
   align-items: center;
-  color: var(--color-grey-500);
+  color: var(--color-grey-600);
 
   &:hover {
-    color: var(--color-grey-700);
+    color: var(--color-grey-900);
   }
 }
 
