@@ -1,11 +1,12 @@
 "use client"
 
 import * as Form from "@radix-ui/react-form"
-import * as Tooltip from "@radix-ui/react-tooltip"
 
 import Checkbox from "@components/checkbox"
 import RadioGroup from "@components/radio-group"
+import Select from "@components/select"
 import Switch from "@components/switch"
+import Tooltip from "@components/tooltip"
 
 import s from "./style.module.css"
 
@@ -97,12 +98,9 @@ export default function FormControlsSpecimens() {
                     </button>
                   </Tooltip.Trigger>
                   <Tooltip.Portal>
-                    <Tooltip.Content
-                      className={s.tooltipContent}
-                      sideOffset={5}
-                    >
+                    <Tooltip.Content>
                       This is a tooltip for the text field.
-                      <Tooltip.Arrow className={s.tooltipArrow} />
+                      <Tooltip.Arrow />
                     </Tooltip.Content>
                   </Tooltip.Portal>
                 </Tooltip.Root>
@@ -117,21 +115,30 @@ export default function FormControlsSpecimens() {
 
       <div className={s.group}>
         <h3 className={s.groupTitle}>Select</h3>
-        <Form.Root className="FormRoot">
-          <Form.Field name="select" className="FormField">
-            <Form.Label className="FormLabel">Select an option</Form.Label>
-            <Form.Control asChild>
-              <select className="FormSelect" defaultValue="">
-                <option value="" disabled hidden>
-                  Choose an option
-                </option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-              </select>
-            </Form.Control>
-          </Form.Field>
-        </Form.Root>
+        <Select.Root defaultValue="option1">
+          <Select.Trigger aria-label="Select an option">
+            <Select.Value placeholder="Choose an option" />
+            <Select.Icon />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Content>
+              <Select.Viewport>
+                <Select.Item value="option1">
+                  <Select.ItemIndicator />
+                  <Select.ItemText>Option 1</Select.ItemText>
+                </Select.Item>
+                <Select.Item value="option2">
+                  <Select.ItemIndicator />
+                  <Select.ItemText>Option 2</Select.ItemText>
+                </Select.Item>
+                <Select.Item value="option3">
+                  <Select.ItemIndicator />
+                  <Select.ItemText>Option 3</Select.ItemText>
+                </Select.Item>
+              </Select.Viewport>
+            </Select.Content>
+          </Select.Portal>
+        </Select.Root>
       </div>
 
       <div className={s.group}>

@@ -34,15 +34,3 @@
     color: var(--color-grey-700);
   }
 }
-
-.tooltipContent {
-  padding: 8px;
-  border-radius: 4px;
-  background-color: var(--color-grey-800);
-  color: var(--color-white);
-  font-size: 14px;
-}
-
-.tooltipArrow {
-  fill: var(--color-grey-800);
-}

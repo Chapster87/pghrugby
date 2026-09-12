@@ -1,0 +1,13 @@
+.content {
+  z-index: 1200;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--color-grey-800);
+  color: var(--color-white);
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.arrow {
+  fill: var(--color-grey-800);
+}

@@ -5,8 +5,10 @@
  * are unlayered, and unlayered rules outrank every cascade layer. Inside a layer
  * these rules were silently defeated, so native fields lost their padding.
  *
- * Checkbox, radio, and switch no longer live here — they are shared wrapper
- * components with their own CSS modules (`@components/checkbox`, etc.). */
+ * Checkbox, radio, switch, select, and tooltip no longer live here — they are
+ * shared wrapper components with their own CSS modules (`@components/checkbox`,
+ * `@components/radio-group`, `@components/switch`, `@components/select`,
+ * `@components/tooltip`). */
 
 .FormRoot {
   display: flex;
@@ -124,16 +126,4 @@
 .FormErrorMessage {
   font-size: 0.875rem;
   color: var(--color-red);
-}
-
-.TooltipContent {
-  z-index: 1000; /* Ensure tooltip appears above other elements */
-  padding: 0.5rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.TooltipArrow {
-  z-index: 1000; /* Match z-index of TooltipContent */
 }

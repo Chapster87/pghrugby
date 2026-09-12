@@ -1,0 +1,130 @@
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  max-width: 420px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: var(--color-white);
+  color: var(--color-grey-900);
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+
+  &:focus-visible {
+    border-color: var(--color-gold);
+    outline: 1px solid var(--color-gold);
+  }
+
+  &[data-placeholder] {
+    color: var(--color-grey-600);
+  }
+
+  &[data-disabled] {
+    background-color: var(--color-grey-100);
+    cursor: not-allowed;
+  }
+}
+
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  color: var(--color-grey-600);
+}
+
+.glyph {
+  width: 14px;
+  height: 14px;
+}
+
+.content {
+  z-index: 1100;
+  overflow: hidden;
+  min-width: var(--radix-select-trigger-width);
+  border: 1px solid var(--color-grey-300);
+  border-radius: 4px;
+  background-color: var(--color-white);
+  color: var(--color-grey-900);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.viewport {
+  padding: 4px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-grey-600);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 2px;
+  font-size: 0.9375rem;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+
+  &[data-highlighted] {
+    background-color: var(--color-grey-100);
+  }
+
+  &[data-disabled] {
+    color: var(--color-grey-500);
+    pointer-events: none;
+  }
+}
+
+.itemText {
+  flex: 1;
+}
+
+.itemIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  color: var(--color-gold-800);
+}
+
+.separator {
+  height: 1px;
+  margin: 4px 0;
+  background-color: var(--color-grey-200);
+}
+
+.scrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  background-color: var(--color-white);
+  color: var(--color-grey-700);
+  cursor: default;
+}
+
+.arrow {
+  fill: var(--color-white);
+}
