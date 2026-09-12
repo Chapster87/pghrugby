@@ -1,0 +1,36 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.groupTitle {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.formFieldTooltip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tooltipTrigger {
+  color: var(--color-grey-500);
+
+  &:hover {
+    color: var(--color-grey-700);
+  }
+}
+
+.tooltipContent {
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--color-grey-800);
+  color: var(--color-white);
+  font-size: 14px;
+}
+
+.tooltipArrow {
+  fill: var(--color-grey-800);
+}

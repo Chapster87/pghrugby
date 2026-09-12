@@ -12,6 +12,7 @@ checkEnvVariables()
 //   /product/*                                         (internal storefront route)
 //   /cart · /checkout · /checkout/success · /membership · /calendar · /contact
 //   /links · /matches/* · /sitemap · /styleguide        (static routes)
+//   /workbench/*                                        (dev-only; 404s in production)
 const storefrontCatalog = require("./src/lib/checkout/storefront-catalog.json")
 
 const pdpSlugs = storefrontCatalog.flows.map((flow) => flow.slug)

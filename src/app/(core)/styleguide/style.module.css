@@ -1,0 +1,42 @@
+.styleguide {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.introText {
+  max-width: 72ch;
+  color: var(--color-grey-700);
+}
+
+.index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.indexLink {
+  padding: 4px 12px;
+  border: 1px solid var(--color-grey-300);
+  border-radius: 999px;
+  font-size: 0.875rem;
+  color: var(--color-grey-800);
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--color-grey-500);
+    background-color: var(--color-grey-100);
+  }
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
