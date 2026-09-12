@@ -43,7 +43,6 @@ export async function generateMetadata(
 export default async function ContactUs() {
   const { socialSettings } = await executeQuery(socialsQuery)
 
-  console.log("Socials Data:", socialSettings)
   return (
     <SidebarLayout>
       <div className={`${contentStyles.contentBlock} ${s.contactPage}`}>

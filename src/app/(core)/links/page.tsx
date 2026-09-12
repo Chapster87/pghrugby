@@ -33,8 +33,6 @@ export async function generateMetadata(
 export default async function LinksPage() {
   const { linktree: linkTreeData } = await executeQuery(linksQuery)
 
-  console.log("Links Data:", linkTreeData)
-
   return (
     <div className={`${contentStyles.contentBlock} ${s.linktreeMain}`}>
       <h1 className={s.linktreeTitle}>Pittsburgh Rugby Links</h1>

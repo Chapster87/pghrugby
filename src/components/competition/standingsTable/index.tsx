@@ -63,7 +63,7 @@ export async function StandingsTable({
 
   const processedStandings = sortStandings(typedLeagueStandings)
 
-  console.log("Standings Data:", standings)
+  // console.log("Standings Data:", standings)
 
   const toKebabCase = (str: string) => {
     return str
