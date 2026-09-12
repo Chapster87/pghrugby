@@ -1,23 +1,46 @@
 .quantitySelector {
-  display: flex;
+  display: inline-flex;
   align-items: stretch;
+  gap: 4px;
 }
 
-.button {
-  padding: 6px;
-  border-radius: 0;
-  background-color: var(--color-grey-700);
-  color: var(--color-white);
+/* Match the global field controls (`components/field`): white, 1px border,
+   small radius. The `button` element + class raises specificity over the
+   Button variant's own background, so this wins without `!important`. The
+   buttons stretch (`align-items: stretch`) to the input's height. */
+.quantitySelector button.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: var(--color-white);
+  color: var(--color-grey-900);
+}
 
-  &:hover {
-    background-color: var(--color-gold);
-  }
+.quantitySelector button.button:hover {
+  background-color: var(--color-grey-100);
 }
 
 .input {
-  width: 55px;
-  border-radius: 0;
+  width: 44px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: var(--color-white);
+  color: var(--color-grey-900);
+  color-scheme: light;
+  font-size: 1rem;
+  line-height: 1.5;
   text-align: center;
+
+  &:focus,
+  &:focus-visible {
+    border-color: var(--color-gold);
+    outline: 1px solid var(--color-gold);
+  }
 }
 
 .input::-webkit-outer-spin-button,

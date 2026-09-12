@@ -43,7 +43,7 @@ export default function QuantitySelector({
         variant="primary"
         onClick={handleDecrement}
       >
-        <Minus />
+        <Minus size={16} />
       </Button>
       <input
         name={`${index !== undefined ? `quantity-${index}` : "quantity"}`}
@@ -59,7 +59,7 @@ export default function QuantitySelector({
         variant="primary"
         onClick={handleIncrement}
       >
-        <Plus />
+        <Plus size={16} />
       </Button>
     </div>
   )
