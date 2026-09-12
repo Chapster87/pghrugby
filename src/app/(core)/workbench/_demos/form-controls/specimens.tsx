@@ -1,8 +1,10 @@
 "use client"
 
-import * as Form from "@radix-ui/react-form"
+import { Info } from "lucide-react"
 
 import Checkbox from "@components/checkbox"
+import Field from "@components/field"
+import Form from "@components/form"
 import RadioGroup from "@components/radio-group"
 import Select from "@components/select"
 import Switch from "@components/switch"
@@ -14,78 +16,60 @@ import s from "./style.module.css"
  * The form-control specimens. A client component because the shared wrappers are
  * compound client components — their parts can only be composed on the client.
  *
- * Checkbox, radio, and switch are on the shared wrappers; the text fields,
- * select, and tooltip are still raw Radix bound to the global `forms.css`
- * classes, pending their wrappers.
+ * Every control here is on a shared wrapper, so this page exercises the
+ * wrappers rather than raw Radix.
  */
 export default function FormControlsSpecimens() {
   return (
     <>
       <div className={s.group}>
         <h3 className={s.groupTitle}>Text fields</h3>
-        <Form.Root className="FormRoot">
-          <Form.Field name="standard" className="FormField">
-            <Form.Label className="FormLabel">Standard text field</Form.Label>
-            <Form.Control asChild>
-              <input type="text" className="FormInput" />
-            </Form.Control>
-          </Form.Field>
+        <Form.Root>
+          <Field.Root name="standard">
+            <Field.Label>Standard text field</Field.Label>
+            <Field.Control asChild>
+              <input type="text" />
+            </Field.Control>
+          </Field.Root>
 
-          <Form.Field name="required" className="FormField required">
-            <Form.Label className="FormLabel">Required text field</Form.Label>
-            <Form.Control asChild>
-              <input type="text" required className="FormInput" />
-            </Form.Control>
-            <Form.Message match="valueMissing" className="FormMessage">
+          <Field.Root name="required">
+            <Field.Label required>Required text field</Field.Label>
+            <Field.Control asChild>
+              <input type="text" required />
+            </Field.Control>
+            <Field.Message match="valueMissing">
               This field is required.
-            </Form.Message>
-          </Form.Field>
+            </Field.Message>
+          </Field.Root>
 
-          <Form.Field
-            name="error"
-            className="FormField"
-            data-invalid
-            data-valid="false"
-          >
-            <Form.Label className="FormLabel" data-invalid data-valid="false">
-              Text field with error
-            </Form.Label>
-            <Form.Control asChild data-invalid data-valid="false">
-              <input type="text" aria-invalid="true" className="FormInput" />
-            </Form.Control>
-            <Form.Message
-              match="valueMissing"
-              className="FormErrorMessage"
-              forceMatch
-            >
+          <Field.Root name="error" serverInvalid>
+            <Field.Label>Text field with error</Field.Label>
+            <Field.Control asChild>
+              <input type="text" aria-invalid="true" />
+            </Field.Control>
+            <Field.Message match="valueMissing" forceMatch>
               This is a test error
-            </Form.Message>
-          </Form.Field>
+            </Field.Message>
+          </Field.Root>
 
-          <Form.Field name="help" className="FormField">
-            <Form.Label className="FormLabel">
-              Text field with help text
-            </Form.Label>
-            <Form.Control asChild>
-              <input type="text" className="FormInput" />
-            </Form.Control>
-            <Form.Message className="FormMessage">
-              This is help text.
-            </Form.Message>
-          </Form.Field>
+          <Field.Root name="help">
+            <Field.Label>Text field with help text</Field.Label>
+            <Field.Control asChild>
+              <input type="text" />
+            </Field.Control>
+            <p className={s.help}>This is help text.</p>
+          </Field.Root>
 
-          <Form.Field name="disabled" className="FormField">
-            <Form.Label className="FormLabel">Disabled text field</Form.Label>
-            <Form.Control asChild>
-              <input type="text" disabled className="FormInput" />
-            </Form.Control>
-          </Form.Field>
+          <Field.Root name="disabled">
+            <Field.Label>Disabled text field</Field.Label>
+            <Field.Control asChild>
+              <input type="text" disabled />
+            </Field.Control>
+          </Field.Root>
 
-          <Form.Field name="tooltip" className="FormField">
+          <Field.Root name="tooltip">
             <div className={s.formFieldTooltip}>
-              <Form.Label className="FormLabel">
-                Text field with tooltip
-              </Form.Label>
+              <Field.Label>Text field with tooltip</Field.Label>
               <Tooltip.Provider>
                 <Tooltip.Root>
                   <Tooltip.Trigger asChild>
@@ -94,7 +78,7 @@ export default function FormControlsSpecimens() {
                       aria-label="Info"
                       className={s.tooltipTrigger}
                     >
-                      ℹ️
+                      <Info className={s.tooltipIcon} aria-hidden />
                     </button>
                   </Tooltip.Trigger>
                   <Tooltip.Portal>
@@ -106,10 +90,10 @@ export default function FormControlsSpecimens() {
                 </Tooltip.Root>
               </Tooltip.Provider>
             </div>
-            <Form.Control asChild>
-              <input type="text" title="Tooltip text" className="FormInput" />
-            </Form.Control>
-          </Form.Field>
+            <Field.Control asChild>
+              <input type="text" title="Tooltip text" />
+            </Field.Control>
+          </Field.Root>
         </Form.Root>
       </div>
 

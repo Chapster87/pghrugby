@@ -5,7 +5,6 @@
 @import "./theming.css";
 @import "./components/typography.css";
 @import "./components/prose.css";
-@import "./components/forms.css";
 @import "./components/tables.css";
 
 /* @layer utilities {

@@ -6,7 +6,8 @@ import Heading from "@components/typography/heading"
 import Button from "@components/button"
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa6"
 import ReCAPTCHA from "react-google-recaptcha"
-import * as Form from "@radix-ui/react-form"
+import Field from "@components/field"
+import Form from "@components/form"
 import s from "./style.module.css"
 
 export type SocialMedia = {
@@ -128,12 +129,7 @@ export default function ContactForm({
         <Heading level="h3" className={s.formHeading}>
           Contact Form
         </Heading>
-        <Form.Root
-          className="FormRoot"
-          onSubmit={handleSubmit}
-          ref={formRef}
-          key={resetKey}
-        >
+        <Form.Root onSubmit={handleSubmit} ref={formRef} key={resetKey}>
           {formStatus && (
             <div
               style={{
@@ -148,61 +144,52 @@ export default function ContactForm({
               {formStatus}
             </div>
           )}
-          <Form.Field name="name" className="FormField required">
+          <Field.Root name="name">
             <div className={s.formFieldLabelWrapper}>
-              <Form.Label htmlFor="name" className="FormLabel">
-                Name
-              </Form.Label>
-              <Form.Message match="valueMissing" className="FormMessage">
+              <Field.Label required>Name</Field.Label>
+              <Field.Message match="valueMissing">
                 Please enter Name
-              </Form.Message>
+              </Field.Message>
             </div>
-            <Form.Control asChild>
+            <Field.Control asChild>
               <input
                 type="text"
                 name="name"
                 placeholder="Your Name"
                 required
-                className="FormInput"
                 autoComplete="name"
               />
-            </Form.Control>
-          </Form.Field>
-          <Form.Field name="email" className="FormField required">
+            </Field.Control>
+          </Field.Root>
+          <Field.Root name="email">
             <div className={s.formFieldLabelWrapper}>
-              <Form.Label htmlFor="email" className="FormLabel">
-                Email
-              </Form.Label>
-              <Form.Message match="valueMissing" className="FormMessage">
+              <Field.Label required>Email</Field.Label>
+              <Field.Message match="valueMissing">
                 Please enter Email
-              </Form.Message>
+              </Field.Message>
             </div>
-            <Form.Control asChild>
+            <Field.Control asChild>
               <input
                 type="email"
                 id="email"
                 name="email"
                 placeholder="visitor@email.com"
                 required
-                className="FormInput"
                 autoComplete="email"
               />
-            </Form.Control>
-          </Form.Field>
-          <Form.Field name="context" className="FormField required">
+            </Field.Control>
+          </Field.Root>
+          <Field.Root name="context">
             <div className={s.formFieldLabelWrapper}>
-              <Form.Label htmlFor="context" className="FormLabel">
-                Context for Message
-              </Form.Label>
-              <Form.Message match="valueMissing" className="FormMessage">
+              <Field.Label required>Context for Message</Field.Label>
+              <Field.Message match="valueMissing">
                 Please select a message context
-              </Form.Message>
+              </Field.Message>
             </div>
-            <Form.Control asChild>
+            <Field.Control asChild>
               <select
                 name="concerned_department"
                 required
-                className="FormSelect"
                 defaultValue="general"
               >
                 <optgroup label="General">
@@ -226,25 +213,22 @@ export default function ContactForm({
                   </option>
                 </optgroup>
               </select>
-            </Form.Control>
-          </Form.Field>
-          <Form.Field name="message" className="FormField required">
+            </Field.Control>
+          </Field.Root>
+          <Field.Root name="message">
             <div className={s.formFieldLabelWrapper}>
-              <Form.Label htmlFor="message" className="FormLabel">
-                Message
-              </Form.Label>
+              <Field.Label required>Message</Field.Label>
             </div>
-            <Form.Control asChild>
+            <Field.Control asChild>
               <textarea
                 id="message"
                 name="message"
-                className="FormInput"
                 placeholder="What's up?"
                 required
                 rows={7}
               />
-            </Form.Control>
-          </Form.Field>
+            </Field.Control>
+          </Field.Root>
 
           <div style={{ margin: "16px 0" }}>
             <ReCAPTCHA

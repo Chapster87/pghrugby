@@ -1,5 +1,4 @@
 import Text from "@/components/typography/text"
-import * as Form from "@radix-ui/react-form"
 import VenmoDialog from "../venmo-dialog"
 import s from "./style.module.css"
 
@@ -48,11 +47,11 @@ export default function TierTable({
             </ul>
           </td>
           <td align="center" className={`${s.tierCell} ${s.paymentOptions}`}>
-            <Form.Root
+            <form
               action="https://www.paypal.com/cgi-bin/webscr"
               method="post"
               target="_top"
-              className={`FormRoot ${s.paypalForm}`}
+              className={s.paypalForm}
             >
               <input name="cmd" type="hidden" value="_s-xclick" />
               <input
@@ -66,20 +65,13 @@ export default function TierTable({
               </div>
               <div className={s.paypalSubPicker}>
                 {Array.isArray(subscriptions) && (
-                  <Form.Field
-                    name="sub-tier"
-                    className={`FormField ${s.subSelect}`}
-                  >
-                    <Form.Control asChild>
-                      <select name="os0" className="FormSelect">
-                        {subscriptions.map((sub, index) => (
-                          <option key={index} value={sub.value}>
-                            {sub.label}
-                          </option>
-                        ))}
-                      </select>
-                    </Form.Control>
-                  </Form.Field>
+                  <select name="os0" className={s.select}>
+                    {subscriptions.map((sub, index) => (
+                      <option key={index} value={sub.value}>
+                        {sub.label}
+                      </option>
+                    ))}
+                  </select>
                 )}
               </div>
               <input name="currency_code" type="hidden" value="USD" />
@@ -96,7 +88,7 @@ export default function TierTable({
                 width="1"
                 height="1"
               />
-            </Form.Root>
+            </form>
             <div className="w-100 text-center">
               <span className="">OR</span>
             </div>

@@ -21,6 +21,11 @@
   gap: 8px;
 }
 
+.help {
+  font-size: 0.875rem;
+  color: var(--color-grey-600);
+}
+
 .formFieldTooltip {
   display: flex;
   align-items: center;
@@ -28,9 +33,16 @@
 }
 
 .tooltipTrigger {
+  display: inline-flex;
+  align-items: center;
   color: var(--color-grey-500);
 
   &:hover {
     color: var(--color-grey-700);
   }
+}
+
+.tooltipIcon {
+  width: 16px;
+  height: 16px;
 }
