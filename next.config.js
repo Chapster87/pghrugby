@@ -61,6 +61,11 @@ const nextConfig = {
         destination: "/links",
         permanent: true,
       },
+      {
+        source: "/style-guide",
+        destination: "/styleguide",
+        permanent: true,
+      },
     ]
   },
 }
