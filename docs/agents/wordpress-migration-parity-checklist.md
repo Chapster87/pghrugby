@@ -1,8 +1,8 @@
 # WordPress → DatoCMS Migration: Completion Inventory & Parity Checklist
 
 Resolves the wayfinder task ticket **"WordPress migration completion and parity
-checklist"** (#9). This is the gate the map names before `migrations/import-wp`
-can be archived/deleted.
+checklist"** (#9). This was the gate the map named before `migrations/import-wp`
+could be deleted — now done.
 
 ## 1. Migration scripts inventory
 
@@ -16,7 +16,7 @@ Source of truth is the live WordPress site at `pghrugby.com` (WP REST API,
 | Tags                     | 237            | DatoCMS `article.tags` (JSON string array) | `migrate-articles.js`                       | Scripted; per-article tag name lists                                                                           |
 | Pages                    | 34             | DatoCMS `page`                             | `migrations/dato-cms/migrate-pages.js`      | Script exists; full-run state not explicitly verified                                                          |
 | Authors                  | —              | DatoCMS `author` (via `authorMap`)         | `migrate-articles.js` / `migrate-pages.js`  | Scripted author-id → DatoCMS author map                                                                        |
-| **WP → Sanity importer** | —              | (Sanity, now removed)                      | `migrations/import-wp/*`                    | **Obsolete** — targets Sanity which is fully removed. Safe to archive/delete                                   |
+| **WP → Sanity importer** | —              | (Sanity, now removed)                      | `migrations/import-wp/*`                    | **Deleted** — targeted Sanity, which is fully removed                                                          |
 
 Storefront seeding scripts in `migrations/dato-cms/` (`create-storefront-schema.js`,
 `seed-products.js`, `seed-detail-pages.js`, `seed-data-collectors.js`,
@@ -59,7 +59,7 @@ readiness here.
 | 7   | Authors           | WP author ids                     | `authorMap` → `author`                                                | ⚠️ owner spot-check on a sample                                                                                   |
 | 8   | Images            | WP featured (Cloudinary)          | **51/66 articles have `featuredImage`**                               | ⚠️ 15 missing — confirm those WP posts genuinely lack a featured image; in-body images via `external_image_block` |
 | 9   | SEO               | Yoast meta                        | `metaTitle`/`metaDescription`/`canonicalUrl`/`metaRobots`/`metaImage` | ✅ owner spot-check; sitemap emits all                                                                            |
-| 10  | Obsolete importer | `migrations/import-wp/*`          | (WP → Sanity)                                                         | ✅ archived/deleted — unblocked by this ticket closing                                                            |
+| 10  | Obsolete importer | `migrations/import-wp/*`          | (WP → Sanity)                                                         | ✅ deleted                                                                                                        |
 
 ### Owner follow-ups (remaining ⚠️ rows)
 
@@ -109,6 +109,5 @@ readiness here.
   category parity is **confirmed** (66/66, 9/9); the scripts are **preserved**
   until the flagged owner rows (tags, pages, featured images, authors) are
   cleared.
-- `migrations/import-wp/` (WP→Sanity) is **confirmed obsolete** now that Sanity
-  is removed; per the Sanity teardown decision it may be archived/deleted now
-  that this ticket is closed. Owner action.
+- `migrations/import-wp/` (WP→Sanity) is **deleted** — Sanity is removed and
+  WordPress content is confirmed landed.

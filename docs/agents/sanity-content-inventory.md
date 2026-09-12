@@ -74,7 +74,7 @@ Object types (removed with the schema folder; no runtime queries): `blockGroup`,
 - `src/components/PortableText.tsx` — Sanity portable-text renderer; used only by the post page
 - `src/components/PageBuilder.tsx` — dead renderer for Sanity `pageBuilder` blocks; **no imports** (leftover from the homepage/pages move)
 - `src/app/(core)/(home)/video-bg/index.tsx` — hardcoded `cdn.sanity.io` video URLs
-- `migrations/import-wp/` — WordPress → Sanity import (posts, pages, categories, tags, users)
+- `migrations/import-wp/` — WordPress → Sanity import (posts, pages, categories, tags, users); **deleted**
 
 Note: two Sanity clients exist with different configs — `src/sanity/lib/client.ts` (used by chrome + competition components) and `src/sanity/client.ts` (used by sidebar, product-form, draft-mode; carries `stega` + `SANITY_VIEWER_TOKEN`).
 
@@ -119,7 +119,7 @@ Rules: replace → verify → delete, site keeps working at every step. Each pha
 ### Phase 5 — Sanity teardown (new ticket, blocked by phases 1–4)
 
 12. Remove `<SanityLive />`/`<VisualEditing />` from `(core)/layout.tsx` and the draft-mode route; remove the studio route; delete `src/sanity/**` and the two client modules; delete `PortableText`/`PageBuilder` if unused; drop Sanity deps (`sanity`, `next-sanity`, `@sanity/*`, `sanity-plugin-*`, `@portabletext/react`) from `package.json`; clear `NEXT_PUBLIC_SANITY_*` / `SANITY_VIEWER_TOKEN` / `SANITY_STUDIO_*` env vars; rehost the `video-bg` assets off `cdn.sanity.io`.
-13. Archive `migrations/import-wp/` (per standing preference, migration files stay until WordPress content is confirmed landed — ticket #9), then delete.
+13. `migrations/import-wp/` (WP → Sanity) is **deleted** — WordPress content is confirmed landed (ticket #9).
 
 ## Notes and risks
 

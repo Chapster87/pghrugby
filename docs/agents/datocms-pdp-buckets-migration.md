@@ -290,8 +290,6 @@ product-detail-page.query.ts`, `page.tsx`) from `pageComponents` to the new
   registration metadata decision (sibling research).
 - `docs/handoffs/wordpress-to-datocms-migration.md` — the `featured_image`
   Cloudinary Picker shape this gallery mirrors.
-- `src/lib/prototype-datocms-models/` — prior modeling prototype; same
-  `links`/validator pattern, but passes api_keys where the CMA expects model ids.
 - [Grilling: PDP product model — product_type (variation/grouped), per-line quantity, in-stock](https://github.com/Chapster87/pghrugby/issues/69)
   — decided; adds the fields in § 1b. Detail in `docs/agents/pdp-product-model.md`.
 - [Grilling: Steel City 7s additional-side pricing](https://github.com/Chapster87/pghrugby/issues/71)

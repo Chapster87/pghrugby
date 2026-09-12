@@ -10,12 +10,12 @@ Companion: [railway-inventory.md](./railway-inventory.md) (Railway-hosted Medusa
 
 Three runtime surfaces today, collapsing to **one** (`pghrugby/nextjs`) after Medusa/Sanity/Strapi removal:
 
-| Surface           | Path                                            | Role today                          | End state                                |
-| ----------------- | ----------------------------------------------- | ----------------------------------- | ---------------------------------------- |
-| Next.js app       | `pghrugby` (repo root)                          | Live site + storefront + prototypes | **Keep** — sole app                      |
-| Medusa backend    | `pghrugby-store`                                | Commerce API on Railway             | **Delete** with Medusa                   |
-| Strapi            | `pghrugby/strapi`                               | Abandoned CMS experiment            | **Delete**                               |
-| Migration scripts | `pghrugby/migrations/*`, `migrations/import-wp` | One-shot WP → CMS                   | Keep only while WP content still landing |
+| Surface           | Path                    | Role today                          | End state                                |
+| ----------------- | ----------------------- | ----------------------------------- | ---------------------------------------- |
+| Next.js app       | `pghrugby` (repo root)  | Live site + storefront + prototypes | **Keep** — sole app                      |
+| Medusa backend    | `pghrugby-store`        | Commerce API on Railway             | **Delete** with Medusa                   |
+| Strapi            | `pghrugby/strapi`       | Abandoned CMS experiment            | **Delete**                               |
+| Migration scripts | `pghrugby/migrations/*` | One-shot WP → CMS                   | Keep only while WP content still landing |
 
 ## 2. Before — full inventory (today)
 
@@ -92,7 +92,7 @@ Standard Strapi secrets only (`HOST`, `PORT`, `APP_KEYS`, `API_TOKEN_SALT`, `ADM
 | Variable                                           | Scripts                                      |
 | -------------------------------------------------- | -------------------------------------------- |
 | `WORDPRESS_URL` (default `https://pghrugby.com`)   | `migrations/dato-cms/*`                      |
-| `WORDPRESS_APP_USERNAME`, `WORDPRESS_APP_PASSWORD` | dato-cms + strapi + `migrations/import-wp`   |
+| `WORDPRESS_APP_USERNAME`, `WORDPRESS_APP_PASSWORD` | `migrations/dato-cms/*`                      |
 | `DATOCMS_API_TOKEN`, `DATOCMS_ENVIRONMENT`         | `migrations/dato-cms/*` (alias of CMA token) |
 | `STRAPI_API_KEY`                                   | `migrations/strapi/*`                        |
 

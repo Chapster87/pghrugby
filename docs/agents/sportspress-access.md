@@ -9,14 +9,18 @@ Verified live on 2026-08-31 against `https://pghrugby.com` (curl, unauthenticate
 ## What works — endpoints
 
 ### Root index
+
 `https://pghrugby.com/wp-json/`
+
 - Namespaces exposed include `wp/v2`, `wc/v3`, `sportspress/v2`, `yoast/v1`,
   `jetpack/v4`, `wordfence/*`.
 - `authentication.application-passwords` is advertised (auth is enabled, but **not
   needed** for any read below).
 
 ### Post types (`wp/v2/types`)
+
 `https://pghrugby.com/wp-json/wp/v2/types`
+
 - `sp_event` → registered with `show_in_rest`, `rest_base: "events"`;
   taxonomies `sp_league`, `sp_season`, `sp_venue`.
 - `sp_table` → registered with `show_in_rest`, `rest_base: "tables"`;
@@ -30,13 +34,15 @@ Verified live on 2026-08-31 against `https://pghrugby.com` (curl, unauthenticate
   build next-page URLs from the `sportspress/v2` base instead.
 
 ### Matches
+
 `https://pghrugby.com/wp-json/sportspress/v2/events?per_page=100&page=N` → `200 OK`
 
 Key fields per event (top level; no `meta.sp_*` object — SportsPress exposes
 plugin-native fields directly):
+
 - `id`, `slug`, `link`, `title.rendered`, `date`, `date_gmt` — kickoff datetime.
   Sample: `"2025-11-08T12:00:41"` / `"2025-11-08T17:00:41"` (local America/New_York
-  + UTC — note the observed -5h winter offset, i.e. `date` is site-local).
+  - UTC — note the observed -5h winter offset, i.e. `date` is site-local).
 - `status` (`publish`), `minutes` (`"80"`).
 - `teams: [id, id]` — `sp_team` post IDs (2 sides).
 - `results: { teamId: { points, outcome, tries?, conversions?, ... }, "0": {points: "Points", outcome: "Outcome"} }`
@@ -51,9 +57,11 @@ Sample scored match (id 5642): Forge 22–20, winner `3913`, league `523`, seaso
 `574`, venue `517`.
 
 ### Standings
+
 `https://pghrugby.com/wp-json/sportspress/v2/tables?per_page=100` → `200 OK`
 
 Key fields per table:
+
 - `id`, `title.rendered`, `date`, `status`, `leagues: [id]`, `seasons: [id]`.
 - `data: { teamId: { pos, name, gp, w, l, d, pf, pa, pd, bt, bl, ff, pts, lppg } }`
   — full standings rows keyed by `sp_team` ID, team **names inline**. Row
@@ -62,6 +70,7 @@ Key fields per table:
   columns GP/W/L/D/PF/PA/PD/BT/BL/FF/PTS/LPPG.
 
 ### Name resolution (companion lookups)
+
 - Teams: `https://pghrugby.com/wp-json/sportspress/v2/teams?per_page=100` →
   `id`, `title.rendered`, `slug`, `abbreviation`, `url`, `leagues[]`, `seasons[]`,
   `venues[]`. Sample id 5649 = "Chicago North Shore".
@@ -73,10 +82,10 @@ Key fields per table:
 
 ## Counts (via `X-WP-Total` response header)
 
-| Endpoint | X-WP-Total | Notes |
-|---|---|---|
-| `sportspress/v2/events?per_page=1` | **127** | 99/100 on page 1 carry scores → ~99% played/recorded |
-| `sportspress/v2/tables?per_page=1` | **19** | season/league standings snapshots |
+| Endpoint                           | X-WP-Total | Notes                                                |
+| ---------------------------------- | ---------- | ---------------------------------------------------- |
+| `sportspress/v2/events?per_page=1` | **127**    | 99/100 on page 1 carry scores → ~99% played/recorded |
+| `sportspress/v2/tables?per_page=1` | **19**     | season/league standings snapshots                    |
 
 ## Auth & caching notes
 
@@ -104,9 +113,9 @@ Key fields per table:
 
 ## Prior WP access patterns in this repo (all REST)
 
-- `migrations/import-wp/constants.ts:1` → `BASE_URL = "https://pghrugby.com/wp-json/wp/v2"`
-  (article-content import; per-type paginated fetch helper in
-  `migrations/import-wp/lib/wpDataTypeFetch.ts`).
+- The `migrations/import-wp/` WP → Sanity importer (since deleted) used
+  `BASE_URL = "https://pghrugby.com/wp-json/wp/v2"` with a per-type paginated
+  fetch helper.
 - `migrations/dato-cms/migrate-{articles,categories,pages}.js` →
   `WORDPRESS_URL = "https://pghrugby.com"` + `/wp-json/wp/v2/{posts,categories,pages}?per_page=100&status=any`
   with app-password auth (env: `WORDPRESS_APP_USERNAME` / `WORDPRESS_APP_PASSWORD`
@@ -140,8 +149,8 @@ Not currently needed. If a future need outgrows the REST surface (e.g. raw
       `sp_table`, `sp_team`, plus `sp_league`/`sp_season`/`sp_venue` terms), or the
       SportsPress-specific export if the plugin ships one. Import target: a throwaway
       WP instance to re-derive REST JSON.
-- [ ] DB access: wp_postmeta rows keyed `sp_*` (e.g. `sp_date`, `sp_team`,
-      `sp_result`, `sp_winner`, `sp_league`, `sp_season`, `sp_venue`, `sp_players`),
-      wp_posts for `sp_event`/`sp_table` rows, wp_term_taxonomy for taxonomies.
+- [ ] DB access: wp*postmeta rows keyed `sp*\*`(e.g.`sp_date`, `sp_team`,
+  `sp_result`, `sp_winner`, `sp_league`, `sp_season`, `sp_venue`, `sp_players`),
+  wp_posts for `sp_event`/`sp_table` rows, wp_term_taxonomy for taxonomies.
       Requires production DB creds + host — do not invent or print them.
 - [ ] Any export/DB dump must be treated as PII-bearing and stored outside the repo.
