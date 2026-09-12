@@ -54,3 +54,37 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Loading state. The component swaps the label for `.spinner`, so `currentColor`
+   stays the variant's text colour (black on gold, white on grey) and the spinner
+   contrasts without needing an explicit colour. */
+.loading {
+  cursor: progress;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.iconBefore,
+.iconAfter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
