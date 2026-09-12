@@ -673,6 +673,32 @@ Represents signed double-precision fractional values as specified by [IEEE 754](
 """
 scalar FloatType
 
+"""Block of type Gallery Item (gallery_item_block)"""
+type GalleryItemBlockRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  alt: String
+  desktopMedia: JsonField
+  id: ItemId!
+  mobileMedia: JsonField
+}
+
 type GlobalSeoField {
   facebookPageUrl: String
   fallbackSeo: SeoField
@@ -3272,8 +3298,11 @@ input ProductDetailPageModelFilter {
   _status: StatusFilter
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
+  addonProducts: LinksFilter
+  dataCollectors: LinksFilter
   description: TextFilter
-  pageComponents: LinksFilter
+  primaryProducts: LinksFilter
+  productType: StringFilter
   slug: SlugFilter
   title: StringFilter
   OR: [ProductDetailPageModelFilter]
@@ -3299,11 +3328,11 @@ enum ProductDetailPageModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  productType_ASC
+  productType_DESC
   title_ASC
   title_DESC
 }
-
-union ProductDetailPageModelPageComponentsField = DataCollectorRecord | ProductRecord
 
 """Record of type Product Detail Page (product_detail_page)"""
 type ProductDetailPageRecord implements RecordInterface {
@@ -3325,12 +3354,16 @@ type ProductDetailPageRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  addonProducts: [ProductRecord!]!
+  dataCollectors: [DataCollectorRecord!]!
   description(
     """Process content as markdown"""
     markdown: Boolean
   ): String
+  gallery: [GalleryItemBlockRecord!]!
   id: ItemId!
-  pageComponents: [ProductDetailPageModelPageComponentsField!]!
+  primaryProducts: [ProductRecord!]!
+  productType: String
   slug: String
   title: String
 }
@@ -3345,8 +3378,13 @@ input ProductModelFilter {
   _status: StatusFilter
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
+  inStock: BooleanFilter
   longDescription: TextFilter
   priceId: StringFilter
+  quantityBearing: BooleanFilter
+  saleEndsAt: DateTimeFilter
+  salePriceId: StringFilter
+  saleStartsAt: DateTimeFilter
   shortDescription: TextFilter
   sku: StringFilter
   title: StringFilter
@@ -3373,8 +3411,18 @@ enum ProductModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  inStock_ASC
+  inStock_DESC
   priceId_ASC
   priceId_DESC
+  quantityBearing_ASC
+  quantityBearing_DESC
+  saleEndsAt_ASC
+  saleEndsAt_DESC
+  salePriceId_ASC
+  salePriceId_DESC
+  saleStartsAt_ASC
+  saleStartsAt_DESC
   sku_ASC
   sku_DESC
   title_ASC
@@ -3402,11 +3450,16 @@ type ProductRecord implements RecordInterface {
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
   id: ItemId!
+  inStock: BooleanType!
   longDescription(
     """Process content as markdown"""
     markdown: Boolean
   ): String
   priceId: String
+  quantityBearing: BooleanType!
+  saleEndsAt: DateTime
+  salePriceId: String
+  saleStartsAt: DateTime
   shortDescription(
     """Process content as markdown"""
     markdown: Boolean
@@ -3502,6 +3555,13 @@ type Query {
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
     filter: ProductModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
+  _allSchemaMigrationsMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: SchemaMigrationModelFilter
   ): CollectionMetadata!
 
   """Returns meta information regarding an assets collection"""
@@ -3675,6 +3735,25 @@ type Query {
     filter: ProductModelFilter
     orderBy: [ProductModelOrderBy] = [_updatedAt_DESC]
   ): [ProductRecord!]!
+
+  """Returns a collection of records"""
+  allSchemaMigrations(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: SchemaMigrationModelFilter
+    orderBy: [SchemaMigrationModelOrderBy] = [_updatedAt_DESC]
+  ): [SchemaMigrationRecord!]!
 
   """Returns a collection of assets"""
   allUploads(
@@ -3876,6 +3955,19 @@ type Query {
     orderBy: [ProductDetailPageModelOrderBy] = [_updatedAt_DESC]
   ): ProductDetailPageRecord
 
+  """Returns a specific record"""
+  schemaMigration(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+    filter: SchemaMigrationModelFilter
+    orderBy: [SchemaMigrationModelOrderBy] = [_updatedAt_DESC]
+  ): SchemaMigrationRecord
+
   """Returns a specific asset"""
   upload(
     """The locale to use to fetch the field's content"""
@@ -3985,6 +4077,68 @@ type ResponsiveImage {
   title: String
   webpSrcSet: String!
   width: IntType!
+}
+
+input SchemaMigrationModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  name: StringFilter
+  OR: [SchemaMigrationModelFilter]
+  AND: [SchemaMigrationModelFilter]
+}
+
+enum SchemaMigrationModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  name_ASC
+  name_DESC
+}
+
+"""Record of type Schema migration (schema_migration)"""
+type SchemaMigrationRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  name: String
 }
 
 type SeoField {

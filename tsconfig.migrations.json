@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "types": ["node"]
+  },
+  "include": ["migrations/*.ts"],
+  "exclude": ["node_modules", ".next"]
+}

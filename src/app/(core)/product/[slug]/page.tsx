@@ -8,7 +8,6 @@ import {
   productDetailPageSlugs,
 } from "./product-detail-page.query"
 import { findCatalogItemsForProduct } from "@/lib/checkout/catalog"
-import storefrontCatalog from "@/lib/checkout/storefront-catalog.json"
 import { ResultOf } from "@/lib/datocms/graphql"
 import PdpCheckoutForm, {
   type PdpField,
@@ -24,19 +23,6 @@ type PdpQuery = NonNullable<
 
 type PageProps = {
   params: Promise<{ slug: string }>
-}
-
-type ManifestProduct = {
-  sku: string
-  label: string
-  wcSlug: string | null
-  pdp: string | null
-  kind: "primary" | "addon"
-}
-
-const manifest = storefrontCatalog as {
-  flows: { slug: string; title: string }[]
-  products: ManifestProduct[]
 }
 
 /**
@@ -83,28 +69,35 @@ export default async function ProductDetailPage({ params }: PageProps) {
     notFound()
   }
 
-  // Resolve each linked product against the manifest (kind) and the Stripe
-  // catalog (selectable options + prices). Products not in the catalog render
-  // no options — the page still shows their editorial copy.
-  const kindBySku = new Map(manifest.products.map((p) => [p.sku, p.kind]))
-  const products: PdpProduct[] = productDetailPage.pageComponents
-    .filter((c) => c.__typename === "ProductRecord")
-    .map((p) => ({
-      title: p.title ?? p.sku ?? "",
-      sku: p.sku ?? "",
-      shortDescription: p.shortDescription ?? null,
-      longDescription: p.longDescription ?? null,
-      kind: kindBySku.get(p.sku ?? "") ?? "primary",
-      options: findCatalogItemsForProduct(p.sku ?? "").map((o) => ({
-        sku: o.sku,
-        label: o.label,
-        unitAmount: o.unitAmount,
-      })),
-    }))
+  // Resolve the PDP's curated buckets against the Stripe catalog (selectable
+  // options + prices). Products not in the catalog render no options — the page
+  // still shows their editorial copy.
+  const toPdpProduct = (
+    kind: "primary" | "addon",
+    product: PdpQuery["primaryProducts"][number]
+  ): PdpProduct => ({
+    title: product.title ?? product.sku ?? "",
+    sku: product.sku ?? "",
+    shortDescription: product.shortDescription ?? null,
+    longDescription: product.longDescription ?? null,
+    kind,
+    options: findCatalogItemsForProduct(product.sku ?? "").map((option) => ({
+      sku: option.sku,
+      label: option.label,
+      unitAmount: option.unitAmount,
+    })),
+  })
 
-  const collector = productDetailPage.pageComponents.find(
-    (c) => c.__typename === "DataCollectorRecord"
-  )
+  const products: PdpProduct[] = [
+    ...productDetailPage.primaryProducts.map((product) =>
+      toPdpProduct("primary", product)
+    ),
+    ...productDetailPage.addonProducts.map((product) =>
+      toPdpProduct("addon", product)
+    ),
+  ]
+
+  const collector = productDetailPage.dataCollectors[0]
   const fields: PdpField[] = (collector?.formFields ?? []).map((f) => ({
     label: f.label ?? f.fieldName ?? "",
     fieldName: f.fieldName ?? "",

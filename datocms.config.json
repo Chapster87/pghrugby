@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "default": {
+      "siteId": "204985",
+      "logLevel": "NONE",
+      "apiTokenEnvName": "DATOCMS_CMA_TOKEN",
+      "migrations": {
+        "directory": "./migrations",
+        "modelApiKey": "schema_migration",
+        "tsconfig": "tsconfig.migrations.json"
+      }
+    }
+  }
+}

@@ -63,7 +63,7 @@ const result = spawnSync(
     "schema",
     "https://graphql.datocms.com/",
     "--header",
-    `Authorization: Bearer ${token}`,
+    `"Authorization: Bearer ${token}"`,
     "--output",
     "./schema.graphql",
   ],

@@ -6,28 +6,31 @@ export const productDetailPageQuery = graphql(`
       title
       slug
       description
-      pageComponents {
-        ... on ProductRecord {
-          __typename
-          title
-          sku
-          shortDescription
-          longDescription
-          priceId
-        }
-        ... on DataCollectorRecord {
-          __typename
-          title
-          formFields {
-            label
-            fieldName
-            fieldType
-            required
-            options
-            placeholder
-            repeatable
-            max
-          }
+      primaryProducts {
+        title
+        sku
+        shortDescription
+        longDescription
+        priceId
+      }
+      addonProducts {
+        title
+        sku
+        shortDescription
+        longDescription
+        priceId
+      }
+      dataCollectors {
+        title
+        formFields {
+          label
+          fieldName
+          fieldType
+          required
+          options
+          placeholder
+          repeatable
+          max
         }
       }
     }
