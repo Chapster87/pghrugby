@@ -18,13 +18,13 @@ This is the spec the cart catalog (`src/lib/prototype-stripe/catalog.ts` in the 
 
 General Club Memberships, annual basis (Jan–Dec), each with a monthly and a yearly price:
 
-| Tier | Monthly | Yearly | Prominent benefits |
-| --- | --- | --- | --- |
-| Diamond | $250 | $2,500 | Spotlight feature, plaque at Ruggers, 4 gala seats, SC7s field naming rights |
-| Platinum | $100 | $1,000 | Spotlight feature, golf-outing signage, plaque |
-| Gold | $50 | $500 | Newsletter, 2 gala seats |
-| Silver | $25 | $250 | Newsletter |
-| Bronze | $15 | $150 | Newsletter |
+| Tier     | Monthly | Yearly | Prominent benefits                                                           |
+| -------- | ------- | ------ | ---------------------------------------------------------------------------- |
+| Diamond  | $250    | $2,500 | Spotlight feature, plaque at Ruggers, 4 gala seats, SC7s field naming rights |
+| Platinum | $100    | $1,000 | Spotlight feature, golf-outing signage, plaque                               |
+| Gold     | $50     | $500   | Newsletter, 2 gala seats                                                     |
+| Silver   | $25     | $250   | Newsletter                                                                   |
+| Bronze   | $15     | $150   | Newsletter                                                                   |
 
 The membership page still carries stale **Venmo** payment instructions; the map's standing preference is that these move to Stripe (the Buy Buttons already are Stripe).
 
@@ -36,23 +36,23 @@ The membership page still carries stale **Venmo** payment instructions; the map'
 
 The club's non-membership revenue currently flows through WooCommerce checkout or PayPal/Venmo — not Stripe. Live-site prices (the basis for the target catalog):
 
-| Family | Live product | Live price |
-| --- | --- | --- |
-| Season dues | Team Dues (competitive cycle Sep 1 – Aug 31) | From $200 |
-| Season dues | Dues – Spring | $200 |
-| Golf outing | Golf Outing Registration / Ticket (Oct, Blackhawk GC, Beaver Falls PA) | $110/person, includes food & drink |
-| Golf outing | Mulligan (4 mulligans + 1 contest entry) | $30 |
-| Golf outing | All You Can Drink | $30 |
-| Golf outing | Sponsorship packages (variable, custom) | currently out of stock |
-| Tournament | Steel City 7s — Men's/Women's Open, Social, Men's Super Social | entry $350/team, second side $325, +$50 after deadline ($400/$375 at checkout) |
-| Donation | Club Donation | PayPal link (stale) |
-| Donation | "Pass the Hat" Fund | $1 (out of stock) |
+| Family      | Live product                                                           | Live price                                                                     |
+| ----------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Season dues | Team Dues (competitive cycle Sep 1 – Aug 31)                           | From $200                                                                      |
+| Season dues | Dues – Spring                                                          | $200                                                                           |
+| Golf outing | Golf Outing Registration / Ticket (Oct, Blackhawk GC, Beaver Falls PA) | $110/person, includes food & drink                                             |
+| Golf outing | Mulligan (4 mulligans + 1 contest entry)                               | $30                                                                            |
+| Golf outing | All You Can Drink                                                      | $30                                                                            |
+| Golf outing | Sponsorship packages (variable, custom)                                | currently out of stock                                                         |
+| Tournament  | Steel City 7s — Men's/Women's Open, Social, Men's Super Social         | entry $350/team, second side $325, +$50 after deadline ($400/$375 at checkout) |
+| Donation    | Club Donation                                                          | PayPal link (stale)                                                            |
+| Donation    | "Pass the Hat" Fund                                                    | $1 (out of stock)                                                              |
 
 The map's real product line is exactly five families — registrations (golf outing, tournament), season dues, donations, memberships. The site's other WooCommerce items (gala, 5k, ballpark, pig roast, pools, raffle, merch) are one-off fundraisers outside the destination.
 
 ## 2. Target catalog
 
-Stripe's catalog rule: *a separate product per distinct option a customer chooses between; prices are billing variants of one product.* (Source: `stripe-catalog-docs-research.md` §7.) Applied to the five families:
+Stripe's catalog rule: _a separate product per distinct option a customer chooses between; prices are billing variants of one product._ (Source: `stripe-catalog-docs-research.md` §7.) Applied to the five families:
 
 ### 2.1 Memberships (recurring) — exists in Stripe; reuse
 
@@ -70,7 +70,7 @@ Stripe's catalog rule: *a separate product per distinct option a customer choose
 ### 2.3 Golf outing registration (one-time) — to create
 
 - **Products**:
-  - `golf-outing-registration` — one-time price `$110` (per golfer; quantity = golfers, payload = captain + player names; spike "Case B").
+  - `golf-outing-registration` — one-time price `$110` (per registration; the buyer sets quantity explicitly. The registration form payload — captain + player names — is independent of quantity; it never dictates it. See `docs/agents/pdp-product-model.md`).
   - `golf-outing-mulligan` — `$30`.
   - `golf-outing-drink-band` — `$30`.
   - (Sponsorship packages: variable/custom, currently out of stock — treat as out of the first build; sell via contact form until a custom flow is wanted.)
@@ -78,7 +78,7 @@ Stripe's catalog rule: *a separate product per distinct option a customer choose
 
 ### 2.4 Tournament divisions (one-time) — to create
 
-- **Products**: one per division — `sc7s-mens-open`, `sc7s-mens-social`, `sc7s-mens-super-social`, `sc7s-womens-open`, `sc7s-womens-social`, `sc7s-mens-additional-side`, `sc7s-womens-additional-side` (matches the live division set).
+- **Products**: one per division — `sc7s-mens-open`, `sc7s-mens-social`, `sc7s-mens-super-social`, `sc7s-womens-open`, `sc7s-womens-social`. The two additional-side products (`sc7s-mens-additional-side`, `sc7s-womens-additional-side`) are **retired**: the additional side is now a Stripe coupon/promotion-code discount, not a buyable product — see `docs/agents/sc7s-additional-side-pricing.md`.
 - **Prices**: one one-time price per division per event year. Live basis: `$350` entry / `$325` second side, `+$50` after the deadline (`$400`/`$375`). Which rate is live in Stripe at any time is an operational call (new price + archive old at the deadline).
 - **Flow**: same registration pattern as golf — one line item, quantity 1 per team per division, team payload beside the session.
 
@@ -94,13 +94,13 @@ Stripe's catalog rule: *a separate product per distinct option a customer choose
 
 ## 3. Grouping semantics (what can share a Checkout Session)
 
-| Combo | Allowed? | Why |
-| --- | --- | --- |
-| Season dues + fixed-amount donation preset | ✅ | Both are fixed prices; two line items, one session (spike Case A). |
-| Golf outing + add-ons (mulligan, drink band) | ✅ | All fixed prices, one session. |
-| Registration + donation | ✅ in principle | Fixed prices mix freely; keep the payload beside the session, not in metadata. |
-| **Any session with a pay-what-you-want donation** | ❌ | `custom_unit_amount` must be the **only** line item (qty 1), no promo codes/discounts/recurring. The PWYW donation UX is its own graduated ticket (Grilling: Pay-what-you-want donation UX). |
-| Membership subscription + one-time items | ⚠️ | Allowed by Stripe (one-time items land on the initial invoice) but out of the first build; keep memberships in their own session. |
+| Combo                                             | Allowed?        | Why                                                                                                                                                                                          |
+| ------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Season dues + fixed-amount donation preset        | ✅              | Both are fixed prices; two line items, one session (spike Case A).                                                                                                                           |
+| Golf outing + add-ons (mulligan, drink band)      | ✅              | All fixed prices, one session.                                                                                                                                                               |
+| Registration + donation                           | ✅ in principle | Fixed prices mix freely; keep the payload beside the session, not in metadata.                                                                                                               |
+| **Any session with a pay-what-you-want donation** | ❌              | `custom_unit_amount` must be the **only** line item (qty 1), no promo codes/discounts/recurring. The PWYW donation UX is its own graduated ticket (Grilling: Pay-what-you-want donation UX). |
+| Membership subscription + one-time items          | ⚠️              | Allowed by Stripe (one-time items land on the initial invoice) but out of the first build; keep memberships in their own session.                                                            |
 
 Source: `stripe-catalog-docs-research.md` §5 (PWYW constraints), §2 (mixing rules).
 
@@ -120,16 +120,16 @@ Stripe has no "SKU" object anymore — the documented mechanism for tying Stripe
 Grounded in docs-research §4; the exact classifications below are **provisional and must be confirmed with a tax advisor** (Stripe's docs explicitly defer legal classification).
 
 - **Stripe Tax only calculates where an active registration exists** — register for PA (and any nexus states) or tax stays zero. Verify enablement + registration status in the Dashboard.
-- **`tax_behavior`**: automatic default is *exclusive* for USD (tax added on top of price); once set inclusive/exclusive it can't be changed.
+- **`tax_behavior`**: automatic default is _exclusive_ for USD (tax added on top of price); once set inclusive/exclusive it can't be changed.
 - **Provisional product tax codes** (per family):
 
-| Family | PTC | Notes |
-| --- | --- | --- |
-| Donations | `txcd_90000001` (Cash Donation) | Brendel, club donation |
-| Memberships | `txcd_50021001` (Fitness/Club dues) | Non-profit nuance: the site treats the incremental membership fee as a donation and issues a donation receipt — the split's tax treatment is a legal determination |
-| Tournament divisions | `txcd_50012003` (Participant competition fee) | SC7s |
-| Golf outing | `txcd_50010002` (Sporting facility participant) | Golf |
-| Fallback | `txcd_00000000` (Nontaxable) | only if advised |
+| Family               | PTC                                             | Notes                                                                                                                                                              |
+| -------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Donations            | `txcd_90000001` (Cash Donation)                 | Brendel, club donation                                                                                                                                             |
+| Memberships          | `txcd_50021001` (Fitness/Club dues)             | Non-profit nuance: the site treats the incremental membership fee as a donation and issues a donation receipt — the split's tax treatment is a legal determination |
+| Tournament divisions | `txcd_50012003` (Participant competition fee)   | SC7s                                                                                                                                                               |
+| Golf outing          | `txcd_50010002` (Sporting facility participant) | Golf                                                                                                                                                               |
+| Fallback             | `txcd_00000000` (Nontaxable)                    | only if advised                                                                                                                                                    |
 
 - **Webhook/tax**: with `automatic_tax` enabled, `total_details.amount_tax` arrives on the `checkout.session.completed` object; Stripe Tax charges a per-transaction calculation fee when a registration covers the jurisdiction.
 - **Donation support requirements**: the pay-what-you-want guide defers to Stripe Support for requirements around accepting donations/tips on the account — check before going live with the donation flow.

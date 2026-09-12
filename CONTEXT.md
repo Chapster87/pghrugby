@@ -13,10 +13,33 @@ _Avoid_: landing page, static page
 An editorial news entry, published under the posts prefix.
 _Avoid_: article, blog post, news item
 
+**Product**:
+One Stripe-backed buyable, identified by its sku. A PDP composes products; a product
+carries its own editorial content and availability (in stock or not, and whether it is
+sold in multiples).
+_Avoid_: item, variant
+
 **Product detail page (PDP)**:
-A buyable product page, one per Stripe-backed product (dues, golf outing, Steel City 7s,
+A buyable page that composes one or more products (dues, golf outing, Steel City 7s,
 donations). Rendered from an internal product route and rewritten to a clean root URL.
 _Avoid_: flow page, product page, buy page
+
+**Product type**:
+How a PDP composes its products — Simple, Variation, or Grouped.
+
+**Simple** (PDP):
+A PDP with a single product and no choice to make.
+
+**Variation** (PDP):
+A PDP whose products are alternatives — the buyer chooses exactly one.
+
+**Grouped** (PDP):
+A PDP whose products are multi-select, each chosen product with its own quantity.
+
+**Data collector**:
+The registration form attached to a PDP. Supplies the registration payload only — it
+never determines quantity.
+_Avoid_: form (ambiguous with a group of fields)
 
 **Clean URL**:
 The public root URL of a product detail page (e.g. `/dues`), produced by rewriting the

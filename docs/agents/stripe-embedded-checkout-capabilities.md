@@ -2,11 +2,13 @@
 
 Research asset for wayfinder map issue **Wayfinder map: Single-repo Next.js site on Stripe + DatoCMS + ForgeCMS**, resolving **Research: Embedded Checkout capability check**. All facts verified against docs.stripe.com primary sources; each section cites the page it came from.
 
+> **Amended by Research: Stripe metadata + product-image mechanics for registration responses (#55).** §4 now documents per-line-item metadata, and the §Consequences "registration payloads do not belong in metadata" rule is **reversed** — see [Registration responses and product imagery in an embedded Checkout Session](./stripe-checkout-registration-metadata.md).
+
 ## Executive summary
 
 Embedded Stripe Checkout (the "full page" Checkout product in its embedded mode, `ui_mode: embedded_page`) covers every current need of this project — multi-line-item purchases, donations, metadata, webhooks, and future shipping — with two hard constraints to design around:
 
-1. **A pay-what-you-want (customer-entered amount) line item must be the *only* line item in the session** (quantity 1). So a custom-amount donation can never ride in the same Checkout Session as season dues. Grouped purchases (dues + donation) work only when the donation is a fixed price; a true pay-what-you-want donation needs its own checkout flow.
+1. **A pay-what-you-want (customer-entered amount) line item must be the _only_ line item in the session** (quantity 1). So a custom-amount donation can never ride in the same Checkout Session as season dues. Grouped purchases (dues + donation) work only when the donation is a fixed price; a true pay-what-you-want donation needs its own checkout flow.
 2. **The webhook is the source of truth for orders.** The `checkout.session.completed` payload is the Checkout Session object itself, but line items require a server-side retrieve with `expand: ['line_items']`, and the handler must be idempotent.
 
 Everything else is accommodating: up to 100 line items, 50-key metadata, a 200-char `client_reference_id` for reconciliation, and `shipping_address_collection` that arrives on the session/webhook as `shipping_details`.
@@ -15,16 +17,16 @@ Everything else is accommodating: up to 100 line items, 50-key metadata, a 200-c
 
 "Full page" is the Checkout product; "embedded" vs "hosted" is where it renders. Both use the Checkout Sessions API and share identical capabilities. Differences are integration mechanics only:
 
-| | Hosted (`ui_mode: hosted_page`) | Embedded (`ui_mode: embedded_page`) |
-| --- | --- | --- |
-| Navigation | Redirect to `checkout.stripe.com` (`session.url`) | In-page iframe, no redirect away from site |
-| Success handling | `success_url` redirect | `return_url` redirect after payment |
-| Client integration | Plain link/redirect | `client_secret` + `stripe.createEmbeddedCheckoutPage()` / React `EmbeddedCheckoutProvider` |
-| Return page | Any URL | Must create one; reads `{CHECKOUT_SESSION_ID}` and retrieves session status |
+|                    | Hosted (`ui_mode: hosted_page`)                   | Embedded (`ui_mode: embedded_page`)                                                        |
+| ------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Navigation         | Redirect to `checkout.stripe.com` (`session.url`) | In-page iframe, no redirect away from site                                                 |
+| Success handling   | `success_url` redirect                            | `return_url` redirect after payment                                                        |
+| Client integration | Plain link/redirect                               | `client_secret` + `stripe.createEmbeddedCheckoutPage()` / React `EmbeddedCheckoutProvider` |
+| Return page        | Any URL                                           | Must create one; reads `{CHECKOUT_SESSION_ID}` and retrieves session status                |
 
 Source: [Build a payments page](https://docs.stripe.com/payments/checkout) (feature/hosting comparison table); [Embed a checkout page in your site](https://docs.stripe.com/checkout/embedded/quickstart).
 
-The "Embedded form" product (public preview, `payment-ui=checkout-form` variants) is *not* what this research covers — it is a separate, more limited UI (no cross-sells/upsells, limited order summary) and was not chosen in the map.
+The "Embedded form" product (public preview, `payment-ui=checkout-form` variants) is _not_ what this research covers — it is a separate, more limited UI (no cross-sells/upsells, limited order summary) and was not chosen in the map.
 
 ## Capabilities checklist
 
@@ -60,7 +62,7 @@ Sources: [Create a Checkout Session](https://docs.stripe.com/api/checkout/sessio
   - No promotion codes or discounts,
   - No recurring payments, no optional items.
 - `submit_type: 'donate'` renders a "Donate" submit button (embedded quickstart uses it with `customer_creation: 'always'`).
-- Alternative for donations: inline `price_data` with a server-set `unit_amount` (fixed amount per session) — API-only, not reusable, and does *not* let the customer choose the amount.
+- Alternative for donations: inline `price_data` with a server-set `unit_amount` (fixed amount per session) — API-only, not reusable, and does _not_ let the customer choose the amount.
 
 Sources: [Let customers decide what to pay](https://docs.stripe.com/payments/checkout/pay-what-you-want) (embedded-page variant); [Create a price](https://docs.stripe.com/api/prices/create) (`custom_unit_amount`); [Price object](https://docs.stripe.com/api/prices/object) (`custom_unit_amount.maximum/minimum/preset`); [Checkout Session object](https://docs.stripe.com/api/checkout/sessions/object) (`submit_type`).
 
@@ -69,9 +71,10 @@ Sources: [Let customers decide what to pay](https://docs.stripe.com/payments/che
 - **Up to 50 keys** per object; key names ≤ **40 chars**; values ≤ **500 chars**; stored as strings; **`[` and `]` are forbidden in keys**. Never store sensitive data.
 - Session-level `metadata` is present on the Checkout Session object and therefore in the webhook payload.
 - `payment_intent_data.metadata` is a separate create-parameter that copies key-value pairs onto the resulting PaymentIntent (separate budget from session metadata).
+- **`line_items[].metadata` is a documented create parameter**, and each line item carries its **own** 50-key budget. Line-item metadata is not on the Session object by default — retrieve the session with `line_items` expanded and read `line_items.data.metadata`.
 - Metadata is invisible to customers unless you display it; it does not affect authorization.
 
-Sources: [Metadata](https://docs.stripe.com/api/metadata); [Create a Checkout Session](https://docs.stripe.com/api/checkout/sessions/create) (`metadata`, `payment_intent_data.metadata`).
+Sources: [Metadata](https://docs.stripe.com/api/metadata); [Create a Checkout Session](https://docs.stripe.com/api/checkout/sessions/create) (`metadata`, `payment_intent_data.metadata`, [`line_items`](https://docs.stripe.com/api/checkout/sessions/create?query=line_items)); [The Checkout Session object](https://docs.stripe.com/api/checkout/sessions/object?query=line_items) (`line_items.data.metadata`).
 
 ### 5. `client_reference_id`
 
@@ -108,11 +111,11 @@ Grounded strictly in the facts above; anything account-specific is flagged in §
 
 - **One Checkout Session = one PaymentIntent = one `orders` row.** Grouped purchases become a single session with multiple line items; the webhook upserts an order keyed by session id. Session → order mapping needs no more than the session id plus the fields in §6.
 - **Dues + donation, two flavors:**
-  - *Fixed-amount donation* (preset donation prices) — can be a second line item in the dues session. Simplest; the whole cart pays in one transaction.
-  - *True pay-what-you-want donation* — cannot share the session; it must be its own checkout flow with a sole `custom_unit_amount` line item. The donation UX decision (separate flow vs fixed presets) is now specifiable — see the graduated ticket.
+  - _Fixed-amount donation_ (preset donation prices) — can be a second line item in the dues session. Simplest; the whole cart pays in one transaction.
+  - _True pay-what-you-want donation_ — cannot share the session; it must be its own checkout flow with a sole `custom_unit_amount` line item. The donation UX decision (separate flow vs fixed presets) is now specifiable — see the graduated ticket.
 - **The cart is server-authoritative.** The Next.js server holds price IDs and builds the Checkout Session; the client only requests a session for the current cart and mounts it. Never let the client dictate amounts/prices.
 - **Reconciliation key = `client_reference_id`** (≤200 chars). Put the cart/order reference there; it is the top-level field designed for exactly this. Keep session `metadata` for small structured payloads (e.g. source page, registration form id) and stay well within the 50-key/40-char/500-char limits.
-- **Registration payloads (golf, tournament) do not belong in metadata.** Collect them in a site-side form before checkout; the session carries the reference (`client_reference_id`), and the `orders` table links session id ↔ registration payload. Checkout also supports up to 3 `custom_fields` if small at-checkout data is ever wanted (note: `custom_fields` are customer-visible).
+- **A compact per-line registration summary belongs in metadata; the full payload does not.** Collect the full registration payload site-side before checkout and keep it in the `orders` table (referenced by `client_reference_id`), but ride a truncated per-line summary in session `metadata` + `payment_intent_data.metadata` so the club can read who registered against the payment in the Dashboard. This **reverses** the original "registration payloads do not belong in metadata" rule — see [Registration responses and product imagery in an embedded Checkout Session](./stripe-checkout-registration-metadata.md) for the key scheme and 500-char truncation rule. Checkout also supports up to 3 `custom_fields` if small at-checkout data is ever wanted (note: `custom_fields` are customer-visible).
 - **Webhook handler contract:** idempotent upsert by session id; retrieve with `expand: ['line_items']`; fulfill only when `payment_status != 'unpaid'`; handle `checkout.session.async_payment_succeeded` if non-instant payment methods get enabled later. Return page calls the same path as a fast-path, but the webhook is authoritative.
 - **Donation flows use `submit_type: 'donate'`** for the correct button label, and `customer_creation: 'always'` keeps a Customer per donor (per the embedded quickstart).
 - **Shipping later costs nothing now.** When it lands, pass `shipping_address_collection.allowed_countries` (e.g. `['US']`) and the address arrives in `shipping_details` on the webhook. Design the `orders` table with a nullable shipping column/JSONB so it doesn't need a migration later.
