@@ -5,6 +5,15 @@ import { getBaseURL } from "@lib/util/env"
 export const cmsCacheTag = "cms-content"
 
 /**
+ * Default freshness window (seconds) for CMS reads. The embedded CDA returns
+ * GraphQL errors with HTTP 200, which Next would otherwise cache indefinitely —
+ * a transient schema/auth error would stick on every page. A TTL bounds any
+ * such poisoned entry, and gives content a freshness window, since nothing
+ * calls `revalidateTag(cmsCacheTag)` today.
+ */
+const CMS_CACHE_TTL_SECONDS = 300
+
+/**
  * Host mount for the embedded ForgeCMS core. Mirrors `src/proxy.ts` and
  * `forgecore.json` `mountPath` — not an env var; the core hardcodes the same
  * prefix until a producer-side change.
@@ -54,7 +63,9 @@ export async function executeQuery<
     cache: options?.cache ?? "force-cache",
     next: {
       tags: [cmsCacheTag],
-      revalidate: options?.revalidate,
+      // See CMS_CACHE_TTL_SECONDS: bounds stale/poisoned entries. Callers can
+      // override, including with `false` to opt out of expiry.
+      revalidate: options?.revalidate ?? CMS_CACHE_TTL_SECONDS,
     },
   }
 
