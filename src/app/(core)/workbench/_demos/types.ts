@@ -12,6 +12,12 @@ export type Demo = {
   title: string
   /** Optional one-liner on what the demo covers. */
   description?: string
-  /** Renders the specimens under test. */
+  /**
+   * Renders the specimens under test. Keep this server-safe and delegate the
+   * actual specimens to a `"use client"` component (`./specimens`): the shared
+   * wrappers are compound client components, and property access such as
+   * `Checkbox.Root` is only defined on the client, not on a server-side client
+   * reference.
+   */
   render: () => ReactNode
 }

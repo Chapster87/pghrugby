@@ -1,0 +1,51 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid var(--color-grey-400);
+  border-radius: 50%;
+  background-color: var(--color-white);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+
+  &:focus-visible {
+    border-color: var(--color-gold);
+    outline: 1px solid var(--color-gold);
+  }
+
+  &[data-state="checked"] {
+    border-color: var(--color-gold);
+  }
+
+  &[data-disabled] {
+    background-color: var(--color-grey-100);
+    cursor: not-allowed;
+  }
+}
+
+.indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-gold);
+}
