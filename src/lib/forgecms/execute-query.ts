@@ -1,7 +1,5 @@
 import { request } from "graphql-request"
 
-import { getBaseURL } from "@lib/util/env"
-
 export const cmsCacheTag = "cms-content"
 
 /**
@@ -20,12 +18,36 @@ const CMS_CACHE_TTL_SECONDS = 300
  */
 export const CMS_MOUNT_PATH = "/admin" as const
 
+/** True for origins that only resolve on the developer's machine. */
+function isLocalOrigin(url: string): boolean {
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(url)
+}
+
+/**
+ * Base URL for the embedded CMS's CDA on this app.
+ *
+ * `NEXT_PUBLIC_BASE_URL` is a public build constant, so a local value
+ * (`http://localhost:8000`) can be inlined into a production build and leave
+ * the CDA unreachable. Prefer it only when it is a real origin, otherwise fall
+ * back to the URL the host publishes for the deploying/running site (Netlify
+ * sets `URL` / `DEPLOY_PRIME_URL`), then to local development.
+ */
+function resolveCmsBaseUrl(): string {
+  const configured = process.env.NEXT_PUBLIC_BASE_URL
+  if (configured && !isLocalOrigin(configured)) return configured
+
+  const hosted = process.env.URL || process.env.DEPLOY_PRIME_URL
+  if (hosted) return hosted
+
+  return configured || "http://localhost:8000"
+}
+
 /**
  * Absolute GraphQL endpoint for the embedded core CDA on this app.
- * `${NEXT_PUBLIC_BASE_URL}/admin/api/graphql`
+ * `${NEXT_PUBLIC_BASE_URL}/admin/api/graphql` in a correct deploy.
  */
 export function getCmsGraphqlUrl(): string {
-  const base = getBaseURL().replace(/\/$/, "")
+  const base = resolveCmsBaseUrl().replace(/\/$/, "")
   return `${base}${CMS_MOUNT_PATH}/api/graphql`
 }
 
