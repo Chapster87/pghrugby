@@ -102,12 +102,16 @@ export async function executeQuery<
   } catch (error) {
     if (options?.graceful) {
       // The CMS is unavailable (offline, misconfigured, or not running during
-      // local development). Resolve to an empty result so chrome (nav, site
-      // settings, sponsors) degrades instead of crashing the page.
+      // local development / a build). Resolve to an empty result so chrome
+      // (nav, site settings, sponsors) degrades instead of crashing the page.
+      //
+      // Log a sanitized reason only: the raw error carries `request.headers`
+      // (including `x-api-key`), and this runs during `next build`, where the
+      // host's secret scanner reads the log.
+      const reason = error instanceof Error ? error.message : "unknown error"
       console.warn(
         `[forgecms] Query failed; falling back to an empty result. ` +
-          `Is the CMS reachable at "${url}"?\n`,
-        error
+          `Is the CMS reachable at "${url}"? (${reason})`
       )
       return {} as Result
     }
