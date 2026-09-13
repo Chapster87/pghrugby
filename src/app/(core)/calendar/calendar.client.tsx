@@ -12,12 +12,12 @@ export default function CalendarClient({
   events: {
     id: string // Changed from number to string to match the updated type
     title: string
-    text: string
+    text: string | null
     start: string
     end: string
-    location: string
-    htmlLink: string
-    calendarName: string // Include calendarIdName for event type
+    location: string | null
+    htmlLink: string | null
+    calendarName: string
   }[]
 }) {
   const [currentDate, setCurrentDate] = useState(dayjs())

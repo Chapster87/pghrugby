@@ -1,5 +1,5 @@
 import { ResultOf } from "@/lib/datocms/graphql"
-import { fileFieldFragment } from "@/app/(core)/[slug]/pages.query"
+import { fileFieldFragment } from "@fragments/blocks"
 
 export type FileField = ResultOf<typeof fileFieldFragment>
 

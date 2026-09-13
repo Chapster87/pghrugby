@@ -31,6 +31,9 @@ export const graphql = initGraphQLTada<{
     MetaTagAttributes: Record<string, string>
     UploadId: string
   }
+  // react-datocms' StructuredText needs unmasked responses: each structured-text
+  // block must carry its `id` and fields directly, not a fragment reference.
+  disableMasking: true
 }>()
 
 export { readFragment } from "gql.tada"

@@ -6,14 +6,7 @@ import { Arrow, Dot } from "../slider-nav"
 import clsx from "clsx"
 import s from "./styles.module.css"
 
-type CardSliderItem = {
-  type: string
-  title: string
-  slug: string
-  date: string
-  excerpt: string
-  featuredMedia: string
-}
+type CardSliderItem = ContentCard
 
 // Set how many slides to show at once
 const SLIDES_TO_SHOW = 5

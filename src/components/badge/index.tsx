@@ -1,7 +1,6 @@
 import React from "react"
 import clsx from "clsx"
 import s from "./styles.module.css"
-import unset from "lodash-es/unset"
 
 export type BadgeVariant = "primary" | "secondary" | "tertiary"
 

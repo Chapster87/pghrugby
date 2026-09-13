@@ -146,10 +146,12 @@ export default async function Calendar() {
   let events: {
     id: string
     title: string
-    text: string
+    text: string | null
     start: string
     end: string
-    calendarIdName: string // Add calendarIdName to the event type
+    location: string | null
+    htmlLink: string | null
+    calendarName: string
   }[] = []
 
   try {

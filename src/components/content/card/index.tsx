@@ -3,7 +3,7 @@ import Link from "next/link"
 import { urlBuilder } from "@/lib/util/url"
 import s from "./styles.module.css"
 
-type ContentCard = {
+export type ContentCard = {
   type: string
   title: string
   slug: string
