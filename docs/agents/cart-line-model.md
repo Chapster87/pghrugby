@@ -137,9 +137,10 @@ snapshot to the entry shape in § 1.
 - ~~**Editing answers / registration-backed quantity in the flyout**~~ — resolved
   by [Grilling: Editing a registration already in the cart](https://github.com/Chapster87/pghrugby/issues/58);
   detail in `docs/agents/registration-editing.md`.
-- **Order + reporting persistence** of collector entries as first-class rows
-  linked to their line —
-  [Grilling: Orders + reporting shape for mixed carts](https://github.com/Chapster87/pghrugby/issues/60).
+- ~~**Order + reporting persistence** of collector entries as first-class rows
+  linked to their line~~ — resolved by
+  [Grilling: Orders + reporting shape for mixed carts](https://github.com/Chapster87/pghrugby/issues/60);
+  detail in `docs/agents/order-records-and-reporting.md`.
 - **Minicart visuals, grouping, and edge states** —
   [Prototype: Minicart flyout](https://github.com/Chapster87/pghrugby/issues/63)
   (decided: Grouped cards; detail in `docs/agents/minicart-flyout-direction.md`).

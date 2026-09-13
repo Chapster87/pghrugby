@@ -54,6 +54,25 @@ A cart line holding a DataCollector's answers. Carries no sku and no price; link
 the priced line it was added with.
 _Avoid_: registration line
 
+**Order**:
+The durable record of a purchase, holding the priced lines and their
+registrations as Stripe recorded them.
+_Avoid_: purchase, transaction
+
+**Order line**:
+A priced line as recorded on an order — one Stripe line item, tied optionally to the
+add-on's primary line.
+_Avoid_: order item
+
+**Order registration**:
+A collector entry as recorded on an order, tied to the order line it was added
+with.
+
+**Family**:
+The product-metadata bucket a product belongs to (membership, dues, golf,
+tournament, donation); the coarse axis orders are reported on. A product may have
+no family.
+
 **Clean URL**:
 The public root URL of a product detail page (e.g. `/dues`), produced by rewriting the
 internal product route. Products win slug ownership over pages.
