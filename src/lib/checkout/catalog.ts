@@ -118,7 +118,12 @@ export const CHECKOUT_CATALOG = {
       },
     ] satisfies CatalogItem[],
   },
-  /** Fixed-amount donation presets — bundleable with any flow. A true pay-what-you-want amount is sole-line-item only (its own ticket). */
+  /**
+   * Fixed-amount donation presets — ordinary cart lines, bundleable with any
+   * flow. A true pay-what-you-want amount is standalone-only (its own
+   * sole-line Checkout Session) and never a cart line — see
+   * `docs/agents/donations-in-mixed-carts.md`.
+   */
   donationPresets: [
     {
       sku: "donation-club-preset-10",

@@ -41,7 +41,7 @@ A `product_type` field on `product_detail_page`:
   1 ticket but names 4 golfers, we may warn; we never block checkout — the club
   follows up directly at its scale.
 - The cart already accepts a per-line quantity (`CheckoutSelection = { sku,
-  quantity }`, clamped 1–100 in `buildCart`), so this is a UI + authoring change,
+quantity }`, clamped 1–100 in `buildCart`), so this is a UI + authoring change,
   not a cart-model change.
 
 ## 3. Availability (in stock)
@@ -70,24 +70,24 @@ A `product_type` field on `product_detail_page`:
 
 ## 4. Page classification
 
-| Page | `product_type` | Notes |
-| --- | --- | --- |
-| Forge Pig Roast | `simple` | one ticket |
-| Steel City 7s Bar Crawl | `simple` | one ticket |
-| Golf Outing | `simple` | one registration primary; mulligan / drink band are quantity-bearing add-ons |
-| Dues | `variation` | fall / spring / summer are alternatives; a player pays for exactly one season |
-| Donate | `variation` | club vs pass-the-hat; confirmed in the donations grilling, not here |
-| Steel City 7s | `variation` | five divisions are alternatives |
-| Forge Day at the Ballpark | `grouped` | Adult + 16 & Under bought together, each with its own quantity |
-| NFL Survivor Pool | `grouped` | Ticket + Insurance bought together, each with its own quantity |
+| Page                      | `product_type` | Notes                                                                                                                                    |
+| ------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Forge Pig Roast           | `simple`       | one ticket                                                                                                                               |
+| Steel City 7s Bar Crawl   | `simple`       | one ticket                                                                                                                               |
+| Golf Outing               | `simple`       | one registration primary; mulligan / drink band are quantity-bearing add-ons                                                             |
+| Dues                      | `variation`    | fall / spring / summer are alternatives; a player pays for exactly one season                                                            |
+| Donate                    | `variation`    | club vs pass-the-hat; cart primaries only — any-amount giving is a standalone, non-cart affordance (confirmed in the donations grilling) |
+| Steel City 7s             | `variation`    | five divisions are alternatives                                                                                                          |
+| Forge Day at the Ballpark | `grouped`      | Adult + 16 & Under bought together, each with its own quantity                                                                           |
+| NFL Survivor Pool         | `grouped`      | Ticket + Insurance bought together, each with its own quantity                                                                           |
 
 ## 5. Control semantics
 
-| Type | Primary selection | Add-ons | Quantity | Add to cart |
-| --- | --- | --- | --- | --- |
-| `simple` | implicit (the one primary) | optional checkboxes | stepper on any quantity-bearing line | one action |
-| `variation` | dropdown, choose exactly one, no preselection | optional checkboxes | stepper on any quantity-bearing line | one action |
-| `grouped` | multi-select; every chosen primary included | optional checkboxes | stepper per line | one "add all" action |
+| Type        | Primary selection                             | Add-ons             | Quantity                             | Add to cart          |
+| ----------- | --------------------------------------------- | ------------------- | ------------------------------------ | -------------------- |
+| `simple`    | implicit (the one primary)                    | optional checkboxes | stepper on any quantity-bearing line | one action           |
+| `variation` | dropdown, choose exactly one, no preselection | optional checkboxes | stepper on any quantity-bearing line | one action           |
+| `grouped`   | multi-select; every chosen primary included   | optional checkboxes | stepper per line                     | one "add all" action |
 
 ## 6. Boundaries / follow-ups
 
@@ -97,7 +97,12 @@ A `product_type` field on `product_detail_page`:
   `sc7s-*-additional-side` products stop being PDP add-ons — which changes the
   SC7s `addonProducts` mapping in the migration doc. That mapping is provisional
   until #71 resolves.
-- **Donations** (PWYW, mixed carts) stay with
-  [Grilling: Donations in a mixed cart](https://github.com/Chapster87/pghrugby/issues/59).
+- **Donations** — resolved in
+  [Grilling: Donations in a mixed cart (PWYW constraint)](https://github.com/Chapster87/pghrugby/issues/59):
+  fixed presets are ordinary cart lines, while any-amount giving is a standalone
+  sole-line checkout that is never a cart primary — detail in
+  `docs/agents/donations-in-mixed-carts.md`. Preset selection under the
+  single-`price_id` model is the open follow-up
+  ([Grilling: Donate PDP preset selection](https://github.com/Chapster87/pghrugby/issues/75)).
 - Glossary terms added to `CONTEXT.md`: Product, Product type, Simple, Variation,
   Grouped, Data collector.
