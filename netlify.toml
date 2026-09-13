@@ -1,0 +1,15 @@
+# Netlify secrets-scanning overrides.
+#
+# Next.js inlines every NEXT_PUBLIC_* value into the build output, so the
+# scanner can always find those. The Google Calendar key is now server-only
+# (`GOOGLE_CALENDAR_API_KEY`, read in src/app/(core)/calendar/page.tsx), so its
+# value no longer reaches the output; the omit below is a defensive belt while
+# we confirm how the scanner matches.
+#
+# `RESEND_API_KEY` is server-only (src/app/api/send-contact-email/route.ts). A
+# rebuild with a throwaway value showed it never reaches the build output or the
+# log, so the scanner hit there is a false positive.
+#
+# Omit these keys rather than disabling scanning outright.
+[build]
+  SECRETS_SCAN_OMIT_KEYS = ["GOOGLE_CALENDAR_API_KEY", "RESEND_API_KEY"]

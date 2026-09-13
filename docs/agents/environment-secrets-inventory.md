@@ -34,7 +34,7 @@ Three runtime surfaces today, collapsing to **one** (`pghrugby/nextjs`) after Me
 | `STRIPE_WEBHOOK_SECRET`                             | prototype webhook signature verify                                                   | Stripe               | **Stay**                                                                               |
 | `RESEND_API_KEY` (was `NEXT_PUBLIC_RESEND_API_KEY`) | `api/send-contact-email`                                                             | Resend               | **Stay** — server-only; rename done 2026-08-24                                         |
 | `RESEND_FROM_EMAIL`                                 | contact form `from` (default `web@pghrugby.com`)                                     | Resend               | **Stay**                                                                               |
-| `NEXT_PUBLIC_GOOGLE_API_KEY`                        | `calendar/page.tsx`                                                                  | Google Calendar      | **Stay**                                                                               |
+| `GOOGLE_CALENDAR_API_KEY`                           | `calendar/page.tsx`                                                                  | Google Calendar      | **Stay** — server-only (renamed from `NEXT_PUBLIC_GOOGLE_API_KEY`)                     |
 | `NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY`             | `components/contact-form`                                                            | reCAPTCHA            | **Stay**                                                                               |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID`                     | Sanity client/env/cli, image URLs                                                    | Sanity               | **Die** (after Sanity teardown)                                                        |
 | `NEXT_PUBLIC_SANITY_DATASET`                        | Sanity client/env                                                                    | Sanity               | **Die**                                                                                |
@@ -135,7 +135,7 @@ RESEND_API_KEY=
 RESEND_FROM_EMAIL=web@pghrugby.com
 
 # Google
-NEXT_PUBLIC_GOOGLE_API_KEY=
+GOOGLE_CALENDAR_API_KEY=
 NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY=
 
 # Cache invalidation (when invalidate-cache route is implemented)

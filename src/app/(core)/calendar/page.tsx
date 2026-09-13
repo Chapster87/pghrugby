@@ -25,7 +25,9 @@ export async function generateMetadata(
   } satisfies Metadata
 }
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+// Server-only (never NEXT_PUBLIC_): used in this server component only, so the
+// value must not be inlined into the build output.
+const API_KEY = process.env.GOOGLE_CALENDAR_API_KEY
 
 // Define calendar IDs directly in the server component
 const CALENDAR_IDS = [
