@@ -175,6 +175,12 @@ appended by seed-data-collectors.js.
 | `steel-city-7s` | sc7s-mens-open, sc7s-mens-social, sc7s-mens-super-social, sc7s-womens-open, sc7s-womens-social | — (retired, see below)                       | "Steel City 7s — Team & contact"  |
 | `donate`        | donation-club, donation-pass-the-hat                                                           | —                                            | —                                 |
 
+> The `donate` row is what the applied backfill produced; the club presets later
+> split into `donation-club-preset-10` / `-25` / `-50` records and the primaries
+> reordered ladder-then-pass-the-hat
+> ([Grilling: Donate PDP preset selection](https://github.com/Chapster87/pghrugby/issues/75)
+> — detail in `docs/agents/donate-pdp-preset-selection.md`).
+
 The six manifest products with `pdp: null` (ballpark ×2, survivor pool ×2, bar
 crawl, pig roast) are not attached to any PDP and must not appear.
 

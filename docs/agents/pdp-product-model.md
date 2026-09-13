@@ -78,16 +78,16 @@ quantity }`, clamped 1–100 in `buildCart`), so this is a UI + authoring change
 
 ## 4. Page classification
 
-| Page                      | `product_type` | Notes                                                                                                                                                |
-| ------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Forge Pig Roast           | `simple`       | one ticket                                                                                                                                           |
-| Steel City 7s Bar Crawl   | `simple`       | one ticket                                                                                                                                           |
-| Golf Outing               | `simple`       | one registration primary (`quantity_bearing`, buyer-set 1–4 — one foursome; captain is player 1); mulligan / drink band are quantity-bearing add-ons |
-| Dues                      | `variation`    | fall / spring / summer are alternatives; a player pays for exactly one season                                                                        |
-| Donate                    | `variation`    | club vs pass-the-hat; cart primaries only — any-amount giving is a standalone, non-cart affordance (confirmed in the donations grilling)             |
-| Steel City 7s             | `variation`    | five divisions are alternatives                                                                                                                      |
-| Forge Day at the Ballpark | `grouped`      | Adult + 16 & Under bought together, each with its own quantity                                                                                       |
-| NFL Survivor Pool         | `grouped`      | Ticket + Insurance bought together, each with its own quantity                                                                                       |
+| Page                      | `product_type` | Notes                                                                                                                                                            |
+| ------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Forge Pig Roast           | `simple`       | one ticket                                                                                                                                                       |
+| Steel City 7s Bar Crawl   | `simple`       | one ticket                                                                                                                                                       |
+| Golf Outing               | `simple`       | one registration primary (`quantity_bearing`, buyer-set 1–4 — one foursome; captain is player 1); mulligan / drink band are quantity-bearing add-ons             |
+| Dues                      | `variation`    | fall / spring / summer are alternatives; a player pays for exactly one season                                                                                    |
+| Donate                    | `variation`    | three club presets + pass-the-hat; cart primaries only — any-amount giving is a standalone, non-cart affordance (presets split in the preset-selection grilling) |
+| Steel City 7s             | `variation`    | five divisions are alternatives                                                                                                                                  |
+| Forge Day at the Ballpark | `grouped`      | Adult + 16 & Under bought together, each with its own quantity                                                                                                   |
+| NFL Survivor Pool         | `grouped`      | Ticket + Insurance bought together, each with its own quantity                                                                                                   |
 
 ## 5. Control semantics
 
@@ -110,7 +110,9 @@ quantity }`, clamped 1–100 in `buildCart`), so this is a UI + authoring change
   fixed presets are ordinary cart lines, while any-amount giving is a standalone
   sole-line checkout that is never a cart primary — detail in
   `docs/agents/donations-in-mixed-carts.md`. Preset selection under the
-  single-`price_id` model is the open follow-up
-  ([Grilling: Donate PDP preset selection](https://github.com/Chapster87/pghrugby/issues/75)).
+  single-`price_id` model is settled in
+  [Grilling: Donate PDP preset selection](https://github.com/Chapster87/pghrugby/issues/75):
+  one record per preset, primaries ordered ladder-then-pass-the-hat — detail in
+  `docs/agents/donate-pdp-preset-selection.md`.
 - Glossary terms added to `CONTEXT.md`: Product, Product type, Simple, Variation,
   Grouped, Data collector.

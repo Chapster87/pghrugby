@@ -18,7 +18,7 @@ A `custom_unit_amount` (customer-entered) Price must be the session's **only**
 line item, quantity 1, and it forbids discounts and promotion codes
 (`docs/agents/stripe-embedded-checkout-capabilities.md` § 3). Since
 [Grilling: Steel City 7s additional-side pricing](https://github.com/Chapster87/pghrugby/issues/71)
-made the additional side a coupon, even a *discounted* cart is incompatible with
+made the additional side a coupon, even a _discounted_ cart is incompatible with
 pay-what-you-want. A PWYW line can therefore **never** ride the mixed-cart
 session the flyout builds — the rule survives the mixed cart.
 
@@ -63,18 +63,19 @@ PDP's `primary_products`). #18's recorded **$25/$50/$100/$250/$500** ladder is
 
 ## 4. Donate PDP modelling
 
-- `product_type: variation` stays **cart-primaries only** (`donation-club`,
-  `donation-pass-the-hat`), confirming the deferral in `pdp-product-model.md`
-  § 4. The any-amount option is not a primary and not a cart line.
-- The any-amount option is a `product` record (`donation-club-pwyw`, `price_id`
-  = the custom-amount Price, with `in_stock` and a label) referenced by a
-  **dedicated standalone page field** on `product_detail_page` — not
-  `primary_products` — consistent with #72's "price authority lives in DatoCMS".
-  The field and record are build work the spec hands off.
+Amended by
+[Grilling: Donate PDP preset selection under the single-price product model](https://github.com/Chapster87/pghrugby/issues/75)
+— the club presets are now one `product` record each, and the any-amount record
+is the repurposed `donation-club` record (detail in
+`docs/agents/donate-pdp-preset-selection.md`).
 
-## Open follow-up
-
-The Donate PDP's *preset selection* under the single-`price_id` product model is
-unresolved (one `donation-club` record, three fixed prices, one option per
-primary) — graduated to
-[Grilling: Donate PDP preset selection under the single-price product model](https://github.com/Chapster87/pghrugby/issues/75).
+- `product_type: variation` stays **cart-primaries only**, but its primaries are
+  the three club presets (`donation-club-preset-10` / `-25` / `-50`) followed by
+  `donation-pass-the-hat`, confirming the deferral in `pdp-product-model.md` § 4.
+  The any-amount option is not a primary and not a cart line.
+- The any-amount option is a `product` record (`donation-club`, `sku`
+  `donation-club-any`, `price_id` = the custom-amount Price, with `in_stock` and
+  a label) referenced by a **dedicated standalone page field** on
+  `product_detail_page` — not `primary_products` — consistent with #72's "price
+  authority lives in DatoCMS". The field and record are build work the spec
+  hands off.
