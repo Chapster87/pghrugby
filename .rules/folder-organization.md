@@ -35,6 +35,7 @@ src/app/example/
 ## Guidelines
 
 - **Keep related files together:** Place components, styles, and logic for a feature in the same directory.
+- **Prototypes belong outside `/workbench`:** `src/app/(core)/workbench` is the permanent shelf for global component wrappers (button, dialog, form controls) and is meant to grow. Temporary or throwaway flow prototypes are made in their own location and deleted once the real implementation lands.
 - **Use the standard subfolders above** for clear separation of concerns and maintainability.
 - **Integrate data sources via helpers:** Use `_helpers` to combine config data into view models.
 - **Prefer local configuration:** Store static config data in `_static` near the features they support.
