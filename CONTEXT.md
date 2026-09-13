@@ -41,6 +41,19 @@ The registration form attached to a PDP. Supplies the registration payload only 
 never determines quantity.
 _Avoid_: form (ambiguous with a group of fields)
 
+**Cart line**:
+One entry in the browser-held cart — either a priced line or a collector entry.
+_Avoid_: cart item
+
+**Priced line**:
+A cart line that is one sku with a buyer-set quantity, optionally linked to the line
+it was added with. The only kind that becomes a Stripe line item.
+
+**Collector entry**:
+A cart line holding a DataCollector's answers. Carries no sku and no price; linked to
+the priced line it was added with.
+_Avoid_: registration line
+
 **Clean URL**:
 The public root URL of a product detail page (e.g. `/dues`), produced by rewriting the
 internal product route. Products win slug ownership over pages.
