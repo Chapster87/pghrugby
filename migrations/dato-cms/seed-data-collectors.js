@@ -108,12 +108,14 @@ const FORMS = [
         required: true,
       },
       {
+        // The captain is player 1; these rows are the remaining players and
+        // mirror the line quantity (`quantity -> rows`, golf 1-4).
         label: "Golfer name",
         fieldName: "golfers",
         fieldType: "text",
         required: true,
         repeatable: true,
-        max: 8,
+        max: 3,
       },
     ],
   },

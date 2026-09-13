@@ -100,7 +100,7 @@ const golf: PdpFixture = {
       note: "Per golfer — 4-person scramble",
       unitAmount: 9500,
       compareAtAmount: 11000,
-      quantityBearing: false,
+      quantityBearing: true,
       inStock: true,
     },
   ],
@@ -135,7 +135,7 @@ const golf: PdpFixture = {
       type: "text",
       required: true,
       repeatable: true,
-      max: 8,
+      max: 3,
       placeholder: "Golfer name",
     },
     {

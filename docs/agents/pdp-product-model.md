@@ -30,16 +30,24 @@ A `product_type` field on `product_detail_page`:
 
 - A `quantity_bearing` boolean on the `product` model. It is a property of the
   buyable (mulligans come in multiples; a season of dues does not), so it is true
-  wherever that product is sold.
+  wherever that product is sold. **Golf registration is quantity-bearing** —
+  buyer-set 1–4 per line, one foursome per registration.
 - `product_type` never grants or denies quantity. Any quantity-bearing line —
   primary or add-on, in any type — renders a quantity control.
-- **The DataCollector never determines quantity.** This corrects existing
-  behaviour: `src/app/(core)/product/[slug]/checkout-form.tsx` currently derives
-  the primary line's quantity from the repeatable form field (golfers), and
-  `docs/agents/stripe-catalog-spec.md` states "quantity = golfers". Both are
-  wrong. The form supplies the registration payload only. If the buyer takes
-  1 ticket but names 4 golfers, we may warn; we never block checkout — the club
-  follows up directly at its scale.
+- **Quantity is buyer-set; the DataCollector follows it.** On a
+  registration-bearing line the collector's repeatable rows **mirror** the line
+  quantity — the direction is **`quantity → rows`**
+  (`docs/agents/cart-line-model.md` § 4). For golf the captain is player 1 and the
+  repeatable player field collects the remaining 1–3 (`max` = quantity − 1, so the
+  field's `max` is 3 against a quantity ceiling of 4). The retired behaviour was
+  the reverse (`rows → quantity`, "quantity = golfers"):
+  `src/app/(core)/product/[slug]/checkout-form.tsx` still derives the line's
+  quantity from the repeatable form field, and `docs/agents/stripe-catalog-spec.md`
+  records "quantity = golfers". Both are wrong. That one-shot form is replaced by
+  the new PDP (`docs/agents/pdp-flow-rollout.md`), which owns the `quantity → rows`
+  logic; the form itself supplies the registration payload only.
+- If the buyer names fewer or more players than paid registrations, we may warn;
+  we never block checkout — the club follows up directly at its scale.
 - The cart already accepts a per-line quantity (`CheckoutSelection = { sku,
 quantity }`, clamped 1–100 in `buildCart`), so this is a UI + authoring change,
   not a cart-model change.
@@ -70,16 +78,16 @@ quantity }`, clamped 1–100 in `buildCart`), so this is a UI + authoring change
 
 ## 4. Page classification
 
-| Page                      | `product_type` | Notes                                                                                                                                    |
-| ------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Forge Pig Roast           | `simple`       | one ticket                                                                                                                               |
-| Steel City 7s Bar Crawl   | `simple`       | one ticket                                                                                                                               |
-| Golf Outing               | `simple`       | one registration primary; mulligan / drink band are quantity-bearing add-ons                                                             |
-| Dues                      | `variation`    | fall / spring / summer are alternatives; a player pays for exactly one season                                                            |
-| Donate                    | `variation`    | club vs pass-the-hat; cart primaries only — any-amount giving is a standalone, non-cart affordance (confirmed in the donations grilling) |
-| Steel City 7s             | `variation`    | five divisions are alternatives                                                                                                          |
-| Forge Day at the Ballpark | `grouped`      | Adult + 16 & Under bought together, each with its own quantity                                                                           |
-| NFL Survivor Pool         | `grouped`      | Ticket + Insurance bought together, each with its own quantity                                                                           |
+| Page                      | `product_type` | Notes                                                                                                                                                |
+| ------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Forge Pig Roast           | `simple`       | one ticket                                                                                                                                           |
+| Steel City 7s Bar Crawl   | `simple`       | one ticket                                                                                                                                           |
+| Golf Outing               | `simple`       | one registration primary (`quantity_bearing`, buyer-set 1–4 — one foursome; captain is player 1); mulligan / drink band are quantity-bearing add-ons |
+| Dues                      | `variation`    | fall / spring / summer are alternatives; a player pays for exactly one season                                                                        |
+| Donate                    | `variation`    | club vs pass-the-hat; cart primaries only — any-amount giving is a standalone, non-cart affordance (confirmed in the donations grilling)             |
+| Steel City 7s             | `variation`    | five divisions are alternatives                                                                                                                      |
+| Forge Day at the Ballpark | `grouped`      | Adult + 16 & Under bought together, each with its own quantity                                                                                       |
+| NFL Survivor Pool         | `grouped`      | Ticket + Insurance bought together, each with its own quantity                                                                                       |
 
 ## 5. Control semantics
 
