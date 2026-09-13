@@ -3,7 +3,11 @@
     { "slug": "dues", "title": "Season Dues" },
     { "slug": "golf-outing", "title": "Golf Outing" },
     { "slug": "steel-city-7s", "title": "Steel City 7s" },
-    { "slug": "donate", "title": "Donate" }
+    { "slug": "donate", "title": "Donate" },
+    { "slug": "pig-roast", "title": "Annual Forge Pig Roast" },
+    { "slug": "bar-crawl", "title": "Steel City 7s Bar Crawl" },
+    { "slug": "ballpark", "title": "Forge Day at the Ballpark" },
+    { "slug": "survivor-pool", "title": "NFL Survivor Pool" }
   ],
   "products": [
     {
@@ -115,42 +119,42 @@
       "sku": "ballpark-day-adult",
       "label": "Forge Day at the Ballpark — Adult",
       "wcSlug": "ballpark-day-adult",
-      "pdp": null,
+      "pdp": "ballpark",
       "kind": "primary"
     },
     {
       "sku": "ballpark-ticket-16-under",
       "label": "Forge Day at the Ballpark — 16 & Under",
       "wcSlug": "ballpark-ticket-16-under",
-      "pdp": null,
+      "pdp": "ballpark",
       "kind": "primary"
     },
     {
       "sku": "nfl-survivor-pool-ticket",
       "label": "NFL Survivor Pool — Ticket",
       "wcSlug": "nfl-survivor-pool-ticket",
-      "pdp": null,
+      "pdp": "survivor-pool",
       "kind": "primary"
     },
     {
       "sku": "nfl-survivor-pool-insurance",
       "label": "NFL Survivor Pool — Insurance",
       "wcSlug": "nfl-survivor-pool-insurance",
-      "pdp": null,
+      "pdp": "survivor-pool",
       "kind": "primary"
     },
     {
       "sku": "steel-city-7s-bar-crawl",
       "label": "Steel City 7s Bar Crawl",
       "wcSlug": "steel-city-7s-bar-crawl",
-      "pdp": null,
+      "pdp": "bar-crawl",
       "kind": "primary"
     },
     {
       "sku": "annual-forge-pig-roast",
       "label": "Annual Forge Pig Roast Ticket",
       "wcSlug": "annual-forge-pig-roast",
-      "pdp": null,
+      "pdp": "pig-roast",
       "kind": "primary"
     }
   ]

@@ -9,6 +9,7 @@ checkEnvVariables()
 //
 // RESERVED SLUGS (do not create DatoCMS pages or routes with these):
 //   /dues · /golf-outing · /steel-city-7s · /donate     (PDP clean URLs)
+//   /pig-roast · /bar-crawl · /ballpark · /survivor-pool (PDP clean URLs)
 //   /product/*                                         (internal storefront route)
 //   /cart · /checkout · /checkout/success · /membership · /calendar · /contact
 //   /links · /matches/* · /sitemap · /styleguide        (static routes)
