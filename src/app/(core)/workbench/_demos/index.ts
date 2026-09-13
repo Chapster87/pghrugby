@@ -1,6 +1,7 @@
 import buttonDemo from "./button"
 import dialogDemo from "./dialog"
 import formControlsDemo from "./form-controls"
+import minicartFlyoutDemo from "./minicart-flyout"
 import pdpLayoutDemo from "./pdp-layout"
 
 import type { Demo } from "./types"
@@ -15,6 +16,7 @@ export const demos: Demo[] = [
   formControlsDemo,
   dialogDemo,
   pdpLayoutDemo,
+  minicartFlyoutDemo,
 ]
 
 /**

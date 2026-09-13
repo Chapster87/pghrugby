@@ -1,0 +1,890 @@
+/* Minicart flyout prototype (wayfinder #63) — the chosen "Grouped cards"
+   direction, retained as the implementation reference. Dev-only; delete once
+   the flyout is built for real. */
+
+/* --------------------------------------------------------- animations ---- */
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlayOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Desktop drawer: slide in from the right edge. */
+@keyframes sheetInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes sheetOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Mobile sheet: rise from the bottom edge. */
+@keyframes sheetInUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes sheetOutDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+/* Cart list / edit panel swap inside one Dialog (the sheet-slides-to-detail
+   idiom from docs/agents/registration-editing.md § 5). */
+@keyframes panelInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* -------------------------------------------------------------- shell ----- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  &[data-state="open"] {
+    animation: overlayIn 200ms ease-out;
+  }
+
+  &[data-state="closed"] {
+    animation: overlayOut 160ms ease-in;
+  }
+}
+
+.sheet {
+  position: fixed;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.28);
+  outline: none;
+
+  &[data-state="open"] {
+    animation: sheetInRight 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  &[data-state="closed"] {
+    animation: sheetOutRight 200ms ease-in;
+  }
+
+  @media (--viewport-md) {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    max-height: 88vh;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.28);
+
+    &[data-state="open"] {
+      animation: sheetInUp 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    &[data-state="closed"] {
+      animation: sheetOutDown 200ms ease-in;
+    }
+  }
+
+  @media (--viewport-md-up) {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: min(420px, 100vw);
+  }
+}
+
+.cartView {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Only when returning from the edit panel — the initial open rides in with the
+   sheet's own slide. */
+.cartReturn {
+  animation: panelInRight 240ms ease-out;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: none;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--color-grey-200);
+}
+
+.headTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.headPill {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background-color: var(--color-grey-200);
+  color: var(--color-grey-700);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--color-grey-700);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-grey-100);
+    color: var(--color-grey-900);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+
+.foot {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 20px 20px;
+  border-top: 1px solid var(--color-grey-200);
+  background-color: var(--color-white);
+}
+
+.subtotalRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.checkout {
+  width: 100%;
+}
+
+.checkoutNote {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-grey-600);
+  text-align: center;
+}
+
+/* -------------------------------------------------------------- parts ----- */
+
+.thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 8px;
+  color: var(--color-white);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  overflow: hidden;
+}
+
+.tone0 {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-grey-800),
+    var(--color-grey-500)
+  );
+}
+
+.tone1 {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-gold-800),
+    var(--color-gold-400)
+  );
+}
+
+.tone2 {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-grey-900),
+    var(--color-gold)
+  );
+}
+
+.tone3 {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-red),
+    var(--color-gold-900)
+  );
+}
+
+.price {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Wraps the global QuantitySelector — never class it directly, or its prop
+   spread drops its own root class and the PDP field styling with it. */
+.stepper {
+  display: inline-flex;
+}
+
+.lineName {
+  font-weight: 600;
+}
+
+.lineNote {
+  font-size: 0.8rem;
+  color: var(--color-grey-600);
+}
+
+/* ---------------------------------------------------- grouped cards ------ */
+
+.card {
+  border: 1px solid var(--color-grey-300);
+  border-radius: 12px;
+  overflow: hidden;
+
+  & + & {
+    margin-top: 14px;
+  }
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  background-color: var(--color-grey-100);
+  border-bottom: 1px solid var(--color-grey-200);
+}
+
+.cardTitle {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-grey-600);
+}
+
+.cardTotal {
+  font-weight: 700;
+}
+
+.cardLine {
+  padding: 14px;
+
+  & + & {
+    border-top: 1px solid var(--color-grey-200);
+  }
+}
+
+.cardLineRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cardThumb {
+  width: 44px;
+  height: 44px;
+  font-size: 0.75rem;
+}
+
+.cardLineText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* The standardized right rail: quantity control on top, price beneath it. */
+.lineRail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex: none;
+}
+
+.answers {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: var(--color-grey-100);
+}
+
+.answersList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+}
+
+.answersRow {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 8px;
+}
+
+.answersLabel {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-grey-600);
+}
+
+.answersValue {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.lineActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.iconAction,
+.iconActionDanger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--color-grey-300);
+  border-radius: 6px;
+  background-color: var(--color-white);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}
+
+.iconAction {
+  color: var(--color-grey-900);
+
+  &:hover {
+    border-color: var(--color-grey-500);
+    background-color: var(--color-grey-100);
+  }
+}
+
+.iconActionDanger {
+  color: var(--color-danger);
+
+  &:hover {
+    border-color: var(--color-danger);
+    background-color: rgba(198, 12, 48, 0.06);
+  }
+}
+
+.cardAddons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 14px 0 0;
+  padding: 14px 0 0;
+  border-top: 1px dashed var(--color-grey-300);
+  list-style: none;
+}
+
+.cardAddon {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.addonLeft {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding-top: 6px;
+}
+
+.addonName {
+  font-size: 0.85rem;
+}
+
+.qtyLabel {
+  font-size: 0.8rem;
+  color: var(--color-grey-600);
+}
+
+.addonPrice {
+  font-size: 0.85rem;
+}
+
+/* -------------------------------------------------------------- empty ---- */
+
+.empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.emptyCard {
+  width: 100%;
+  padding: 24px 20px;
+  border: 1px dashed var(--color-grey-400);
+  border-radius: 12px;
+  background-color: var(--color-grey-100);
+}
+
+.emptyTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.emptyText {
+  max-width: 34ch;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-grey-600);
+}
+
+/* -------------------------------------------------------- edit panel ----- */
+
+.editPanel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  animation: panelInRight 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.editHead {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: none;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--color-grey-200);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-gold-800);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}
+
+.editTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.editBody {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px 20px;
+}
+
+.editQty {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--color-grey-300);
+  border-radius: 8px;
+}
+
+.editHint {
+  font-size: 0.75rem;
+  color: var(--color-grey-600);
+}
+
+.warning {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-gold-300);
+  border-radius: 8px;
+  background-color: var(--color-gold-100);
+}
+
+.warningText {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-gold-900);
+}
+
+.warningActions {
+  display: flex;
+  gap: 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.required {
+  color: var(--color-danger);
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid var(--color-grey-400);
+  border-radius: 6px;
+  background-color: var(--color-white);
+
+  &:focus,
+  &:focus-visible {
+    border-color: var(--color-gold);
+    outline: 1px solid var(--color-gold);
+  }
+}
+
+.inputError {
+  border-color: var(--color-danger);
+}
+
+.fieldError {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: var(--color-danger);
+}
+
+.repeatRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  & + & {
+    margin-top: 8px;
+  }
+}
+
+.rowAction {
+  border: none;
+  background: none;
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.addRow {
+  align-self: flex-start;
+  margin-top: 8px;
+}
+
+.editFoot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: none;
+  padding: 16px 20px 20px;
+  border-top: 1px solid var(--color-grey-200);
+}
+
+/* ------------------------------------------------------ mock storefront -- */
+
+.prototype {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toolbarLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-grey-600);
+}
+
+.toggle {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-self: flex-start;
+  padding: 4px;
+  border: 1px solid var(--color-grey-300);
+  border-radius: 999px;
+  background-color: var(--color-white);
+}
+
+.toggleButton {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--color-grey-700);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-grey-200);
+  }
+}
+
+.toggleButtonActive {
+  background-color: var(--color-grey-900);
+  color: var(--color-white);
+
+  &:hover {
+    background-color: var(--color-grey-900);
+  }
+}
+
+.toolbarHint {
+  max-width: 72ch;
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-grey-700);
+}
+
+.storeBar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background-color: var(--color-grey-900);
+  color: var(--color-white);
+}
+
+.storeMark {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.storeCart {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  background-color: transparent;
+  color: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}
+
+.storeCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background-color: var(--color-gold);
+  color: var(--color-black);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.storeBody {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.productCard {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid var(--color-grey-300);
+  border-radius: 12px;
+  overflow: hidden;
+
+  @media (--viewport-sm-up) {
+    grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  }
+}
+
+.productMedia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  background-image: linear-gradient(
+    135deg,
+    var(--color-grey-800),
+    var(--color-gold)
+  );
+  color: var(--color-white);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.productBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+}
+
+.productTitle {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.productMeta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-grey-600);
+}
+
+.productText {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-grey-800);
+}
+
+.productActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.productNote {
+  font-size: 0.78rem;
+  color: var(--color-grey-600);
+}
+
+/* ------------------------------------------------------ reduced motion --- */
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .sheet,
+  .cartReturn,
+  .editPanel {
+    animation: none !important;
+  }
+}
