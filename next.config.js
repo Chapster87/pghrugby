@@ -37,6 +37,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
+      // Cart-line thumbnails come from Stripe Product images, resolved by
+      // expanding a Price's Product (`src/lib/checkout/product-image.ts`).
+      {
+        protocol: "https",
+        hostname: "files.stripe.com",
+      },
     ],
   },
   // beforeFiles: PDP clean URLs win over root [slug] pages (products own slugs).

@@ -436,8 +436,11 @@ sits directly beneath the add-on name with the qty/price rail to its right. The
 quantity control is the shared global `QuantitySelector` (§ 5.7).
 
 Thumbnails come from Stripe product images (`Product.images[0]`, resolved via a
-`price.product` expand and cached on the cart line); fall back to a placeholder
-when empty. Live-side detail: `docs/agents/stripe-checkout-registration-metadata.md`.
+`price.product` expand) through `src/lib/checkout/product-image.ts`
+(`getLineThumbnailUrl`, cached per Price), falling back to
+`FALLBACK_PRODUCT_IMAGE` when a product has no image. `files.stripe.com` is
+allow-listed in `next.config.js` `images.remotePatterns`. Live-side detail:
+`docs/agents/stripe-checkout-registration-metadata.md`.
 
 ### 7.4 Edit panel
 
@@ -717,9 +720,10 @@ prototypes do not belong in it.
 10. **Success page** — registration rows grouped by line.
 11. **Cutover** — deletions, content gate, mixed-cart gate, rollback rehearsal.
 
-Open sibling tasks feeding this: [Task: Author PDPs for the four orphan event products](https://github.com/Chapster87/pghrugby/issues/65)
-(content gate) and [Task: Stripe product photos for cart line thumbnails](https://github.com/Chapster87/pghrugby/issues/64)
-(off the critical path — thumbnails fall back to a placeholder).
+Both content-gate siblings are now resolved: [Task: Author PDPs for the four orphan event products](https://github.com/Chapster87/pghrugby/issues/65)
+authored the orphan PDPs, and [Task: Stripe product photos for cart line thumbnails](https://github.com/Chapster87/pghrugby/issues/64)
+settled that thumbnails read Stripe product images with a fallback — no Stripe
+image population is needed.
 
 ---
 
