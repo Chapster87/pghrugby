@@ -47,9 +47,13 @@ The only legitimate writers of `src/app/admin/**` are the forgecms CLI (install
 
 ## Rules
 
-- General guidelines — `.rules/general-guidelines.md`
-- Component styling details — `.rules/component-styling.md`
-- Folder organization details — `.rules/folder-organization.md`
+Project-specific rules live in `.agents/rules/`:
+
+- General guidelines — `.agents/rules/general-guidelines.md`
+- Folder organization details — `.agents/rules/folder-organization.md`
+
+Component styling, agent architecture, and completion checks are shared global
+rules (see `~/.agents/rules/`).
 
 ## Agent skills
 
