@@ -8,12 +8,16 @@ export const cacheTag = "datocms"
  * the result in Next.js Data Cache using the `cache: 'force-cache'` option.
  * This means that regular visitors won't generate additional calls to DatoCMS.
  *
- * Cache invalidation happens when DatoCMS sends a webhook that triggers
- * `revalidateTag('datocms')`. Note that on Vercel, the Data Cache persists
- * across deployments — new deploys alone won't invalidate cached data. If you
- * need fresh data after deploy, trigger the webhook or purge the cache manually.
+ * The fetch carries the `datocms` tag and sets no `revalidate` of its own, so
+ * freshness comes from the route's `revalidate` window plus on-demand
+ * `revalidateTag('datocms')`.
  *
- * @see src/app/api/invalidate-cache/route.tsx for webhook-based cache invalidation
+ * @TODO: the webhook-based invalidation this used to reference does not exist —
+ * there is no `invalidate-cache` route in this repo and nothing calls
+ * `revalidateTag('datocms')`. On Netlify the Data Cache is deploy-scoped, so
+ * content currently refreshes only on redeploy. Build the route (calling
+ * `revalidateTag(tag, "max")`, which Next 16 requires over the deprecated
+ * single-argument form) and point the DatoCMS webhook at it.
  */
 export async function executeQuery<Result, Variables>(
   query: TadaDocumentNode<Result, Variables>,

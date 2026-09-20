@@ -1,7 +1,7 @@
 // ForgeCMS competition queries (matches + schedules).
 // Replaces the Sanity `match` / `team` / `season` document reads behind
 // matches/all, the schedule tables, the countdown, and the sidebar matches
-// widget (see docs/agents/sanity-content-inventory.md, Phase 5).
+// widget.
 //
 // The CDA exposes collections via `<plural>Collection { edges { node { … } } }`
 // (see docs/handoffs/forgecms-capability-gate.md). `where` only supports

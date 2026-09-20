@@ -1,8 +1,7 @@
 // ForgeCMS site-chrome queries (nav, settings, socials, sponsors).
 // Replaces the Sanity `navigation` / `settings` / `socialMedia` / `sponsor` /
-// `sponsorBar` document types (see docs/agents/sanity-content-inventory.md,
-// Phase 4). Note the snake_case `site_navigation` entry point — the one chrome
-// model queried by snake_case rather than camelCase.
+// `sponsorBar` document types. Note the snake_case `site_navigation` entry
+// point — the one chrome model queried by snake_case rather than camelCase.
 
 // ---------------------------------------------------------------------------
 // Site navigation (header + footer)

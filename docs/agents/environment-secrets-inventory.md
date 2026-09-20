@@ -61,10 +61,10 @@ Three runtime surfaces today, collapsing to **one** (`pghrugby/nextjs`) after Me
 
 Also referenced in code but not always in `.env.local`:
 
-| Variable                 | Used by           | Fate                                                   |
-| ------------------------ | ----------------- | ------------------------------------------------------ |
-| `NEXT_PUBLIC_VERCEL_URL` | `next-sitemap.js` | Optional host; prefer `NEXT_PUBLIC_BASE_URL` long-term |
-| `NODE_ENV`               | framework         | Stay (set by runtime)                                  |
+| Variable                 | Used by                  | Fate                                                                                                                                        |
+| ------------------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_VERCEL_URL` | _(no longer referenced)_ | **Removed** — its only consumer, `next-sitemap.js`, was Vercel-era dead code (no dependency, no script, no references) and has been deleted |
+| `NODE_ENV`               | framework                | Stay (set by runtime)                                                                                                                       |
 
 ### 2.2 Medusa (`pghrugby-store`) — dies entirely
 
@@ -206,7 +206,7 @@ Prototype spike still uses in-memory store; wiring these env vars into a real Su
 1. DatoCMS project → Settings → API tokens.
 2. Revoke/rotate the token that matches the old committed value (treat it as public).
 3. Create a replacement with the minimum scope needed (CDA published read for schema gen; separate tokens for draft CDA and CMA as you already have).
-4. Update local `.env.local` and any host env (Vercel/Cloudinary/etc.) with the new values.
+4. Update local `.env.local` and any host env (Netlify/Cloudinary/etc.) with the new values.
 5. Confirm `pnpm generate-schema` still works.
 6. If this repo is or was public, assume the old token was scraped — rotation is mandatory, not optional.
 
