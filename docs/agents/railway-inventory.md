@@ -1,92 +1,127 @@
-# Railway Inventory and Decommission Plan
+# Railway platform inventory — the CMS instance
 
-Status: **verified 2026-08-24** (repo evidence + human dashboard check).
+Status: **verified 2026-09-21** unless a line says otherwise. Companion to
+[forgecms-instance-operations.md](./forgecms-instance-operations.md) (the generator's
+contract and the update ritual) on the wayfinder map
+[Wayfinder map: Site uses external data from cms.pghrugby.com (#89)](https://github.com/Chapster87/pghrugby/issues/89).
 
-Part of the wayfinder map: [Wayfinder map: Single-repo Next.js site on Stripe + DatoCMS + ForgeCMS](https://github.com/Chapster87/pghrugby/issues/1) — ticket [Task: Railway inventory and decommission plan](https://github.com/Chapster87/pghrugby/issues/6).
+This file is the **platform half** of the instance: what is configured on Railway, which
+is to say everything the generator's manifest cannot hold and no `forgecms update` can
+touch. It was rewritten on 2026-09-21 — its previous subject was the **retired Medusa
+stack**, which is dead and decommissioned, and its service list, Postgres, Redis and
+billing are gone with it. Nothing here concerns the Medusa project.
 
-## 1. What runs on Railway
+## 1. The project
 
-The Railway project is dashboard-configured — no `railway.json`, `Dockerfile`, `nixpacks.toml`, or `.railway` config lives in this repo. Build is Nixpacks against `pghrugby-store` (`predeploy: medusa db:migrate`, then `start: medusa start`).
+| Setting                 | Value                                                                                                                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Railway project         | `pghrugby-cms`                                                                                                                                                            |
+| Service                 | `pghrugby-cms`                                                                                                                                                            |
+| Environment             | `production`                                                                                                                                                              |
+| Region                  | `us-east4-eqdc4a` (US East — chosen to be close to the Supabase project, so CDA reads are not paying a cross-region round trip)                                           |
+| Builder                 | **Railpack**, the generator's own `next build` / `next start`. No platform adapter.                                                                                       |
+| Host config in the repo | **None.** No `Dockerfile`, `railway.json`, `nixpacks.toml`, `Procfile` or CI. Configuration is service variables, by design — see the boundary rule in the companion doc. |
 
-### Project canvas (verified)
+Project id recorded at stand-up: `608afd95-482d-4ca3-b12b-9109bf8e48cd`.
 
-| Service                                    | Status                           | Notes                                                                                                                                                  |
-| ------------------------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **pghrugby-store-server**                  | Online                           | Medusa HTTP/API + admin. Public host `pghrugby-store-server.up.railway.app` (truncated).                                                               |
-| **pghrugby-store-worker**                  | Online                           | Medusa worker process (same repo/image, worker mode).                                                                                                  |
-| **Postgres** (`postgres-production-9b85…`) | Online                           | Volume `pest-volume`. Connection host shape `*.proxy.rlwy.net` (seen in local `DATABASE_URL`).                                                         |
-| **Redis**                                  | Present (canvas shows Completed) | Volume `hour-volume`. Only Medusa references it; may never have been meaningfully used (Redis-backed modules are commented out in `medusa-config.ts`). |
+## 2. The public surface
 
-Nothing else is on this Railway project. **Strapi is not on Railway.** The Next.js frontend is **not** on Railway (user reports Cloudinary for the live frontend/assets path) — decommission scope is this Medusa stack only.
+- **Origin** `https://cms.pghrugby.com`. The app is served at the **root** of its own
+  origin — the admin is at `/`, the editor at `/editor`, the schema builder at `/schema`.
+  There is no mount prefix and no base-path setting.
+- **DNS** `pghrugby.com` is **Cloudflare-managed** (`donald.ns.cloudflare.com`,
+  `erin.ns.cloudflare.com`). The `cms` record is a **CNAME → `qi96newp.up.railway.app`**,
+  resolving unproxied (verified by lookup 2026-09-21), which is what lets Railway issue
+  and serve the certificate.
+- **TLS** Railway-issued (Let's Encrypt). No Cloudflare proxy in front of the app.
+- **The CDA root the site consumes** is `https://cms.pghrugby.com/api/graphql` —
+  server-to-server, `POST` with `x-api-key`. No CORS, no base path.
 
-### Medusa service env surface
+> Correction worth carrying: [Grilling: Deploy target and custom domain for the CMS
+> instance (#98)](https://github.com/Chapster87/pghrugby/issues/98)'s resolution describes
+> the DNS as Dreamhost. It is not — it is Cloudflare, as the map's own 2026-09-15
+> correction records and the nameserver lookup above confirms. The decision (Railway, a
+> plain CNAME) is unaffected; only that sentence is wrong.
 
-From `medusa-config.ts` + local `pghrugby-store/.env` (names only — values live in Railway vars / local `.env`, never committed):
+## 3. The branch and the build
 
-| Var                                                          | Role                                                                                                                                                                                                                |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`                                               | Postgres (required). Local `.env` points at the Railway Postgres proxy.                                                                                                                                             |
-| `REDIS_URL`                                                  | Redis. Commented out locally (in-memory fallback); expected set on the Railway services for server/worker split.                                                                                                    |
-| `MEDUSA_WORKER_MODE`                                         | `shared` / `worker` / `server` — server + worker services use this to split roles.                                                                                                                                  |
-| `PORT`                                                       | `9000` locally                                                                                                                                                                                                      |
-| `STORE_CORS`, `ADMIN_CORS`, `AUTH_CORS`                      | CORS allow-lists                                                                                                                                                                                                    |
-| `JWT_SECRET`, `COOKIE_SECRET`                                | Auth/session secrets (local defaults are placeholders)                                                                                                                                                              |
-| `DISABLE_MEDUSA_ADMIN`                                       | Admin UI toggle                                                                                                                                                                                                     |
-| `MEDUSA_BACKEND_URL`                                         | Admin backend URL (config default `http://localhost:9000`)                                                                                                                                                          |
-| `STRIPE_API_KEY`                                             | **Test-mode** key for Stripe sandbox `acct_1RT7eIR1ZGc2p07H`; verified empty 2026-08-24. Dead weight — cleanup owned by [Task: Environment and secrets inventory](https://github.com/Chapster87/pghrugby/issues/7). |
-| `RESEND_API_KEY`, `RESEND_FROM_EMAIL`                        | Email notification module (`web@pghrugby.com`)                                                                                                                                                                      |
-| `SANITY_API_TOKEN`, `SANITY_PROJECT_ID`, `SANITY_STUDIO_URL` | Sanity content module (dataset `production`)                                                                                                                                                                        |
+- **Deploy source:** the instance repo's default branch. The checkout shows `trunk` as
+  HEAD with `main` at the same commit, and the stand-up notes record `main` — the two name
+  the same commit today, so this is a naming detail to confirm rather than a conflict.
+- **Install:** `pnpm install --frozen-lockfile`, with `CI=true`. pnpm 10 is selected by
+  the manifest's `packageManager` field (Railpack's own default is pnpm 9). **A manifest
+  that has drifted from `pnpm-lock.yaml` fails the build** — see the ritual in the
+  companion doc.
+- **Node:** resolved by Railpack, defaulting to the alias `lts` — a moving target. Pinned
+  by a root `.nvmrc` in the instance as of 2026-09-21; `RAILPACK_NODE_VERSION` on this
+  service is the equivalent alternative, and the two must not both be set.
+- **Start:** the manifest's `start` script (`next start`), which reads the injected
+  `PORT` itself — no `-p $PORT` needed.
 
-A commented-out Neon `DATABASE_URL` also appears in local `.env` — historical only; active DB is Railway Postgres.
+## 4. Service variables
 
-## 2. What depends on Railway
+**Must exist at build time, not only at run time** — `next build` inlines them and the
+build fails without them:
 
-**Only the Next.js frontend's Medusa integration** (`pghrugby/nextjs`) — and only until Medusa is removed from the app:
+| Variable                        | Role                                            |
+| ------------------------------- | ----------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase project URL                            |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Publishable/anon key (browser-safe, RLS-scoped) |
 
-- `MEDUSA_BACKEND_URL` — Medusa JS SDK base URL (`src/lib/config.ts`) and region/country resolution (`src/middleware.ts`)
-- `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` — SDK publishable key
-- `NEXT_PUBLIC_MEDUSA_DEFAULT_COUNTRY_CODE` — store/category/collection/product pages
-- Runtime calls through `@lib/data/{cart,customer,orders,categories,collections,regions,products}` against the Medusa API
+Required at runtime:
 
-Nothing else in the repo depends on Railway Postgres, Redis, or the Medusa host. Strapi is not deployed here. Frontend hosting is off Railway.
+| Variable        | Role                                                                                                                                                |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CMS_DB_KEY`    | The scoped server credential (a secret key whose JWT template sets `role: forgecms`). The app **refuses to boot** if it resolves to any other role. |
+| `CMS_API_TOKEN` | The delivery key the CDA requires. The app **refuses to start** with it unset.                                                                      |
 
-**Local env copies** that die with Medusa: Railway `DATABASE_URL`, Medusa CORS/JWT/cookie/worker vars, and the legacy Stripe test key in `pghrugby-store/.env`. Env cleanup is owned by [Task: Environment and secrets inventory](https://github.com/Chapster87/pghrugby/issues/7).
+Optional, by feature:
 
-## 3. Migration paths for anything that must survive
+| Variable                                                                                                     | Role                                                                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `CMS_PREVIEW_TOKEN`                                                                                          | Unlocks `preview` / `includeDrafts` on the CDA                                                                                                               |
+| `NEXT_PUBLIC_CMS_PRODUCT_NAME`, `NEXT_PUBLIC_CMS_GLOBALS_CMS_SETTINGS_KEY`, `NEXT_PUBLIC_CMS_MEDIA_PROVIDER` | Branding and media-provider defaults                                                                                                                         |
+| `CMS_WEBHOOK_URL`, `CMS_WEBHOOK_SECRET`                                                                      | **The publish signal.** Set as of 2.2.0 (ADR-0009): a signed, content-free POST emitted on publish/unpublish/delete. Unset means the instance emits nothing. |
+| `CMS_WEBHOOK_TRIGGER_TOKEN`                                                                                  | Optional bearer token for the manual webhook trigger                                                                                                         |
+| the media provider's server credential                                                                       | Whatever the club's registered server-half media provider needs, declared in `src/extensions/register-server.ts`                                             |
 
-**None.** Confirmed:
+Delivery is best-effort — one attempt plus one retry, no queue — and runs after the
+response, so a miss degrades to the site's staleness window. The receiver is the site's
+own endpoint; the instance holds no knowledge of it beyond the URL.
 
-- Medusa catalog / DB is **demo only — never used in live** (human confirmation 2026-08-24). Aligns with [stripe-catalog-spec.md](./stripe-catalog-spec.md): live Stripe is a fresh account; the Medusa test key points at an empty sandbox.
-- Destination replaces Medusa entirely: Stripe owns catalog + checkout, DatoCMS owns product content, orders land in the website Supabase `orders` table.
-- Redis has no consumers outside Medusa and was likely never load-bearing.
+## 5. What must never be on the service
 
-Optional safety: take a one-shot `pg_dump` of the Railway Postgres before delete, keep until decommission is confirmed. Not required for a migration path.
+- `SUPABASE_SERVICE_ROLE_KEY` — **operator-only.** It is what the `forgecms` CLI's
+  convergence, the instance's `pnpm db:migrate` and the local MCP server use, and it is
+  exactly what the shared-project isolation guards exist to keep out of the app.
+- `SUPABASE_LEGACY_JWT_SECRET` — operator-only for a sharper reason: it can sign a JWT
+  for any role.
 
-## 4. Decommission sequence (cut-off checklist)
+## 6. Scheduled work
 
-Follows the map's replace → verify → delete rule. Execute **after** the frontend no longer talks to Medusa:
+**Nothing is scheduled.** Two jobs belong here and neither exists yet:
 
-1. **Confirm Medusa is unreferenced.** Grep `pghrugby/nextjs` for `MEDUSA_BACKEND_URL`, `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY`, `@medusajs/js-sdk`, `@lib/data/` Medusa calls. App builds and runs with zero Medusa env vars; store/cart/checkout served from Stripe + DatoCMS.
-2. **Optional safety dump** of Railway Postgres (demo data only — skip if not wanted).
-3. **Verify zero traffic** to `pghrugby-store-server` (Railway logs) for a short sanity window.
-4. **Delete both Medusa services** — `pghrugby-store-server` and `pghrugby-store-worker`. Frontend stays green (step 1).
-5. **Delete Redis** (volume `hour-volume`).
-6. **Delete Postgres** (volume `pest-volume`).
-7. **Cancel Railway billing** (see §5).
-8. **Clean local env** — drop Railway `DATABASE_URL`, Medusa vars, legacy Stripe test key from `pghrugby-store/.env` (tracked by [Task: Environment and secrets inventory](https://github.com/Chapster87/pghrugby/issues/7)).
+- **Audit-log retention** — `pnpm db:prune-audit-logs`, daily off-peak per
+  `docs/DEPLOY.md`. The log is append-only for every request-path role, so nothing the app
+  does bounds it. It needs `SUPABASE_SERVICE_ROLE_KEY` and refuses the app's `CMS_DB_KEY`
+  by design, so it is operator-side work; filed as its own Task under the map.
+- Nothing else. The instance holds no cron, no queue and no scheduler of its own.
 
-## 5. Billing cancellation
+## 7. What is deliberately not here
 
-- **Plan:** Hobby, **~$6/month**, next bill **2026-09-01**.
-- **Order:** delete services first (steps 4–6), then cancel the plan / delete the project so usage stops before the next cycle.
-- This Railway project is the Medusa stack only (no Strapi, no Next.js). Safe to delete the whole project once services are gone, provided the Railway account/team has no other projects you still want.
-- After deletion, confirm the Sep 1 cycle closes with no further Railway charges (or a final pro-rate only).
+- **The site.** It runs on Netlify; the CMS and the site are on separate hosts on purpose,
+  so their failure domains and their bills are separate. See
+  [Wayfinder map: The site serves from a green Netlify deploy (#78)](https://github.com/Chapster87/pghrugby/issues/78).
+- **Supabase.** Shared project, neither app's host.
+- **Any club setting that would otherwise sit inside an owned `package.json` key.** The
+  boundary rule: manifest for what upstream ships, Railway for everything else, nothing
+  in both.
 
-## 6. Facts recorded (verified 2026-08-24)
+## 8. Open items
 
-- Railway hosts exactly four resources: `pghrugby-store-server`, `pghrugby-store-worker`, Postgres (`pest-volume`), Redis (`hour-volume`).
-- Medusa never went live; Postgres holds no production data; Redis is Medusa-only and may be unused.
-- Strapi is not on Railway. Next.js is not on Railway.
-- External integrations on the Medusa services (Stripe test key, Resend, Sanity) are independent of Railway and survive or die on their own tickets — not migration targets for this decommission.
-- No Railway manifests in the repo; all wiring is dashboard-side.
-- Hobby plan ~$6/mo, next bill 2026-09-01 — cancel after services are deleted.
+- Confirm the deploying branch name (`trunk` vs `main`).
+- Confirm the Node line the service actually runs, against the `.nvmrc` added 2026-09-21,
+  on the next deploy's build log.
+- Set a spending limit on the project (a hold-the-line measure carried from
+  [Task: Land the shared-project isolation guards before the CMS is cut over (#101)](https://github.com/Chapster87/pghrugby/issues/101)).
+- Schedule the retention job (§6).
