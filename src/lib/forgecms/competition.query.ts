@@ -3,8 +3,8 @@
 // matches/all, the schedule tables, the countdown, and the sidebar matches
 // widget.
 //
-// The CDA exposes collections via `<plural>Collection { edges { node { … } } }`
-// (see docs/handoffs/forgecms-capability-gate.md). `where` only supports
+// The CDA exposes collections via `<plural>Collection { edges { node { … } } }`.
+// `where` only supports
 // exact-match scalar fields — nested relation filters silently return empty —
 // and there is no ordering argument, so the app filters and sorts in JS. The
 // full history is ~127 rows; fetching it wholesale and narrowing client-side

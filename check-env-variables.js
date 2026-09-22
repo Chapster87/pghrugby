@@ -1,8 +1,7 @@
 const c = require("ansi-colors")
 
 // Core runtime envs for the single Next.js app (see
-// docs/agents/environment-secrets-inventory.md § 3.1 and
-// docs/agents/forgecms-env-build-surface.md). Missing keys are
+// docs/agents/environment-secrets-inventory.md § 3.1). Missing keys are
 // warnings, not fatal: local dev legitimately runs with a partial .env.local
 // (e.g. live webhook secret pending). Deployments validate envs at their own
 // hosting layer.
