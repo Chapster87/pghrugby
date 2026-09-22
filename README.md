@@ -21,7 +21,12 @@ content migration is confirmed landed.
 
 ## Setup
 
+Node is pinned to **24** by `.nvmrc` (the Active LTS). Use `nvm use` before
+installing — Netlify reads the same file, and its docs warn that a local Node
+differing from the build image's causes build errors.
+
 ```bash
+nvm use
 pnpm install
 ```
 

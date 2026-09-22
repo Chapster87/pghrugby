@@ -28,6 +28,11 @@ The only legitimate writers of `src/app/admin/**` are the forgecms CLI (install
 
 ## Coding conventions
 
+- **Node is pinned by `.nvmrc`** to **`24`**, the Active LTS. Run `nvm use` before
+  working here: Netlify reads the same file, and its docs warn that a local Node
+  differing from the build image's causes build errors. The pin is what stops the
+  runtime drifting — unpinned, Netlify pins the site to whatever its build image
+  defaulted to at the time, invisibly.
 - **Indentation**: 2 spaces, never tabs.
 - **Variables**: `camelCase`; prefer `const` over `let`.
 - **Comments**: JSDoc on functions explaining purpose, parameters, and return
