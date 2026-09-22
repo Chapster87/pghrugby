@@ -1,21 +1,23 @@
-// Probe the embedded ForgeCMS GraphQL API and dump the schema model list.
-// Reads NEXT_PUBLIC_BASE_URL / CMS_API_TOKEN from .env.local.
-// CDA URL = ${NEXT_PUBLIC_BASE_URL}/admin/api/graphql (same-app mount).
+// Probe the ForgeCMS GraphQL API and dump the schema model list.
+// Reads CMS_GRAPHQL_URL / CMS_API_TOKEN from .env.local.
 // Usage: node scripts/forgecms-introspect.mjs [--types | --fields]
 import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
-const CMS_MOUNT_PATH = "/admin"
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const env = parseEnv(fs.readFileSync(path.join(root, ".env.local"), "utf8"))
 
-const base = (env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000").replace(
-  /\/$/,
-  ""
-)
-const url = `${base}${CMS_MOUNT_PATH}/api/graphql`
+const url = env.CMS_GRAPHQL_URL
 const token = env.CMS_API_TOKEN
+
+if (!url) {
+  console.error(
+    "CMS_GRAPHQL_URL is not set in .env.local " +
+      "(e.g. https://cms.pghrugby.com/api/graphql)"
+  )
+  process.exit(1)
+}
 
 const mode = process.argv[2] ?? "--fields"
 

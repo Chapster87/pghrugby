@@ -4,20 +4,31 @@ import type { TadaDocumentNode } from "gql.tada"
 export const cacheTag = "datocms"
 
 /**
+ * Freshness window (seconds) for DatoCMS reads.
+ *
+ * Deliberately equal to the `(core)` group's ISR window (`(core)/layout.tsx`). A
+ * fetch's `revalidate` lowers the whole route's window, not just that fetch's
+ * cache entry, so a shorter value here would quietly become the visitor-facing
+ * freshness for every route that reads DatoCMS and leave the group's own window
+ * meaningless. The two are one number; keep them equal.
+ *
+ * A DatoCMS publish reaches the site as a webhook, which is the fast path; this
+ * bounds how long a missed delivery is served stale.
+ */
+const DATOCMS_CACHE_TTL_SECONDS = 3600
+
+/**
  * Executes a GraphQL query using the DatoCMS Content Delivery API, and caches
  * the result in Next.js Data Cache using the `cache: 'force-cache'` option.
  * This means that regular visitors won't generate additional calls to DatoCMS.
  *
- * The fetch carries the `datocms` tag and sets no `revalidate` of its own, so
- * freshness comes from the route's `revalidate` window plus on-demand
- * `revalidateTag('datocms')`.
- *
- * @TODO: the webhook-based invalidation this used to reference does not exist —
- * there is no `invalidate-cache` route in this repo and nothing calls
- * `revalidateTag('datocms')`. On Netlify the Data Cache is deploy-scoped, so
- * content currently refreshes only on redeploy. Build the route (calling
- * `revalidateTag(tag, "max")`, which Next 16 requires over the deprecated
- * single-argument form) and point the DatoCMS webhook at it.
+ * The fetch carries the `datocms` tag and an explicit `revalidate` window, so
+ * freshness has two paths: the window bounds a missed webhook, and
+ * `src/app/api/revalidate/route.ts` purges the tag the moment DatoCMS's webhook
+ * fires. The window is set here rather than inherited from the enclosing route
+ * group's `revalidate`, so that a page moving between groups — or a fetch made
+ * outside a prerendered route — cannot silently lose its expiry and serve a
+ * stale entry indefinitely.
  */
 export async function executeQuery<Result, Variables>(
   query: TadaDocumentNode<Result, Variables>,
@@ -63,6 +74,8 @@ export async function executeQuery<Result, Variables>(
        * For more info: https://www.datocms.com/docs/next-js/using-cache-tags
        */
       next: {
+        // Explicit expiry, not inherited — see DATOCMS_CACHE_TTL_SECONDS.
+        revalidate: DATOCMS_CACHE_TTL_SECONDS,
         tags: [cacheTag],
       },
     },

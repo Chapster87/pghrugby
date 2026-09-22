@@ -1,65 +1,115 @@
-import { request } from "graphql-request"
+import { ClientError, GraphQLClient } from "graphql-request"
 
 export const cmsCacheTag = "cms-content"
 
 /**
- * Default freshness window (seconds) for CMS reads. The embedded CDA returns
- * GraphQL errors with HTTP 200, which Next would otherwise cache indefinitely —
- * a transient schema/auth error would stick on every page. A TTL bounds any
- * such poisoned entry, and gives content a freshness window, since nothing
- * calls `revalidateTag(cmsCacheTag)` today.
- */
-const CMS_CACHE_TTL_SECONDS = 300
-
-/**
- * Host mount for the embedded ForgeCMS core. Mirrors `src/proxy.ts` and
- * `forgecore.json` `mountPath` — not an env var; the core hardcodes the same
- * prefix until a producer-side change.
- */
-export const CMS_MOUNT_PATH = "/admin" as const
-
-/** True for origins that only resolve on the developer's machine. */
-function isLocalOrigin(url: string): boolean {
-  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(url)
-}
-
-/**
- * Base URL for the embedded CMS's CDA on this app.
+ * Default freshness window (seconds) for CMS reads.
  *
- * `NEXT_PUBLIC_BASE_URL` is a public build constant, so a local value
- * (`http://localhost:8000`) can be inlined into a production build and leave
- * the CDA unreachable. Prefer it only when it is a real origin, otherwise fall
- * back to the URL the host publishes for the deploying/running site (Netlify
- * sets `URL` / `DEPLOY_PRIME_URL`), then to local development.
+ * Deliberately equal to the `(core)` group's ISR window (`(core)/layout.tsx`). A
+ * fetch's `revalidate` lowers the whole route's window, not just that fetch's
+ * cache entry, so a shorter value here would quietly become the visitor-facing
+ * freshness for every route that reads the CDA and leave the group's own window
+ * meaningless. The two are one number; keep them equal.
+ *
+ * The CDA returns GraphQL errors over HTTP 200, which Next would otherwise cache
+ * — a transient resolver or schema fault would stick for this window. It bounds
+ * that, and `src/app/api/revalidate/route.ts` purges the tag on the instance's
+ * publish signal, so this is the floor rather than the only path.
  */
-function resolveCmsBaseUrl(): string {
-  const configured = process.env.NEXT_PUBLIC_BASE_URL
-  if (configured && !isLocalOrigin(configured)) return configured
+const CMS_CACHE_TTL_SECONDS = 3600
 
-  const hosted = process.env.URL || process.env.DEPLOY_PRIME_URL
-  if (hosted) return hosted
-
-  return configured || "http://localhost:8000"
+/**
+ * Raised when the CMS client is misconfigured. Named so a failed build says what
+ * is missing in one line, without the reader parsing a stack trace.
+ */
+export class CmsEnvError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "CmsEnvError"
+  }
 }
 
 /**
- * Absolute GraphQL endpoint for the embedded core CDA on this app.
- * `${NEXT_PUBLIC_BASE_URL}/admin/api/graphql` in a correct deploy.
+ * The standalone ForgeCMS instance's endpoint and delivery key, read together and
+ * validated.
+ *
+ * Both are server-only (neither is `NEXT_PUBLIC_*`) and neither has a fallback: a
+ * defaulted endpoint would quietly point at nothing.
+ *
+ * @returns The absolute CDA URL and the value for the `x-api-key` header.
+ * @throws {CmsEnvError} When either variable is unset.
+ */
+export function cmsEnv(): { url: string; token: string } {
+  const url = process.env.CMS_GRAPHQL_URL
+  const token = process.env.CMS_API_TOKEN
+
+  if (!url || !token) {
+    const missing = [!url && "CMS_GRAPHQL_URL", !token && "CMS_API_TOKEN"]
+      .filter(Boolean)
+      .join(", ")
+
+    throw new CmsEnvError(
+      `ForgeCMS CDA is not configured: ${missing} unset. Set CMS_GRAPHQL_URL to ` +
+        `the instance's endpoint (e.g. https://cms.pghrugby.com/api/graphql).`
+    )
+  }
+
+  return { url, token }
+}
+
+/**
+ * Absolute GraphQL endpoint for the ForgeCMS CDA.
  */
 export function getCmsGraphqlUrl(): string {
-  const base = resolveCmsBaseUrl().replace(/\/$/, "")
-  return `${base}${CMS_MOUNT_PATH}/api/graphql`
+  return cmsEnv().url
+}
+
+/**
+ * True when a failure is a genuine CMS outage: a 5xx, or a network-level failure
+ * with no HTTP response at all (DNS, TLS, connection reset, timeout).
+ */
+function isCmsOutage(error: unknown): boolean {
+  if (error instanceof ClientError) {
+    return error.response.status >= 500
+  }
+
+  // No response was produced — `fetch` rejected before the CDA answered.
+  return true
+}
+
+/**
+ * True for an HTTP 200 carrying *execution* errors — a resolver fault on the CMS
+ * side. Degradable, but never silent, so it is logged at error level.
+ *
+ * GraphQL distinguishes the two kinds of `errors` entry without a status code: a
+ * *validation* error (the schema rejects the query) has no `path`, while an
+ * *execution* error (a resolver threw) does. Validation errors are site bugs and
+ * are thrown rather than degraded — schema drift must not hide as empty chrome.
+ */
+function isExecutionError(error: unknown): boolean {
+  if (!(error instanceof ClientError)) return false
+  if (error.response.status !== 200) return false
+
+  const errors = (error.response as { errors?: readonly unknown[] }).errors
+  if (!Array.isArray(errors)) return false
+
+  return errors.some(
+    (entry) => typeof entry === "object" && entry !== null && "path" in entry
+  )
 }
 
 /**
  * Executes a GraphQL query against the CMS Content Delivery API.
  *
- * When `graceful` is true, an unreachable CMS (e.g. no connection / missing
- * credentials during local development) does not throw: the query resolves to
- * an empty result so callers can render their fallbacks. Consumers must treat
- * the result as potentially empty (they already default unset fields with
- * optional chaining / `?? []`). Production content queries should leave
- * `graceful` off so genuine outages surface as errors.
+ * When `graceful` is true the call degrades to an empty result for the two
+ * failures a caller can survive: an outage (5xx, network, timeout) and a 200
+ * carrying execution errors. Every other failure — a refused key (401), a
+ * malformed query (400), a schema mismatch, or missing configuration — throws, so
+ * a real fault cannot hide as blank chrome. Callers must still treat a degraded
+ * result as potentially empty (they already default unset fields with optional
+ * chaining / `?? []`).
+ *
+ * Pass `graceful` only where no stale copy exists to serve instead.
  */
 export async function executeQuery<
   Result = any,
@@ -73,15 +123,26 @@ export async function executeQuery<
     graceful?: boolean
   }
 ): Promise<Result> {
-  const url = getCmsGraphqlUrl()
+  // Outside the try: an unconfigured client fails loudly and is never degraded.
+  const { url, token } = cmsEnv()
 
   const headers = {
     "Content-Type": "application/json",
-    "x-api-key": process.env.CMS_API_TOKEN!,
+    "x-api-key": token,
   }
 
-  // Next.js Data Cache options
-  const requestInit: any = {
+  // Next.js Data Cache options.
+  //
+  // These travel on the client's config, not on the request, and the difference
+  // is not cosmetic: `graphql-request@7` reads only `document`, `variables`,
+  // `requestHeaders` and `signal` from the object handed to `request()`, and
+  // takes its `fetchOptions` from the config passed to the *constructor*. Given
+  // at call level, `cache` and `next` are dropped without warning — no tag ever
+  // attaches to the fetch, so `revalidateTag` from
+  // `src/app/api/revalidate/route.ts` finds nothing to purge and the TTL never
+  // applies. Verified against the installed build, and by probe: the same signed
+  // purge moved a DatoCMS-fed page but left a ForgeCMS-fed page untouched.
+  const client = new GraphQLClient(url, {
     cache: options?.cache ?? "force-cache",
     next: {
       tags: [cmsCacheTag],
@@ -89,32 +150,38 @@ export async function executeQuery<
       // override, including with `false` to opt out of expiry.
       revalidate: options?.revalidate ?? CMS_CACHE_TTL_SECONDS,
     },
-  }
+  } as any) // `next` is a Next extension, not part of `RequestInit`
 
   try {
-    return await request<Result>({
-      url,
+    return await client.request<Result>({
       document: query,
       variables: options?.variables,
       requestHeaders: headers,
-      ...requestInit,
     } as any)
   } catch (error) {
     if (options?.graceful) {
-      // The CMS is unavailable (offline, misconfigured, or not running during
-      // local development / a build). Resolve to an empty result so chrome
-      // (nav, site settings, sponsors) degrades instead of crashing the page.
-      //
-      // Log a sanitized reason only: the raw error carries `request.headers`
-      // (including `x-api-key`), and this runs during `next build`, where the
-      // host's secret scanner reads the log.
+      // Log a sanitized reason only: a raw `graphql-request` error carries
+      // `request.headers` (including `x-api-key`), and this runs during
+      // `next build`, where the host's secret scanner reads the log.
       const reason = error instanceof Error ? error.message : "unknown error"
-      console.warn(
-        `[forgecms] Query failed; falling back to an empty result. ` +
-          `Is the CMS reachable at "${url}"? (${reason})`
-      )
-      return {} as Result
+
+      if (isCmsOutage(error)) {
+        console.warn(
+          `[forgecms] CMS unreachable; falling back to an empty result. ` +
+            `(${url}) ${reason}`
+        )
+        return {} as Result
+      }
+
+      if (isExecutionError(error)) {
+        console.error(
+          `[forgecms] CMS returned GraphQL execution errors; falling back to ` +
+            `an empty result. (${url}) ${reason}`
+        )
+        return {} as Result
+      }
     }
+
     throw error
   }
 }

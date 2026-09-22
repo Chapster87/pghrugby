@@ -11,20 +11,19 @@ Commerce and content come from Stripe, DatoCMS, ForgeCMS, and Supabase
 (`orders`/`carts`). Medusa, Strapi, and Sanity are removed — never reintroduce
 them or their patterns. All changes stay within this repository.
 
-### ForgeCMS mounted core — do not edit
+### ForgeCMS is an external service
 
-`src/app/admin/**` is the **vendored ForgeCMS core** (`forgecms install` /
-`forgecms update`, marker `forgecore.json`). It is **wholesale-overwritten on
-update**. Agents must **never** create, edit, delete, or reformat files under
-`src/app/admin/**`.
+ForgeCMS runs as its own deployment (`cms.pghrugby.com`, repo
+`Chapster87/pghrugby-cms`). This repo is a plain HTTP consumer of its
+server-to-server Content Delivery API: a required server-only `CMS_GRAPHQL_URL`
+plus `CMS_API_TOKEN` as the `x-api-key`, read through
+`src/lib/forgecms/execute-query.ts`.
 
-Host work stays outside that tree: root layout, route-group wrappers,
-`src/proxy.ts`, env, site libs, and seam plugins under `src/cms/` (see
-`docs/agents/forgecms-site-layer-custom-models.md`). Read the core only when
-needed for contracts or imports; never patch it in place.
-
-The only legitimate writers of `src/app/admin/**` are the forgecms CLI (install
-/ update). Do not hand-edit “just this one file” inside the mount.
+There is no admin subtree, no host seam, and no mounted core here. Content models
+and custom field types (e.g. `standings_table`) live in the instance's
+`src/extensions/**`. Never reintroduce a vendored core or an `/admin` mount.
+Instance operations — the generator pin, update ritual, and what survives an
+update — are recorded in `docs/agents/forgecms-instance-operations.md`.
 
 ## Coding conventions
 
