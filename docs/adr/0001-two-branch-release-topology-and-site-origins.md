@@ -29,8 +29,14 @@ onto the production deploy.
 - **Only `production` ever goes live on Stripe.** Branch deploys and previews stay on test
   Stripe permanently, including after cutover — a preview that can take real money is a preview
   nobody dares open.
-- The `trunk` branch deploy is publicly reachable and, unlike a preview, is **not**
-  `noindex`ed by the platform, so it carries an explicit `X-Robots-Tag` header of its own.
+- The `trunk` branch deploy is publicly reachable and, unlike a Deploy Preview, is **not**
+  `noindex`ed by the platform. It gets `X-Robots-Tag: noindex` from `next.config.js`'s
+  `headers()`, switched on by a `SITE_NOINDEX=true` value set for the `branch-deploy` context;
+  `production` leaves it unset, and `robots.ts` refuses everything as a belt. A `netlify.toml`
+  `[[headers]]` block **cannot** do this — Netlify's docs are explicit that its headers and
+  redirects are global for every build and cannot be scoped to a deploy context, while an
+  environment variable can. `next.config.js` is evaluated at build time, so the toggle costs no
+  runtime work.
 - After cutover `next.pghrugby.com` becomes a **domain alias** and Netlify canonical-redirects
   it to the apex; it does not keep serving an independent copy.
 - GitHub's default branch is `trunk`, so pull requests and their previews target it by default.
