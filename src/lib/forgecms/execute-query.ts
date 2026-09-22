@@ -1,15 +1,22 @@
-import { ClientError, request } from "graphql-request"
+import { ClientError, GraphQLClient } from "graphql-request"
 
 export const cmsCacheTag = "cms-content"
 
 /**
- * Default freshness window (seconds) for CMS reads. The CDA returns GraphQL
- * errors over HTTP 200, which Next would otherwise cache indefinitely — a
- * transient resolver or schema fault would stick on every page. A TTL bounds any
- * such poisoned entry, and `src/app/api/revalidate/route.ts` purges the tag on
- * the instance's publish signal, so this is the floor rather than the only path.
+ * Default freshness window (seconds) for CMS reads.
+ *
+ * Deliberately equal to the `(core)` group's ISR window (`(core)/layout.tsx`). A
+ * fetch's `revalidate` lowers the whole route's window, not just that fetch's
+ * cache entry, so a shorter value here would quietly become the visitor-facing
+ * freshness for every route that reads the CDA and leave the group's own window
+ * meaningless. The two are one number; keep them equal.
+ *
+ * The CDA returns GraphQL errors over HTTP 200, which Next would otherwise cache
+ * — a transient resolver or schema fault would stick for this window. It bounds
+ * that, and `src/app/api/revalidate/route.ts` purges the tag on the instance's
+ * publish signal, so this is the floor rather than the only path.
  */
-const CMS_CACHE_TTL_SECONDS = 300
+const CMS_CACHE_TTL_SECONDS = 3600
 
 /**
  * Raised when the CMS client is misconfigured. Named so a failed build says what
@@ -124,8 +131,18 @@ export async function executeQuery<
     "x-api-key": token,
   }
 
-  // Next.js Data Cache options
-  const requestInit: any = {
+  // Next.js Data Cache options.
+  //
+  // These travel on the client's config, not on the request, and the difference
+  // is not cosmetic: `graphql-request@7` reads only `document`, `variables`,
+  // `requestHeaders` and `signal` from the object handed to `request()`, and
+  // takes its `fetchOptions` from the config passed to the *constructor*. Given
+  // at call level, `cache` and `next` are dropped without warning — no tag ever
+  // attaches to the fetch, so `revalidateTag` from
+  // `src/app/api/revalidate/route.ts` finds nothing to purge and the TTL never
+  // applies. Verified against the installed build, and by probe: the same signed
+  // purge moved a DatoCMS-fed page but left a ForgeCMS-fed page untouched.
+  const client = new GraphQLClient(url, {
     cache: options?.cache ?? "force-cache",
     next: {
       tags: [cmsCacheTag],
@@ -133,15 +150,13 @@ export async function executeQuery<
       // override, including with `false` to opt out of expiry.
       revalidate: options?.revalidate ?? CMS_CACHE_TTL_SECONDS,
     },
-  }
+  } as any) // `next` is a Next extension, not part of `RequestInit`
 
   try {
-    return await request<Result>({
-      url,
+    return await client.request<Result>({
       document: query,
       variables: options?.variables,
       requestHeaders: headers,
-      ...requestInit,
     } as any)
   } catch (error) {
     if (options?.graceful) {
