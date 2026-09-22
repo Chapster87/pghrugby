@@ -99,13 +99,37 @@ own endpoint; the instance holds no knowledge of it beyond the URL.
 
 ## 6. Scheduled work
 
-**Nothing is scheduled.** Two jobs belong here and neither exists yet:
+**Audit-log retention — live.** Daily at **03:30 UTC** (23:30 EDT, off-peak), a **90-day**
+window with no per-record cap (ADR-0004's default, the cadence `docs/DEPLOY.md`
+documents).
 
-- **Audit-log retention** — `pnpm db:prune-audit-logs`, daily off-peak per
-  `docs/DEPLOY.md`. The log is append-only for every request-path role, so nothing the app
-  does bounds it. It needs `SUPABASE_SERVICE_ROLE_KEY` and refuses the app's `CMS_DB_KEY`
-  by design, so it is operator-side work; filed as its own Task under the map.
-- Nothing else. The instance holds no cron, no queue and no scheduler of its own.
+- **Where it runs:** inside the database, via **`pg_cron` 1.6.4** (installed in
+  `pg_catalog`), as the `postgres` role that owns the routine. It is `cron.job` #1,
+  `audit-log-retention`, and its whole command is:
+
+  ```sql
+  select public.prune_audit_logs(p_retain_days => 90, p_keep_per_record => null)
+  ```
+
+- **Why there.** `prune_audit_logs()` is granted to `service_role`/`postgres` alone, so the
+  run is operator-side by construction — and the template deliberately ships no scheduler
+  (ADR-0004 rejects "scheduling inside the template"), which leaves the mechanism to the
+  operator. In-database cron needs **no second copy of `SUPABASE_SERVICE_ROLE_KEY`**, no
+  extra service and no build. Rejected: a **Supabase Scheduled Edge Function** (needs
+  `pg_cron` _and_ `pg_net` installed anyway, plus the function and a secret — strictly more
+  for the same result), and a **Railway cron service** running `pnpm db:prune-audit-logs`
+  (it would use the shipped executor with its guards, but the master key gets a second home
+  in Railway variables, the image must retain the `tsx` devDependency, and it needs a
+  build). The trade taken: a raw RPC call loses the executor's report sum-check and its
+  human-readable log line — the function still refuses a boundless run and raises on
+  failure, so a bad run is recorded rather than silent.
+- **Watching it:** `select * from cron.job_run_details order by start_time desc limit 10;`
+  A run that cannot prune raises, so a failure lands there as a failed run.
+- **Governance note:** `pg_cron` is an object **outside the generator's substrate**. A
+  `forgecms update` neither knows nor manages it, and the extension + job are recorded here
+  because nothing in the instance repo would otherwise say they exist.
+
+The instance holds no queue and no other scheduled job.
 
 ## 7. What is deliberately not here
 
@@ -124,4 +148,3 @@ own endpoint; the instance holds no knowledge of it beyond the URL.
   on the next deploy's build log.
 - Set a spending limit on the project (a hold-the-line measure carried from
   [Task: Land the shared-project isolation guards before the CMS is cut over (#101)](https://github.com/Chapster87/pghrugby/issues/101)).
-- Schedule the retention job (§6).

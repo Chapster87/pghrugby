@@ -153,7 +153,10 @@ Two consequences worth stating outright:
 - **Scheduled work is operator-side.** The audit-log retention prune is the worked
   example: it needs `SUPABASE_SERVICE_ROLE_KEY` and **refuses the app's `CMS_DB_KEY` by
   design**, because the credential that writes the log must not be able to delete it. So
-  it can never run from the deployed app, and no update can express it.
+  it can never run from the deployed app, and no update can express it. It is now
+  scheduled **inside the database** with `pg_cron` — daily at 03:30 UTC, a 90-day window —
+  the mechanism that needs no second copy of the master key and no extra service; see
+  [railway-inventory.md](./railway-inventory.md) §6.
 
 ## 8. The operating habit
 
@@ -195,15 +198,28 @@ The trap they set is worth naming: the 2.0.1 update rewrote `CONTEXT.md` (192 li
 `AGENTS.md` would author into a file they believed was owned, or avoid one they believed
 was.
 
+Two later corrections landed in that file, both the same class of stale instruction:
+
+- the `pnpm approve-builds` note, superseded once the manifest began shipping
+  `pnpm.onlyBuiltDependencies`; and
+- the "delete the starter sample once you have your own registrations" line, replaced by
+  the opposite decision — the sample is **kept deliberately** as the seam's worked
+  reference, with its registrations left live and its no-op media stub named plainly, so
+  that nothing looks like it depends on it.
+
 ## 10. Follow-ups
 
-- **Audit-log retention is unscheduled.** `docs/DEPLOY.md` says run
-  `pnpm db:prune-audit-logs` daily off-peak; nothing does. The log is append-only for
-  every request-path role, so nothing the app does bounds it. Filed as its own Task under
-  the map — operator-side platform work, not a decision.
-- **`src/extensions/sample/` is still present** beside the club's own `standings`
-  extension. The instance's `AGENTS.md` says to delete the sample once there are real
-  registrations; the test suite stays green when it goes.
 - **The `CONTEXT.md` in the instance still carries implementation prose** (Repo Shape,
   Runtime posture, Database posture, Deployment posture) that a domain doc arguably
   should not — `CONTEXT.md` is a glossary. Restructuring it is its own decision.
+- **The instance has no working media provider**, so the media library has no storage
+  backend. Raised on
+  [Grilling: CMS runtime tuning — images, caching, and region (#100)](https://github.com/Chapster87/pghrugby/issues/100),
+  which owns the media question. Provider choice is coupled to whether the public site
+  consumes CMS image URLs —
+  [Grilling: The site's CDA interface contract against an external CMS (#91)](https://github.com/Chapster87/pghrugby/issues/91).
+- **Possible instance ADR** for the `pg_cron` schedule. Where the scheduler lives is an
+  instance decision with a real trade-off (in-database cron against a Railway cron service
+  against a Supabase Scheduled Edge Function), and the instance's own governance puts
+  decisions in its `docs/adr/**`. Currently recorded here and in
+  [railway-inventory.md](./railway-inventory.md) §6 only.
