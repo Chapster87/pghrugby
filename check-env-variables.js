@@ -32,8 +32,12 @@ const requiredEnvs = [
     description: "Supabase anon key (embedded ForgeCMS client/auth)",
   },
   {
+    key: "CMS_GRAPHQL_URL",
+    description: "ForgeCMS CDA endpoint (standalone instance)",
+  },
+  {
     key: "CMS_API_TOKEN",
-    description: "ForgeCMS CDA x-api-key (storefront + /admin/api/graphql)",
+    description: "ForgeCMS CDA x-api-key (delivery key)",
   },
 ]
 
