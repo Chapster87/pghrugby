@@ -2,7 +2,8 @@ import { NextResponse } from "next/server"
 
 import { findCatalogItem } from "@/lib/checkout/catalog"
 import { getCart } from "@/lib/checkout/cart-store"
-import { CHECKOUT_BASE_URL, isLiveStripe, stripe } from "@/lib/checkout/stripe"
+import { isLiveStripe, stripe } from "@/lib/checkout/stripe"
+import { getBaseURL } from "@/lib/util/env"
 
 /**
  * POST /api/checkout/sessions  { cartRef }
@@ -78,8 +79,9 @@ export async function POST(request: Request) {
         }
       }),
       // Required for embedded_page; Stripe substitutes {CHECKOUT_SESSION_ID}
-      // on redirect.
-      return_url: `${CHECKOUT_BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      // on redirect. The origin comes from the same resolver the metadata does,
+      // so a preview returns the buyer to that preview rather than to production.
+      return_url: `${getBaseURL()}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       client_reference_id: cart.cartRef,
       customer_creation: "always",
       metadata: {

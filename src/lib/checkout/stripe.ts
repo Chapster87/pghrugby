@@ -63,10 +63,3 @@ export const STRIPE_WEBHOOK_SECRET = pickStripeKey(
   process.env.STRIPE_WEBHOOK_SECRET_TEST,
   process.env.STRIPE_WEBHOOK_SECRET
 )
-
-/**
- * Base URL used to build the embedded Checkout `return_url`. Falls back to a
- * local dev origin so the flow works without env setup.
- */
-export const CHECKOUT_BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
