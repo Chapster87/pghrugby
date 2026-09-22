@@ -3,14 +3,11 @@ import { ClientError, request } from "graphql-request"
 export const cmsCacheTag = "cms-content"
 
 /**
- * Default freshness window (seconds) for CMS reads.
- *
- * The CDA returns GraphQL errors over HTTP 200, which Next would otherwise cache
- * indefinitely — a transient resolver or schema fault would stick on every page.
- * A TTL bounds any such poisoned entry. It is not the visitor-facing freshness
- * promise (the route group's `revalidate` is); it dedupes callers within one
- * render and bounds a cached error. `src/app/api/revalidate/route.ts` purges the
- * tag on the instance's publish signal, so this is the floor, not the only path.
+ * Default freshness window (seconds) for CMS reads. The CDA returns GraphQL
+ * errors over HTTP 200, which Next would otherwise cache indefinitely — a
+ * transient resolver or schema fault would stick on every page. A TTL bounds any
+ * such poisoned entry, and `src/app/api/revalidate/route.ts` purges the tag on
+ * the instance's publish signal, so this is the floor rather than the only path.
  */
 const CMS_CACHE_TTL_SECONDS = 300
 
@@ -29,9 +26,8 @@ export class CmsEnvError extends Error {
  * The standalone ForgeCMS instance's endpoint and delivery key, read together and
  * validated.
  *
- * Both are server-only (neither is `NEXT_PUBLIC_*`) and neither has a fallback:
- * the site no longer embeds the CMS, so there is no in-app origin to derive from,
- * and a defaulted endpoint would quietly point at nothing.
+ * Both are server-only (neither is `NEXT_PUBLIC_*`) and neither has a fallback: a
+ * defaulted endpoint would quietly point at nothing.
  *
  * @returns The absolute CDA URL and the value for the `x-api-key` header.
  * @throws {CmsEnvError} When either variable is unset.
@@ -46,9 +42,8 @@ export function cmsEnv(): { url: string; token: string } {
       .join(", ")
 
     throw new CmsEnvError(
-      `ForgeCMS CDA is not configured: ${missing} unset. The site reads content ` +
-        `from the standalone instance (https://cms.pghrugby.com/api/graphql); ` +
-        `there is no in-repo fallback.`
+      `ForgeCMS CDA is not configured: ${missing} unset. Set CMS_GRAPHQL_URL to ` +
+        `the instance's endpoint (e.g. https://cms.pghrugby.com/api/graphql).`
     )
   }
 
@@ -56,7 +51,7 @@ export function cmsEnv(): { url: string; token: string } {
 }
 
 /**
- * Absolute GraphQL endpoint for the ForgeCMS CDA running at `cms.pghrugby.com`.
+ * Absolute GraphQL endpoint for the ForgeCMS CDA.
  */
 export function getCmsGraphqlUrl(): string {
   return cmsEnv().url
@@ -99,17 +94,15 @@ function isExecutionError(error: unknown): boolean {
 /**
  * Executes a GraphQL query against the CMS Content Delivery API.
  *
- * When `graceful` is true the call degrades to an empty result only for the two
- * failures a caller can meaningfully survive: an outage (5xx, network, timeout)
- * and a 200 carrying execution errors. Every other failure — a refused key
- * (401), a malformed query (400), a schema mismatch, or missing configuration —
- * throws, so a real fault cannot hide as blank chrome. Consumers must still treat
- * a degraded result as potentially empty (they already default unset fields with
- * optional chaining / `?? []`).
+ * When `graceful` is true the call degrades to an empty result for the two
+ * failures a caller can survive: an outage (5xx, network, timeout) and a 200
+ * carrying execution errors. Every other failure — a refused key (401), a
+ * malformed query (400), a schema mismatch, or missing configuration — throws, so
+ * a real fault cannot hide as blank chrome. Callers must still treat a degraded
+ * result as potentially empty (they already default unset fields with optional
+ * chaining / `?? []`).
  *
- * Callers on a prerendered surface leave `graceful` off entirely: under ISR a
- * failed regeneration keeps serving the last good page, so degrading would
- * replace real content with nothing. It survives only where no stale copy exists.
+ * Pass `graceful` only where no stale copy exists to serve instead.
  */
 export async function executeQuery<
   Result = any,

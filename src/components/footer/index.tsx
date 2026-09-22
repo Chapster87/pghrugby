@@ -12,8 +12,8 @@ import { SocialMedia } from "./types"
 
 export default async function Footer() {
   const [{ site_navigation }, { socialSettings }] = await Promise.all([
-    executeQuery(siteNavigationQuery, { graceful: true }),
-    executeQuery(socialSettingsQuery, { graceful: true }),
+    executeQuery(siteNavigationQuery),
+    executeQuery(socialSettingsQuery),
   ])
 
   const socialMedia: SocialMedia = {

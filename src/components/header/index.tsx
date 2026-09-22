@@ -21,8 +21,8 @@ export interface NavItem extends SubMenuItem {
 
 export default async function Header() {
   const [{ siteSettings }, { site_navigation }] = await Promise.all([
-    executeQuery(siteSettingsQuery, { graceful: true }),
-    executeQuery(siteNavigationQuery, { graceful: true }),
+    executeQuery(siteSettingsQuery),
+    executeQuery(siteNavigationQuery),
   ])
   const siteTitle = siteSettings?.defaultPageTitle || "Pittsburgh Rugby"
   const formattedNavData = {

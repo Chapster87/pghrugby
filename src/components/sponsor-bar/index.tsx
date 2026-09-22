@@ -8,7 +8,7 @@ export default async function SponsorBar() {
     sponsorsCollection?: {
       edges?: { node: ForgeCmsSponsor }[]
     } | null
-  }>(sponsorsQuery, { graceful: true })
+  }>(sponsorsQuery)
   const sponsors = (sponsorsCollection?.edges ?? []).map((edge) => edge.node)
 
   return (
