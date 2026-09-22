@@ -123,10 +123,13 @@ are template-owned and already present. Specifically:
   already whitelists `sharp` (with `esbuild` and `unrs-resolver`) so pnpm 10 runs its
   install script. Adding it explicitly would duplicate `next`'s optional dep and earn a
   warning on every update.
-- **Node is pinned by a root `.nvmrc`** — the one mechanism that is both honoured and
-  silent, because a root file the generator does not ship is outside _every_ region, so
-  no update sees it. Explicitly **not** `engines`: the template ships no `engines`, so a
-  club value there only buys a permanent warning with no enforcement.
+- **Node is pinned by a root `.nvmrc`** to **`24`**, the Active LTS (security support to
+  2028-04-30) — the one mechanism that is both honoured and silent, because a root file the
+  generator does not ship is outside _every_ region, so no update sees it. Unpinned, the
+  alias resolves to 24 today and flips to 26 on 2026-10-28. Explicitly **not** `engines`: the
+  template ships no `engines`, so a club value there only buys a permanent warning with no
+  enforcement. Keep local development on the same line — `nvm use` in the instance — so a
+  local `pnpm build` proves the line production runs.
 
 Railpack resolves Node from `RAILPACK_NODE_VERSION`, then `devEngines`/`engines`, then
 `.nvmrc`, then `.node-version`, then `mise.toml`, and finally the alias `lts` — a moving

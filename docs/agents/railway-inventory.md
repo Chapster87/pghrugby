@@ -52,9 +52,11 @@ Project id recorded at stand-up: `608afd95-482d-4ca3-b12b-9109bf8e48cd`.
   the manifest's `packageManager` field (Railpack's own default is pnpm 9). **A manifest
   that has drifted from `pnpm-lock.yaml` fails the build** — see the ritual in the
   companion doc.
-- **Node:** resolved by Railpack, defaulting to the alias `lts` — a moving target. Pinned
-  by a root `.nvmrc` in the instance as of 2026-09-21; `RAILPACK_NODE_VERSION` on this
-  service is the equivalent alternative, and the two must not both be set.
+- **Node:** resolved by Railpack, defaulting to the moving alias `lts`. Pinned by a root
+  `.nvmrc` to **`24`** — the Active LTS (security support to 2028-04-30). Unpinned, the
+  alias resolves to 24 today and **flips to 26 on 2026-10-28**, which is the drift the pin
+  exists to stop. `RAILPACK_NODE_VERSION` on this service is the equivalent alternative, and
+  the two must not both be set.
 - **Start:** the manifest's `start` script (`next start`), which reads the injected
   `PORT` itself — no `-p $PORT` needed.
 
