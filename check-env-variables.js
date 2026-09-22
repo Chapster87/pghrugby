@@ -28,10 +28,6 @@ const requiredEnvs = [
     description: "DatoCMS CDA token (published content)",
   },
   {
-    key: "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-    description: "Supabase anon key (embedded ForgeCMS client/auth)",
-  },
-  {
     key: "CMS_GRAPHQL_URL",
     description: "ForgeCMS CDA endpoint (standalone instance)",
   },
