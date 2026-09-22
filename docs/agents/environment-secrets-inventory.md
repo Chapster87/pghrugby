@@ -4,7 +4,7 @@ Status: **verified 2026-08-24** from code references + local env _names_ (values
 
 Part of the wayfinder map: [Wayfinder map: Single-repo Next.js site on Stripe + DatoCMS + ForgeCMS](https://github.com/Chapster87/pghrugby/issues/1) — ticket [Task: Environment and secrets inventory](https://github.com/Chapster87/pghrugby/issues/7).
 
-Companion: [railway-inventory.md](./railway-inventory.md) (Railway-hosted Medusa stack env surface).
+Companion: [railway-inventory.md](./railway-inventory.md) — **rewritten 2026-09-21** as the CMS instance's Railway platform inventory. This file's Medusa rows describe a stack on the same host that has since been decommissioned.
 
 ## 1. Scope
 
@@ -219,7 +219,7 @@ Prototype spike still uses in-memory store; wiring these env vars into a real Su
 
 Wherever the Next.js app is deployed, set the **§3.1** block. Do **not** set Medusa/Sanity/Strapi vars on the new host.
 
-Railway Medusa service env vars are deleted with the Railway project ([railway-inventory.md](./railway-inventory.md) §4–5).
+Railway Medusa service env vars died with the Railway project, which has since been **deleted** and its billing closed — that decommission is done, and [railway-inventory.md](./railway-inventory.md) no longer covers it.
 
 ## 6. Facts recorded
 
