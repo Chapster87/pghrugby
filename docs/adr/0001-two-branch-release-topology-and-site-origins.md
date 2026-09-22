@@ -2,11 +2,12 @@
 
 Netlify's production deploy builds **`main`**, the release branch; **`trunk`** is the
 integration branch where feature branches pool and are verified, promoted to `main` by a
-`trunk → main` pull request. `trunk` is enabled as a **branch deploy**, which is not cosmetic:
-Netlify gates Deploy Previews on the pull request's base branch being either the production
-branch or a branch with branch deploys enabled, so without it a PR into `trunk` gets no preview
-at all. The site's pre-cutover origin is **`next.pghrugby.com`**, an unproxied Cloudflare CNAME
-onto the production deploy.
+**fast-forward only** merge — the `deploy-prod` skill — so `main` advances onto trunk's existing
+commit and **no new SHA is created**. `trunk` is enabled as a **branch deploy**, which is not
+cosmetic: Netlify gates Deploy Previews on the pull request's base branch being either the
+production branch or a branch with branch deploys enabled, so without it a PR into `trunk` gets
+no preview at all. The site's pre-cutover origin is **`next.pghrugby.com`**, an unproxied
+Cloudflare CNAME onto the production deploy.
 
 ## Considered options
 
@@ -18,6 +19,12 @@ onto the production deploy.
 - **`staging.pghrugby.com` as a production alias.** Rejected on naming, not shape: a hostname
   that serves production content must not be called staging, since every later session reading
   it would infer the wrong thing. `next.` says what it is — the next site, not yet at the apex.
+- **A `trunk → main` release pull request.** Rejected: a merge commit mints a SHA that was never
+  built anywhere, so the production deploy would serve a commit no branch deploy ever verified —
+  and an unreachable-from-trunk `main` also makes every later fast-forward impossible. A
+  fast-forward keeps the promoted commit identical to the one the `trunk` branch deploy built, so
+  pushing `main` deploys exactly what was verified. There is therefore **no promotion preview**:
+  the preview surface is feature PRs into `trunk`.
 
 ## Consequences
 
@@ -41,3 +48,6 @@ onto the production deploy.
   it to the apex; it does not keep serving an independent copy.
 - GitHub's default branch is `trunk`, so pull requests and their previews target it by default.
   This is independent of Netlify's production branch, which stays `main`.
+- After a promotion `main` and `trunk` point at the **same commit**, since promotion adds no SHA.
+  `main` therefore holds no work of its own, and any commit on `main` that is not on `trunk` is a
+  signal the topology has been violated rather than a normal state to reconcile.
