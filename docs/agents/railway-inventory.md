@@ -125,6 +125,12 @@ documents).
   failure, so a bad run is recorded rather than silent.
 - **Watching it:** `select * from cron.job_run_details order by start_time desc limit 10;`
   A run that cannot prune raises, so a failure lands there as a failed run.
+- **First run, observed 2026-09-22** (by briefly setting the job to every minute, then
+  restoring it). **69 rows deleted — 201 → 132**, with nothing left past 90 days and the
+  oldest row now `2026-06-27`. Both runs recorded `status = succeeded`. Worth knowing: the
+  table's `return_message` is `1 row` — the count of the job's own `SELECT` — and **not**
+  the function's jsonb report, so a run's `deleted` / `cutoff` detail is only visible by
+  calling the function directly.
 - **Governance note:** `pg_cron` is an object **outside the generator's substrate**. A
   `forgecms update` neither knows nor manages it, and the extension + job are recorded here
   because nothing in the instance repo would otherwise say they exist.
