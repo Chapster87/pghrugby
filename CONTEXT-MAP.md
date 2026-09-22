@@ -12,7 +12,7 @@ This map defines the domain contexts in the repository.
   DatoCMS, ForgeCMS, and Supabase (`orders`/`carts`).
 - **Context File**: `CONTEXT.md`
 - **Agent docs**: `docs/agents/`; **handoffs**: `docs/handoffs/`
-- **ADRs**: `docs/adr/` (if/when added)
+- **ADRs**: `docs/adr/`
 
 ## Retired contexts
 

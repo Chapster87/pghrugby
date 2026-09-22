@@ -77,3 +77,8 @@ no family.
 The public root URL of a product detail page (e.g. `/dues`), produced by rewriting the
 internal product route. Products win slug ownership over pages.
 _Avoid_: pretty URL, friendly URL, nice URL
+
+**Live store**:
+The WordPress/WooCommerce storefront serving the apex domain, which this app replaces at
+cutover. Distinct from _this site_, which is the Next.js app in this repo.
+_Avoid_: current site, old site, production site, staging site
