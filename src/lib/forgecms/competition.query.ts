@@ -4,11 +4,12 @@
 // widget.
 //
 // The CDA exposes collections via `<plural>Collection { edges { node { … } } }`.
-// `where` only supports
-// exact-match scalar fields — nested relation filters silently return empty —
-// and there is no ordering argument, so the app filters and sorts in JS. The
-// full history is ~127 rows; fetching it wholesale and narrowing client-side
-// is cheaper and more robust than composing filters the API can't express.
+// `where` filters on exact-match scalars and supports nested relation filters
+// (verified against the standings collection), but there is no ordering
+// argument, and the schedule tables, countdown and sidebar widget all need
+// matches ordered by kickoff. The full history is only ~127 rows, so fetching it
+// wholesale and narrowing in JS keeps the filter and the sort in one place
+// rather than splitting them between the API and the client.
 
 import { executeQuery } from "./execute-query"
 
@@ -94,8 +95,8 @@ export interface MatchFilter {
 /**
  * Fetches every ForgeCMS match with its resolved league, division, season, and
  * team (with logo) references. The collection is small (~127 rows), so the app
- * filters and sorts in JS rather than relying on `where` (scalar-only) or an
- * ordering argument (none exists). Cached under the shared `cms-content` tag.
+ * narrows and sorts in JS rather than splitting that between `where` and the
+ * client. Cached under the shared `cms-content` tag.
  * @returns All matches, unordered as returned by the API.
  */
 export async function getAllMatches(): Promise<ForgeCmsMatch[]> {
