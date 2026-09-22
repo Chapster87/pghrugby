@@ -41,6 +41,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# netlify — local CLI state, and the curated env file the CLI imports
+# (stage-managed by scripts/netlify-standup-wizard.sh; it holds live secrets)
+.netlify/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
