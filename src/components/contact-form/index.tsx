@@ -197,15 +197,19 @@ export default function ContactForm({
                 </optgroup>
                 <optgroup label="Membership">
                   <option value="womens-membership">
-                    Women's Team Membership
+                    Women&apos;s Team Membership
                   </option>
-                  <option value="mens-membership">Men's Team Membership</option>
+                  <option value="mens-membership">
+                    Men&apos;s Team Membership
+                  </option>
                 </optgroup>
                 <optgroup label="Match Scheduling">
                   <option value="womens-matchsec">
-                    Women's Match Secretary
+                    Women&apos;s Match Secretary
                   </option>
-                  <option value="mens-matchsec">Men's Match Secretary</option>
+                  <option value="mens-matchsec">
+                    Men&apos;s Match Secretary
+                  </option>
                 </optgroup>
                 <optgroup label="Website">
                   <option value="website">

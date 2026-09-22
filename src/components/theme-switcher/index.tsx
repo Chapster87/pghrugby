@@ -1,17 +1,26 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 import { Moon, Sun } from "lucide-react"
 import s from "./styles.module.css"
 
-export function ThemeSwitcher() {
-  const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
+/**
+ * The store never changes, so subscription is a no-op. Hoisted so its identity
+ * stays stable across renders and React does not resubscribe on every one.
+ */
+const subscribe = () => () => {}
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+export function ThemeSwitcher() {
+  // false during SSR and the first client render, true once hydrated. The
+  // stored theme is unknown until the client takes over, so rendering the
+  // toggle earlier would flash the wrong icon — this is the mount guard.
+  const mounted = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false
+  )
+  const { theme, setTheme } = useTheme()
 
   if (!mounted) return null
 

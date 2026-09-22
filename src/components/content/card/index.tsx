@@ -28,7 +28,13 @@ export function ContentCard({ data }: { data: ContentCard }) {
     <div className={s.card} data-color-scheme="light">
       {imageProps?.src && (
         <Link href={urlBuilder(type, slug)} className={s.cardImageLink}>
-          <Image {...imageProps} src={imageProps.src as string} />
+          {/* `alt` is restated explicitly so jsx-a11y/alt-text can see it: the
+              rule does not read through the spread above. */}
+          <Image
+            {...imageProps}
+            src={imageProps.src as string}
+            alt={imageProps.alt}
+          />
         </Link>
       )}
       <Link href={urlBuilder(type, slug)} className={s.cardTitleLink}>

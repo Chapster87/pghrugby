@@ -92,8 +92,9 @@ export default function VenmoDialog() {
                 <div className="d-flex flex-column">
                   <p className="mb-2">
                     If you would like to make a recurring payment, tap the
-                    "Schedule" button in the bottom left. Then choose a
-                    frequency &amp; occurs date. Tap "Save" when finished.
+                    &quot;Schedule&quot; button in the bottom left. Then choose
+                    a frequency &amp; occurs date. Tap &quot;Save&quot; when
+                    finished.
                   </p>
                   <div className={s.venmoSchedule}>
                     <Image
@@ -113,7 +114,7 @@ export default function VenmoDialog() {
                   </div>
                 </div>
               </li>
-              <li>Click "Pay" to complete the transaction</li>
+              <li>Click &quot;Pay&quot; to complete the transaction</li>
             </ol>
             <div className={dialogStyles.footer}>
               <Dialog.Close asChild>

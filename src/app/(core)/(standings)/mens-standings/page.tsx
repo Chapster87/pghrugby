@@ -31,7 +31,7 @@ export async function generateMetadata(
 export default function MensStandings() {
   return (
     <div className={`${contentStyles.contentBlock} ${s.mensStandingsMain}`}>
-      <Heading level="h1">Men's Rugby Season Standings</Heading>
+      <Heading level="h1">Men&apos;s Rugby Season Standings</Heading>
 
       <StandingsTable
         leagueSlug="midwest-mens-rugby"

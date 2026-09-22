@@ -31,7 +31,7 @@ export async function generateMetadata(
 export default function WomensStandings() {
   return (
     <div className={`${contentStyles.contentBlock} ${s.mensStandingsMain}`}>
-      <Heading level="h1">Women's Rugby Season Standings</Heading>
+      <Heading level="h1">Women&apos;s Rugby Season Standings</Heading>
 
       <StandingsTable
         leagueSlug="midwest-womens-rugby"
