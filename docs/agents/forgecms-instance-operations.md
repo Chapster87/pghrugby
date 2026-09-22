@@ -156,7 +156,8 @@ Two consequences worth stating outright:
   it can never run from the deployed app, and no update can express it. It is now
   scheduled **inside the database** with `pg_cron` — daily at 03:30 UTC, a 90-day window —
   the mechanism that needs no second copy of the master key and no extra service; see
-  [railway-inventory.md](./railway-inventory.md) §6.
+  [railway-inventory.md](./railway-inventory.md) §6, and the instance's own decision record
+  in `Chapster87/pghrugby-cms` at `docs/adr/0002-audit-log-retention-runs-in-the-database.md`.
 
 ## 8. The operating habit
 
@@ -218,8 +219,3 @@ Two later corrections landed in that file, both the same class of stale instruct
   which owns the media question. Provider choice is coupled to whether the public site
   consumes CMS image URLs —
   [Grilling: The site's CDA interface contract against an external CMS (#91)](https://github.com/Chapster87/pghrugby/issues/91).
-- **Possible instance ADR** for the `pg_cron` schedule. Where the scheduler lives is an
-  instance decision with a real trade-off (in-database cron against a Railway cron service
-  against a Supabase Scheduled Edge Function), and the instance's own governance puts
-  decisions in its `docs/adr/**`. Currently recorded here and in
-  [railway-inventory.md](./railway-inventory.md) §6 only.
