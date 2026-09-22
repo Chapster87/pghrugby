@@ -10,8 +10,10 @@ Built with Next.js (App Router), with content and commerce spread across:
   `scripts/provision-stripe-catalog.mjs`).
 - **DatoCMS** — editorial content (pages, posts) plus interim product content
   and taxonomy.
-- **ForgeCMS** — site chrome + competition (nav, footer, settings, sponsors,
-  teams, matches, schedules, standings, links, socials).
+- **ForgeCMS** — a standalone instance at `cms.pghrugby.com`, consumed
+  server-to-server over its Content Delivery API: site chrome + competition (nav,
+  footer, settings, sponsors, teams, matches, schedules, standings, links,
+  socials).
 - **Supabase** — the `orders` table (and `carts`), written service-role only.
 
 The repo is self-contained at its root — the Next.js app, `src/`, `scripts/`,

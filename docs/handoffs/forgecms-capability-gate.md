@@ -5,6 +5,12 @@ DatoCMS + ForgeCMS](https://github.com/Chapster87/pghrugby/issues/1) — ticket
 [Task: ForgeCMS capability gate and handoff
 list](https://github.com/Chapster87/pghrugby/issues/5).
 
+> **Superseded.** A producer-to-host handoff from the embedded generation. The
+> capability survey and migration handoff it records are history; the CDA
+> contract it fixed — server-to-server `POST /api/graphql` with `x-api-key` — is
+> what the standalone instance serves, and the site consumes it through
+> `src/lib/forgecms/`.
+
 Scope: what the live ForgeCMS Content Delivery API already serves for site chrome
 (nav, footer, settings, socials, sponsors) and competition (standings, links,
 teams, matches, schedules), and the handoff for the chrome/competition migrations
@@ -31,8 +37,8 @@ the handoff is content population, field-name mapping, and cleanup.
 - **No-linked-records constraint confirmed in the data.** Nav, linktree, and
   sponsor links are stored as **free-form strings / JSON arrays**, not typed
   references: e.g. linktree items are `{ type: "static", routePath: "/about",
-  labelOverride: "About Us", children: [] }`, sponsors carry a literal
-  `sponsor_url`. Refs exist only *within* ForgeCMS (match → team/league/division/
+labelOverride: "About Us", children: [] }`, sponsors carry a literal
+  `sponsor_url`. Refs exist only _within_ ForgeCMS (match → team/league/division/
   season; standings → league/division/season). So nav items pointing at
   DatoCMS pages must be **literal paths** that match DatoCMS slugs — the app
   already owns those slugs. The owner's instinct holds: this is exactly the shape
@@ -49,23 +55,23 @@ Singles are queried by camelCase (`linktree`, `siteSettings`, `socialSettings`)
 
 ### Site chrome
 
-| Model | Query entry | Fields | Live data |
-| ----- | ----------- | ------ | --------- |
-| Nav/footer | `site_navigation { id header footer }` | `header` JSON, `footer` JSON | **`header`/`footer` = null** — needs content |
-| Site settings | `siteSettings { … }` | `defaultPageTitle, titleSuffix, fallbackDescription, noIndex, siteUrl, favicon(Media)` | Populated; `favicon` null |
-| Socials | `socialSettings { … }` | `socialSiteName, twitterUrl, facebookUrl, instagramUrl, linkedinUrl, youtubeUrl, tiktokUrl, socialCard(Media), ogType, ogLocale, twitterCardType` | Populated ("Pittsburgh Forge Rugby Club") |
-| Sponsors | `sponsorsCollection { edges { node { name slug sponsor_url logo{url} } } }` | `id, name, article, slug, logo(Media), sponsor_url` | 6 sponsors (IC Light, Iron City, AHN, ESSMC, Ruggers Pub, Blackwell Law); `sponsor_url` null |
-| Linktree | `linktree { id top_links club_info }` | `top_links` JSON, `club_info` JSON | Populated (About Us, Club Bylaws / Forge Merchandise) |
+| Model         | Query entry                                                                 | Fields                                                                                                                                            | Live data                                                                                    |
+| ------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Nav/footer    | `site_navigation { id header footer }`                                      | `header` JSON, `footer` JSON                                                                                                                      | **`header`/`footer` = null** — needs content                                                 |
+| Site settings | `siteSettings { … }`                                                        | `defaultPageTitle, titleSuffix, fallbackDescription, noIndex, siteUrl, favicon(Media)`                                                            | Populated; `favicon` null                                                                    |
+| Socials       | `socialSettings { … }`                                                      | `socialSiteName, twitterUrl, facebookUrl, instagramUrl, linkedinUrl, youtubeUrl, tiktokUrl, socialCard(Media), ogType, ogLocale, twitterCardType` | Populated ("Pittsburgh Forge Rugby Club")                                                    |
+| Sponsors      | `sponsorsCollection { edges { node { name slug sponsor_url logo{url} } } }` | `id, name, article, slug, logo(Media), sponsor_url`                                                                                               | 6 sponsors (IC Light, Iron City, AHN, ESSMC, Ruggers Pub, Blackwell Law); `sponsor_url` null |
+| Linktree      | `linktree { id top_links club_info }`                                       | `top_links` JSON, `club_info` JSON                                                                                                                | Populated (About Us, Club Bylaws / Forge Merchandise)                                        |
 
 ### Competition
 
-| Model | Query entry | Fields | Live data |
-| ----- | ----------- | ------ | --------- |
-| Matches/schedules | `matchesCollection { edges { node { … } } }` | `event_name, match_date_time, match_type, slug, home_team(Teams), away_team(Teams), home_team_score, away_team_score, league(Leagues), division(Divisions), season(Seasons)` | Populated (e.g. "Pittsburgh Forge Men's D1 @ Chicago Griffins", 2025-09-27) |
-| Teams | `teamsCollection { edges { node { … } } }` | `team_name, short_name, slug, team_logo(Media), league(Leagues), division[], seasons[]` | Populated |
-| Standings | `standingsCollection` (already consumed by app) | `league, season, division, league_standings(JSON), slug` | Present (app uses it today) |
-| Leagues / Divisions / Seasons | `leaguesCollection` / `divisionsCollection` / `seasonsCollection` | `name, slug, short_name` / `name, slug, short_name` / `year, display_name, season, slug` | Populated |
-| Media | `media` (via refs) | `url, name, type, size, width, height, alt_text, folder, tags` | Cloudinary-hosted logos |
+| Model                         | Query entry                                                       | Fields                                                                                                                                                                       | Live data                                                                   |
+| ----------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Matches/schedules             | `matchesCollection { edges { node { … } } }`                      | `event_name, match_date_time, match_type, slug, home_team(Teams), away_team(Teams), home_team_score, away_team_score, league(Leagues), division(Divisions), season(Seasons)` | Populated (e.g. "Pittsburgh Forge Men's D1 @ Chicago Griffins", 2025-09-27) |
+| Teams                         | `teamsCollection { edges { node { … } } }`                        | `team_name, short_name, slug, team_logo(Media), league(Leagues), division[], seasons[]`                                                                                      | Populated                                                                   |
+| Standings                     | `standingsCollection` (already consumed by app)                   | `league, season, division, league_standings(JSON), slug`                                                                                                                     | Present (app uses it today)                                                 |
+| Leagues / Divisions / Seasons | `leaguesCollection` / `divisionsCollection` / `seasonsCollection` | `name, slug, short_name` / `name, slug, short_name` / `year, display_name, season, slug`                                                                                     | Populated                                                                   |
+| Media                         | `media` (via refs)                                                | `url, name, type, size, width, height, alt_text, folder, tags`                                                                                                               | Cloudinary-hosted logos                                                     |
 
 Note: `Matches`, `Teams`, and `Standings` already carry references to ForgeCMS
 `Leagues`/`Divisions`/`Seasons`/`Media` records — the intra-ForgeCMS ref pattern
@@ -77,7 +83,7 @@ works; only DatoCMS records are out of reach (handled by free-form paths above).
    prerequisite for [Task: Site chrome migration to
    ForgeCMS](https://github.com/Chapster87/pghrugby/issues/20). Use the linktree
    JSON shape as the template: items `{ type, routePath, labelOverride,
-   children[] }` with `routePath` matching DatoCMS page slugs.
+children[] }` with `routePath` matching DatoCMS page slugs.
 2. **Fix the app `teamsQuery` mismatch.** The in-app query (matches/all) asks for
    `divison { … }` — a typo — and treats it as a single record; the live model is
    `division` (a list). Reconcile before wiring teams.

@@ -6,6 +6,12 @@ on the wayfinder map. Feeds
 [cutover plan + deletion set (#94)] and
 [standings seam port (#97)].
 
+> **Superseded.** This was the inventory and removal order for severing the
+> embedded install, executed on [Task: Cut over the site to the external CMS and
+> delete the in-repo install](https://github.com/Chapster87/pghrugby/issues/96).
+> The topology it describes is gone: no `src/app/admin/**`, no `forgecore.json`,
+> no host seam, no `/admin` mount. Kept as the record of what was coupled and why.
+
 Destination (context, not verified from this repo): ForgeCMS runs as its own
 deployed app at `cms.pghrugby.com` (repo `Chapster87/pghrugby-cms`), and this
 site becomes a plain HTTP consumer of its server-to-server CDA at

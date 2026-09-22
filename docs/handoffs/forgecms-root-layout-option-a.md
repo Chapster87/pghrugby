@@ -9,6 +9,11 @@
 > guide and host contract live in the forgecms repo at `docs/EMBEDDING.md` and
 > `docs/HOST-RUNTIME.md`.
 
+> **Superseded.** A handoff from the embedded generation. The root-layout seam
+> stitch it describes (`<AdminRegistry />`), the `/admin` mount, and the four
+> HOST-RUNTIME smokes are all gone; the root layout is a plain document shell
+> again.
+
 ## Why this task exists
 
 forgecms vendors the core into a **plain `src/app/admin`** directory, and the core
@@ -65,7 +70,7 @@ group — is Option B, not chosen here.)
 4. **Verify the refactor alone**: `pnpm dev` (or `pnpm build`) must succeed and
    the existing routes under `(core)`, `(checkout)`, `(plugin)` must render with
    correct html. This is the checkpoint — pghrugby should be a valid Next tree
-   *before* forgecms is introduced.
+   _before_ forgecms is introduced.
 5. **tsconfig aliases for the core.** Ensure the core's imports resolve under
    `./src/app/admin/*`. pghrugby must add the missing aliases and confirm the
    existing ones don't collide:
@@ -73,7 +78,7 @@ group — is Option B, not chosen here.)
      `@customTypes/*`, `@client/*`.
    - **Audit for collision:** pghrugby's `@components/*`, `@lib/*`, etc. point at
      pghrugby's own folders. If the vendored core imports those same names
-     expecting its *own* copies under `admin/`, that's a conflict. Check whether
+     expecting its _own_ copies under `admin/`, that's a conflict. Check whether
      the core's cross-file imports are relative (within `admin/`) or use the
      aliases; mirror only what the core actually uses, and resolve any overlap
      before running the app.

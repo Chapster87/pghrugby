@@ -5,6 +5,13 @@ Status: **decided 2026-09-10** for
 on
 [Wayfinder map: Embed the ForgeCMS content software into the pghrugby app](https://github.com/Chapster87/pghrugby/issues/40).
 
+> **Superseded.** This described the embedded core, where the CDA was served from
+> this app at `/admin/api/graphql` behind a host session gate. ForgeCMS is now a
+> standalone deployment (`cms.pghrugby.com`) consumed server-to-server over
+> `POST /api/graphql` with `x-api-key`; this repo serves no `/admin` route and
+> holds no session gate. The HOST-RUNTIME smoke set recorded here retired with the
+> mount and belongs to the instance's deployment.
+
 Companion env/build surface:
 [forgecms-env-build-surface.md](./forgecms-env-build-surface.md).
 

@@ -42,10 +42,11 @@ Three runtime surfaces today, collapsing to **one** (`pghrugby/nextjs`) after Me
 | `NEXT_PUBLIC_SANITY_STUDIO_URL`                     | Sanity client/env                                                                                                      | Sanity                  | **Die**                                                                                                         |
 | `SANITY_VIEWER_TOKEN`                               | draft-mode enable, Sanity live                                                                                         | Sanity                  | **Die**                                                                                                         |
 | `STRAPI_GRAPHQL_ENDPOINT`                           | `src/lib/data/strapi.ts`                                                                                               | Strapi                  | **Die**                                                                                                         |
-| `FORGECMS_API_URL`                                  | (retired) separate-process CDA base                                                                                    | ForgeCMS                | **Die** — embedded mount; see `forgecms-env-build-surface.md`                                                   |
+| `FORGECMS_API_URL`                                  | (retired) separate-process CDA base                                                                                    | ForgeCMS                | **Die** → `CMS_GRAPHQL_URL`                                                                                     |
 | `FORGECMS_API_TOKEN`                                | (retired) CDA x-api-key                                                                                                | ForgeCMS                | **Die** → `CMS_API_TOKEN`                                                                                       |
-| `CMS_API_TOKEN`                                     | site + `/admin/api/graphql` CDA `x-api-key`                                                                            | ForgeCMS                | **Stay**                                                                                                        |
-| `NEXT_PUBLIC_CMS_PRODUCT_NAME`                      | admin chrome wordmark                                                                                                  | ForgeCMS                | **Stay** (optional; host sets `Pittsburgh Forge`)                                                               |
+| `CMS_GRAPHQL_URL`                                   | `src/lib/forgecms/execute-query.ts` — the instance's CDA endpoint                                                      | ForgeCMS                | **Stay** — required, server-only, no fallback                                                                   |
+| `CMS_API_TOKEN`                                     | site CDA `x-api-key` (delivery key)                                                                                    | ForgeCMS                | **Stay**                                                                                                        |
+| `NEXT_PUBLIC_CMS_PRODUCT_NAME`                      | admin chrome wordmark                                                                                                  | ForgeCMS                | **Move to the instance** — the admin is `cms.pghrugby.com`                                                      |
 | `DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN`               | `src/lib/datocms/executeQuery.ts`                                                                                      | DatoCMS                 | **Stay**                                                                                                        |
 | `DATOCMS_DRAFT_CONTENT_CDA_TOKEN`                   | draft/preview queries                                                                                                  | DatoCMS                 | **Stay**                                                                                                        |
 | `DATOCMS_BASE_EDITING_URL`                          | draft content-link overlays                                                                                            | DatoCMS                 | **Stay**                                                                                                        |
@@ -57,7 +58,7 @@ Three runtime surfaces today, collapsing to **one** (`pghrugby/nextjs`) after Me
 | `CMS_WEBHOOK_URL`                                   | the instance's delivery endpoint                                                                                       | ForgeCMS publish signal | **Instance-side** (Railway env); the site does not need it                                                      |
 | `CMS_WEBHOOK_TRIGGER_TOKEN`                         | bearer for the instance's manual trigger route (`POST /api/webhooks/revalidate`)                                       | ForgeCMS publish signal | **Instance-side** (Railway env); the site holds it only to call the trigger                                     |
 | `NEXT_PUBLIC_SUPABASE_URL`                          | in `.env.local`; not yet imported in app src                                                                           | Supabase orders         | **Stay** (required for `orders`)                                                                                |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY`                     | in `.env.local`; not yet imported                                                                                      | Supabase                | **Stay** (browser/anon if ever needed; orders write path uses service role)                                     |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY`                     | not referenced in app src                                                                                              | Supabase                | **Drop** — no browser-side Supabase read; orders use the service role                                           |
 | `SUPABASE_SERVICE_ROLE_KEY`                         | in `.env.local`; not yet imported                                                                                      | Supabase orders         | **Stay** — **required** for `recordOrder` (RLS on, zero policies; service-role bypass)                          |
 | `WORDPRESS_APP_USERNAME`                            | WP migration scripts                                                                                                   | Migration               | **Stay until WP content confirmed landed**                                                                      |
 | `WORDPRESS_APP_PASSWORD`                            | WP migration scripts                                                                                                   | Migration               | **Stay until WP content confirmed landed**                                                                      |
@@ -115,10 +116,9 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 STRIPE_WEBHOOK_SECRET=
 
 # Supabase website project (orders table; ref knqlsiuhdcflazlnefob)
+# Service-role only — the site has no browser-side Supabase read.
 NEXT_PUBLIC_SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
-# Optional if any client-side Supabase read is added later:
-# NEXT_PUBLIC_SUPABASE_ANON_KEY=
 
 # DatoCMS (editorial + interim product content)
 DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN=
@@ -127,11 +127,9 @@ DATOCMS_BASE_EDITING_URL=
 # CMA for schema gen / migrations (server/dev only):
 DATOCMS_CMA_TOKEN=
 
-# ForgeCMS (embedded core at /admin — see forgecms-env-build-surface.md)
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+# ForgeCMS CDA (standalone instance at cms.pghrugby.com)
+CMS_GRAPHQL_URL=
 CMS_API_TOKEN=
-# Optional branding (set on this host):
-# NEXT_PUBLIC_CMS_PRODUCT_NAME=Pittsburgh Forge
 
 # Resend (contact form today; order email later if needed)
 RESEND_API_KEY=

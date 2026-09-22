@@ -5,6 +5,12 @@ Status: **decided 2026-09-10** for
 on
 [Wayfinder map: Embed the ForgeCMS content software into the pghrugby app](https://github.com/Chapster87/pghrugby/issues/40).
 
+> **Superseded.** This described the embedded core's env and build surface, where
+> the CDA base was derived as `${NEXT_PUBLIC_BASE_URL}/admin/api/graphql` through
+> `CMS_MOUNT_PATH`. The site now reads one server-only `CMS_GRAPHQL_URL`, with no
+> derivation and no fallback (`src/lib/forgecms/execute-query.ts`), and the
+> `NEXT_PUBLIC_CMS_*` knobs belong to the instance.
+
 Values are never recorded here — names, purpose, and consumers only.
 
 ## Build

@@ -5,6 +5,12 @@ Status: **researched 2026-09-10** for
 on
 [Wayfinder map: Embed the ForgeCMS content software into the pghrugby app](https://github.com/Chapster87/pghrugby/issues/40).
 
+> **Superseded.** This described the host seam (`src/cms/**`) that injected custom
+> field types into the vendored core, and the import-path translation table for
+> porting them. The port is done — the `standings_table` field type lives in the
+> instance's `src/extensions/standings/` — and this repo has no seam, no
+> registrar, and no mounted core.
+
 Sources (producer `cms-starter` / forgecms, tag parity with host marker
 `forgecore.json` → **`core/v2`**):
 
@@ -27,13 +33,13 @@ Sources (producer `cms-starter` / forgecms, tag parity with host marker
 **Models and fields are data. Custom field types (and media providers) are
 code.**
 
-| Need | Mechanism | Host code? | Touches `src/app/admin/**`? |
-| --- | --- | --- | --- |
-| New content model (e.g. a new table/shape) | Schema UI → registry rows in Supabase (`models` / `fields`) + physical table | No | No |
-| New field on an existing model using a **built-in** type | Schema UI only | No | No |
-| Field using a **custom** type (e.g. `standings_table`) | Schema UI stores `field_type` string **and** host registers a field-type plugin via the seam | Yes — outside core | No |
-| Media storage provider | Host registers client + server media providers via the media seam | Yes — outside core | No |
-| Custom admin routes / CDA resolvers | **Out of scope** on the seam today | — | — |
+| Need                                                     | Mechanism                                                                                    | Host code?         | Touches `src/app/admin/**`? |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------ | --------------------------- |
+| New content model (e.g. a new table/shape)               | Schema UI → registry rows in Supabase (`models` / `fields`) + physical table                 | No                 | No                          |
+| New field on an existing model using a **built-in** type | Schema UI only                                                                               | No                 | No                          |
+| Field using a **custom** type (e.g. `standings_table`)   | Schema UI stores `field_type` string **and** host registers a field-type plugin via the seam | Yes — outside core | No                          |
+| Media storage provider                                   | Host registers client + server media providers via the media seam                            | Yes — outside core | No                          |
+| Custom admin routes / CDA resolvers                      | **Out of scope** on the seam today                                                           | —                  | —                           |
 
 A core pull (`forgecms update`) wholesale-overwrites `src/app/admin/**`. Host
 work stays in the shell: root layout, group wrappers, `src/proxy.ts`, env,
@@ -100,13 +106,13 @@ registerFieldType({
 
 Producer template uses a **shell** isolation layout:
 
-| Producer (cms-starter standalone) | pghrugby host (Option A, single root) |
-| --- | --- |
-| `src/app/(cms)/example-registry.tsx` client registrar | Host-owned registrar (e.g. `src/cms/admin-registry.tsx`) |
-| Imported from `src/app/(cms)/layout.tsx` | Import from **`src/app/layout.tsx`** (the one `<body>`) |
-| Plugins under `src/example/standings/` | Plugins under host tree, e.g. `src/cms/standings/` |
-| Server media via `src/instrumentation.ts` | Same — add host `src/instrumentation.ts` when media is needed |
-| `@/*` → `./src/app/(cms)/admin/*` | `@/*` → `./src/*` — **do not copy demo import paths verbatim** |
+| Producer (cms-starter standalone)                     | pghrugby host (Option A, single root)                          |
+| ----------------------------------------------------- | -------------------------------------------------------------- |
+| `src/app/(cms)/example-registry.tsx` client registrar | Host-owned registrar (e.g. `src/cms/admin-registry.tsx`)       |
+| Imported from `src/app/(cms)/layout.tsx`              | Import from **`src/app/layout.tsx`** (the one `<body>`)        |
+| Plugins under `src/example/standings/`                | Plugins under host tree, e.g. `src/cms/standings/`             |
+| Server media via `src/instrumentation.ts`             | Same — add host `src/instrumentation.ts` when media is needed  |
+| `@/*` → `./src/app/(cms)/admin/*`                     | `@/*` → `./src/*` — **do not copy demo import paths verbatim** |
 
 ### Recommended host tree (do not create in this research ticket)
 
@@ -130,13 +136,13 @@ src/
 Demo / producer aliases point **into** the core. On this host they must point
 through `src/app/admin/…`:
 
-| Demo import | Host import |
-| --- | --- |
-| `@/seam` | `@/app/admin/seam` |
+| Demo import                                      | Host import                                                |
+| ------------------------------------------------ | ---------------------------------------------------------- |
+| `@/seam`                                         | `@/app/admin/seam`                                         |
 | `@/editor/[model]/_components/record-form/types` | `@/app/admin/editor/[model]/_components/record-form/types` |
-| `@/components/button` | `@/app/admin/components/button` |
-| `@/components/fields/field-wrapper` | `@/app/admin/components/fields/field-wrapper` |
-| `@/components/fields/reference-field` | `@/app/admin/components/fields/reference-field` |
+| `@/components/button`                            | `@/app/admin/components/button`                            |
+| `@/components/fields/field-wrapper`              | `@/app/admin/components/fields/field-wrapper`              |
+| `@/components/fields/reference-field`            | `@/app/admin/components/fields/reference-field`            |
 
 Using bare `@/components/…` on pghrugby resolves to **site** components under
 `src/components`, not the admin primitives the standings editor needs.
@@ -172,12 +178,12 @@ the template's `(cms)` registrar. Do **not** put this import inside
 
 Field-type plugins need **no** new env.
 
-| Variable | Role for site-layer work |
-| --- | --- |
-| Supabase trio + `CMS_API_TOKEN` | Already required for mounted core + CDA ([forgecms-env-build-surface.md](./forgecms-env-build-surface.md)) |
-| `NEXT_PUBLIC_CMS_PRODUCT_NAME` | Branding only |
-| `NEXT_PUBLIC_CMS_MEDIA_PROVIDER` | Only when a media provider is registered |
-| `CMS_MOUNT_PATH` host constant `"/admin"` | Mount + CDA URL; not for plugins |
+| Variable                                  | Role for site-layer work                                                                                   |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Supabase trio + `CMS_API_TOKEN`           | Already required for mounted core + CDA ([forgecms-env-build-surface.md](./forgecms-env-build-surface.md)) |
+| `NEXT_PUBLIC_CMS_PRODUCT_NAME`            | Branding only                                                                                              |
+| `NEXT_PUBLIC_CMS_MEDIA_PROVIDER`          | Only when a media provider is registered                                                                   |
+| `CMS_MOUNT_PATH` host constant `"/admin"` | Mount + CDA URL; not for plugins                                                                           |
 
 ---
 
@@ -187,22 +193,22 @@ Verified with `pnpm supabase:inspect-forgecms` against the shared DB:
 
 ### Model already exists (data — no seam)
 
-| | |
-| --- | --- |
-| Table / slug | `standings` |
-| Friendly name | Standings |
-| Rows | **18** |
-| Singleton | false |
+|               |             |
+| ------------- | ----------- |
+| Table / slug  | `standings` |
+| Friendly name | Standings   |
+| Rows          | **18**      |
+| Singleton     | false       |
 
 ### Fields
 
-| slug | field_type | required | notes |
-| --- | --- | --- | --- |
-| `season` | `reference` | yes | built-in |
-| `slug` | `seo_slug` | no | built-in |
-| `league` | `reference` | yes | built-in |
-| `division` | `reference` | yes | built-in |
-| `league_standings` | **`standings_table`** | yes | **consumer type** |
+| slug               | field_type            | required | notes             |
+| ------------------ | --------------------- | -------- | ----------------- |
+| `season`           | `reference`           | yes      | built-in          |
+| `slug`             | `seo_slug`            | no       | built-in          |
+| `league`           | `reference`           | yes      | built-in          |
+| `division`         | `reference`           | yes      | built-in          |
+| `league_standings` | **`standings_table`** | yes      | **consumer type** |
 
 Related competition models already present: `teams` (60), `leagues` (3),
 `seasons` (5), `divisions` (6), `matches` (127).
@@ -218,7 +224,7 @@ Storefront `StandingsTable` queries `standingsCollection` and reads
 
 Without a host `registerFieldType({ type: "standings_table", … })`:
 
-- Schema UI type picker will **not** list “Rugby Standings” for *new* fields
+- Schema UI type picker will **not** list “Rugby Standings” for _new_ fields
   (existing field row already has `field_type = standings_table` in DB).
 - Record form `FieldRegistry` misses the consumer Editor → **falls back to
   text-single**, so editors cannot use the standings grid.
@@ -276,27 +282,27 @@ admin media library is required on this host — client via registrar, server vi
 
 ## Files / seams checklist (host must touch)
 
-| Path | Purpose |
-| --- | --- |
-| `src/cms/standings/**` (proposed) | Plugin code (editor + register) |
-| `src/cms/admin-registry.tsx` (proposed) | Client side-effect registrar |
-| `src/app/layout.tsx` | Import registrar once under `<body>` |
-| `src/instrumentation.ts` | Only for server media provider |
-| `.env.local` | No new keys for field types |
-| `src/app/admin/**` | **Never edit** — overwritten on `forgecms update` |
-| `forgecore.json` | Marker only (`core/v2`, mount `/admin`) |
+| Path                                    | Purpose                                           |
+| --------------------------------------- | ------------------------------------------------- |
+| `src/cms/standings/**` (proposed)       | Plugin code (editor + register)                   |
+| `src/cms/admin-registry.tsx` (proposed) | Client side-effect registrar                      |
+| `src/app/layout.tsx`                    | Import registrar once under `<body>`              |
+| `src/instrumentation.ts`                | Only for server media provider                    |
+| `.env.local`                            | No new keys for field types                       |
+| `src/app/admin/**`                      | **Never edit** — overwritten on `forgecms update` |
+| `forgecore.json`                        | Marker only (`core/v2`, mount `/admin`)           |
 
 Core surfaces consulted (read-only):
 
-| Path | Role |
-| --- | --- |
-| `src/app/admin/seam/consumer-registry.ts` | Empty registry + `registerFieldType` |
-| `src/app/admin/seam/index.ts` | Public seam exports |
-| `src/app/admin/seam/types.ts` | `FieldTypePlugin` contract |
-| `src/app/admin/utils/field-types.ts` | Built-ins + `getAllFieldTypeMetadata` |
-| `src/app/admin/editor/.../field-registry.tsx` | Editor resolution order |
-| `src/app/admin/api/models/schema/fields/route.ts` | Create field; unknown type → jsonb |
-| `src/app/admin/server/cms/cda/CDACore.ts` | Consumer types → `GraphQLJSON` |
+| Path                                              | Role                                  |
+| ------------------------------------------------- | ------------------------------------- |
+| `src/app/admin/seam/consumer-registry.ts`         | Empty registry + `registerFieldType`  |
+| `src/app/admin/seam/index.ts`                     | Public seam exports                   |
+| `src/app/admin/seam/types.ts`                     | `FieldTypePlugin` contract            |
+| `src/app/admin/utils/field-types.ts`              | Built-ins + `getAllFieldTypeMetadata` |
+| `src/app/admin/editor/.../field-registry.tsx`     | Editor resolution order               |
+| `src/app/admin/api/models/schema/fields/route.ts` | Create field; unknown type → jsonb    |
+| `src/app/admin/server/cms/cda/CDACore.ts`         | Consumer types → `GraphQLJSON`        |
 
 ---
 
