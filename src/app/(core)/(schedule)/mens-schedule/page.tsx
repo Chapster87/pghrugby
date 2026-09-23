@@ -13,7 +13,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // Build canonical URL using current URL and slug
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
-  url.pathname = `/links`
+  url.pathname = `/mens-schedule`
 
   return {
     title: "Men's Rugby Season Schedules | Pittsburgh Forge Rugby Club",

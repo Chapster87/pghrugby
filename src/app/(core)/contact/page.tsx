@@ -15,11 +15,10 @@ export async function generateMetadata(
   props: { params: Promise<{ slug: string }> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { slug } = await props.params
-
-  // Build canonical URL using current URL and slug
+  // Build canonical URL for this route. It has no dynamic segment — reaching
+  // for `props.params.slug` here produced a literal `/undefined` canonical.
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
-  url.pathname = `/${slug}`
+  url.pathname = `/contact`
 
   return {
     title: `Contact Us | Pittsburgh Forge Rugby Club`,
