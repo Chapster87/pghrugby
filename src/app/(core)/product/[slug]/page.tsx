@@ -1,19 +1,29 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
+
 import SidebarLayout from "@/layouts/sidebar"
 import { executeQuery } from "@/lib/datocms/executeQuery"
+import { ResultOf } from "@/lib/datocms/graphql"
+import {
+  findCatalogItem,
+  findCatalogItemsForProduct,
+} from "@/lib/checkout/catalog"
+import type { CollectorField } from "@/lib/checkout/cart-entries"
+import type { CloudinaryImage } from "@/types/datocms"
+import { getBaseURL } from "@/lib/util/env"
+
+import PdpLayout from "./_components/pdp-layout"
+import type {
+  PdpLine,
+  PdpPhoto,
+  PdpProductType,
+  PdpViewModel,
+} from "./_data/types"
 import {
   productDetailPageQuery,
   productDetailPageSlugs,
 } from "./product-detail-page.query"
-import { findCatalogItemsForProduct } from "@/lib/checkout/catalog"
-import { ResultOf } from "@/lib/datocms/graphql"
-import { getBaseURL } from "@/lib/util/env"
-import PdpCheckoutForm, {
-  type PdpField,
-  type PdpProduct,
-} from "./checkout-form"
 
 import contentStyles from "@/styles/content.module.css"
 import s from "./styles.module.css"
@@ -63,6 +73,72 @@ export async function generateMetadata({
   }
 }
 
+/** The page's `product_type`, narrowed to the three the buy box renders. */
+function toProductType(value: string | null): PdpProductType {
+  return value === "variation" || value === "grouped" ? value : "simple"
+}
+
+/** A DataCollector's `options` text (one per line) as a select's option list. */
+function parseOptions(value: string | null): string[] | undefined {
+  const options = (value ?? "")
+    .split("\n")
+    .map((option) => option.trim())
+    .filter(Boolean)
+  return options.length > 0 ? options : undefined
+}
+
+/** The DatoCMS form fields as the collector entry's add-time field snapshot. */
+function toFields(collector: PdpQuery["dataCollectors"][number] | undefined) {
+  return (collector?.formFields ?? [])
+    .map(
+      (field): CollectorField => ({
+        name: field.fieldName ?? "",
+        label: field.label ?? field.fieldName ?? "",
+        type: field.fieldType ?? "text",
+        required: field.required ?? undefined,
+        repeatable: field.repeatable ?? undefined,
+        max: field.max ?? undefined,
+        options: parseOptions(field.options),
+        placeholder: field.placeholder ?? undefined,
+      })
+    )
+    .filter((field) => field.name.length > 0)
+}
+
+/**
+ * A product record's buyable lines.
+ *
+ * The amount and label come from the checkout catalog — the same map the server
+ * bills from — so the PDP can never advertise a price the session build won't
+ * charge. A product whose exact sku is not in the catalog expands to its
+ * variant skus (the fixed-amount donation presets), which keeps a
+ * variant-priced product sellable; a product with neither renders nothing
+ * rather than an unpriced row.
+ */
+function toLines(product: PdpQuery["primaryProducts"][number]): PdpLine[] {
+  const sku = product.sku ?? ""
+  if (!sku) return []
+
+  const exact = findCatalogItem(sku)
+  const items = exact ? [exact] : findCatalogItemsForProduct(sku)
+
+  return items.map((item) => ({
+    sku: item.sku,
+    label: item.label,
+    note: product.shortDescription || null,
+    unitAmount: item.unitAmount,
+    quantityBearing: product.quantityBearing ?? false,
+    inStock: product.inStock ?? true,
+  }))
+}
+
+/**
+ * A Product Detail Page.
+ *
+ * Assembles the view model server-side — content plus catalog prices — and hands
+ * it to the interactive layout. Draft/preview parity matches every other page
+ * (`includeDrafts` + `baseEditingUrl`).
+ */
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params
   const { isEnabled: isDraftModeEnabled } = await draftMode()
@@ -77,58 +153,40 @@ export default async function ProductDetailPage({ params }: PageProps) {
     notFound()
   }
 
-  // Resolve the PDP's curated buckets against the Stripe catalog (selectable
-  // options + prices). Products not in the catalog render no options — the page
-  // still shows their editorial copy.
-  const toPdpProduct = (
-    kind: "primary" | "addon",
-    product: PdpQuery["primaryProducts"][number]
-  ): PdpProduct => ({
-    title: product.title ?? product.sku ?? "",
-    sku: product.sku ?? "",
-    shortDescription: product.shortDescription ?? null,
-    longDescription: product.longDescription ?? null,
-    kind,
-    options: findCatalogItemsForProduct(product.sku ?? "").map((option) => ({
-      sku: option.sku,
-      label: option.label,
-      unitAmount: option.unitAmount,
-    })),
-  })
+  const photos: PdpPhoto[] = productDetailPage.gallery.map((item) => ({
+    id: item.id,
+    alt: item.alt ?? "",
+    desktop: (item.desktopMedia as CloudinaryImage | null) ?? null,
+    mobile: (item.mobileMedia as CloudinaryImage | null) ?? null,
+  }))
 
-  const products: PdpProduct[] = [
-    ...productDetailPage.primaryProducts.map((product) =>
-      toPdpProduct("primary", product)
-    ),
-    ...productDetailPage.addonProducts.map((product) =>
-      toPdpProduct("addon", product)
-    ),
-  ]
+  const primaryLines = productDetailPage.primaryProducts.flatMap((product) =>
+    toLines(product)
+  )
+  const addonLines = productDetailPage.addonProducts.flatMap((product) =>
+    toLines(product)
+  )
 
   const collector = productDetailPage.dataCollectors[0]
-  const fields: PdpField[] = (collector?.formFields ?? []).map((f) => ({
-    label: f.label ?? f.fieldName ?? "",
-    fieldName: f.fieldName ?? "",
-    fieldType: f.fieldType ?? "text",
-    required: f.required,
-    options: f.options ?? null,
-    placeholder: f.placeholder ?? null,
-    repeatable: f.repeatable,
-    max: f.max,
-  }))
+
+  const product: PdpViewModel = {
+    slug,
+    title: productDetailPage.title ?? slug,
+    shortDescription: productDetailPage.description,
+    longDescription:
+      productDetailPage.primaryProducts[0]?.longDescription ?? null,
+    productType: toProductType(productDetailPage.productType),
+    photos,
+    primaries: primaryLines,
+    addons: addonLines,
+    collectorRef: collector?.id ?? "",
+    fields: toFields(collector),
+  }
 
   return (
     <SidebarLayout>
       <article className={`${contentStyles.contentBlock} ${s.pageContent}`}>
-        <div className={s.pdpGrid}>
-          <div className={s.pdpMain}>
-            <h1 className={s.title}>{productDetailPage.title}</h1>
-            {productDetailPage.description && (
-              <p className={s.intro}>{productDetailPage.description}</p>
-            )}
-            <PdpCheckoutForm pdp={slug} products={products} fields={fields} />
-          </div>
-        </div>
+        <PdpLayout product={product} />
       </article>
     </SidebarLayout>
   )

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import Link from "next/link"
 import Crest from "@svg/Crest"
+import { CartTrigger } from "@/components/cart"
 import s from "./style.module.css"
 
 interface NavProps {
@@ -55,9 +56,7 @@ export default function HeaderMain({ title, mainNav, mobileNav }: NavProps) {
           >
             Account
           </Link>
-          <Link href="/cart" className={s.navLink} data-testid="nav-cart-link">
-            Cart
-          </Link>
+          <CartTrigger className={s.cartButton} />
         </div>
       </div>
     </header>

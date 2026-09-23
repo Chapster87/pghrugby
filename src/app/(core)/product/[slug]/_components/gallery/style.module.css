@@ -1,0 +1,101 @@
+/* The PDP's page-owned gallery carousel. */
+
+.gallery {
+  position: relative;
+  align-self: start;
+}
+
+.galleryMedia {
+  display: block;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  border-radius: 8px;
+  background-color: var(--color-grey-100);
+  object-fit: cover;
+}
+
+.galleryEmpty {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  border-radius: 8px;
+  background-color: var(--color-grey-100);
+}
+
+.galleryNav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: var(--color-white);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-gold);
+    color: var(--color-black);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-white);
+    outline-offset: 2px;
+  }
+}
+
+.galleryPrev {
+  left: 8px;
+}
+
+.galleryNext {
+  right: 8px;
+}
+
+.dots {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+/* Each button is a 30px tap target (above the 24px WCAG minimum); the visible
+   indicator is a 10px dot drawn inside it, so the dots stay small on screen
+   while keeping a comfortable touch size. */
+.dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  &::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.55);
+  }
+
+  &:hover::before {
+    background-color: var(--color-white);
+  }
+
+  &:focus-visible::before {
+    outline: 2px solid var(--color-white);
+    outline-offset: 2px;
+  }
+}
+
+.dotActive::before {
+  background-color: var(--color-white);
+}

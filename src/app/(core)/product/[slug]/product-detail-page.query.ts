@@ -1,17 +1,40 @@
 import { graphql } from "@/lib/datocms/graphql"
 
+/**
+ * The PDP's content read.
+ *
+ * Reads the three curated buckets (primaries / add-ons / data collectors), the
+ * page-owned gallery, and the page's `product_type`. Product fields carry the
+ * two commerce flags the buy box renders on: `inStock` (sold-out lines render
+ * disabled, never hidden) and `quantityBearing` (whether a line gets a stepper).
+ *
+ * The sale window (`salePriceId` / `saleStartsAt` / `saleEndsAt`) is deliberately
+ * not read here: displaying a struck-through regular price needs the sale
+ * Price's own amount, which only the server can resolve, and the session build
+ * is where the effective Price id is chosen
+ * (`docs/agents/pdp-pricing-and-sale-windows.md`).
+ */
 export const productDetailPageQuery = graphql(`
   query ProductDetailPageQuery($slug: String!) {
     productDetailPage(filter: { slug: { eq: $slug } }) {
       title
       slug
       description
+      productType
+      gallery {
+        id
+        alt
+        desktopMedia
+        mobileMedia
+      }
       primaryProducts {
         title
         sku
         shortDescription
         longDescription
         priceId
+        inStock
+        quantityBearing
       }
       addonProducts {
         title
@@ -19,8 +42,11 @@ export const productDetailPageQuery = graphql(`
         shortDescription
         longDescription
         priceId
+        inStock
+        quantityBearing
       }
       dataCollectors {
+        id
         title
         formFields {
           label

@@ -57,6 +57,41 @@ export async function insertIgnoreDuplicates<T extends Record<string, unknown>>(
 }
 
 /**
+ * Upserts row(s) with PostgREST's `resolution=merge-duplicates` preference — a
+ * write to an existing primary key replaces the row.
+ *
+ * Reserved for the ephemeral `carts` snapshot, which must track the browser
+ * cart's latest state so a second checkout on the same `cartRef` reflects an
+ * edit. The `orders` tree deliberately does **not** use this: first writer wins
+ * there, so a late webhook can never clobber a frozen order.
+ */
+export async function upsertRow<T extends Record<string, unknown>>(
+  table: Table,
+  row: T | T[]
+): Promise<void> {
+  const { supabaseUrl, serviceRoleKey } = supabaseConfig()
+
+  const res = await fetch(`${supabaseUrl}/rest/v1/${table}`, {
+    method: "POST",
+    headers: {
+      apikey: serviceRoleKey,
+      Authorization: `Bearer ${serviceRoleKey}`,
+      "Content-Type": "application/json",
+      Prefer: "resolution=merge-duplicates",
+    },
+    body: JSON.stringify(row),
+    cache: "no-store",
+  })
+
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "")
+    throw new Error(
+      `PostgREST upsert into ${table} failed (${res.status}): ${detail}`
+    )
+  }
+}
+
+/**
  * PATCHes a row via PostgREST — the only write tool the event handlers use,
  * and it touches mutable status columns only (`payment_status`,
  * `session_status`, `refunded_amount`, `refund_status`, `updated_at`); the

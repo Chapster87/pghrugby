@@ -40,6 +40,16 @@ export type PricedLine = {
   kind: "product"
   sku: string
   quantity: number
+  /**
+   * Whether the product renders a quantity control, snapshotted from the PDP's
+   * `quantity_bearing` at add-time.
+   *
+   * Display-only, like a collector entry's `fields`: the flyout needs it to pick
+   * a stepper over `Qty. N`, and re-fetching DatoCMS per line would put a content
+   * token in the browser. The server still enforces availability and clamps the
+   * quantity at session build.
+   */
+  quantityBearing?: boolean
   /** PDP slug the entry was added from — a reporting tag, never an identity key. */
   sourcePdp: string
   /** The add-to-cart action that created the entry; groups display only. */
@@ -81,4 +91,71 @@ export function pricedLines(
   entries: CartEntry[] | null | undefined
 ): PricedLine[] {
   return (entries ?? []).filter(isPricedLine)
+}
+
+/**
+ * Parses an untrusted entry list — `localStorage`, or the POST body of the
+ * checkout snapshot — into cart entries, dropping anything malformed.
+ *
+ * A boundary parser rather than a cast: the cart survives reloads and a round
+ * trip through the browser, so a truncated write or a stale shape must degrade
+ * to "fewer lines" and never to a crash or a phantom charge. Only the shape is
+ * checked here; skus and quantities are validated against the catalog by the
+ * server at snapshot time (`buildCartFromEntries`).
+ *
+ * @param value - The untrusted value.
+ * @returns The parsable entries, in order; `[]` when nothing parses.
+ */
+export function parseCartEntries(value: unknown): CartEntry[] {
+  if (!Array.isArray(value)) return []
+
+  const entries: CartEntry[] = []
+  for (const raw of value) {
+    if (!raw || typeof raw !== "object") continue
+    const entry = raw as Record<string, unknown>
+    const id = typeof entry.id === "string" ? entry.id : ""
+    const groupRef = typeof entry.groupRef === "string" ? entry.groupRef : ""
+    const sourcePdp = typeof entry.sourcePdp === "string" ? entry.sourcePdp : ""
+    if (!id) continue
+
+    if (entry.kind === "product") {
+      const sku = typeof entry.sku === "string" ? entry.sku : ""
+      if (!sku) continue
+      entries.push({
+        id,
+        kind: "product",
+        sku,
+        quantity: typeof entry.quantity === "number" ? entry.quantity : 1,
+        quantityBearing: entry.quantityBearing === true,
+        sourcePdp,
+        groupRef,
+        parentId:
+          typeof entry.parentId === "string" ? entry.parentId : undefined,
+      })
+      continue
+    }
+
+    if (entry.kind === "collector") {
+      const parentId = typeof entry.parentId === "string" ? entry.parentId : ""
+      if (!parentId) continue
+      entries.push({
+        id,
+        kind: "collector",
+        collectorRef:
+          typeof entry.collectorRef === "string" ? entry.collectorRef : "",
+        answers:
+          entry.answers && typeof entry.answers === "object"
+            ? (entry.answers as Record<string, unknown>)
+            : {},
+        fields: Array.isArray(entry.fields)
+          ? (entry.fields as CollectorField[])
+          : [],
+        sourcePdp,
+        groupRef,
+        parentId,
+      })
+    }
+  }
+
+  return entries
 }

@@ -1,0 +1,120 @@
+/* The scrim fade. The panel rules are compound (`.sheet.sheet`) so they always
+   beat the centred `Dialog.Content` defaults they layer over —
+   `@components/dialog` sets `top/left/transform/width/padding` on a single
+   class, and a compound selector outranks it regardless of file order. */
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlayOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Desktop drawer: slide in from the right edge. */
+@keyframes sheetInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes sheetOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Mobile sheet: rise from the bottom edge. */
+@keyframes sheetInUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes sheetOutDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.overlay {
+  &[data-state="open"] {
+    animation: overlayIn 200ms ease-out;
+  }
+
+  &[data-state="closed"] {
+    animation: overlayOut 160ms ease-in;
+  }
+}
+
+.sheet.sheet {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  transform: none;
+  z-index: 1001;
+  width: min(420px, 100vw);
+  max-height: none;
+  gap: 0;
+  padding: 0;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.28);
+
+  &[data-state="open"] {
+    animation: sheetInRight 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  &[data-state="closed"] {
+    animation: sheetOutRight 200ms ease-in;
+  }
+
+  @media (--viewport-md) {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    max-height: 88vh;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.28);
+
+    &[data-state="open"] {
+      animation: sheetInUp 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    &[data-state="closed"] {
+      animation: sheetOutDown 200ms ease-in;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .sheet.sheet {
+    animation: none !important;
+  }
+}

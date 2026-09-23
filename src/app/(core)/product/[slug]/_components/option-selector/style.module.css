@@ -1,0 +1,99 @@
+/* The buy box's option controls: the price card, the variation dropdown, the
+   grouped multi-select, the add-on rows, and the line primitives they share. */
+
+.lineDisabled {
+  opacity: 0.55;
+}
+
+.lineText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.lineName {
+  font-weight: 600;
+}
+
+.lineNote {
+  font-size: 0.8rem;
+  color: var(--color-grey-600);
+}
+
+.lineEnd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.price {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.soldOut {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background-color: var(--color-grey-200);
+  color: var(--color-grey-700);
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* The price card: name and price in a white bordered block, with a stepper only
+   when the line is quantity-bearing. */
+.singlePrimary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-grey-300);
+  border-radius: 8px;
+  background-color: var(--color-white);
+}
+
+.stepper {
+  flex: none;
+}
+
+.addons,
+.grouped {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.addonRow,
+.groupedRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-grey-300);
+  border-radius: 8px;
+  background-color: var(--color-white);
+}
+
+.addonLabel,
+.groupedLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}

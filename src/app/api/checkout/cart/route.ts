@@ -1,22 +1,20 @@
 import { NextResponse } from "next/server"
 
-import { createCart } from "@/lib/checkout/cart-store"
+import { createCartFromEntries } from "@/lib/checkout/cart-store"
 
 /**
- * POST /api/checkout/cart
+ * POST /api/checkout/cart  { cartRef, entries }
  *
- * Builds a server-authoritative cart from client selections. The client only
- * sends selections (sku + quantity, mirroring what the PDP page rendered) plus
- * an optional registration payload; amounts come from the server catalog and
- * are never client-dictated.
+ * The flyout's Checkout action: persists the browser-held cart as the `carts`
+ * snapshot the session build reads and `recordOrder` re-joins by
+ * `client_reference_id`.
  *
- * Body: { pdp, selections: [{ sku, quantity }], registration? }
+ * Amounts stay server-side — entries carry skus and quantities, never prices —
+ * and an unknown sku is rejected rather than dropped, so the snapshot can only
+ * describe the cart the buyer actually built.
+ *
  * Returns: { cartRef, cart }
  */
-
-function strings(value: unknown) {
-  return typeof value === "string" ? value.trim() : ""
-}
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null)
@@ -25,40 +23,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
 
-  const pdp = strings((body as { pdp?: unknown }).pdp)
-  if (!pdp) {
-    return NextResponse.json({ error: "pdp is required" }, { status: 400 })
+  const cartRef = (body as { cartRef?: unknown }).cartRef
+  if (typeof cartRef !== "string" || !cartRef.trim()) {
+    return NextResponse.json({ error: "cartRef is required" }, { status: 400 })
   }
-
-  const selections = Array.isArray(
-    (body as { selections?: unknown }).selections
-  )
-    ? (body as { selections: unknown[] }).selections
-        .map((s) => {
-          if (!s || typeof s !== "object") return null
-          const sel = s as { sku?: unknown; quantity?: unknown }
-          const sku = strings(sel.sku)
-          if (!sku) return null
-          const quantity =
-            typeof sel.quantity === "number" && Number.isFinite(sel.quantity)
-              ? Math.floor(sel.quantity)
-              : 1
-          return { sku, quantity }
-        })
-        .filter((s): s is { sku: string; quantity: number } => s !== null)
-    : []
-
-  if (selections.length === 0) {
-    return NextResponse.json(
-      { error: "at least one selection is required" },
-      { status: 400 }
-    )
-  }
-
-  const registration = (body as { registration?: unknown }).registration
 
   try {
-    const cart = await createCart({ pdp, selections, registration })
+    const cart = await createCartFromEntries({
+      cartRef: cartRef.trim(),
+      entries: (body as { entries?: unknown }).entries,
+    })
     return NextResponse.json({ cartRef: cart.cartRef, cart })
   } catch (error) {
     const message = error instanceof Error ? error.message : "unknown error"
