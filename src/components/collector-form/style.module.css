@@ -30,7 +30,15 @@
   font-size: 1rem;
   border: 1px solid var(--color-grey-400);
   border-radius: 6px;
+  /* The field sits on white, and the theme flips the native scheme to dark —
+     without both of these the text renders white on white. */
   background-color: var(--color-white);
+  color: var(--color-grey-900);
+  color-scheme: light;
+
+  &::placeholder {
+    color: var(--color-grey-600);
+  }
 
   &:focus,
   &:focus-visible {

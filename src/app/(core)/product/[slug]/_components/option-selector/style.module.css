@@ -57,7 +57,8 @@
 }
 
 /* The price card: name and price in a white bordered block, with a stepper only
-   when the line is quantity-bearing. */
+   when the line is quantity-bearing. The text colour is explicit because the
+   card is white and the theme's inherited colour is not. */
 .singlePrimary {
   display: flex;
   align-items: center;
@@ -66,6 +67,7 @@
   border: 1px solid var(--color-grey-300);
   border-radius: 8px;
   background-color: var(--color-white);
+  color: var(--color-grey-900);
 }
 
 .stepper {
@@ -88,6 +90,7 @@
   border: 1px solid var(--color-grey-300);
   border-radius: 8px;
   background-color: var(--color-white);
+  color: var(--color-grey-900);
 }
 
 .addonLabel,
