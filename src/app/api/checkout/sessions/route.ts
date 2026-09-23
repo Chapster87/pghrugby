@@ -14,7 +14,8 @@ import { getBaseURL } from "@/lib/util/env"
  * session id substituted.
  *
  * `client_reference_id` = cartRef — the reconciliation key the webhook and
- * success page use to re-join the registration payload.
+ * success page use to re-join the cart's entry list (its per-line provenance
+ * and registrations).
  */
 
 export async function POST(request: Request) {
@@ -84,9 +85,9 @@ export async function POST(request: Request) {
       return_url: `${getBaseURL()}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       client_reference_id: cart.cartRef,
       customer_creation: "always",
-      metadata: {
-        flow: cart.flow,
-      },
+      // @TODO: the families / reg_N / reg_count / reg_ref metadata lands here at
+      // session build (spec § 8.5) — the cart-level `flow` slug it replaces is
+      // gone.
     })
 
     return NextResponse.json({ clientSecret: session.client_secret })

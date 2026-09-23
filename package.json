@@ -19,7 +19,8 @@
     "competition:insert": "node --env-file=.env.local scripts/competition-migration/insert.mjs",
     "legacy-pages:cleanup": "node ./scripts/delete-legacy-datocms-pages.mjs",
     "supabase:query": "node --env-file=.env.local scripts/supabase-query.mjs",
-    "supabase:inspect-forgecms": "node --env-file=.env.local scripts/inspect-forgecms.mjs"
+    "supabase:inspect-forgecms": "node --env-file=.env.local scripts/inspect-forgecms.mjs",
+    "order-storage:round-trip": "node --env-file=.env.local --import tsx scripts/order-storage-round-trip.ts"
   },
   "dependencies": {
     "@datocms/cda-client": "^0.2.10",

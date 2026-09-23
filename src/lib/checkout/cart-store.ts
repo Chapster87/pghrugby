@@ -2,21 +2,29 @@ import "server-only"
 
 import { randomUUID } from "node:crypto"
 
+import {
+  isPricedLine,
+  type CartEntry,
+  type CollectorEntry,
+  type PricedLine,
+} from "./cart-entries"
 import { CHECKOUT_CURRENCY, findCatalogItem } from "./catalog"
 import { insertIgnoreDuplicates, selectRow } from "./supabase"
 
 /**
  * Server-authoritative cart store, backed by the Supabase `carts` table.
  *
- * The client only sends selections (sku + quantity) plus an optional
- * registration payload; the server validates every sku against the catalog and
- * computes the line items and total. The cart is persisted so the
- * checkout-session route can replay it (even across server restarts) and the
- * webhook can re-join the registration payload via `client_reference_id`.
+ * A cart persists a single `entries` snapshot — the flat, ordered
+ * `PricedLine` / `CollectorEntry` list (see `cart-entries.ts`) — so the
+ * checkout-session route can replay it and `recordOrder` can rebuild the
+ * per-line provenance and registration rows. `flow` / cart-level `registration`
+ * are gone: each entry carries its own `sourcePdp`, and answers live on a
+ * collector entry.
  *
- * `flow` is a reporting tag only (the PDP slug, e.g. "golf-outing") — it never
- * drives cart building. Order flow is derived from Stripe product family
- * metadata at record time (see recordOrder).
+ * **No resolved amounts are persisted.** Prices are re-resolved at session
+ * build; `total` is only the `/cart` display figure. The `items` field on the
+ * returned cart is a derived, catalog-resolved view kept for the legacy
+ * cart/session code — it is not part of the snapshot.
  */
 
 /** Safety bound per line quantity; the real cap (e.g. max golfers) lives in the DataCollector form definition. */
@@ -32,14 +40,16 @@ export type CheckoutCartItem = {
 
 export type CheckoutCart = {
   cartRef: string
-  /** PDP slug this cart was built on (reporting tag only). */
-  flow: string
   currency: string
-  items: CheckoutCartItem[]
-  /** Minor units (cents). */
+  /** The flat, browser-held entry list, replayed verbatim at session build. */
+  entries: CartEntry[]
+  /** Minor units (cents) — server-computed display snapshot, not price authority. */
   total: number
-  /** Form payload from the PDP's DataCollector (golf: captain + golfers; SC7s: team + contact). */
-  registration?: unknown
+  /**
+   * The priced lines resolved against the catalog — a display/session view
+   * derived from `entries`, never persisted on the snapshot.
+   */
+  items: CheckoutCartItem[]
 }
 
 export type CheckoutSelection = {
@@ -49,14 +59,37 @@ export type CheckoutSelection = {
 
 type CartRow = {
   cart_ref: string
-  flow: string
   currency: string
-  line_items: CheckoutCartItem[]
+  entries: CartEntry[]
   total: number
-  registration: unknown
 }
 
-/** Builds a cart from client selections, validating every sku against the catalog. */
+/** Resolves the snapshot's priced lines against the catalog for display/session building. */
+function resolveItems(entries: CartEntry[]): CheckoutCartItem[] {
+  const items: CheckoutCartItem[] = []
+  for (const entry of entries) {
+    if (!isPricedLine(entry)) continue
+    const catalogItem = findCatalogItem(entry.sku)
+    if (!catalogItem) continue
+    items.push({
+      sku: entry.sku,
+      label: catalogItem.label,
+      unitAmount: catalogItem.unitAmount,
+      quantity: entry.quantity,
+    })
+  }
+  return items
+}
+
+/**
+ * Builds a cart snapshot from client selections, validating every sku against
+ * the catalog. Selections become priced lines; an optional form payload
+ * becomes one collector entry linked to the first line.
+ *
+ * The flat one-shot form this bridges is replaced by the PDP's per-line entries
+ * (`docs/agents/cart-line-model.md`); the synthesized collector entry therefore
+ * carries only the answers, with no field-definition snapshot (`fields: []`).
+ */
 export function buildCart(input: {
   pdp: string
   selections: CheckoutSelection[]
@@ -70,7 +103,9 @@ export function buildCart(input: {
   }
 
   const cartRef = `cart-${input.pdp}-${randomUUID().slice(0, 12)}`
-  const items: CheckoutCartItem[] = []
+  const groupRef = `group-${randomUUID().slice(0, 12)}`
+  const entries: CartEntry[] = []
+  let primaryId: string | null = null
 
   for (const selection of input.selections) {
     const catalogItem = findCatalogItem(selection.sku)
@@ -81,14 +116,40 @@ export function buildCart(input: {
       Math.max(1, Math.floor(selection.quantity || 1)),
       MAX_LINE_QUANTITY
     )
-    items.push({
+    const id = `line-${randomUUID()}`
+    primaryId ??= id
+    const line: PricedLine = {
+      id,
+      kind: "product",
       sku: catalogItem.sku,
-      label: catalogItem.label,
-      unitAmount: catalogItem.unitAmount,
       quantity,
-    })
+      sourcePdp: input.pdp,
+      groupRef,
+    }
+    entries.push(line)
   }
 
+  if (
+    primaryId &&
+    input.registration !== null &&
+    input.registration !== undefined &&
+    typeof input.registration === "object"
+  ) {
+    const collector: CollectorEntry = {
+      id: `collector-${randomUUID()}`,
+      kind: "collector",
+      // The one-shot form captured answers only — no DatoCMS collector id.
+      collectorRef: "",
+      answers: input.registration as Record<string, unknown>,
+      fields: [],
+      sourcePdp: input.pdp,
+      groupRef,
+      parentId: primaryId,
+    }
+    entries.push(collector)
+  }
+
+  const items = resolveItems(entries)
   const total = items.reduce(
     (sum, item) => sum + item.unitAmount * item.quantity,
     0
@@ -96,23 +157,20 @@ export function buildCart(input: {
 
   return {
     cartRef,
-    flow: input.pdp,
     currency: CHECKOUT_CURRENCY,
-    items,
+    entries,
     total,
-    registration: input.registration,
+    items,
   }
 }
 
-/** Persists a computed cart. */
+/** Persists a computed cart snapshot. */
 export async function saveCart(cart: CheckoutCart): Promise<void> {
   await insertIgnoreDuplicates("carts", {
     cart_ref: cart.cartRef,
-    flow: cart.flow,
     currency: cart.currency,
-    line_items: cart.items,
+    entries: cart.entries,
     total: cart.total,
-    registration: cart.registration ?? null,
   } satisfies CartRow)
 }
 
@@ -122,11 +180,10 @@ export async function getCart(cartRef: string): Promise<CheckoutCart | null> {
   if (!row) return null
   return {
     cartRef: row.cart_ref,
-    flow: row.flow,
     currency: row.currency,
-    items: row.line_items,
+    entries: row.entries,
     total: row.total,
-    registration: row.registration ?? undefined,
+    items: resolveItems(row.entries),
   }
 }
 
