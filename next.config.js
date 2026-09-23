@@ -37,8 +37,11 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  // Type checking runs during the build. `tsc --noEmit` is clean — verified
+  // 2026-09-23 — so a type error should fail a deploy rather than ship quietly.
+  // This replaced `ignoreBuildErrors: true`, which made "green" mean "not typed".
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   images: {
     remotePatterns: [

@@ -9,6 +9,7 @@ import {
 } from "./product-detail-page.query"
 import { findCatalogItemsForProduct } from "@/lib/checkout/catalog"
 import { ResultOf } from "@/lib/datocms/graphql"
+import { getBaseURL } from "@/lib/util/env"
 import PdpCheckoutForm, {
   type PdpField,
   type PdpProduct,
@@ -49,9 +50,16 @@ export async function generateMetadata({
 
   if (!productDetailPage) return {}
 
+  // The clean URL, not the internal /product/<slug> route: the rewrite in
+  // `next.config.js` serves this page at the root slug and the internal path
+  // 308-redirects here, so the root slug is the canonical address.
+  const canonical = new URL(`/${slug}`, getBaseURL()).toString()
+
   return {
     title: `${productDetailPage.title} | Pittsburgh Forge Rugby Club`,
     description: productDetailPage.description ?? undefined,
+    alternates: { canonical },
+    openGraph: { url: canonical },
   }
 }
 
