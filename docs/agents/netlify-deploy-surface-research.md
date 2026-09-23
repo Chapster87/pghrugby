@@ -5,6 +5,24 @@ Status: **researched** for
 on the wayfinder map. Nothing here is actioned; the findings feed whatever
 ticket wires up the site.
 
+> **Measured later, 2026-09-23 — read this before trusting §4.** The site was stood up and the
+> two claims this map inherited were tested for real
+> ([detail](https://github.com/Chapster87/pghrugby/issues/113)).
+>
+> - **§4's "deploy-scoped" cache claim did NOT reproduce.** After a fresh deploy, pages cached
+>   _before_ it were still served — `/club-bylaws` reported `Age: 3733` against a deploy two
+>   minutes old, with `"Next.js"; hit; fwd=stale` and `"Netlify Durable"; fwd=bypass`. Caches
+>   **survive deploys**. The `getDeployStore` reading below may describe a layer that is not on the
+>   response path. Consequently the "a `revalidateTag` purge acts only within the deploy that wrote
+>   the entry" note is **superseded**: the purge route is the only thing that invalidates an entry,
+>   which makes it more important, not less. No cold-cache stampede occurs after a release.
+> - **Confirmed from this document:** Next 16 support and auto-installation of the runtime, Node 24
+>   as the image default, pnpm resolving to 10.x, the runtime being undeclarable, and
+>   `revalidateTag(tag, { expire: 0 })` working on a real deploy.
+> - **Resolved differently:** the `--shamefully-hoist` concern was moot — the site builds green on
+>   an empty `.npmrc`. The `SECRETS_SCAN_OMIT_KEYS` placement was moot too; the file was deleted
+>   and a clean scan (358 files, zero matches) was obtained without any omit list.
+
 Question: what does a **fresh Netlify site** need in order to build and serve
 the repository at the repo root — a Next.js App Router site that uses pnpm?
 
@@ -54,7 +72,7 @@ Required configuration for a fresh site, all documented:
    Next.js sites. Not required in `netlify.toml` (Netlify suggests these on repo
    link), but they are the values a manual setup must use.
 2. **Nothing else for the runtime itself.** The adapter installs automatically
-   and must **not** be declared in `netlify.toml` — declaring it *pins* it and
+   and must **not** be declared in `netlify.toml` — declaring it _pins_ it and
    opts out of the per-build auto-update.
 3. **Node 24** — already satisfied by `.nvmrc`, which outranks `NODE_VERSION`.
 4. **pnpm + Next.js hoisting.** The repo's `.npmrc` is empty, so the documented
@@ -79,14 +97,14 @@ recommends for a critical `ImageResponse` RCE (see §6).
 
 ### Confidence at a glance
 
-| # | Question | Confidence |
-| --- | --- | --- |
-| 1 | Runtime version / auto-install / defaults | documented |
-| 2 | Node 24 and precedence | documented |
-| 3 | Which pnpm, and lockfile compatibility | documented (residual gaps marked) |
-| 4 | Cache handler, ISR, deploy scoping, `revalidateTag` | documented |
-| 5 | How secrets scanning matches | documented |
-| 6 | Next 16 App Router items | partly documented; version-specific gaps itemised |
+| #   | Question                                            | Confidence                                        |
+| --- | --------------------------------------------------- | ------------------------------------------------- |
+| 1   | Runtime version / auto-install / defaults           | documented                                        |
+| 2   | Node 24 and precedence                              | documented                                        |
+| 3   | Which pnpm, and lockfile compatibility              | documented (residual gaps marked)                 |
+| 4   | Cache handler, ISR, deploy scoping, `revalidateTag` | documented                                        |
+| 5   | How secrets scanning matches                        | documented                                        |
+| 6   | Next 16 App Router items                            | partly documented; version-specific gaps itemised |
 
 ---
 
@@ -171,7 +189,7 @@ Netlify documents. The defaults for a Next.js site are build command
   `SECRETS_SCAN_OMIT_KEYS` is documented as an environment variable (§5), so the
   current placement is not the documented one.
 - Why "an empty `netlify.toml` is not the same as a missing one": because
-  `netlify.toml` overrides the UI for keys it sets, a *minimal* file that sets
+  `netlify.toml` overrides the UI for keys it sets, a _minimal_ file that sets
   nothing Netlify acts on leaves the UI's (and the framework detector's)
   settings in force. A file that sets a key Netlify does not recognise is a
   different situation — see the to-observe list.
@@ -188,7 +206,7 @@ secret hit still occurs).
 
 ## 2. Node version
 
-**Answer.** Yes — Node **24** is the build image's *default* version, so
+**Answer.** Yes — Node **24** is the build image's _default_ version, so
 `.nvmrc` is asking for something already preinstalled. Netlify reads **both**
 `.nvmrc` (and `.node-version`) and the `NODE_VERSION` environment variable, and
 they take precedence in this order: **`.nvmrc` → `.node-version` →
@@ -227,7 +245,7 @@ different function runtime is ever needed.
 ## 3. pnpm resolution
 
 **Answer.** With no `packageManager` field, Netlify installs a pnpm from
-**Corepack's default for the selected image, currently `10.x`** — it does *not*
+**Corepack's default for the selected image, currently `10.x`** — it does _not_
 derive a version from the lockfile. That default is compatible with a
 `lockfileVersion: '9.0'` lockfile in the sense that `9.0` is the schema pnpm's
 own current docs show, and nothing in either project's docs describes a
@@ -276,7 +294,7 @@ does not satisfy the documented pnpm+Next.js hoisting requirement.
   ([OpenNext](https://opennext.js.org/netlify),
   [manage dependencies](https://docs.netlify.com/build/configure-builds/manage-dependencies))
   The repo's `.npmrc` exists but is **empty**, so neither branch is satisfied.
-  Note the tension to resolve: *this* is where `.npmrc` would matter, and also
+  Note the tension to resolve: _this_ is where `.npmrc` would matter, and also
   where a build-time environment variable would — and per §5/§1, a build
   environment variable belongs in `[build.environment]` in `netlify.toml` (or in
   the UI), not loose in `[build]`.
@@ -285,7 +303,7 @@ does not satisfy the documented pnpm+Next.js hoisting requirement.
 build log (`pnpm --version` / the install banner) — expected `10.x`. (ii)
 Whether the install is frozen and what it does on lockfile drift — observe by
 reading the install command line in the build log. (iii) Whether the build
-succeeds *without* `--shamefully-hoist`; if it does, the documented requirement
+succeeds _without_ `--shamefully-hoist`; if it does, the documented requirement
 is unsatisfied but not currently biting, which is worth knowing explicitly rather
 than assuming.
 
@@ -314,7 +332,7 @@ Handler is a first-class, tested path.
   `getDeployStore` from `@netlify/blobs`, and pins the region to `us-east-2`
   unless `USE_REGIONAL_BLOBS=TRUE` is set:
   `getDeployStore({ ...args, fetch: getFetchBeforeNextPatchedIt(), region:
-  process.env.USE_REGIONAL_BLOBS?.toUpperCase() === 'TRUE' ? undefined : 'us-east-2' })`.
+process.env.USE_REGIONAL_BLOBS?.toUpperCase() === 'TRUE' ? undefined : 'us-east-2' })`.
   ([`src/run/storage/regional-blob-store.cts`](https://github.com/opennextjs/opennextjs-netlify/blob/main/src/run/storage/regional-blob-store.cts))
 - **What "deploy-specific" means** (Netlify Blobs): "Opens a deploy-specific
   store for reading and writing blobs. **Data added to that store will be scoped
@@ -418,7 +436,7 @@ invocation to render, per the SSG note).
 
 **Answer.** Netlify's secrets scanning matches **secret VALUES**, not environment
 variable names. It scans every file in the build — code pulled from the repo
-*and* files generated during the build — looking for the values of environment
+_and_ files generated during the build — looking for the values of environment
 variables that have been explicitly flagged as secrets (and, independently,
 values that its heuristic "smart detection" thinks look like secrets). A match
 **fails the build**, before publish. A server-only secret whose value never
@@ -452,7 +470,7 @@ are **environment variables**, which is the catch for the current `netlify.toml`
 - The flag is what `SECRETS_SCAN_OMIT_KEYS` is about: "**`SECRETS_SCAN_OMIT_KEYS`:**
   default is _empty_. Set to a comma separated list of **key names** that should
   **not be scanned for** within this site or team." So the mechanism keys off the
-  variable's *name* to decide whose *value* to stop looking for.
+  variable's _name_ to decide whose _value_ to stop looking for.
 - Alternatives, verbatim defaults: "**`SECRETS_SCAN_ENABLED`:** default is
   `true`. Set to `false` to entirely disable all secret scanning protections for
   the site/team, including both smart detection and scanning for environment
@@ -490,7 +508,7 @@ value to appear in a build file — so nothing should be flagged, and no omit en
 should be necessary. The omit list is therefore best treated as the belt the
 existing comment says it is — but it must be declared as an environment variable
 (`[build.environment]` or the UI/CLI) to be the belt it is meant to be. Note the
-asymmetry the docs make explicit: *smart detection* is always on and needs no
+asymmetry the docs make explicit: _smart detection_ is always on and needs no
 config, so a build can fail for a heuristically-detected secret even if no
 variable is flagged, and the documented remedy there is the safelist variable,
 not `SECRETS_SCAN_OMIT_KEYS`.
@@ -515,7 +533,7 @@ supported configuration path (and the one Next 16 prefers over the deprecated
 `images.domains`). Middleware is supported and runs as an Edge Function, with
 route handlers and metadata routes covered by the same server function.
 `netlify dev` is worth adopting for routing/redirect and edge behaviour, but it
-is *not* a faithful test of blob-backed caching. The real risks on Next 16.3.x
+is _not_ a faithful test of blob-backed caching. The real risks on Next 16.3.x
 today are not missing features but two open behavioural items and one security
 advisory — itemised below.
 
@@ -606,7 +624,7 @@ advisory — itemised below.
    (`opennextjs-cloudflare#1334`) suggests it is not Netlify-only. There is **no
    maintainer fix recorded on the issue**. Adjacent but distinct: PR
    [#3574](https://github.com/opennextjs/opennextjs-netlify/pull/3574) ("fix:
-   preserve initURL", merged 2026-09-17, shipped in v5.16.0) fixes a *different*
+   preserve initURL", merged 2026-09-17, shipped in v5.16.0) fixes a _different_
    Next-16.3 symptom — RSC requests missing a matching `_rsc` param getting a 307
    whose `Location` is built from `initURL`, which sent browsers to an internal
    rewrite target when the `?_rsc` param was lost. Do **not** read #3574 as
@@ -621,7 +639,7 @@ advisory — itemised below.
    explicitly and says the fix requires the adapter's `x-next-public-url` header
    handling and a matching `Netlify-Vary`. Because the repo does not pin the
    adapter (§1), a fresh site's builds get the fixed adapter automatically — but
-   this is an argument *against* ever pinning the adapter, and against pinning
+   this is an argument _against_ ever pinning the adapter, and against pinning
    Next.js without checking the adapter's release notes. The repo's
    `next.config.js` `rewrites()` and `redirects()` make the rewrite-related part
    of this relevant.
@@ -641,7 +659,7 @@ advisory — itemised below.
    execution, but exploitation increases function cost, and "any publicly
    available deploy previews and branch deploys may remain vulnerable until they
    are automatically deleted". The repo's `next: ^16.3.3` range permits 16.3.6,
-   but `^16.3.3` as written does not *require* it — a lockfile pinned at 16.3.3–5
+   but `^16.3.3` as written does not _require_ it — a lockfile pinned at 16.3.3–5
    would install a vulnerable version.
    ([changelog](https://www.netlify.com/changelog/))
 5. **Already-fixed Next 16 items, for completeness.** The `cacheComponents`/
@@ -672,22 +690,22 @@ than claims:
 1. **What actually happens to `SECRETS_SCAN_OMIT_KEYS` when declared under
    `[build]`.** Netlify documents that it is an environment variable and
    documents where environment variables go; it does not document the handling of
-   unrecognised `[build]` keys. *To be observed:* deploy-log messages plus whether
+   unrecognised `[build]` keys. _To be observed:_ deploy-log messages plus whether
    `SECRETS_SCAN_OMIT_KEYS` is present in the build environment.
 2. **Whether Netlify runs `pnpm install` frozen, and its behaviour on lockfile
-   drift.** *To be observed:* the install command printed in the build log.
+   drift.** _To be observed:_ the install command printed in the build log.
 3. **The exact pnpm version selected for a repo with no `packageManager`.**
    Documented as "defaults to `10.x`", but the resolved patch version is not
-   stated. *To be observed:* the install/version banner in the build log.
+   stated. _To be observed:_ the install/version banner in the build log.
 4. **Whether this repo builds without `--shamefully-hoist`.** The requirement is
-   documented for pnpm+Next.js; whether *this* dependency graph trips it is not.
-   *To be observed:* a build with the flag absent.
+   documented for pnpm+Next.js; whether _this_ dependency graph trips it is not.
+   _To be observed:_ a build with the flag absent.
 5. **Whether `robots.ts` is served correctly.** No primary source names metadata
-   routes. *To be observed:* `GET /robots.txt`.
-6. **Whether #3573 (RSC prefetch amplification) affects this repo.** *To be
-   observed:* reload counting as described in item 1 of §6.
+   routes. _To be observed:_ `GET /robots.txt`.
+6. **Whether #3573 (RSC prefetch amplification) affects this repo.** _To be
+   observed:_ reload counting as described in item 1 of §6.
 7. **Whether the flagged-as-secret state exists for this site's variables.**
-   Site-side state, not repo-side. *To be observed:* Netlify UI
+   Site-side state, not repo-side. _To be observed:_ Netlify UI
    `Contains secret values` on each variable, plus the first build's scan result.
 8. **The current per-version support matrix.** The docs express support as
    "13.5 and later" with no matrix, and point at the E2E report. To answer
