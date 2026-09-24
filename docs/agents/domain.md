@@ -15,9 +15,11 @@ exploring the codebase.
 - **Per-context files**: a `CONTEXT.md` holding the domain language and
   high-level architecture for that context.
 - **Agent docs**: `docs/agents/`; **handoffs**: `docs/handoffs/`.
-- **ADRs**: `docs/adr/` (none written yet). Because the sole live context is the
-  repo root, context-scoped decisions live in `docs/adr/` rather than under
-  `src/<context>/docs/adr/`.
+- **ADRs**: `docs/adr/`, numbered — e.g.
+  `0001-two-branch-release-topology-and-site-origins.md`. Because the sole live
+  context is the repo root, context-scoped decisions live in `docs/adr/` rather than
+  under `src/<context>/docs/adr/`. A flow's own decision records — one per grilling
+  or ticket on a Wayfinder map — live in `docs/agents/` instead.
 
 Today there is one live context: `pghrugby` (path `.`, file `CONTEXT.md`).
 
