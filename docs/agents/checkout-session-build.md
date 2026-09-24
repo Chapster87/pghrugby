@@ -94,6 +94,14 @@ sale_price_id : price_id`, resolved by `effectivePriceId()`
 - Live mode requires the effective Price id and fails loudly without one. Test
   mode bills inline `price_data` from `catalog.ts`'s `unitAmount`, because a test
   key cannot reference live Prices. Amounts stay server-side in both.
+- **Rollout precondition: the CMS must carry the `price_id`s before the live flow
+  ships.** As of 2026-09-23 every `product` record's `price_id` — and both sale
+  fields — is empty: a read of all 21 records found nothing set. In live mode
+  `requirePriceId` therefore refuses **every** line as `unpriced`, so deploying as
+  it stands would block all checkout. Populate `product.price_id` from the
+  approval checklist's provisioned Prices (the values `catalog.ts` already holds)
+  before the cutover. **Test mode hides this entirely** — it bills `catalog.ts`'s
+  `unitAmount` and never needs a Price id, which is why a local run passes.
 - Line items are the priced lines **in cart order**; collector entries never
   become line items.
 
@@ -125,12 +133,14 @@ sale_price_id : price_id`, resolved by `effectivePriceId()`
 **The two sides agree in production, and only in production.** `order_lines.family`
 and `orders.families` are read back off the session's Stripe products, while this
 metadata is read off the catalog. In live mode a line item's Price expands to its
-real Product and the two agree. In test mode the line items are inline
-`price_data`, whose generated Product carries no metadata: `orders.families` is
-`{}` and `order_lines.family` is null, while the session metadata still names the
-catalog's families. That divergence is inherent to the test-mode inline path
-(spec § 8.2) and is a local-only artifact — but it means criterion 2's order-row
-half is a live-mode check.
+real Product and the two agree. In test mode Stripe **mints a Product** for the
+inline `price_data` — checked 2026-09-23, and it came back as a generated id with
+our name on it and `metadata` empty — so `order_lines.sku` records that generated
+id rather than our sku, `order_lines.family` is null, and `orders.families` is
+`{}`, while the session metadata still names the catalog's families. That
+divergence is inherent to the test-mode inline path (spec § 8.2) and is a
+local-only artifact — but it means criterion 2's order-row half is a live-mode
+check.
 
 **Confirmed against the live account** (2026-09-23, read-only): all 23 catalog
 items carry in Stripe exactly the `family` this catalog claims, `events` included
@@ -177,17 +187,34 @@ Registration x4: Jane Smith, John Doe"`. Names are every answered field of the
 
 ## 8. Verification
 
+**Verified**
+
 - **Offline**, through `pnpm checkout:round-trip`
   (`scripts/checkout-pricing-round-trip.ts`): the sale window's in/out/boundary/
   half-authored cases, every refusal code, and the whole metadata surface
   including the truncation and >50-key overflow. No credentials needed. This is
   where criterion 4's _resolution_ is proved — which price id is chosen.
-- **Live mode only**, because the test account cannot express them: the charged
-  amount following the sale price (criterion 4), the order rows landing with a
-  real `sku`/`family` and `orders.families` (criterion 2), and line thumbnails
-  resolving from `Product.images` rather than the placeholder (criterion 5). The
-  test-mode inline `price_data` path has no Product to read any of them from.
-- Criterion 1 (a local pig-roast checkout completing and returning to success) was
-  confirmed locally against embedded Checkout. Criterion 3's refusal is asserted
-  offline and rendered by both surfaces; the end-to-end block itself has not been
-  exercised by hand.
+- **Criterion 1** by hand, against embedded Checkout on a local dev server.
+- **Criterion 3's server half** (2026-09-23, against the local dev server): a cart
+  holding a valid line beside `donation-club-preset-25` and an unknown sku answers
+  `409` from **both** `/api/checkout/cart` and `/api/checkout/sessions`, with one
+  error per offending line — `unknown-product` and `unknown-sku`, each carrying
+  the entry id the buyer removes — and the valid line appears in no error. The
+  refusal writes no `carts` row: the 409 precedes the snapshot write.
+- **Criterion 2's metadata half** (2026-09-23, a test-mode session read back with
+  `line_items.data.price.product` expanded): the session carried
+  `families=events`, `reg_count=0` and `reg_ref=<cartRef>`. The PaymentIntent does
+  not exist until the buyer begins paying, so its copy is a live-pass check.
+
+**Outstanding**
+
+- The `sold-out` code specifically: no `product` record is currently
+  `in_stock: false`, and setting one is a CMS edit. The path is asserted offline
+  and is the same contract as the two refusals verified above.
+- Criterion 3's **UI** half — the row in the flyout and the row on the checkout
+  page, each with its one-click remove — has not been exercised by hand.
+- Criterion 2's order rows, criterion 4's charged amount and criterion 5's
+  thumbnails: live mode (test mode's generated Product has no `family`, and its
+  ids are not our skus). For criterion 4 the session can be **created and
+  retrieved** with `line_items.data.price` expanded without paying, which shows
+  which Price the window chose; only the charge itself needs money.
