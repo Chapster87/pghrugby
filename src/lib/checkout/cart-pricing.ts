@@ -161,8 +161,17 @@ export type QuotedLine = {
    * instead (`docs/agents/checkout-session-build.md` § 5).
    */
   family: string | null
-  /** Catalog unit amount in minor units — test-mode `price_data` only. */
+  /**
+   * The amount to bill in test mode and to display: the sale amount while a sale
+   * runs, otherwise the regular amount.
+   *
+   * Starts as the catalog's regular amount — a sale is a Stripe fact the pure
+   * quote cannot reach — and `resolveCartFromEntries` folds the display pricing
+   * in. Live mode bills the Price id, not this amount.
+   */
   unitAmount: number
+  /** The regular amount to strike through while a sale runs; null otherwise. */
+  compareAtAmount: number | null
   quantity: number
   /**
    * The Stripe Price this line would bill at in live mode — the CMS's effective
@@ -252,6 +261,7 @@ export function quoteCart(
       label: catalogItem.label,
       family: catalogItem.family ?? null,
       unitAmount: catalogItem.unitAmount,
+      compareAtAmount: null,
       quantity: line.quantity,
       priceId,
     })

@@ -98,8 +98,11 @@ sale_price_id : price_id`, resolved by `effectivePriceId()`
   CMS field fails session creation** (Stripe rejects an inactive Price) rather
   than quietly falling back — so retire a sale by clearing the field.
 - Live mode requires the effective Price id and fails loudly without one. Test
-  mode bills inline `price_data` from `catalog.ts`'s `unitAmount`, because a test
-  key cannot reference live Prices. Amounts stay server-side in both.
+  mode bills inline `price_data` from `catalog.ts`, because a test key cannot
+  reference live Prices — but at the **same effective amount** the buyer was
+  shown, taken from the line rather than the catalog's regular figure, so a
+  local rehearsal charges what production would. Amounts stay server-side in
+  both.
 - **The CMS field is an override, with `catalog.ts` underneath it.** The field is
   labelled "Price ID (override)" and that is the rule:
   `resolveLinePriceId = effectivePriceId(record) ?? catalogItem.priceId`. Content

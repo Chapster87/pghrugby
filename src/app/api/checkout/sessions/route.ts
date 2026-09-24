@@ -19,9 +19,10 @@ import { getBaseURL } from "@/lib/util/env"
  *
  * Line items are the priced lines **in cart order** — collector entries never
  * become line items — each at its `effectivePriceId`. Live mode requires that
- * Price id; test mode falls back to inline `price_data` from `catalog.ts`,
- * because a test key cannot reference live Prices and the amounts stay
- * server-side either way.
+ * Price id. Test mode bills inline `price_data` instead, because a test key cannot
+ * reference a live Price, but at the **same effective amount** the buyer was shown:
+ * the amount comes from the line, not from the catalog's regular figure, so a
+ * local rehearsal charges what production would.
  *
  * A sold-out or otherwise unquotable line answers `409` with `errors` and
  * blocks the session — never a silently dropped line, and never a whole-cart
@@ -109,6 +110,9 @@ export async function POST(request: Request) {
         return {
           price_data: {
             currency: cart.currency,
+            // The amount is the line's effective one — the sale amount while a
+            // sale runs — so a test-mode charge matches the displayed price even
+            // though the live Price itself cannot be referenced by a test key.
             // Stripe mints its own Product for a `price_data` line, and
             // `order_lines.family` / `orders.families` are read back off the
             // product's metadata — so the generated one has to be given the

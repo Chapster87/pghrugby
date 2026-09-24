@@ -119,11 +119,11 @@ invisible on the very page they check it on.
 
 Two consequences worth stating:
 
-- In test mode the surfaces now show the live sale amount while a test-mode
-  Checkout still bills the catalog's _regular_ inline `price_data`. Display and
-  local billing therefore disagree by design, and live mode agrees throughout.
-  Having the test-mode build bill the displayed amount instead is a possible
-  follow-up — it would make a local rehearsal match production pricing exactly.
+- The **test-mode** build bills the displayed amount, not the catalog's regular
+  one: `resolveCartFromEntries` folds the display pricing into the lines, and the
+  inline `price_data` takes its `unit_amount` from there. So a local rehearsal
+  charges exactly what production would — the only thing a test key cannot express
+  is the live Price **id**, not the amount. Live mode agrees throughout.
 - A sale Price that cannot be read — no live key, an unknown or deactivated Price,
   a "sale" that is not actually cheaper — leaves the line on its regular amount,
   which is exactly what it showed before sales existed. Display can mislead at

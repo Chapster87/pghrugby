@@ -4,6 +4,7 @@ import { isPricedLine, parseCartEntries, type CartEntry } from "./cart-entries"
 import { clampLineQuantity } from "./cart-mutations"
 import { quoteCart, type CartLineError, type QuotedLine } from "./cart-pricing"
 import { CHECKOUT_CURRENCY } from "./catalog"
+import { resolveLineDisplay } from "./price-display"
 import { resolveProductRecords } from "./product-records"
 import { isLiveStripe } from "./stripe"
 import { selectRow, upsertRow } from "./supabase"
@@ -103,6 +104,10 @@ export function buildCartFromEntries(input: {
  * the session build, which re-resolves **fresh** so a window that closed while
  * the cart sat open re-prices, and a line that sold out in between is refused.
  *
+ * The returned lines carry the **display** pricing — the sale amount while a sale
+ * runs — so the amounts reported here match what the surfaces show and what a
+ * test-mode session bills.
+ *
  * @param input.cartRef - The client's `client_reference_id`.
  * @param input.entries - The untrusted entry list.
  * @returns The quoted lines, the per-line errors, and the display total.
@@ -121,11 +126,31 @@ export async function resolveCartFromEntries(input: {
     requirePriceId: isLiveStripe,
   })
 
+  // Fold in the display pricing. A sale amount is a Stripe fact the pure quote
+  // cannot see, and in test mode this amount **is** what gets billed (inline
+  // `price_data`), so taking it from here is what makes a local rehearsal charge
+  // exactly what the surfaces show. Live mode bills the Price id instead, and
+  // this only moves the figures the snapshot and the response report.
+  const display = await resolveLineDisplay(
+    lines.map((line) => line.sku),
+    records
+  )
+  const priced = lines.map((line) => {
+    const shown = display.get(line.sku)
+    return shown
+      ? {
+          ...line,
+          unitAmount: shown.unitAmount,
+          compareAtAmount: shown.compareAtAmount,
+        }
+      : line
+  })
+
   return {
     ...cart,
-    lines,
+    lines: priced,
     errors,
-    total: lines.reduce(
+    total: priced.reduce(
       (sum, line) => sum + line.unitAmount * line.quantity,
       0
     ),
