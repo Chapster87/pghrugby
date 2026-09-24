@@ -28,9 +28,11 @@ import {
   effectivePriceId,
   isWithinSaleWindow,
   quoteCart,
+  resolveLinePriceId,
   type CartLineError,
   type ProductPriceRecord,
 } from "../src/lib/checkout/cart-pricing"
+import { findCatalogItem } from "../src/lib/checkout/catalog"
 import {
   buildOrderMetadata,
   registrationNames,
@@ -72,7 +74,7 @@ const RECORDS = new Map<string, ProductPriceRecord>([
   ["annual-forge-pig-roast", record("annual-forge-pig-roast")],
   ["donation-club-preset-25", record("donation-club-preset-25")],
   ["sc7s-mens-open", record("sc7s-mens-open", { inStock: false })],
-  // A live-mode price requirement with nothing to bill.
+  // A live-mode price requirement with an empty CMS field — the catalog covers it.
   ["dues-fall", record("dues-fall", { priceId: null })],
   // A sale Price that no window ever selects.
   [
@@ -205,6 +207,31 @@ function main(): void {
     ) === "price_regular_annual-forge-pig-roast"
   )
 
+  console.log("\nA blank CMS price falls back to the provisioned catalog price")
+  const golfItem = findCatalogItem("golf-outing-registration")
+  check("the fixture sku is in the catalog", Boolean(golfItem?.priceId))
+  check(
+    "the CMS's effective price wins when it names one",
+    resolveLinePriceId(onSale, golfItem!, at("2026-09-15T12:00:00Z")) ===
+      onSale.salePriceId
+  )
+  check(
+    "a blank CMS price falls back to the catalog's",
+    resolveLinePriceId(
+      record("golf-outing-registration", { priceId: null }),
+      golfItem!,
+      at("2026-09-15T12:00:00Z")
+    ) === golfItem!.priceId
+  )
+  check(
+    "no price in either source resolves to null",
+    resolveLinePriceId(
+      null,
+      { sku: "x", label: "X", unitAmount: 100 },
+      at("2026-09-15T12:00:00Z")
+    ) === null
+  )
+
   console.log("\nA refusal names its line and never drops one")
   const quoted = quoteCart(GOLF_ENTRIES, RECORDS, {
     now: at("2026-09-15T12:00:00Z"),
@@ -254,9 +281,13 @@ function main(): void {
     "a sku with no CMS record is refused as unknown-product",
     refusal(refused.errors, "line-no-record")?.code === "unknown-product"
   )
+  // `unpriced` needs a catalog item with no provisioned Price, which none has —
+  // it is the last-resort guard when neither source can name a price.
   check(
-    "live mode refuses a line with no price id",
-    refusal(refused.errors, "line-unpriced")?.code === "unpriced"
+    "a blank CMS price is not a refusal — the catalog covers it",
+    refusal(refused.errors, "line-unpriced") === undefined &&
+      refused.lines.find((q) => q.entryId === "line-unpriced")?.priceId ===
+        findCatalogItem("dues-fall")?.priceId
   )
   check(
     "test mode does not require a price id",

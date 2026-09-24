@@ -94,14 +94,24 @@ sale_price_id : price_id`, resolved by `effectivePriceId()`
 - Live mode requires the effective Price id and fails loudly without one. Test
   mode bills inline `price_data` from `catalog.ts`'s `unitAmount`, because a test
   key cannot reference live Prices. Amounts stay server-side in both.
-- **Rollout precondition: the CMS must carry the `price_id`s before the live flow
-  ships.** As of 2026-09-23 every `product` record's `price_id` — and both sale
-  fields — is empty: a read of all 21 records found nothing set. In live mode
-  `requirePriceId` therefore refuses **every** line as `unpriced`, so deploying as
-  it stands would block all checkout. Populate `product.price_id` from the
-  approval checklist's provisioned Prices (the values `catalog.ts` already holds)
-  before the cutover. **Test mode hides this entirely** — it bills `catalog.ts`'s
-  `unitAmount` and never needs a Price id, which is why a local run passes.
+- **The CMS field is an override, with `catalog.ts` underneath it.** The field is
+  labelled "Price ID (override)" and that is the rule:
+  `resolveLinePriceId = effectivePriceId(record) ?? catalogItem.priceId`. Content
+  wins when it names a price; a blank field means "charge what we provisioned"
+  rather than "refuse the sale", so an unauthored field can never take checkout
+  down. `unpriced` survives only as the last-resort refusal for a sku with no
+  price in **either** source.
+
+  This **amends** `docs/agents/pdp-pricing-and-sale-windows.md`, which made the
+  CMS field _authoritative_ and the catalog "reduced in role". Both were written
+  while every `product.price_id` was blank — a read of all 21 records on
+  2026-09-23 found none set — so the literal reading, "refuse every line", would
+  have taken live checkout down on deploy. The amendment keeps the capability that
+  decision was after (set the field and the price changes without a deploy; a sale
+  Price still wins inside its window) while the catalog keeps the provisioned ids
+  as the default instead of ceding them. Populating the field is the CMS becoming
+  _explicit_ about each price — worth doing, no longer a precondition.
+
 - Line items are the priced lines **in cart order**; collector entries never
   become line items.
 
@@ -196,11 +206,15 @@ Registration x4: Jane Smith, John Doe"`. Names are every answered field of the
   where criterion 4's _resolution_ is proved — which price id is chosen.
 - **Criterion 1** by hand, against embedded Checkout on a local dev server.
 - **Criterion 3's server half** (2026-09-23, against the local dev server): a cart
-  holding a valid line beside `donation-club-preset-25` and an unknown sku answers
-  `409` from **both** `/api/checkout/cart` and `/api/checkout/sessions`, with one
-  error per offending line — `unknown-product` and `unknown-sku`, each carrying
-  the entry id the buyer removes — and the valid line appears in no error. The
-  refusal writes no `carts` row: the 409 precedes the snapshot write.
+  holding a valid line beside an offending one answers `409` from **both**
+  `/api/checkout/cart` and `/api/checkout/sessions`, with one error per offending
+  line, each carrying the entry id the buyer removes, and the valid line appearing
+  in no error. All three reachable codes were exercised this way: `sold-out`
+  (after publishing `steel-city-7s-bar-crawl` as out of stock and purging the
+  `datocms` tag through the app's own revalidate route — _“Steel City 7s Bar Crawl”
+  is sold out — remove it from the cart to continue._), `unknown-product`
+  (`donation-club-preset-25`, which has no CMS record) and `unknown-sku`. No
+  `carts` row is written for a refused cart: the 409 precedes the snapshot write.
 - **Criterion 2's metadata half** (2026-09-23, a test-mode session read back with
   `line_items.data.price.product` expanded): the session carried
   `families=events`, `reg_count=0` and `reg_ref=<cartRef>`, and each generated line
@@ -210,10 +224,6 @@ Registration x4: Jane Smith, John Doe"`. Names are every answered field of the
 
 **Outstanding**
 
-- The `sold-out` code specifically: no `product` record is `in_stock: false` on
-  the published environment, so the branch cannot be triggered without publishing
-  a CMS edit. It is asserted offline, and it shares its contract with the two
-  refusals verified above.
 - Criterion 3's **UI** half — the row in the flyout and the row on the checkout
   page, each with its one-click remove — has not been exercised by hand.
 - Criterion 2's `sku` on the order row (generated in test mode), criterion 4's

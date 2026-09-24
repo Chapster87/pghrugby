@@ -15,7 +15,7 @@
  */
 
 import { pricedLines, type CartEntry } from "./cart-entries"
-import { findCatalogItem } from "./catalog"
+import { findCatalogItem, type CatalogItem } from "./catalog"
 
 /** The commerce fields the cart build reads off a DatoCMS `product` record. */
 export type ProductPriceRecord = {
@@ -63,17 +63,18 @@ export function isWithinSaleWindow(
 }
 
 /**
- * The Stripe Price id a line bills at:
+ * The CMS's own price rule:
  * `now ∈ [sale_starts_at, sale_ends_at] && sale_price_id ? sale_price_id :
  * price_id`.
  *
  * Resolved **fresh** at cart build and again at session build, so a window that
  * closes while a cart sits open re-prices rather than charging the early-bird
- * rate.
+ * rate. This is what the CMS alone says; `resolveLinePriceId` is what a line
+ * actually bills at, since it adds the catalog's default underneath.
  *
  * @param record - The product's price record.
  * @param now - The instant to resolve at; defaults to the current time.
- * @returns The effective Price id, or null when the product has no price.
+ * @returns The CMS's effective Price id, or null when the record names none.
  */
 export function effectivePriceId(
   record: ProductPriceRecord,
@@ -83,6 +84,32 @@ export function effectivePriceId(
     return record.salePriceId
   }
   return record.priceId
+}
+
+/**
+ * The Stripe Price a line bills at: the CMS's effective price, falling back to
+ * the price provisioned in `catalog.ts` when the CMS field is blank.
+ *
+ * The CMS field is labelled **"Price ID (override)"**, and that is the rule:
+ * content overrides the default. A blank field means "charge what we
+ * provisioned", never "refuse the sale" — a missing price must not be able to
+ * take checkout down, which is why the catalog keeps its live Price ids rather
+ * than ceding them entirely to the CMS
+ * (`docs/agents/checkout-session-build.md` § 4).
+ *
+ * @param record - The product's CMS record, or null when there is none (the
+ *   caller refuses that line separately: a missing record has no availability).
+ * @param catalogItem - The sku's catalog entry, whose `priceId` is the default.
+ * @param now - The instant the sale window is resolved at.
+ * @returns The Price id to bill at, or null when neither source has one.
+ */
+export function resolveLinePriceId(
+  record: ProductPriceRecord | null,
+  catalogItem: CatalogItem,
+  now: Date
+): string | null {
+  if (!record) return catalogItem.priceId ?? null
+  return effectivePriceId(record, now) ?? catalogItem.priceId ?? null
 }
 
 /** Why a priced line cannot be checked out. */
@@ -121,7 +148,10 @@ export type QuotedLine = {
   /** Catalog unit amount in minor units — test-mode `price_data` only. */
   unitAmount: number
   quantity: number
-  /** The effective Stripe Price id — live mode's line-item price. */
+  /**
+   * The Stripe Price this line would bill at in live mode — the CMS's effective
+   * price, or the provisioned catalog price when the CMS is blank.
+   */
   priceId: string | null
 }
 
@@ -144,8 +174,9 @@ export type CartQuote = {
  * @param entries - The cart's entries, in add order.
  * @param products - The resolved product records, keyed by sku.
  * @param options.now - The instant the sale windows are resolved at.
- * @param options.requirePriceId - Live mode: every line must name a Stripe
- *   Price (test mode bills inline `price_data` instead).
+ * @param options.requirePriceId - Live mode: every line must resolve to a
+ *   Stripe Price from the CMS **or** the catalog (test mode bills inline
+ *   `price_data` instead).
  * @returns The quoted lines and the per-line errors; one of them is always empty.
  */
 export function quoteCart(
@@ -180,7 +211,7 @@ export function quoteCart(
       continue
     }
 
-    const priceId = effectivePriceId(record, now)
+    const priceId = resolveLinePriceId(record, catalogItem, now)
 
     if (!record.inStock) {
       errors.push({
@@ -195,7 +226,7 @@ export function quoteCart(
         entryId: line.id,
         sku: line.sku,
         code: "unpriced",
-        message: `“${catalogItem.label}” has no Stripe Price configured — set its price in the CMS.`,
+        message: `“${catalogItem.label}” has no price — set its price in the CMS or add it to the catalog.`,
       })
     }
 
