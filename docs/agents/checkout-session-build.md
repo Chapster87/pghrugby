@@ -132,11 +132,11 @@ catalog's families. That divergence is inherent to the test-mode inline path
 (spec § 8.2) and is a local-only artifact — but it means criterion 2's order-row
 half is a live-mode check.
 
-**One thing to verify before trusting the Dashboard view:** that the live
-products really do carry `family=events`. The checklist is marked applied, but
-if it is not, a session would claim a family its order row lacks. If the live
-metadata turns out bare, drop `family` from the six event tickets in
-`catalog.ts` rather than inventing one.
+**Confirmed against the live account** (2026-09-23, read-only): all 23 catalog
+items carry in Stripe exactly the `family` this catalog claims, `events` included
+— 0 mismatches, 0 prices missing. So a session's `metadata.families` and the
+order rows derived from it agree in production. If a product's family is ever
+changed in Stripe, change it here in the same breath.
 
 ## 6. `reg_N` / `reg_count` / `reg_ref`
 
@@ -174,3 +174,20 @@ Registration x4: Jane Smith, John Doe"`. Names are every answered field of the
 - **The catalog clean-ups** spec § 3 lists as target state:
   `findCatalogItemsForProduct`'s prefix fallback and the two additional-side
   items. They belong with the coupon work above, not here.
+
+## 8. Verification
+
+- **Offline**, through `pnpm checkout:round-trip`
+  (`scripts/checkout-pricing-round-trip.ts`): the sale window's in/out/boundary/
+  half-authored cases, every refusal code, and the whole metadata surface
+  including the truncation and >50-key overflow. No credentials needed. This is
+  where criterion 4's _resolution_ is proved — which price id is chosen.
+- **Live mode only**, because the test account cannot express them: the charged
+  amount following the sale price (criterion 4), the order rows landing with a
+  real `sku`/`family` and `orders.families` (criterion 2), and line thumbnails
+  resolving from `Product.images` rather than the placeholder (criterion 5). The
+  test-mode inline `price_data` path has no Product to read any of them from.
+- Criterion 1 (a local pig-roast checkout completing and returning to success) was
+  confirmed locally against embedded Checkout. Criterion 3's refusal is asserted
+  offline and rendered by both surfaces; the end-to-end block itself has not been
+  exercised by hand.
