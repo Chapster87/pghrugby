@@ -36,36 +36,52 @@ export type ProductPriceRecord = {
 }
 
 /**
- * True when `now` falls inside the product's sale window.
+ * Whether the product's sale Price is running at `now`.
  *
- * The window is absolute and inclusive at both ends
- * (`docs/agents/pdp-pricing-and-sale-windows.md`). A missing or unparsable bound
- * is **not** read as open-ended: `effectivePriceId` follows the literal rule
- * `now ∈ [sale_starts_at, sale_ends_at]`, so a half-authored window can never
- * silently discount a line.
+ * A bound the record leaves **empty does not limit the sale**: a set start means
+ * "from then on", a set end means "until then", and a sale Price with no window at
+ * all is simply on sale. Ending a sale is therefore an explicit act — set an end
+ * date, or clear the sale Price — which is what makes linking a sale price do
+ * what linking a sale price says. (Requiring both bounds instead meant a linked
+ * sale Price silently did nothing, which is the trap this rule exists to avoid.)
+ *
+ * A bound that is *present but unreadable* is the one case that refuses to
+ * discount: the value cannot be honoured, and guessing would charge a sale price
+ * against a window nobody can see.
  *
  * @param record - The product's price record.
- * @param now - The instant to test the window against.
- * @returns Whether the sale price applies.
+ * @param now - The instant to test against.
+ * @returns Whether the sale Price applies.
  */
-export function isWithinSaleWindow(
-  record: ProductPriceRecord,
-  now: Date
-): boolean {
-  if (!record.saleStartsAt || !record.saleEndsAt) return false
+export function isSaleRunning(record: ProductPriceRecord, now: Date): boolean {
+  if (!record.salePriceId) return false
 
-  const starts = Date.parse(record.saleStartsAt)
-  const ends = Date.parse(record.saleEndsAt)
-  if (Number.isNaN(starts) || Number.isNaN(ends)) return false
+  const starts = boundTime(record.saleStartsAt)
+  const ends = boundTime(record.saleEndsAt)
+  if (starts === undefined || ends === undefined) return false
 
   const at = now.getTime()
-  return at >= starts && at <= ends
+  if (starts !== null && at < starts) return false
+  if (ends !== null && at > ends) return false
+  return true
 }
 
 /**
- * The CMS's own price rule:
- * `now ∈ [sale_starts_at, sale_ends_at] && sale_price_id ? sale_price_id :
- * price_id`.
+ * Reads a window bound: `null` when empty (no limit), `undefined` when present
+ * but unreadable.
+ *
+ * @param value - The bound as the CMS holds it.
+ * @returns Milliseconds, or null/undefined per the above.
+ */
+function boundTime(value: string | null): number | null | undefined {
+  if (value === null || value.trim() === "") return null
+  const parsed = Date.parse(value)
+  return Number.isNaN(parsed) ? undefined : parsed
+}
+
+/**
+ * The CMS's own price rule: the sale Price while the sale is running, otherwise
+ * the regular price.
  *
  * Resolved **fresh** at cart build and again at session build, so a window that
  * closes while a cart sits open re-prices rather than charging the early-bird
@@ -80,7 +96,7 @@ export function effectivePriceId(
   record: ProductPriceRecord,
   now: Date = new Date()
 ): string | null {
-  if (record.salePriceId && isWithinSaleWindow(record, now)) {
+  if (record.salePriceId && isSaleRunning(record, now)) {
     return record.salePriceId
   }
   return record.priceId

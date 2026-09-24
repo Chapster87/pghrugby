@@ -87,10 +87,16 @@ sale_price_id : price_id`, resolved by `effectivePriceId()`
 - Resolved **twice**: at validate, and again fresh at session build, so a window
   that closes while the cart sits open re-prices rather than charging the
   early-bird rate.
-- The window must be **fully authored** — both bounds present and parsable —
-  before it can discount anything. A half-filled window reads as "not in range",
-  the literal reading of § 8.2's formula, so a mis-authored sale can only fail to
-  discount, never discount by accident.
+- **An empty bound does not limit the sale.** A set start means "from then on",
+  a set end means "until then", and a sale Price with no window at all is simply
+  on sale — so linking a sale Price does what linking a sale Price says, and
+  ending a sale is an explicit act (set an end date, or clear the field). A bound
+  that is present but _unreadable_ is the one case that refuses to discount, since
+  the value cannot be honoured and guessing would charge a sale against a window
+  nobody can see. Two consequences worth knowing: a forgotten end date keeps the
+  sale running, and **deactivating the sale Price in Stripe without clearing the
+  CMS field fails session creation** (Stripe rejects an inactive Price) rather
+  than quietly falling back — so retire a sale by clearing the field.
 - Live mode requires the effective Price id and fails loudly without one. Test
   mode bills inline `price_data` from `catalog.ts`'s `unitAmount`, because a test
   key cannot reference live Prices. Amounts stay server-side in both.

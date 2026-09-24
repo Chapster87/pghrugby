@@ -26,7 +26,7 @@ import type {
 } from "../src/lib/checkout/cart-entries"
 import {
   effectivePriceId,
-  isWithinSaleWindow,
+  isSaleRunning,
   quoteCart,
   resolveLinePriceId,
   type CartLineError,
@@ -61,7 +61,7 @@ function record(
   }
 }
 
-/** A product mid-sale: the sale price applies inside the window only. */
+/** A product mid-sale: the sale price applies inside its window. */
 const onSale = record("golf-outing-registration", {
   salePriceId: "price_sale_golf-outing-registration",
   saleStartsAt: SALE_START,
@@ -76,11 +76,6 @@ const RECORDS = new Map<string, ProductPriceRecord>([
   ["sc7s-mens-open", record("sc7s-mens-open", { inStock: false })],
   // A live-mode price requirement with an empty CMS field — the catalog covers it.
   ["dues-fall", record("dues-fall", { priceId: null })],
-  // A sale Price that no window ever selects.
-  [
-    "steel-city-7s-bar-crawl",
-    record("steel-city-7s-bar-crawl", { salePriceId: "price_sale_bar_crawl" }),
-  ],
 ])
 
 const GOLF_FIELDS: CollectorField[] = [
@@ -155,9 +150,7 @@ function refusal(
 }
 
 function main(): void {
-  console.log(
-    "A sale window selects the sale price, and only inside its bounds"
-  )
+  console.log("A running sale selects the sale price")
   check(
     "before the window: the regular price",
     effectivePriceId(onSale, at("2026-08-31T12:00:00Z")) === onSale.priceId
@@ -179,23 +172,50 @@ function main(): void {
     effectivePriceId(onSale, at("2026-10-01T12:00:00Z")) === onSale.priceId
   )
   check(
-    "a sale price with a half-authored window never discounts",
+    "an empty start does not hold the sale off",
     effectivePriceId(
-      record("steel-city-7s-bar-crawl", {
-        salePriceId: "price_sale_bar_crawl",
-        saleStartsAt: SALE_START,
-      }),
+      record("x", { salePriceId: "price_sale_x", saleEndsAt: SALE_END }),
       at("2026-09-15T12:00:00Z")
-    ) === "price_regular_steel-city-7s-bar-crawl"
+    ) === "price_sale_x"
   )
   check(
-    "an unparsable bound never discounts",
-    !isWithinSaleWindow(
+    "an empty end does not end the sale",
+    effectivePriceId(
+      record("x", { salePriceId: "price_sale_x", saleStartsAt: SALE_START }),
+      at("2026-11-15T12:00:00Z")
+    ) === "price_sale_x"
+  )
+  check(
+    "a sale price with no window at all is on sale",
+    effectivePriceId(
+      record("x", { salePriceId: "price_sale_x" }),
+      at("2026-09-15T12:00:00Z")
+    ) === "price_sale_x"
+  )
+  check(
+    "a future start holds the sale off",
+    effectivePriceId(
       record("x", {
         salePriceId: "price_sale_x",
-        saleStartsAt: "not-a-date",
-        saleEndsAt: SALE_END,
+        saleStartsAt: "2027-01-01T00:00:00Z",
       }),
+      at("2026-09-15T12:00:00Z")
+    ) === "price_regular_x"
+  )
+  check(
+    "a past end ends the sale",
+    effectivePriceId(
+      record("x", {
+        salePriceId: "price_sale_x",
+        saleEndsAt: "2026-01-01T00:00:00Z",
+      }),
+      at("2026-09-15T12:00:00Z")
+    ) === "price_regular_x"
+  )
+  check(
+    "a bound present but unreadable refuses to discount",
+    !isSaleRunning(
+      record("x", { salePriceId: "price_sale_x", saleStartsAt: "not-a-date" }),
       at("2026-09-15T12:00:00Z")
     )
   )

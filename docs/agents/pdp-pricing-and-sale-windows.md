@@ -93,6 +93,16 @@ billablePriceId = effectivePriceId(record) ?? catalogItem.priceId
 - Refusing to sell survives only for a sku with no price in either source — a
   provisioning hole, not a content decision.
 
+**And each window bound is optional.** An empty bound does not limit the sale: a
+set start means "from then on", a set end means "until then", and a sale Price
+with no window at all is on sale. The formula above, read literally, required
+both — and a linked sale Price then silently did nothing, which is precisely what
+happened the first time a sale was set up. The bound that is _present but
+unreadable_ is now the only one that refuses to discount. Ending a sale is an
+explicit act: set an end date, or clear the field. Clearing matters — deactivating
+the Price in Stripe while the field still names it fails session creation rather
+than falling back.
+
 Detail: `docs/agents/checkout-session-build.md` § 4.
 
 ## Related
