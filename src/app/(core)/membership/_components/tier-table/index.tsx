@@ -82,6 +82,9 @@ export default function TierTable({
                 src="/images/venmo/donate-paypal.webp"
                 type="image"
               />
+              {/* PayPal's tracking pixel is a 1x1 beacon, not content, so it must
+                  stay a raw <img>. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
                 alt=""

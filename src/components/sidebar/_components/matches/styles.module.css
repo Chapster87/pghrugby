@@ -49,6 +49,10 @@
   position: relative;
 }
 
+.objectContain {
+  object-fit: contain;
+}
+
 .atVs {
   display: flex;
   flex-direction: column;
