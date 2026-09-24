@@ -5,14 +5,14 @@ import { graphql } from "@/lib/datocms/graphql"
  *
  * Reads the three curated buckets (primaries / add-ons / data collectors), the
  * page-owned gallery, and the page's `product_type`. Product fields carry the
- * two commerce flags the buy box renders on: `inStock` (sold-out lines render
- * disabled, never hidden) and `quantityBearing` (whether a line gets a stepper).
+ * two commerce flags the buy box renders on — `inStock` (sold-out lines render
+ * disabled, never hidden) and `quantityBearing` (whether a line gets a stepper)
+ * — plus the pricing fields.
  *
- * The sale window (`salePriceId` / `saleStartsAt` / `saleEndsAt`) is deliberately
- * not read here: displaying a struck-through regular price needs the sale
- * Price's own amount, which only the server can resolve, and the session build
- * is where the effective Price id is chosen
- * (`docs/agents/pdp-pricing-and-sale-windows.md`).
+ * The pricing fields are read but not used here: the *amount* of a sale Price
+ * lives in Stripe, so `page.tsx` resolves the display through
+ * `src/lib/checkout/price-display.ts`, which needs the CMS record to know whether
+ * a sale is running at all (`docs/agents/pdp-pricing-and-sale-windows.md`).
  */
 export const productDetailPageQuery = graphql(`
   query ProductDetailPageQuery($slug: String!) {
@@ -33,6 +33,9 @@ export const productDetailPageQuery = graphql(`
         shortDescription
         longDescription
         priceId
+        salePriceId
+        saleStartsAt
+        saleEndsAt
         inStock
         quantityBearing
       }
@@ -42,6 +45,9 @@ export const productDetailPageQuery = graphql(`
         shortDescription
         longDescription
         priceId
+        salePriceId
+        saleStartsAt
+        saleEndsAt
         inStock
         quantityBearing
       }

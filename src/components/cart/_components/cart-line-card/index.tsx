@@ -6,10 +6,11 @@ import { Pencil, Trash2 } from "lucide-react"
 import QuantitySelector from "@components/quantity-selector"
 import type { PricedLine } from "@/lib/checkout/cart-entries"
 import {
+  displayFor,
   formatMoney,
   lineLabel,
-  lineUnitAmount,
   pdpLabel,
+  type LineDisplay,
 } from "@/lib/checkout/cart-display"
 import { collectorDetail, type CartGroup } from "@/lib/checkout/cart-mutations"
 
@@ -31,15 +32,19 @@ import s from "./style.module.css"
  *
  * @param props.group - The primaries one add-to-cart action created.
  * @param props.thumbnails - Resolved sku → thumbnail URL, possibly incomplete.
+ * @param props.pricing - Resolved sku → display pricing; an unresolved sku falls
+ *   back to the catalog's regular amount.
  * @param props.onEdit - Opens the registration edit panel for a collector entry.
  */
 export default function CartLineCard({
   group,
   thumbnails,
+  pricing,
   onEdit,
 }: {
   group: CartGroup
   thumbnails: Record<string, string>
+  pricing: Record<string, LineDisplay>
   onEdit: (collectorId: string) => void
 }) {
   const { model, remove, setQuantity } = useCart()
@@ -48,8 +53,11 @@ export default function CartLineCard({
     const addons = model.addonsFor(line.id)
     return (
       sum +
-      lineTotal(line) +
-      addons.reduce((inner, addon) => inner + lineTotal(addon), 0)
+      lineAmount(line, pricing) * line.quantity +
+      addons.reduce(
+        (inner, addon) => inner + lineAmount(addon, pricing) * addon.quantity,
+        0
+      )
     )
   }, 0)
 
@@ -86,7 +94,7 @@ export default function CartLineCard({
                 ) : (
                   <span className={s.qtyLabel}>Qty. {line.quantity}</span>
                 )}
-                <span className={s.price}>{formatMoney(lineTotal(line))}</span>
+                <LineAmount line={line} pricing={pricing} />
               </div>
             </div>
 
@@ -130,7 +138,9 @@ export default function CartLineCard({
                 {addons.map((addon) => (
                   <li key={addon.id} className={s.cardAddon}>
                     <div className={s.addonLeft}>
-                      <span className={s.addonName}>{lineLabel(addon.sku)}</span>
+                      <span className={s.addonName}>
+                        {lineLabel(addon.sku)}
+                      </span>
                       <button
                         type="button"
                         className={s.iconActionDanger}
@@ -149,11 +159,15 @@ export default function CartLineCard({
                           }
                         />
                       ) : (
-                        <span className={s.qtyLabel}>Qty. {addon.quantity}</span>
+                        <span className={s.qtyLabel}>
+                          Qty. {addon.quantity}
+                        </span>
                       )}
-                      <span className={`${s.price} ${s.addonPrice}`}>
-                        {formatMoney(lineTotal(addon))}
-                      </span>
+                      <LineAmount
+                        line={addon}
+                        pricing={pricing}
+                        className={s.addonPrice}
+                      />
                     </div>
                   </li>
                 ))}
@@ -166,9 +180,49 @@ export default function CartLineCard({
   )
 }
 
-/** A line's extended price (unit × quantity), in minor units. */
-function lineTotal(line: PricedLine): number {
-  return lineUnitAmount(line.sku) * line.quantity
+/**
+ * A line's unit amount, resolved for display: the sale amount while a sale runs,
+ * otherwise the catalog's regular amount.
+ *
+ * @param line - The priced line.
+ * @param pricing - The resolved display pricing, keyed by sku.
+ * @returns The amount to show per unit, in minor units.
+ */
+function lineAmount(
+  line: PricedLine,
+  pricing: Record<string, LineDisplay>
+): number {
+  return displayFor(line.sku, pricing).unitAmount
+}
+
+/**
+ * A line's extended price, with the regular amount struck through while a sale
+ * runs. The pair sits side by side rather than stacked in the right rail.
+ *
+ * @param props.line - The priced line.
+ * @param props.pricing - The resolved display pricing, keyed by sku.
+ * @param props.className - An extra class for the smaller add-on variant.
+ */
+function LineAmount({
+  line,
+  pricing,
+  className,
+}: {
+  line: PricedLine
+  pricing: Record<string, LineDisplay>
+  className?: string
+}) {
+  const { unitAmount, compareAtAmount } = displayFor(line.sku, pricing)
+  return (
+    <span className={className ? `${s.price} ${className}` : s.price}>
+      {compareAtAmount !== null && (
+        <span className={s.compareAt}>
+          {formatMoney(compareAtAmount * line.quantity)}
+        </span>
+      )}
+      <span>{formatMoney(unitAmount * line.quantity)}</span>
+    </span>
+  )
 }
 
 /**

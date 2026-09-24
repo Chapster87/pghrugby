@@ -20,7 +20,13 @@ import s from "./style.module.css"
  * never hidden (`docs/pdp-to-minicart-to-checkout-spec.md` § 5.5).
  */
 
-/** A line's effective unit price. */
+/**
+ * A line's price: the amount, with the regular amount struck through ahead of it
+ * while a sale is running (`docs/agents/pdp-pricing-and-sale-windows.md`).
+ *
+ * The two spans are separated by JSX whitespace rather than a gap, so this stays a
+ * plain inline pair in every price context the buy box uses it in.
+ */
 export function LinePrice({
   line,
   className,
@@ -30,7 +36,10 @@ export function LinePrice({
 }) {
   return (
     <span className={clsx(s.price, className)}>
-      {formatMoney(line.unitAmount)}
+      {line.compareAtAmount !== null && (
+        <span className={s.compareAt}>{formatMoney(line.compareAtAmount)}</span>
+      )}
+      <span>{formatMoney(line.unitAmount)}</span>
     </span>
   )
 }

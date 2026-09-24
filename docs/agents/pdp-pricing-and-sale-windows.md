@@ -103,6 +103,33 @@ explicit act: set an end date, or clear the field. Clearing matters — deactiva
 the Price in Stripe while the field still names it fails session creation rather
 than falling back.
 
+**And the effective price is now displayed, not only billed.** `catalog.ts` holds
+the regular amount and DatoCMS holds the sale Price's _id_, so the sale amount can
+only come from Stripe: `src/lib/checkout/price-display.ts` resolves
+`{ unitAmount, compareAtAmount }` per sku, and both buyer-facing surfaces render
+the regular amount struck through ahead of the sale amount — the PDP from a
+server-side resolve, the cart flyout over `POST /api/checkout/pricing`, the way it
+already resolves thumbnails.
+
+That read goes to the **live** account (`liveStripe`) whatever `STRIPE_ENV` says.
+The amounts the site advertises have always been live — `catalog.ts` carries live
+amounts and the PDP has always shown them — so display must not flip when billing
+is a rehearsal against test; otherwise a sale the owner has just authored is
+invisible on the very page they check it on.
+
+Two consequences worth stating:
+
+- In test mode the surfaces now show the live sale amount while a test-mode
+  Checkout still bills the catalog's _regular_ inline `price_data`. Display and
+  local billing therefore disagree by design, and live mode agrees throughout.
+  Having the test-mode build bill the displayed amount instead is a possible
+  follow-up — it would make a local rehearsal match production pricing exactly.
+- A sale Price that cannot be read — no live key, an unknown or deactivated Price,
+  a "sale" that is not actually cheaper — leaves the line on its regular amount,
+  which is exactly what it showed before sales existed. Display can mislead at
+  worst; it can never mis-charge, because billing resolves the Price **id**, never
+  this amount.
+
 Detail: `docs/agents/checkout-session-build.md` § 4.
 
 ## Related

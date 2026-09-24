@@ -5,11 +5,13 @@ import { draftMode } from "next/headers"
 import SidebarLayout from "@/layouts/sidebar"
 import { executeQuery } from "@/lib/datocms/executeQuery"
 import { ResultOf } from "@/lib/datocms/graphql"
+import type { ProductPriceRecord } from "@/lib/checkout/cart-pricing"
 import {
   findCatalogItem,
   findCatalogItemsForProduct,
 } from "@/lib/checkout/catalog"
 import type { CollectorField } from "@/lib/checkout/cart-entries"
+import { resolveLineDisplay } from "@/lib/checkout/price-display"
 import type { CloudinaryImage } from "@/types/datocms"
 import { getBaseURL } from "@/lib/util/env"
 
@@ -114,6 +116,9 @@ function toFields(collector: PdpQuery["dataCollectors"][number] | undefined) {
  * variant skus (the fixed-amount donation presets), which keeps a
  * variant-priced product sellable; a product with neither renders nothing
  * rather than an unpriced row.
+ *
+ * `compareAtAmount` starts null: a sale is a Stripe fact, so the display pass in
+ * the page resolves it afterwards.
  */
 function toLines(product: PdpQuery["primaryProducts"][number]): PdpLine[] {
   const sku = product.sku ?? ""
@@ -127,9 +132,30 @@ function toLines(product: PdpQuery["primaryProducts"][number]): PdpLine[] {
     label: item.label,
     note: product.shortDescription || null,
     unitAmount: item.unitAmount,
+    compareAtAmount: null,
     quantityBearing: product.quantityBearing ?? false,
     inStock: product.inStock ?? true,
   }))
+}
+
+/** The CMS records a page's lines price against, as `cart-pricing` reads them. */
+function toRecords(
+  products: PdpQuery["primaryProducts"]
+): Map<string, ProductPriceRecord> {
+  const records = new Map<string, ProductPriceRecord>()
+  for (const product of products) {
+    const sku = product.sku ?? ""
+    if (!sku) continue
+    records.set(sku, {
+      sku,
+      inStock: product.inStock ?? true,
+      priceId: product.priceId,
+      salePriceId: product.salePriceId,
+      saleStartsAt: product.saleStartsAt,
+      saleEndsAt: product.saleEndsAt,
+    })
+  }
+  return records
 }
 
 /**
@@ -167,6 +193,26 @@ export default async function ProductDetailPage({ params }: PageProps) {
     toLines(product)
   )
 
+  // A sale amount lives in Stripe, so the display is resolved once for every sku
+  // the page sells and folded onto the lines the catalog priced.
+  const display = await resolveLineDisplay(
+    [...primaryLines, ...addonLines].map((line) => line.sku),
+    toRecords([
+      ...productDetailPage.primaryProducts,
+      ...productDetailPage.addonProducts,
+    ])
+  )
+  const withDisplay = (line: PdpLine): PdpLine => {
+    const shown = display.get(line.sku)
+    return shown
+      ? {
+          ...line,
+          unitAmount: shown.unitAmount,
+          compareAtAmount: shown.compareAtAmount,
+        }
+      : line
+  }
+
   const collector = productDetailPage.dataCollectors[0]
 
   const product: PdpViewModel = {
@@ -177,8 +223,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
       productDetailPage.primaryProducts[0]?.longDescription ?? null,
     productType: toProductType(productDetailPage.productType),
     photos,
-    primaries: primaryLines,
-    addons: addonLines,
+    primaries: primaryLines.map(withDisplay),
+    addons: addonLines.map(withDisplay),
     collectorRef: collector?.id ?? "",
     fields: toFields(collector),
   }

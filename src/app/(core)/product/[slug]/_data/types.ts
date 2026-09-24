@@ -2,7 +2,8 @@ import type { CloudinaryImage } from "@/types/datocms"
 
 /**
  * The PDP's view model — what the buy box renders, assembled server-side from
- * DatoCMS content and the checkout catalog.
+ * DatoCMS content, the checkout catalog, and a display-only Stripe read of any
+ * sale Price in play.
  *
  * Deliberately free of DatoCMS shapes and of any Stripe client: the layout is a
  * client component, and everything it needs (prices included) is resolved here
@@ -25,8 +26,13 @@ export type PdpLine = {
   label: string
   /** A one-line qualifier under the name (the product's short description). */
   note: string | null
-  /** Effective unit price in minor units (cents), resolved from the catalog. */
+  /**
+   * The amount the buyer pays, in minor units (cents): the sale amount while a
+   * sale is running, otherwise the catalog's regular amount.
+   */
   unitAmount: number
+  /** The regular amount to strike through while a sale runs; null otherwise. */
+  compareAtAmount: number | null
   /** Renders a quantity control, from the product's `quantity_bearing`. */
   quantityBearing: boolean
   /** Sold-out lines render disabled and labelled, never hidden. */

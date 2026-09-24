@@ -13,9 +13,10 @@ import {
   type CollectorEntry,
   type PricedLine,
 } from "@/lib/checkout/cart-entries"
-import { formatMoney } from "@/lib/checkout/cart-display"
+import { displayFor, formatMoney } from "@/lib/checkout/cart-display"
 import type { CartLineError } from "@/lib/checkout/cart-pricing"
 
+import { useLinePricing } from "../../_hooks/use-line-pricing"
 import { useLineThumbnails } from "../../_hooks/use-line-thumbnails"
 import { useCart } from "../../context"
 import CartLineCard from "../cart-line-card"
@@ -56,6 +57,17 @@ export default function MinicartFlyout() {
   // a closed flyout showing nothing should not cost a request per page load.
   const thumbnails = useLineThumbnails(
     open ? model.lines.map((line) => line.sku) : []
+  )
+  const pricing = useLinePricing(
+    open ? model.lines.map((line) => line.sku) : []
+  )
+
+  // The subtotal the flyout shows is the display subtotal, so it agrees with the
+  // line amounts beside it and with what Checkout will bill.
+  const subtotal = model.lines.reduce(
+    (sum, line) =>
+      sum + displayFor(line.sku, pricing).unitAmount * line.quantity,
+    0
   )
 
   // A closed flyout always reopens on the cart list. Reset on the dismiss that
@@ -216,6 +228,7 @@ export default function MinicartFlyout() {
                     key={group.key}
                     group={group}
                     thumbnails={thumbnails}
+                    pricing={pricing}
                     onEdit={startEdit}
                   />
                 ))}
@@ -224,7 +237,7 @@ export default function MinicartFlyout() {
               <footer className={s.foot}>
                 <div className={s.subtotalRow}>
                   <span>Subtotal</span>
-                  <span>{formatMoney(model.subtotal)}</span>
+                  <span>{formatMoney(subtotal)}</span>
                 </div>
                 <RefusedLines
                   message={checkoutError}

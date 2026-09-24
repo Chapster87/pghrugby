@@ -41,8 +41,20 @@
 }
 
 .price {
+  /* A pair while a sale runs (struck regular + sale), a single amount otherwise. */
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
   font-weight: 700;
   white-space: nowrap;
+}
+
+/* The regular amount behind a sale amount. */
+.compareAt {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--color-grey-600);
+  text-decoration: line-through;
 }
 
 .soldOut {
