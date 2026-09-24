@@ -112,6 +112,12 @@ export type QuotedLine = {
   sku: string
   /** The catalog label — the product name test-mode `price_data` bills under. */
   label: string
+  /**
+   * The catalog `family`. Live mode reads it back off the real Product; test
+   * mode's generated Product has none, so the build writes this one onto it
+   * instead (`docs/agents/checkout-session-build.md` § 5).
+   */
+  family: string | null
   /** Catalog unit amount in minor units — test-mode `price_data` only. */
   unitAmount: number
   quantity: number
@@ -197,6 +203,7 @@ export function quoteCart(
       entryId: line.id,
       sku: line.sku,
       label: catalogItem.label,
+      family: catalogItem.family ?? null,
       unitAmount: catalogItem.unitAmount,
       quantity: line.quantity,
       priceId,

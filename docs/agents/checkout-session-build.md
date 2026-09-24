@@ -130,17 +130,17 @@ sale_price_id : price_id`, resolved by `effectivePriceId()`
   family — § 8.5's table lists the key without a condition, and `reg_count` /
   `reg_ref` are written the same way.
 
-**The two sides agree in production, and only in production.** `order_lines.family`
-and `orders.families` are read back off the session's Stripe products, while this
-metadata is read off the catalog. In live mode a line item's Price expands to its
-real Product and the two agree. In test mode Stripe **mints a Product** for the
-inline `price_data` — checked 2026-09-23, and it came back as a generated id with
-our name on it and `metadata` empty — so `order_lines.sku` records that generated
-id rather than our sku, `order_lines.family` is null, and `orders.families` is
-`{}`, while the session metadata still names the catalog's families. That
-divergence is inherent to the test-mode inline path (spec § 8.2) and is a
-local-only artifact — but it means criterion 2's order-row half is a live-mode
-check.
+**Where the two sides could drift.** `order_lines.family` and `orders.families`
+are read back off the session's Stripe products, while this metadata is read off
+the catalog. In live mode the two necessarily agree — the same provisioned
+metadata is the source. Test mode is the case that needed handling: Stripe
+**mints a Product** for the inline `price_data` (checked 2026-09-23 — a generated
+`prod_…` carrying our name and an otherwise empty `metadata`), so the session
+build now **writes the catalog's family onto that generated Product**. A local
+order therefore records the same `family` and `families` production will. Its
+`id` is still Stripe's rather than our sku, so `order_lines.sku` in a local run
+names a generated product — which is why criterion 2's `sku` half is a live-mode
+check and its family half is not.
 
 **Confirmed against the live account** (2026-09-23, read-only): all 23 catalog
 items carry in Stripe exactly the `family` this catalog claims, `events` included
@@ -203,18 +203,21 @@ Registration x4: Jane Smith, John Doe"`. Names are every answered field of the
   refusal writes no `carts` row: the 409 precedes the snapshot write.
 - **Criterion 2's metadata half** (2026-09-23, a test-mode session read back with
   `line_items.data.price.product` expanded): the session carried
-  `families=events`, `reg_count=0` and `reg_ref=<cartRef>`. The PaymentIntent does
-  not exist until the buyer begins paying, so its copy is a live-pass check.
+  `families=events`, `reg_count=0` and `reg_ref=<cartRef>`, and each generated line
+  item's Product carried `metadata={"family":"events"}` — so `order_lines.family`
+  and `orders.families` read correctly locally too. The PaymentIntent does not
+  exist until the buyer begins paying, so its copy is a live-pass check.
 
 **Outstanding**
 
-- The `sold-out` code specifically: no `product` record is currently
-  `in_stock: false`, and setting one is a CMS edit. The path is asserted offline
-  and is the same contract as the two refusals verified above.
+- The `sold-out` code specifically: no `product` record is `in_stock: false` on
+  the published environment, so the branch cannot be triggered without publishing
+  a CMS edit. It is asserted offline, and it shares its contract with the two
+  refusals verified above.
 - Criterion 3's **UI** half — the row in the flyout and the row on the checkout
   page, each with its one-click remove — has not been exercised by hand.
-- Criterion 2's order rows, criterion 4's charged amount and criterion 5's
-  thumbnails: live mode (test mode's generated Product has no `family`, and its
-  ids are not our skus). For criterion 4 the session can be **created and
-  retrieved** with `line_items.data.price` expanded without paying, which shows
-  which Price the window chose; only the charge itself needs money.
+- Criterion 2's `sku` on the order row (generated in test mode), criterion 4's
+  charged amount, and criterion 5's thumbnails: live mode. For criterion 4 the
+  session can be **created and retrieved** with `line_items.data.price` expanded
+  without paying, which shows which Price the window chose; only the charge itself
+  needs money.

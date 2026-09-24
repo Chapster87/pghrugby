@@ -109,7 +109,15 @@ export async function POST(request: Request) {
         return {
           price_data: {
             currency: cart.currency,
-            product_data: { name: line.label },
+            // Stripe mints its own Product for a `price_data` line, and
+            // `order_lines.family` / `orders.families` are read back off the
+            // product's metadata — so the generated one has to be given the
+            // family the live Product already carries, or every local order
+            // records `{}` where production records the real family.
+            product_data: {
+              name: line.label,
+              ...(line.family ? { metadata: { family: line.family } } : {}),
+            },
             unit_amount: line.unitAmount,
           },
           quantity: line.quantity,

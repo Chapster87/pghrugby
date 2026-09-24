@@ -216,6 +216,10 @@ function main(): void {
   )
   check("collector entries never become line items", quoted.lines.length === 4)
   check(
+    "a quoted line carries its catalog family",
+    quoted.lines.every((line) => typeof line.family === "string")
+  )
+  check(
     "the registration line is quoted at its sale price",
     quoted.lines[0].priceId === "price_sale_golf-outing-registration"
   )
