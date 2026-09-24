@@ -1,30 +1,47 @@
 import { NextResponse } from "next/server"
 
-import { findCatalogItem } from "@/lib/checkout/catalog"
-import { getCart } from "@/lib/checkout/cart-store"
+import {
+  refusalResponse,
+  resolveCartFromEntries,
+  saveCart,
+} from "@/lib/checkout/cart-store"
+import { buildOrderMetadata } from "@/lib/checkout/order-metadata"
 import { isLiveStripe, stripe } from "@/lib/checkout/stripe"
 import { getBaseURL } from "@/lib/util/env"
 
 /**
- * POST /api/checkout/sessions  { cartRef }
+ * POST /api/checkout/sessions  { cartRef, entries }
  *
- * Loads the server-authoritative cart and creates an embedded-page Checkout
- * Session. Returns { clientSecret } for the embedded Checkout UI. On
- * completion Stripe redirects to the return_url (the success page) with the
- * session id substituted.
+ * The session build: re-resolves the browser-held cart against DatoCMS
+ * **fresh** (so a sale window that closed, or a line that sold out, while the
+ * cart sat open is caught at the payment boundary), writes the `carts` snapshot
+ * `recordOrder` re-joins, and creates an embedded-page Checkout Session.
  *
- * `client_reference_id` = cartRef — the reconciliation key the webhook and
- * success page use to re-join the cart's entry list (its per-line provenance
- * and registrations).
+ * Line items are the priced lines **in cart order** — collector entries never
+ * become line items — each at its `effectivePriceId`. Live mode requires that
+ * Price id; test mode falls back to inline `price_data` from `catalog.ts`,
+ * because a test key cannot reference live Prices and the amounts stay
+ * server-side either way.
+ *
+ * A sold-out or otherwise unquotable line answers `409` with `errors` and
+ * blocks the session — never a silently dropped line, and never a whole-cart
+ * refusal while other lines are valid.
+ *
+ * `client_reference_id` = cartRef — the reconciliation key the webhook and the
+ * success page use to re-join the cart's entry list, and the `reg_ref` the
+ * order is traced back by.
  */
 
 export async function POST(request: Request) {
-  const body = await request.json().catch(() => null)
-  const cartRef: string | undefined = body?.cartRef
+  const body = (await request.json().catch(() => null)) as {
+    cartRef?: unknown
+    entries?: unknown
+  } | null
 
-  if (!cartRef || typeof cartRef !== "string") {
+  if (!body || typeof body.cartRef !== "string" || !body.cartRef.trim()) {
     return NextResponse.json({ error: "cartRef is required" }, { status: 400 })
   }
+  const cartRef = body.cartRef.trim()
 
   if (!stripe) {
     return NextResponse.json(
@@ -35,7 +52,21 @@ export async function POST(request: Request) {
 
   let cart
   try {
-    cart = await getCart(cartRef)
+    cart = await resolveCartFromEntries({ cartRef, entries: body.entries })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "unknown error"
+    return NextResponse.json({ error: message }, { status: 400 })
+  }
+
+  if (cart.errors.length > 0) {
+    return NextResponse.json(refusalResponse(cart.errors), { status: 409 })
+  }
+
+  // The snapshot rides beside the session, never in metadata: the session
+  // carries the reference (client_reference_id) and the webhook re-joins it.
+  // Written here rather than at validate time so it is the checkout-time cart.
+  try {
+    await saveCart(cart)
   } catch (error) {
     const message = error instanceof Error ? error.message : "unknown error"
     return NextResponse.json(
@@ -43,40 +74,46 @@ export async function POST(request: Request) {
       { status: 503 }
     )
   }
-  if (!cart) {
-    return NextResponse.json(
-      { error: "Cart not found — go back to the cart and build it again" },
-      { status: 404 }
-    )
-  }
+
+  const { metadata, lineMetadata } = buildOrderMetadata(
+    cart.entries,
+    cart.cartRef
+  )
 
   try {
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded_page",
       mode: "payment",
-      line_items: cart.items.map((item) => {
-        const catalogItem = findCatalogItem(item.sku)
-        // Live account (STRIPE_ENV=live): every line item must resolve to a
-        // provisioned Stripe Price (see the catalog ticket + catalog.ts). Fail
-        // loudly instead of falling back to inline price_data — a fallback
-        // would silently mint an ad-hoc price in the live account. Test mode
-        // uses inline price_data because a test key can't reference live
-        // Prices; amounts are always server-side, never client-dictated.
+      line_items: cart.lines.map((line, lineIndex) => {
+        // Quote-time validation already refused an unpriced line in live mode;
+        // this only narrows the type, and fails loudly rather than minting an
+        // ad-hoc price in the live account.
+        if (isLiveStripe && !line.priceId) {
+          throw new Error(
+            `No live Stripe Price id for sku "${line.sku}" — set the product's price in the CMS or fix catalog.ts`
+          )
+        }
+
+        const overflow = lineMetadata[lineIndex]
+        // A >50-line cart carries its tail summaries on the line items instead
+        // of the session/PaymentIntent maps (spec § 8.5).
+        const lineItemMetadata = overflow ? { metadata: overflow } : {}
+
         if (isLiveStripe) {
-          if (!catalogItem?.priceId) {
-            throw new Error(
-              `No live Stripe Price id for sku "${item.sku}" — provision it via scripts/provision-stripe-catalog.mjs or fix catalog.ts`
-            )
+          return {
+            price: line.priceId as string,
+            quantity: line.quantity,
+            ...lineItemMetadata,
           }
-          return { price: catalogItem.priceId, quantity: item.quantity }
         }
         return {
           price_data: {
             currency: cart.currency,
-            product_data: { name: item.label },
-            unit_amount: item.unitAmount,
+            product_data: { name: line.label },
+            unit_amount: line.unitAmount,
           },
-          quantity: item.quantity,
+          quantity: line.quantity,
+          ...lineItemMetadata,
         }
       }),
       // Required for embedded_page; Stripe substitutes {CHECKOUT_SESSION_ID}
@@ -85,9 +122,11 @@ export async function POST(request: Request) {
       return_url: `${getBaseURL()}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       client_reference_id: cart.cartRef,
       customer_creation: "always",
-      // @TODO: the families / reg_N / reg_count / reg_ref metadata lands here at
-      // session build (spec § 8.5) — the cart-level `flow` slug it replaces is
-      // gone.
+      // `families` / `reg_N` / `reg_count` / `reg_ref` ride on both surfaces:
+      // the Session object reaches our webhook, and the PaymentIntent is the
+      // page the Dashboard shows for an individual payment.
+      metadata,
+      payment_intent_data: { metadata },
     })
 
     return NextResponse.json({ clientSecret: session.client_secret })

@@ -1,19 +1,25 @@
 import { NextResponse } from "next/server"
 
-import { createCartFromEntries } from "@/lib/checkout/cart-store"
+import {
+  refusalResponse,
+  resolveCartFromEntries,
+} from "@/lib/checkout/cart-store"
 
 /**
  * POST /api/checkout/cart  { cartRef, entries }
  *
- * The flyout's Checkout action: persists the browser-held cart as the `carts`
- * snapshot the session build reads and `recordOrder` re-joins by
- * `client_reference_id`.
+ * The add-time resolve/validate call: resolves every priced line against
+ * DatoCMS (availability + the effective Stripe Price id) and returns the quoted
+ * unit amounts. **It does not persist** — the `carts` snapshot is written at
+ * session build, so what `recordOrder` re-joins is the checkout-time cart, not
+ * an earlier one (`docs/pdp-to-minicart-to-checkout-spec.md` § 8.1).
  *
- * Amounts stay server-side — entries carry skus and quantities, never prices —
- * and an unknown sku is rejected rather than dropped, so the snapshot can only
- * describe the cart the buyer actually built.
+ * A line that cannot be checked out (sold out, unknown sku, no price) answers
+ * `409` with `errors`, one entry per offending line, carrying the cart entry id
+ * the buyer removes. Lines are never dropped and the whole cart is never
+ * blocked by one bad line.
  *
- * Returns: { cartRef, cart }
+ * Returns: { cartRef, currency, lines, total } | { error, errors }
  */
 
 export async function POST(request: Request) {
@@ -29,12 +35,24 @@ export async function POST(request: Request) {
   }
 
   try {
-    const cart = await createCartFromEntries({
+    const cart = await resolveCartFromEntries({
       cartRef: cartRef.trim(),
       entries: (body as { entries?: unknown }).entries,
     })
-    return NextResponse.json({ cartRef: cart.cartRef, cart })
+
+    if (cart.errors.length > 0) {
+      return NextResponse.json(refusalResponse(cart.errors), { status: 409 })
+    }
+
+    return NextResponse.json({
+      cartRef: cart.cartRef,
+      currency: cart.currency,
+      lines: cart.lines,
+      total: cart.total,
+    })
   } catch (error) {
+    // A structural failure (no priced line, unreadable body, DatoCMS
+    // unreachable) is not a per-line refusal — it is a retryable request error.
     const message = error instanceof Error ? error.message : "unknown error"
     return NextResponse.json({ error: message }, { status: 400 })
   }

@@ -14,11 +14,13 @@ import {
   type PricedLine,
 } from "@/lib/checkout/cart-entries"
 import { formatMoney } from "@/lib/checkout/cart-display"
+import type { CartLineError } from "@/lib/checkout/cart-pricing"
 
 import { useLineThumbnails } from "../../_hooks/use-line-thumbnails"
 import { useCart } from "../../context"
 import CartLineCard from "../cart-line-card"
 import EditPanel from "../edit-panel"
+import RefusedLines from "../refused-lines"
 import s from "./style.module.css"
 
 /**
@@ -34,7 +36,8 @@ import s from "./style.module.css"
  * animates over whatever page is showing.
  */
 export default function MinicartFlyout() {
-  const { model, open, setOpen, entries, cartRef, saveCollector } = useCart()
+  const { model, open, setOpen, entries, cartRef, remove, saveCollector } =
+    useCart()
   const router = useRouter()
 
   const [view, setView] = useState<"cart" | "edit">("cart")
@@ -44,6 +47,9 @@ export default function MinicartFlyout() {
   const [returning, setReturning] = useState(false)
   const [checkingOut, setCheckingOut] = useState(false)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  // Per-line refusals from the validate call — a sold-out line is named and
+  // removable here rather than being silently dropped from the total.
+  const [lineErrors, setLineErrors] = useState<CartLineError[]>([])
   const returnFocusId = useRef<string | null>(null)
 
   // Resolved only while the flyout is open: the resolution reaches Stripe, and
@@ -60,6 +66,7 @@ export default function MinicartFlyout() {
       setEditingId(null)
       setReturning(false)
       setCheckoutError(null)
+      setLineErrors([])
     }
     setOpen(next)
   }
@@ -105,14 +112,18 @@ export default function MinicartFlyout() {
     : undefined
 
   /**
-   * Persists the browser-held cart as the checkout snapshot (`carts.entries`)
-   * and hands off to Stripe. The snapshot is what `recordOrder` re-joins by
-   * `client_reference_id`, so the order can rebuild this cart's provenance and
-   * registrations.
+   * Validates the browser-held cart before handing off to Stripe: the server
+   * resolves every line against DatoCMS and answers a sold-out or unpriced line
+   * with a per-line error, which the buyer clears by removing that line.
+   *
+   * Nothing is persisted here — the `carts` snapshot is written at session
+   * build, so what `recordOrder` re-joins by `client_reference_id` is the
+   * checkout-time cart.
    */
   const checkout = async () => {
     setCheckingOut(true)
     setCheckoutError(null)
+    setLineErrors([])
     try {
       const res = await fetch("/api/checkout/cart", {
         method: "POST",
@@ -122,6 +133,7 @@ export default function MinicartFlyout() {
       const data = await res.json()
       if (!res.ok) {
         setCheckoutError(data.error ?? "Could not start checkout")
+        setLineErrors(Array.isArray(data.errors) ? data.errors : [])
         return
       }
       handleOpenChange(false)
@@ -131,6 +143,14 @@ export default function MinicartFlyout() {
     } finally {
       setCheckingOut(false)
     }
+  }
+
+  /** Removes a refused line (cascading, like any primary) and clears its error. */
+  const removeRefusedLine = (entryId: string) => {
+    remove(entryId)
+    setLineErrors((previous) =>
+      previous.filter((error) => error.entryId !== entryId)
+    )
   }
 
   const empty = model.primaries.length === 0
@@ -206,9 +226,11 @@ export default function MinicartFlyout() {
                   <span>Subtotal</span>
                   <span>{formatMoney(model.subtotal)}</span>
                 </div>
-                {checkoutError && (
-                  <p className={s.checkoutError}>{checkoutError}</p>
-                )}
+                <RefusedLines
+                  message={checkoutError}
+                  errors={lineErrors}
+                  onRemove={removeRefusedLine}
+                />
                 <Button
                   size="large"
                   className={s.checkout}

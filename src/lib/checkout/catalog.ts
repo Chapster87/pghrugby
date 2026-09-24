@@ -26,6 +26,14 @@ export type CatalogItem = {
   unitAmount: number
   /** Live Stripe Price id (provisioned from the live account). */
   priceId?: string
+  /**
+   * The `family` metadata provisioned onto the Stripe product, mirrored here so
+   * the session build can write `metadata.families` without expanding a Price
+   * into its Product (which a test-mode key cannot do — the live Price ids don't
+   * exist in the test account). `docs/agents/stripe-catalog-approval.md` is the
+   * source for both; keep the two in step.
+   */
+  family?: string
 }
 
 export const CHECKOUT_CATALOG = {
@@ -36,18 +44,21 @@ export const CHECKOUT_CATALOG = {
       label: "Fall 2026 Season Dues",
       unitAmount: 25000,
       priceId: "price_1U8sVqJdsCjn0Z6oJHyBTjMy",
+      family: "dues",
     } as CatalogItem,
     spring: {
       sku: "dues-spring",
       label: "Spring Season Dues",
       unitAmount: 20000,
       priceId: "price_1U8sVrJdsCjn0Z6oQAWwnxYK",
+      family: "dues",
     } as CatalogItem,
     summer: {
       sku: "dues-summer",
       label: "Summer Season Dues",
       unitAmount: 10000,
       priceId: "price_1U8sVrJdsCjn0Z6oriStDeNM",
+      family: "dues",
     } as CatalogItem,
   },
   /** Golf outing — registration is one line item × N golfers; add-ons are fixed prices in the same session. */
@@ -57,18 +68,21 @@ export const CHECKOUT_CATALOG = {
       label: "Golf Outing Registration",
       unitAmount: 11000,
       priceId: "price_1U8sVrJdsCjn0Z6ortmo6EeT",
+      family: "golf",
     } as CatalogItem,
     mulligan: {
       sku: "golf-outing-mulligan",
       label: "Golf Outing — Mulligan (4 + contest entry)",
       unitAmount: 3000,
       priceId: "price_1U8sVsJdsCjn0Z6oKSgm4FJK",
+      family: "golf",
     } as CatalogItem,
     drinkBand: {
       sku: "golf-outing-drink-band",
       label: "Golf Outing — All You Can Drink",
       unitAmount: 3000,
       priceId: "price_1U8sVsJdsCjn0Z6o2XD2kc0Q",
+      family: "golf",
     } as CatalogItem,
   },
   /** Tournament divisions — one line item, quantity 1 per team per division. */
@@ -79,42 +93,49 @@ export const CHECKOUT_CATALOG = {
         label: "SC7s Men's Open",
         unitAmount: 40000,
         priceId: "price_1U8sVtJdsCjn0Z6oYrRWlKgw",
+        family: "tournament",
       },
       {
         sku: "sc7s-mens-social",
         label: "SC7s Men's Social",
         unitAmount: 40000,
         priceId: "price_1U8sVtJdsCjn0Z6oY5gGSuSX",
+        family: "tournament",
       },
       {
         sku: "sc7s-mens-super-social",
         label: "SC7s Men's Super Social",
         unitAmount: 40000,
         priceId: "price_1U8sVtJdsCjn0Z6oxmeHyQ78",
+        family: "tournament",
       },
       {
         sku: "sc7s-womens-open",
         label: "SC7s Women's Open",
         unitAmount: 40000,
         priceId: "price_1U8sVuJdsCjn0Z6o04LP4emq",
+        family: "tournament",
       },
       {
         sku: "sc7s-womens-social",
         label: "SC7s Women's Social",
         unitAmount: 40000,
         priceId: "price_1U8sVuJdsCjn0Z6o0n7Bd6xJ",
+        family: "tournament",
       },
       {
         sku: "sc7s-mens-additional-side",
         label: "SC7s Men's Additional Side",
         unitAmount: 37500,
         priceId: "price_1U8sVvJdsCjn0Z6oWBP498re",
+        family: "tournament",
       },
       {
         sku: "sc7s-womens-additional-side",
         label: "SC7s Women's Additional Side",
         unitAmount: 37500,
         priceId: "price_1U8sVvJdsCjn0Z6oKdrWG5XP",
+        family: "tournament",
       },
     ] satisfies CatalogItem[],
   },
@@ -130,24 +151,28 @@ export const CHECKOUT_CATALOG = {
       label: "Club donation — $10",
       unitAmount: 1000,
       priceId: "price_1U8sVvJdsCjn0Z6oaOEq0ddc",
+      family: "donation",
     },
     {
       sku: "donation-club-preset-25",
       label: "Club donation — $25",
       unitAmount: 2500,
       priceId: "price_1U8sVwJdsCjn0Z6oamLaukPr",
+      family: "donation",
     },
     {
       sku: "donation-club-preset-50",
       label: "Club donation — $50",
       unitAmount: 5000,
       priceId: "price_1U8sVwJdsCjn0Z6oKlpr8BCC",
+      family: "donation",
     },
     {
       sku: "donation-pass-the-hat",
       label: "Pass the Hat Fund — $1",
       unitAmount: 100,
       priceId: "price_1U8sVwJdsCjn0Z6o0mwJoMle",
+      family: "donation",
     },
   ] satisfies CatalogItem[],
   /**
@@ -160,36 +185,42 @@ export const CHECKOUT_CATALOG = {
       label: "Forge Day at the Ballpark — Adult",
       unitAmount: 4000,
       priceId: "price_1U8sVxJdsCjn0Z6o14Lb8pU7",
+      family: "events",
     },
     {
       sku: "ballpark-ticket-16-under",
       label: "Forge Day at the Ballpark — 16 & Under",
       unitAmount: 3500,
       priceId: "price_1U8sVxJdsCjn0Z6opcxFjiBL",
+      family: "events",
     },
     {
       sku: "nfl-survivor-pool-ticket",
       label: "NFL Survivor Pool — Ticket",
       unitAmount: 2000,
       priceId: "price_1U8sVxJdsCjn0Z6oWzDUHuiW",
+      family: "events",
     },
     {
       sku: "nfl-survivor-pool-insurance",
       label: "NFL Survivor Pool — Insurance",
       unitAmount: 1000,
       priceId: "price_1U8sVyJdsCjn0Z6oaAnT6j1D",
+      family: "events",
     },
     {
       sku: "steel-city-7s-bar-crawl",
       label: "Steel City 7s Bar Crawl",
       unitAmount: 500,
       priceId: "price_1U8sVyJdsCjn0Z6oz3Atw4A2",
+      family: "events",
     },
     {
       sku: "annual-forge-pig-roast",
       label: "Annual Forge Pig Roast Ticket",
       unitAmount: 2500,
       priceId: "price_1U8sVzJdsCjn0Z6olKK20EeQ",
+      family: "events",
     },
   ] satisfies CatalogItem[],
 } as const

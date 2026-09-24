@@ -106,12 +106,6 @@
   width: 100%;
 }
 
-.checkoutError {
-  margin: 0;
-  font-size: 0.8rem;
-  color: var(--color-danger);
-}
-
 .empty {
   flex: 1;
   display: flex;

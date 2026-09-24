@@ -100,8 +100,9 @@ export function pricedLines(
  * A boundary parser rather than a cast: the cart survives reloads and a round
  * trip through the browser, so a truncated write or a stale shape must degrade
  * to "fewer lines" and never to a crash or a phantom charge. Only the shape is
- * checked here; skus and quantities are validated against the catalog by the
- * server at snapshot time (`buildCartFromEntries`).
+ * checked here; skus and quantities are judged against the catalog and DatoCMS
+ * by the server when it quotes the cart (`resolveCartFromEntries`), which
+ * refuses an unusable line with a per-line error.
  *
  * @param value - The untrusted value.
  * @returns The parsable entries, in order; `[]` when nothing parses.
