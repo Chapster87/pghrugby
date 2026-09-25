@@ -3304,7 +3304,7 @@ input ProductDetailPageModelFilter {
   eventStartsAt: DateTimeFilter
   primaryProducts: LinksFilter
   productType: StringFilter
-  shortDescription: TextFilter
+  shortDescription: StructuredTextFilter
   slug: SlugFilter
   title: StringFilter
   OR: [ProductDetailPageModelFilter]
@@ -3340,6 +3340,13 @@ enum ProductDetailPageModelOrderBy {
   title_DESC
 }
 
+type ProductDetailPageModelShortDescriptionField {
+  blocks: [String!]!
+  inlineBlocks: [String!]!
+  links: [PageRecord!]!
+  value: JsonField!
+}
+
 """Record of type Product Detail Page (product_detail_page)"""
 type ProductDetailPageRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -3368,10 +3375,7 @@ type ProductDetailPageRecord implements RecordInterface {
   id: ItemId!
   primaryProducts: [ProductRecord!]!
   productType: String
-  shortDescription(
-    """Process content as markdown"""
-    markdown: Boolean
-  ): String
+  shortDescription: ProductDetailPageModelShortDescriptionField
   slug: String
   tabs: [ProductTabRecord!]!
   title: String

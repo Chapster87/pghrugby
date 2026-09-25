@@ -103,11 +103,10 @@ additional sides, donation-preset split) but drives nothing at runtime.
 
 Detail: `docs/agents/datocms-pdp-buckets-migration.md`,
 `docs/agents/pdp-product-model.md`, `docs/agents/pdp-pricing-and-sale-windows.md`,
-`docs/agents/donate-pdp-preset-selection.md`. **The buckets, gallery, product-type
-and pricing fields are already applied** — live on the `main` environment (§ 4.5).
-The copy reshape and the tab system are authored but **not promoted**, so § 4.1's
-`short_description` / `event_*` / `tabs`, § 4.3's rename and § 4.7 all describe
-the state once that promotion lands (§ 4.5).
+`docs/agents/donate-pdp-preset-selection.md`. **Every field below is live on the
+`main` environment** (§ 4.5) — the buckets, gallery, product-type and pricing
+fields from the original restructure, then the copy reshape and the tab system,
+then the tagline's move to Structured Text.
 
 ### 4.1 `product_detail_page`
 
@@ -118,7 +117,7 @@ the state once that promotion lands (§ 4.5).
 | Data collectors   | `data_collectors`   | `links` → `data_collector` | Ordered; `fail` cascades                                                                                                                      |
 | Product type      | `product_type`      | `string` enum              | `simple` \| `variation` \| `grouped`; required, default `simple`, `string_select`; hint-only (not schema-enforced)                            |
 | Gallery           | `gallery`           | Modular `rich_text`        | Restricted to `gallery_item_block` (§ 4.2)                                                                                                    |
-| Short description | `short_description` | `text`, optional           | The tagline under the meta line, above the option selector (§ 5.1). The page owns the tagline — the product model keeps no short copy (§ 4.3) |
+| Short description | `short_description` | Structured Text, optional  | The tagline under the meta line, above the option selector (§ 5.1). The page owns the tagline — the product model keeps no short copy (§ 4.3) |
 | Event starts at   | `event_starts_at`   | `date_time`, optional      | The buy box meta line's date (§ 5.1). Blank on anything that is not a scheduled event                                                         |
 | Event location    | `event_location`    | `string`, optional         | The meta line's other half; either half alone still renders the line                                                                          |
 | Tabs              | `tabs`              | Modular `rich_text`        | Ordered panels, restricted to `product_tab` (§ 4.7). Content decides what renders and in what form (§ 5.6)                                    |
@@ -228,15 +227,18 @@ and [Task: Realign golf registration with the cart-line model](https://github.co
   at `max: 3` (remaining players; the captain is player 1).
 - **Credential caveat:** `.env.local`'s `DATOCMS_CMA_TOKEN` cannot write. Live
   record edits required the linked `datocms` CLI with owner OAuth.
-- **Authored but not yet promoted:** the copy reshape and the tab system —
-  `migrations/1790305040_reshapeProductCopyAndAddTabs.ts`, authored for
-  [Task: Reshape product copy and add the authored PDP tab
-  system](https://github.com/Chapster87/pghrugby/issues/120). Until it runs on
-  `main`, the live schema still carries `product.short_description` and
-  `long_description` and the page's `description`, and has no `tabs`, no page
-  `short_description` and neither `event_*` field — so the app query cannot
-  select them, and `pnpm generate-typings` will not produce them, until the
-  promotion regenerates the schema.
+- **Applied 2026-09-25** ([#120](https://github.com/Chapster87/pghrugby/issues/120)):
+  `migrations/1790305040_reshapeProductCopyAndAddTabs.ts` was run on a fork of
+  `main`, verified there, and promoted — the copy reshape and the tab system land
+  together with the app change, because the promote drops fields `trunk` still
+  read. `migrations/1790313304_addRichPageTagline.ts` and
+  `migrations/1790313305_swapPageTaglineToRich.ts` then ran **in place** on the
+  primary (`--allow-primary`): a field's type cannot be changed in DatoCMS, so the
+  tagline's move to Structured Text is create → convert → drop → rename, split so
+  the additive half is separate from the lossy one.
+- **The rollback is the `main-pre-reshape` sandbox**, left in place by the promote:
+  the substrate is forward-only, so a snapshot of the pre-reshape schema and content
+  is the only way back. Do not destroy it casually.
 
 ### 4.6 Orphan event PDPs (the simple case)
 
@@ -298,7 +300,8 @@ so the gallery sits beside the buy box.
      `event_location` (§ 4.1), directly under the title. Rendered only when at
      least one of the two is set, so a page that is not a scheduled event shows
      nothing here
-  3. short description — the page's `short_description` (§ 4.1)
+  3. short description — the page's `short_description`, Structured Text
+     restricted to links and emphasis (§ 4.1), rendered as its own paragraph
   4. "Read the full description" anchor — smooth-scrolls to the panel below the
      fold; a real `#` anchor with a JS enhancement honouring
      `prefers-reduced-motion`, and when the content renders as tabs it also
@@ -362,6 +365,13 @@ panel needs no code and an empty one cannot render.
   empty the panel renders the primary product's `description` (§ 4.3) beneath the
   tab's title. That is what keeps every live PDP showing a description panel
   without the copy being maintained twice.
+- **No authored tabs at all → one implicit Description panel.** A page whose
+  `tabs` is empty and whose primary product carries a `description` renders that
+  copy as a single Description section, titled "Description". Every PDP predates
+  the tab system, and each showed its product copy below the fold before it
+  existed — without this rule, moving the panel set into the CMS would have
+  silently deleted a description from all eight. Authoring any tab takes over:
+  the implicit panel is only what stands in for "nothing authored yet".
 - The full-description anchor (§ 5.1) scrolls here, and selects the Description
   tab when the panels render as tabs.
 

@@ -16,6 +16,11 @@ import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
  * no short copy of its own — the field was dropped when the tagline moved to the
  * page (`docs/pdp-to-minicart-to-checkout-spec.md` § 4.3).
  *
+ * The tagline is Structured Text, restricted to links and emphasis (§ 4.1), so it
+ * is read as a document rather than a string and rendered through
+ * `StructuredText`. It carries no blocks, which is why no block fragment is
+ * spread here.
+ *
  * `tabs` is the authored panel set (§ 4.7), read with the shared block fragment
  * so a panel body can carry the same embeds a page body does. The renderer
  * enumerates this field rather than naming panels of its own (§ 5.6).
@@ -31,7 +36,9 @@ export const productDetailPageQuery = graphql(
       productDetailPage(filter: { slug: { eq: $slug } }) {
         title
         slug
-        shortDescription
+        shortDescription {
+          value
+        }
         eventStartsAt
         eventLocation
         productType

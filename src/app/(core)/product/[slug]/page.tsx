@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
+import { StructuredText } from "react-datocms"
 
 import SidebarLayout from "@/layouts/sidebar"
 import { executeQuery } from "@/lib/datocms/executeQuery"
@@ -73,7 +74,7 @@ export async function generateMetadata({
 
   return {
     title: `${productDetailPage.title} | Pittsburgh Forge Rugby Club`,
-    description: productDetailPage.shortDescription ?? undefined,
+    description: toPlainText(productDetailPage.shortDescription) || undefined,
     alternates: { canonical },
     openGraph: { url: canonical },
   }
@@ -92,6 +93,41 @@ function toPanelKind(value: string | null): PdpPanelKind {
     value === "other"
     ? value
     : "other"
+}
+
+/**
+ * A Structured Text document's text, flattened.
+ *
+ * For the meta description, which must be a plain string. The tagline is one or two
+ * sentences in a single paragraph, so flattening loses no structure worth keeping;
+ * block boundaries become spaces.
+ */
+function toPlainText(document: unknown): string {
+  const parts: string[] = []
+
+  const visit = (node: unknown): void => {
+    if (Array.isArray(node)) {
+      node.forEach(visit)
+      return
+    }
+    if (!node || typeof node !== "object") return
+
+    const record = node as {
+      value?: unknown
+      children?: unknown
+      document?: unknown
+    }
+    if (typeof record.value === "string") {
+      parts.push(record.value)
+      return
+    }
+    if (record.document) visit(record.document)
+    if (record.value && typeof record.value === "object") visit(record.value)
+    if (record.children) visit(record.children)
+  }
+
+  visit(document)
+  return parts.join(" ").replace(/\s+/g, " ").trim()
 }
 
 /** An ISO instant as a club-local date ("October 2, 2026"), or null if unparseable. */
@@ -136,6 +172,11 @@ function toEventMeta(
  * Description tab: with no content of its own it falls back to the primary
  * product's copy, which is what lets the full description stay on the product
  * without being authored twice.
+ *
+ * A page with **no authored tabs at all** gets that fallback as a single implicit
+ * panel. Eight live PDPs predate the tab system entirely, and their product copy
+ * rendered below the fold before it existed — so without this, moving the panel set
+ * into the CMS would silently delete a description from every one of them.
  */
 function toPanels(
   tabs: PdpQuery["tabs"],
@@ -165,6 +206,17 @@ function toPanels(
         content: <p>{fallbackDescription}</p>,
       })
     }
+  }
+
+  if (panels.length === 0 && fallbackDescription) {
+    return [
+      {
+        id: "description-fallback",
+        kind: "description",
+        title: "Description",
+        content: <p>{fallbackDescription}</p>,
+      },
+    ]
   }
 
   return panels
@@ -307,7 +359,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const product: PdpViewModel = {
     slug,
     title: productDetailPage.title ?? slug,
-    shortDescription: productDetailPage.shortDescription,
+    shortDescription: productDetailPage.shortDescription ? (
+      <StructuredText data={productDetailPage.shortDescription} />
+    ) : null,
     event: toEventMeta(
       productDetailPage.eventStartsAt,
       productDetailPage.eventLocation

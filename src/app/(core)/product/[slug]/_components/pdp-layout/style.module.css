@@ -49,6 +49,16 @@
   color: var(--color-grey-800);
 }
 
+/* The tagline is Structured Text and renders its own paragraph, so the wrapper
+   above owns the spacing rather than a bare <p>. */
+.shortDescription p {
+  margin: 0 0 8px;
+}
+
+.shortDescription > :last-child {
+  margin-bottom: 0;
+}
+
 .descriptionLink {
   display: inline-flex;
   align-items: center;

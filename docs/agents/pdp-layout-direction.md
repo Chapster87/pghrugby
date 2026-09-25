@@ -28,7 +28,9 @@ Desktop: two columns above the fold.
   1. Title.
   2. The event meta line — the date and the location, from the page's
      `event_starts_at` / `event_location`. Omitted entirely when neither is set.
-  3. Short description — the page's `short_description`.
+  3. Short description — the page's `short_description`, Structured Text
+     restricted to links and emphasis, so a tagline can point at membership or
+     registration without being able to grow into a document.
   4. "Read the full description" anchor — smooth-scrolls to the panel below the
      fold. A real `#` anchor with a JS enhancement, honouring
      `prefers-reduced-motion`; when the panels render as tabs (§ 5) it also

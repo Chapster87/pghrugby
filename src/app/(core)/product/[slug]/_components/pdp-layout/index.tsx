@@ -114,7 +114,9 @@ export default function PdpLayout({ product }: { product: PdpViewModel }) {
               </p>
             )}
             {product.shortDescription && (
-              <p className={s.shortDescription}>{product.shortDescription}</p>
+              <div className={s.shortDescription}>
+                {product.shortDescription}
+              </div>
             )}
             {descriptionPanel && (
               <a

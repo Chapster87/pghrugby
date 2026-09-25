@@ -83,8 +83,13 @@ export type PdpEventMeta = {
 export type PdpViewModel = {
   slug: string
   title: string
-  /** The page's tagline, shown under the title. */
-  shortDescription: string | null
+  /**
+   * The page's tagline, shown under the title.
+   *
+   * Rendered on the server rather than passed as CMS data: it is Structured Text
+   * (§ 4.1), and only the tab strip and buy box need to be interactive.
+   */
+  shortDescription: ReactNode | null
   /** The buy box's date / location line, or `null` when neither is set. */
   event: PdpEventMeta | null
   productType: PdpProductType
