@@ -4,9 +4,15 @@ import { useCallback, useState } from "react"
 
 import type { CollectorField } from "@/lib/checkout/cart-entries"
 
+import {
+  applyQuantityChange,
+  planQuantityChange,
+  rowsOf,
+  type CollectorAnswers,
+} from "./rows"
+
 /**
- * The DataCollector form's state — the field values, the validation rules, and
- * the `quantity → rows` coupling.
+ * The DataCollector form's state — the field values and the validation rules.
  *
  * Shared by the PDP's add-time collector form and the flyout's edit panel, so
  * an add and a later edit enforce exactly the same rules
@@ -14,36 +20,16 @@ import type { CollectorField } from "@/lib/checkout/cart-entries"
  *
  * Answers are keyed by field name, matching `CollectorEntry.answers`: a scalar
  * is a string, a repeatable is a string array.
+ *
+ * The `quantity → rows` rules are **not** here: they are plain functions in
+ * `./rows.ts`, so the PDP, the edit panel, and the scripted round-trip share one
+ * implementation. This hook owns the state and delegates to them.
  */
 
-/** A DataCollector payload, keyed by field name. */
-export type CollectorAnswers = Record<string, string | string[]>
+export type { CollectorAnswers }
 
 /** Per-field validation messages, keyed by field name. */
 export type CollectorErrors = Record<string, string>
-
-/**
- * How many repeatable rows a registration of this quantity collects.
- *
- * `quantity → rows` (cart-line model § 4): the line's quantity **is** the
- * number of registrations. The collector's first person is captured by a
- * non-repeatable field (golf's captain is player 1), so the repeatable field
- * collects the remaining ones — `quantity - 1`, capped by the field's `max`.
- *
- * The floor of one row is deliberate and is the one place this departs from a
- * literal mirror: at `quantity === 1` the remaining count is zero, yet a
- * required repeatable field with no row at all could never be filled, and the
- * club's rule is that a people/quantity mismatch warns and never blocks. One
- * empty row is always allowed.
- *
- * @param quantity - The registration line's quantity.
- * @param max - The repeatable field's cap from its add-time snapshot.
- * @returns The row count to render.
- */
-export function registrationRowCount(quantity: number, max?: number): number {
-  const remaining = Math.max(1, Math.floor(quantity || 1) - 1)
-  return max && max > 0 ? Math.min(remaining, max) : remaining
-}
 
 /** Seeds the form from a field snapshot and optional existing answers. */
 function initialValues(
@@ -64,12 +50,6 @@ function initialValues(
     }
   }
   return values
-}
-
-/** The repeatable rows currently held for a field. */
-function rowsOf(values: CollectorAnswers, name: string): string[] {
-  const raw = values[name]
-  return Array.isArray(raw) ? raw : [""]
 }
 
 /**
@@ -119,25 +99,6 @@ export function useCollectorForm(
     })
   }, [])
 
-  /** Resizes every repeatable field to a target row count, keeping values. */
-  const setRowCount = useCallback(
-    (count: number) => {
-      setValues((prev) => {
-        const next = { ...prev }
-        for (const field of fields) {
-          if (!field.repeatable) continue
-          const target = Math.max(1, count)
-          const rows = [...rowsOf(prev, field.name)]
-          while (rows.length < target) rows.push("")
-          rows.length = target
-          next[field.name] = rows
-        }
-        return next
-      })
-    },
-    [fields]
-  )
-
   /**
    * Plans a quantity change against the repeatable rows without committing it,
    * so a caller can warn before discarding a named row.
@@ -146,21 +107,7 @@ export function useCollectorForm(
    * @returns The target row count and the named rows the change would drop.
    */
   const planQuantity = useCallback(
-    (quantity: number) => {
-      const rowCounts = fields
-        .filter((field) => field.repeatable)
-        .map((field) => registrationRowCount(quantity, field.max))
-      const target = Math.max(1, ...rowCounts)
-      const dropped: string[] = []
-      for (const field of fields) {
-        if (!field.repeatable) continue
-        const rows = rowsOf(values, field.name)
-        dropped.push(
-          ...rows.slice(target).filter((row) => row.trim().length > 0)
-        )
-      }
-      return { rowCount: target, dropped }
-    },
+    (quantity: number) => planQuantityChange(fields, values, quantity),
     [fields, values]
   )
 
@@ -172,11 +119,11 @@ export function useCollectorForm(
    */
   const applyQuantity = useCallback(
     (quantity: number) => {
-      const { rowCount, dropped } = planQuantity(quantity)
-      setRowCount(rowCount)
-      return dropped
+      const plan = applyQuantityChange(fields, values, quantity)
+      setValues(plan.values)
+      return plan.dropped
     },
-    [planQuantity, setRowCount]
+    [fields, values]
   )
 
   /**

@@ -22,7 +22,8 @@
     "supabase:inspect-forgecms": "node --env-file=.env.local scripts/inspect-forgecms.mjs",
     "order-storage:round-trip": "node --env-file=.env.local --import tsx scripts/order-storage-round-trip.ts",
     "cart:round-trip": "node --import tsx scripts/cart-mutations-round-trip.ts",
-    "checkout:round-trip": "node --import tsx scripts/checkout-pricing-round-trip.ts"
+    "checkout:round-trip": "node --import tsx scripts/checkout-pricing-round-trip.ts",
+    "registration:round-trip": "node --import tsx scripts/registration-round-trip.ts"
   },
   "dependencies": {
     "@datocms/cda-client": "^0.2.10",
