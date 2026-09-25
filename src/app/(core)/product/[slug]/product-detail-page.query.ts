@@ -22,7 +22,10 @@ import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
  * spread here.
  *
  * `tabs` is the authored panel set (§ 4.7), read with the shared block fragment
- * so a panel body can carry the same embeds a page body does. The renderer
+ * so a panel body can carry the same embeds a page body does. Two blocks are
+ * allowed on the field — `tab`, a generic panel, and `tab_desc`, the Description
+ * panel — which makes it a **union**, so each is selected through its own inline
+ * fragment and discriminated by `__typename` in `page.tsx`. The renderer
  * enumerates this field rather than naming panels of its own (§ 5.6).
  *
  * The pricing fields are read but not used here: the *amount* of a sale Price
@@ -49,13 +52,25 @@ export const productDetailPageQuery = graphql(
           mobileMedia
         }
         tabs {
-          id
-          tab
-          title
-          content {
-            value
-            blocks {
-              ...BlocksFragment
+          __typename
+          ... on TabRecord {
+            id
+            title
+            content {
+              value
+              blocks {
+                ...BlocksFragment
+              }
+            }
+          }
+          ... on TabDescRecord {
+            id
+            title
+            content {
+              value
+              blocks {
+                ...BlocksFragment
+              }
             }
           }
         }

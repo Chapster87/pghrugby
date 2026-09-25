@@ -33,8 +33,8 @@ Desktop: two columns above the fold.
      registration without being able to grow into a document.
   4. "Read the full description" anchor — smooth-scrolls to the panel below the
      fold. A real `#` anchor with a JS enhancement, honouring
-     `prefers-reduced-motion`; when the panels render as tabs (§ 5) it also
-     selects the Description tab.
+     `prefers-reduced-motion`; it also selects the Description panel (§ 5) before
+     it scrolls.
   5. Option selector (§ 3).
   6. Add-ons (§ 4).
   7. DataCollector — **in the buy box, above the add-to-cart** (§ 7).
@@ -66,30 +66,43 @@ never hidden.
 
 Below the fold, the panel set is **authored** — one panel per content, never a
 plain long-description block and never a panel with nothing in it. The page's
-`tabs` field holds one `product_tab` block per panel, each carrying its own title
-and its own structured content, so this is the club's choice of titles rather
-than a set fixed here:
+`tabs` field holds one block per panel, each carrying its own title and its own
+structured content, so this is the club's choice of titles rather than a set
+fixed here.
 
-- **Description** — the long copy. Left unauthored, this panel falls back to the
-  primary product's `description`, so a PDP keeps a description without the copy
-  being maintained twice.
-- **Includes** — a bulleted list.
-- **Good to know** — practical notes.
-- **Other** — whatever else the club wants.
+Two blocks are allowed on the field, and the type is the whole of what separates
+them:
 
-Content decides the form as well as the set: nothing populated renders nothing;
-one populated panel renders as a plain section with its heading (one panel needs
-no control of its own); two or more render through the `@components/tabs`
-wrapper. Spec: `docs/pdp-to-minicart-to-checkout-spec.md` § 5.6.
+- **`tab_desc`** — the Description panel, and the only block the render reasons
+  about. With none authored the panel is supplied from the primary product's
+  `description`, so a PDP keeps a description without the copy being maintained
+  twice. Authoring one replaces that default at the position it was dragged to,
+  which is how the description is retitled or moved below another panel.
+- **`tab`** — every other panel. The titles are the club's: "Includes", "Good to
+  know" and anything else are all a `tab` carrying that title.
+
+`title` and `content` are required on both, so an empty panel cannot be authored.
+Content decides the form on top of that: a page with no product copy and no
+`tab_desc` renders no Description panel, and a page with no panels renders no
+strip. Otherwise the set renders through the `@components/tabs` wrapper at **any
+panel count** — a lone panel is a one-tab strip, not a plain section, because the
+Description panel means the set is essentially never empty. Spec:
+`docs/pdp-to-minicart-to-checkout-spec.md` § 5.6.
 
 Implementation note: the prototype used Radix Tabs inline. **Amended 2026-09-24**
 ([#120](https://github.com/Chapster87/pghrugby/issues/120)): an earlier
 amendment — a content-driven rule with **no** page fields behind it, which left
 the panel set unbuildable and the § 2 meta line with no source — is replaced. The
-fields now exist (`tabs` / `product_tab`, plus `event_starts_at` /
-`event_location`), so the wrapper is built for real rather than deferred. That
-earlier amendment was [#117](https://github.com/Chapster87/pghrugby/issues/117),
-superseded by #120.
+fields now exist (`tabs` plus `event_starts_at` / `event_location`), so the
+wrapper is built for real rather than deferred. That earlier amendment was
+[#117](https://github.com/Chapster87/pghrugby/issues/117), superseded by #120.
+
+**Superseded in place 2026-09-25** ([#120](https://github.com/Chapster87/pghrugby/issues/120)):
+the single `product_tab` block and its `tab` enum are gone. The owner split it
+into `tab` / `tab_desc` — the type now carries the meaning the enum did — and
+dropped the plain-section rule above, so a lone panel is a one-tab strip. The
+render walks the authored order, placing the implicit Description panel first
+only while nothing authored claims that position.
 
 ## 6. Quantity control
 

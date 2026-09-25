@@ -22,7 +22,6 @@ import type {
   PdpEventMeta,
   PdpLine,
   PdpPanel,
-  PdpPanelKind,
   PdpPhoto,
   PdpProductType,
   PdpViewModel,
@@ -83,16 +82,6 @@ export async function generateMetadata({
 /** The page's `product_type`, narrowed to the three the buy box renders. */
 function toProductType(value: string | null): PdpProductType {
   return value === "variation" || value === "grouped" ? value : "simple"
-}
-
-/** A `product_tab`'s `tab`, narrowed. An unrecognised value files as `other`. */
-function toPanelKind(value: string | null): PdpPanelKind {
-  return value === "description" ||
-    value === "includes" ||
-    value === "goodToKnow" ||
-    value === "other"
-    ? value
-    : "other"
 }
 
 /**
@@ -168,55 +157,59 @@ function toEventMeta(
  *
  * The renderer enumerates the `tabs` field rather than naming panels of its own,
  * so a panel with nothing to show is never built and adding one needs no code
- * (`docs/pdp-to-minicart-to-checkout-spec.md` § 5.6). The one exception is the
- * Description tab: with no content of its own it falls back to the primary
- * product's copy, which is what lets the full description stay on the product
- * without being authored twice.
+ * (`docs/pdp-to-minicart-to-checkout-spec.md` § 5.6). Two blocks are allowed on
+ * the field, and the block's type is the whole of what differs between them: a
+ * `tab_desc` is the Description panel, a `tab` is anything else.
  *
- * A page with **no authored tabs at all** gets that fallback as a single implicit
- * panel. Eight live PDPs predate the tab system entirely, and their product copy
- * rendered below the fold before it existed — so without this, moving the panel set
- * into the CMS would silently delete a description from every one of them.
+ * **The Description panel is the one a page need not author.** With no `tab_desc`
+ * present the primary product's `description` renders as an implicit panel titled
+ * "Description", first in the set — which is what keeps the copy on the product
+ * instead of being maintained twice. An authored `tab_desc` replaces that default
+ * outright, at whatever position the editor dragged it to: the order is the
+ * field's order, and the implicit panel is only what stands in for "nothing
+ * authored yet".
  */
 function toPanels(
   tabs: PdpQuery["tabs"],
   fallbackDescription: string | null
 ): PdpPanel[] {
   const panels: PdpPanel[] = []
+  let hasDescriptionPanel = false
 
   for (const tab of tabs) {
-    const kind = toPanelKind(tab.tab)
-    const title = tab.title ?? ""
+    const isDescription = tab.__typename === "TabDescRecord"
+    if (isDescription) hasDescriptionPanel = true
 
     if (tab.content) {
       panels.push({
         id: tab.id,
-        kind,
-        title,
+        kind: isDescription ? "description" : "other",
+        title: tab.title ?? "",
         content: <PdpPanelContent content={tab.content} />,
       })
       continue
     }
 
-    if (kind === "description" && fallbackDescription) {
+    // `content` is required on both blocks, so this is a draft or a record that
+    // predates the requirement. A Description panel still has the product's copy
+    // to show; anything else has nothing, and a panel with nothing does not render.
+    if (isDescription && fallbackDescription) {
       panels.push({
         id: tab.id,
-        kind,
-        title,
+        kind: "description",
+        title: tab.title ?? "Description",
         content: <p>{fallbackDescription}</p>,
       })
     }
   }
 
-  if (panels.length === 0 && fallbackDescription) {
-    return [
-      {
-        id: "description-fallback",
-        kind: "description",
-        title: "Description",
-        content: <p>{fallbackDescription}</p>,
-      },
-    ]
+  if (!hasDescriptionPanel && fallbackDescription) {
+    panels.unshift({
+      id: "description-implicit",
+      kind: "description",
+      title: "Description",
+      content: <p>{fallbackDescription}</p>,
+    })
   }
 
   return panels

@@ -43,13 +43,16 @@ export type PdpLine = {
 export type PdpProductType = "simple" | "variation" | "grouped"
 
 /**
- * A `product_tab` block's `tab` value, narrowed to the four the enum allows.
+ * What a panel is — all the render needs to know about its block.
  *
- * Only `description` changes behaviour: it is the panel whose body falls back to
- * the primary product's copy when the block carries none of its own
- * (`docs/pdp-to-minicart-to-checkout-spec.md` § 5.6).
+ * The block's *type* carries it now: a `tab_desc` is the Description panel and
+ * every `tab` is `other`. The enum that once held `includes` and `goodToKnow`
+ * beside `description` was dropped, because `title` already says everything the
+ * reader sees (`docs/pdp-to-minicart-to-checkout-spec.md` § 4.7). The consumer is
+ * the full-description anchor in `pdp-layout`, which selects this panel before it
+ * scrolls.
  */
-export type PdpPanelKind = "description" | "includes" | "goodToKnow" | "other"
+export type PdpPanelKind = "description" | "other"
 
 /**
  * One below-fold panel, already rendered.
@@ -59,10 +62,17 @@ export type PdpPanelKind = "description" | "includes" | "goodToKnow" | "other"
  * switch the page bodies use — and only the tab strip is interactive.
  */
 export type PdpPanel = {
-  /** The block's record id, which is also the tabs wrapper's `value`. */
+  /**
+   * The block's record id, which is also the tabs wrapper's `value` — or a
+   * synthetic id for the implicit Description panel, which has no block behind it.
+   */
   id: string
   kind: PdpPanelKind
-  /** The block's `title`, which is the section heading or the tab's label. */
+  /**
+   * The block's `title`, which is the tab's label. Required on both blocks, so
+   * the only panel whose label is set here rather than in the CMS is the
+   * implicit Description panel.
+   */
   title: string
   /** The rendered body. A panel is only built when it has something to show. */
   content: ReactNode

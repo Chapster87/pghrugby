@@ -13,8 +13,8 @@ import s from "./style.module.css"
  * which tab is active.
  *
  * Whether a tab strip is warranted at all is the caller's rule, not this
- * component's. The PDP renders a single populated panel as a plain section with
- * its heading and reaches for this only at two or more
+ * component's — though the PDP now reaches for it at any panel count, one
+ * included, because its Description panel is always present
  * (`docs/pdp-to-minicart-to-checkout-spec.md` § 5.6).
  */
 

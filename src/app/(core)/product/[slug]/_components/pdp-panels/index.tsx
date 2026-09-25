@@ -8,7 +8,7 @@ import { fileFieldFragment } from "@fragments/blocks"
 
 import type { productDetailPageQuery } from "../../product-detail-page.query"
 
-/** One `product_tab`'s Structured Text document, as the query reads it. */
+/** One panel block's Structured Text document, as the query reads it. */
 type TabContent = NonNullable<
   ResultOf<typeof productDetailPageQuery>["productDetailPage"]
 >["tabs"][number]["content"]

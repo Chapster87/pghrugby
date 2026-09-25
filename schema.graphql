@@ -3347,6 +3347,8 @@ type ProductDetailPageModelShortDescriptionField {
   value: JsonField!
 }
 
+union ProductDetailPageModelTabsField = TabDescRecord | TabRecord
+
 """Record of type Product Detail Page (product_detail_page)"""
 type ProductDetailPageRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -3377,7 +3379,7 @@ type ProductDetailPageRecord implements RecordInterface {
   productType: String
   shortDescription: ProductDetailPageModelShortDescriptionField
   slug: String
-  tabs: [ProductTabRecord!]!
+  tabs: [ProductDetailPageModelTabsField!]!
   title: String
 }
 
@@ -3473,41 +3475,6 @@ type ProductRecord implements RecordInterface {
   salePriceId: String
   saleStartsAt: DateTime
   sku: String
-  title: String
-}
-
-union ProductTabModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
-
-type ProductTabModelContentField {
-  blocks: [ProductTabModelContentBlocksField!]!
-  inlineBlocks: [String!]!
-  links: [PageRecord!]!
-  value: JsonField!
-}
-
-"""Block of type Product Tab (product_tab)"""
-type ProductTabRecord implements RecordInterface {
-  _createdAt: DateTime!
-
-  """Editing URL"""
-  _editingUrl: String
-  _firstPublishedAt: DateTime!
-  _isValid: BooleanType!
-  _modelApiKey: String!
-  _publicationScheduledAt: DateTime
-  _publishedAt: DateTime!
-
-  """Generates SEO and Social card meta tags to be used in your frontend"""
-  _seoMetaTags(
-    """The locale to use to fetch the field's content"""
-    locale: SiteLocale
-  ): [Tag!]!
-  _status: ItemStatus!
-  _unpublishingScheduledAt: DateTime
-  _updatedAt: DateTime!
-  content: ProductTabModelContentField
-  id: ItemId!
-  tab: String
   title: String
 }
 
@@ -4317,6 +4284,74 @@ input StructuredTextFilter {
   Filter records with the specified field defined (i.e. with any value) or not [DEPRECATED]
   """
   exists: BooleanType
+}
+
+union TabDescModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+
+type TabDescModelContentField {
+  blocks: [TabDescModelContentBlocksField!]!
+  inlineBlocks: [String!]!
+  links: [PageRecord!]!
+  value: JsonField!
+}
+
+"""Block of type Description tab (tab_desc)"""
+type TabDescRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  content: TabDescModelContentField
+  id: ItemId!
+  title: String
+}
+
+union TabModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+
+type TabModelContentField {
+  blocks: [TabModelContentBlocksField!]!
+  inlineBlocks: [String!]!
+  links: [PageRecord!]!
+  value: JsonField!
+}
+
+"""Block of type Content tab (tab)"""
+type TabRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  content: TabModelContentField
+  id: ItemId!
+  title: String
 }
 
 type Tag {

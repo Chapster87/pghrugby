@@ -47,8 +47,9 @@ export default function PdpLayout({ product }: { product: PdpViewModel }) {
   const { addToCart } = useCart()
   const panelsRef = useRef<HTMLDivElement>(null)
 
-  // Which panels exist is authored, so the description tab is looked up rather
-  // than assumed — a page need not have one (§ 5.6).
+  // The Description panel is looked up rather than assumed: an authored `tab_desc`
+  // supplies one, and the implicit panel only exists when the product has copy to
+  // fall back on (§ 5.6).
   const descriptionPanel = product.panels.find(
     (panel) => panel.kind === "description"
   )
@@ -255,27 +256,25 @@ export default function PdpLayout({ product }: { product: PdpViewModel }) {
 
       {product.panels.length > 0 && (
         <div ref={panelsRef} id="pdp-panels" className={s.panels}>
-          {product.panels.length === 1 ? (
-            <section>
-              <h2 className={s.sectionTitle}>{product.panels[0].title}</h2>
-              <div className={s.panelBody}>{product.panels[0].content}</div>
-            </section>
-          ) : (
-            <Tabs.Root value={activePanel} onValueChange={setActivePanel}>
-              <Tabs.List aria-label="Product details">
-                {product.panels.map((panel) => (
-                  <Tabs.Trigger key={panel.id} value={panel.id}>
-                    {panel.title}
-                  </Tabs.Trigger>
-                ))}
-              </Tabs.List>
+          {/*
+            Always the tab strip, even for a single panel. The Description panel
+            gives every PDP that has copy at least one, so a strip is the only
+            shape the set takes (§ 5.6).
+          */}
+          <Tabs.Root value={activePanel} onValueChange={setActivePanel}>
+            <Tabs.List aria-label="Product details">
               {product.panels.map((panel) => (
-                <Tabs.Content key={panel.id} value={panel.id}>
-                  <div className={s.panelBody}>{panel.content}</div>
-                </Tabs.Content>
+                <Tabs.Trigger key={panel.id} value={panel.id}>
+                  {panel.title}
+                </Tabs.Trigger>
               ))}
-            </Tabs.Root>
-          )}
+            </Tabs.List>
+            {product.panels.map((panel) => (
+              <Tabs.Content key={panel.id} value={panel.id}>
+                <div className={s.panelBody}>{panel.content}</div>
+              </Tabs.Content>
+            ))}
+          </Tabs.Root>
         </div>
       )}
     </div>
