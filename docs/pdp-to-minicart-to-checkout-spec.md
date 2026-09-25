@@ -91,7 +91,7 @@ one-shot form gone there is no fallback for them.
 | `src/app/(checkout)/checkout/success/page.tsx`                            | Renders `order.registration` via `RegistrationDetails`                                                                                                                                             | Renders registration rows grouped by their line (§ 9.4)                                                                                                                                                  |
 | `supabase/migrations/`                                                    | `orders` with `flow` / `line_items` / `registration`; `carts` with `flow` / `line_items` / `registration`                                                                                          | Header + child tables, `carts.entries`; legacy columns dropped, no backfill (§ 9.5)                                                                                                                      |
 | `scripts/provision-stripe-catalog.mjs`                                    | Products + prices only                                                                                                                                                                             | Also provisions the SC7s per-count coupons + `EXTRASIDE` promotion code (§ 8.3)                                                                                                                          |
-| `src/components/`                                                         | `button`, `dialog`, `select`, `checkbox`, `radio-group`, `quantity-selector`, …                                                                                                                    | Adds a `tabs` wrapper, a Sheet/Drawer wrapper, and a cart-line card (§ 5.8)                                                                                                                              |
+| `src/components/`                                                         | `button`, `dialog`, `select`, `checkbox`, `radio-group`, `quantity-selector`, …                                                                                                                    | Adds a Sheet/Drawer wrapper and a cart-line card (§ 5.8)                                                                                                                                                 |
 
 `src/lib/checkout/storefront-catalog.json` is a migration/backfill guide, not
 runtime config — it is not imported by `src/`. It needs reconciling (retired
@@ -224,16 +224,15 @@ so the gallery sits beside the buy box.
   the mobile/desktop variant and branch image vs video (§ 4.2).
 - **Right column** — the buy box, in order:
   1. title
-  2. date / location meta line
-  3. short description
-  4. "Read the full description" anchor — smooth-scrolls to the tabbed section
-     and returns it to the Description tab; a real `#` anchor with a JS
-     enhancement honouring `prefers-reduced-motion`
-  5. option selector (§ 5.2)
-  6. add-ons (§ 5.3)
-  7. DataCollector (above the add-to-cart, § 5.4)
-  8. running total
-  9. **one** add-to-cart button
+  2. short description
+  3. "Read the full description" anchor — smooth-scrolls to the description panel
+     below the fold; a real `#` anchor with a JS enhancement honouring
+     `prefers-reduced-motion`
+  4. option selector (§ 5.2)
+  5. add-ons (§ 5.3)
+  6. DataCollector (above the add-to-cart, § 5.4)
+  7. running total
+  8. **one** add-to-cart button
 
 ### 5.2 Option selector (per `product_type`)
 
@@ -270,8 +269,11 @@ server-side (§ 8.2) — the flag is not editorial-only.
 
 ### 5.6 Bottom panel
 
-Below the fold, a single Radix Tabs panel (not a long block): **Description**
-(default) / **Includes** / **Good to know**.
+Below the fold, one panel per content — never a long block, and never a panel
+with nothing in it. A panel renders **only when the CMS supplies content for
+it**: Description (the primary product's `longDescription`) is the only one with
+a source, so every live PDP renders that panel alone, as a section with its
+heading. Adding a panel is a content decision before it is a render one (§ 13).
 
 ### 5.7 Quantity control
 
@@ -285,9 +287,8 @@ props spread.
 
 Prefer Radix primitives, wrapped **once** as global components. Already present:
 `button`, `dialog`, `select`, `checkbox`, `radio-group`, `quantity-selector`.
-To add: a **`tabs`** wrapper, a **Sheet/Drawer** wrapper around `@components/dialog`,
-and a **cart-line card** component (shared by the flyout, the future `/cart`, and
-order summaries).
+To add: a **Sheet/Drawer** wrapper around `@components/dialog`, and a **cart-line
+card** component (shared by the flyout, the future `/cart`, and order summaries).
 
 ### 5.9 Add-to-cart handoff
 
@@ -707,14 +708,14 @@ prototypes do not belong in it.
 3. **Checkout API** — `POST /api/checkout/cart` resolve/validate;
    `POST /api/checkout/sessions` price + availability + coupon + metadata +
    snapshot write.
-4. **Global components** — `tabs` wrapper, Sheet/Drawer wrapper, cart-line card,
+4. **Global components** — Sheet/Drawer wrapper, cart-line card,
    `QuantitySelector` restyle.
 5. **Cart store (client)** — React context + `localStorage`, `cartRef`, entry
    mutations, merge/cascade rules.
 6. **Minicart flyout** — shell, grouped cards, edit panel, header trigger,
    `/cart` alias.
 7. **PDP render** — gallery, option selector per type, add-ons, DataCollector
-   (`quantity → rows`), availability, bottom tabs, add-to-cart handoff.
+   (`quantity → rows`), availability, bottom panel, add-to-cart handoff.
 8. **SC7s pricing** — coupon/promotion-code provisioning and the session step.
 9. **Donate** — preset records, standalone any-amount field + sole-line session.
 10. **Success page** — registration rows grouped by line.
@@ -765,3 +766,7 @@ build from, and nothing here forecloses them:
 - **Funnel analytics** (add-to-cart → cart-open → checkout-start).
 - **Donate any-amount surfacing** — the owner foresees replacing the in-page
   standalone CTA with a link below the dropdown to its own page.
+- **The PDP's panel set beyond Description** — Includes and Good to know have no
+  field on `product_detail_page`, so the panels and the copy in them are a
+  content decision before they are a render one (§ 5.6 renders only the panels
+  that have content).

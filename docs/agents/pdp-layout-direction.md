@@ -26,16 +26,15 @@ Desktop: two columns above the fold.
     stay visually small while remaining tappable.
 - **Right column** — the buy box, in this order:
   1. Title.
-  2. Date / location meta line.
-  3. Short description.
-  4. "Read the full description" anchor — smooth-scrolls to the tabbed section
-     below and returns it to the Description tab. A real `#` anchor with a JS
-     enhancement, honouring `prefers-reduced-motion`.
-  5. Option selector (§ 3).
-  6. Add-ons (§ 4).
-  7. DataCollector — **in the buy box, above the add-to-cart** (§ 7).
-  8. Running total.
-  9. **One** add-to-cart button.
+  2. Short description.
+  3. "Read the full description" anchor — smooth-scrolls to the description panel
+     below the fold. A real `#` anchor with a JS enhancement, honouring
+     `prefers-reduced-motion`.
+  4. Option selector (§ 3).
+  5. Add-ons (§ 4).
+  6. DataCollector — **in the buy box, above the add-to-cart** (§ 7).
+  7. Running total.
+  8. **One** add-to-cart button.
 
 Mobile: single column, gallery above the buy box.
 
@@ -60,17 +59,26 @@ never hidden.
 
 ## 5. Bottom area
 
-Below the fold is a single **tabbed panel** (Radix Tabs) rather than a plain
-long-description block, so more product data can be added without lengthening
-the page:
+Below the fold is a single panel, not a plain long-description block, so more
+product data can be added without lengthening the page:
 
-- **Description** — the long copy (default tab).
+- **Description** — the long copy (the primary product's `longDescription`).
 - **Includes** — a bulleted list.
 - **Good to know** — practical notes.
 
-Implementation note: the prototype used Radix Tabs inline. The real PDP should
-use a single global wrapper component (`@components/tabs`), per the map Notes on
-wrapping Radix primitives once so controls stay repeatable and restylable.
+A panel renders **only when the CMS has content for it**; a panel with none is
+not rendered at all. Description is the only panel with a source, so every live
+PDP renders it alone, as a section with its heading — one panel needs no control
+of its own.
+
+Implementation note: the prototype used Radix Tabs inline. **Amended
+2026-09-24** ([#117](https://github.com/Chapster87/pghrugby/issues/117)): the
+fixed tab set is dropped in favour of the content-driven rule above, because
+`product_detail_page` has no field for **Includes** or **Good to know** — nor for
+the date / location meta line § 2 once asked for. Should the club want those
+panels, the field comes first and a global wrapper (`@components/tabs`, once more
+than one panel has content) follows it; recorded as deferred in
+`docs/pdp-to-minicart-to-checkout-spec.md` § 13.
 
 ## 6. Quantity control
 
