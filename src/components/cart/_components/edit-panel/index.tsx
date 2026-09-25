@@ -47,11 +47,15 @@ export default function EditPanel({
   const panelRef = useRef<HTMLDivElement>(null)
 
   // Focus lands on the first field so the journey round-trips without a mouse;
-  // the flyout returns focus to the Edit control on the way back.
+  // the flyout returns focus to the Edit control on the way back. The panel's
+  // first control in document order is the header's Back button, so fields are
+  // asked for first and a panel with no fields falls back to it.
   useEffect(() => {
-    const first = panelRef.current?.querySelector<HTMLElement>(
-      "input, select, textarea, button"
-    )
+    const panel = panelRef.current
+    if (!panel) return
+    const first =
+      panel.querySelector<HTMLElement>("input, select, textarea") ??
+      panel.querySelector<HTMLElement>("button")
     first?.focus()
   }, [])
 
