@@ -163,15 +163,28 @@ Mirrors `page.featured_image`.
 **Copy reshape** ([#120](https://github.com/Chapster87/pghrugby/issues/120),
 2026-09-24). The product model holds **one** copy field. `description` is
 `long_description` renamed, so its values come across untouched;
-`short_description` is **dropped**. The drop is the considered part: the field
-was populated per _variant_ — one line per Steel City 7s division, one per dues
+`short_description` is **dropped**. The drop is the considered part: the field was
+populated per _variant_ — one line per Steel City 7s division, one per dues
 season — while the page's replacement is a single string, so there was no
 faithful destination for it. What it uniquely carried is already on the row: the
 catalog `label` names the variant, and the line's price is rendered beside it.
-The tagline now lives on the page, as `short_description` (§ 4.1). Two
-alternatives were rejected: keeping the field with an honest product-level name
-(`option_note`), which contradicts "one copy field on `product`"; and hoisting
-six divisions' worth of strings into one page string.
+
+**Verified against the live CDA** (2026-09-24, before the migration was run). 11
+of 20 products carry short copy: the three dues seasons, the five live SC7s
+divisions, the two retired additional sides, and two records that are legacy
+migration fallout — `golf-outing-registration` (a PayPal-outage notice) and
+`donation-club` (a donation appeal with a pasted PayPal button script inside it).
+Both currently render as the line's `note`, so broken JavaScript and a wall of
+text reach the DOM on the golf and donate PDPs today; dropping the field ends
+that. Whether the _notice_ in them is still operationally wanted is a content
+question, recorded on #120 — it is not an argument for keeping the field.
+
+The tagline is a **move, not authoring**: all eight PDPs already carry good
+flow-level intro copy in the page's `description`, which becomes
+`short_description` unchanged. Two alternatives to the drop were rejected: keeping
+the field under an honest product-level name (`option_note`), which contradicts
+"one copy field on `product`"; and hoisting six divisions' worth of strings into
+one page string.
 
 **Price resolution** (server-side, at cart build and at session creation; read on
 the PDP for display):
