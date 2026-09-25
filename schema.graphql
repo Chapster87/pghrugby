@@ -3300,9 +3300,11 @@ input ProductDetailPageModelFilter {
   _isValid: BooleanFilter
   addonProducts: LinksFilter
   dataCollectors: LinksFilter
-  description: TextFilter
+  eventLocation: StringFilter
+  eventStartsAt: DateTimeFilter
   primaryProducts: LinksFilter
   productType: StringFilter
+  shortDescription: TextFilter
   slug: SlugFilter
   title: StringFilter
   OR: [ProductDetailPageModelFilter]
@@ -3328,6 +3330,10 @@ enum ProductDetailPageModelOrderBy {
   _updatedAt_DESC
   _isValid_ASC
   _isValid_DESC
+  eventLocation_ASC
+  eventLocation_DESC
+  eventStartsAt_ASC
+  eventStartsAt_DESC
   productType_ASC
   productType_DESC
   title_ASC
@@ -3356,15 +3362,18 @@ type ProductDetailPageRecord implements RecordInterface {
   _updatedAt: DateTime!
   addonProducts: [ProductRecord!]!
   dataCollectors: [DataCollectorRecord!]!
-  description(
-    """Process content as markdown"""
-    markdown: Boolean
-  ): String
+  eventLocation: String
+  eventStartsAt: DateTime
   gallery: [GalleryItemBlockRecord!]!
   id: ItemId!
   primaryProducts: [ProductRecord!]!
   productType: String
+  shortDescription(
+    """Process content as markdown"""
+    markdown: Boolean
+  ): String
   slug: String
+  tabs: [ProductTabRecord!]!
   title: String
 }
 
@@ -3378,14 +3387,13 @@ input ProductModelFilter {
   _status: StatusFilter
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
+  description: TextFilter
   inStock: BooleanFilter
-  longDescription: TextFilter
   priceId: StringFilter
   quantityBearing: BooleanFilter
   saleEndsAt: DateTimeFilter
   salePriceId: StringFilter
   saleStartsAt: DateTimeFilter
-  shortDescription: TextFilter
   sku: StringFilter
   title: StringFilter
   OR: [ProductModelFilter]
@@ -3449,22 +3457,53 @@ type ProductRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
-  id: ItemId!
-  inStock: BooleanType!
-  longDescription(
+  description(
     """Process content as markdown"""
     markdown: Boolean
   ): String
+  id: ItemId!
+  inStock: BooleanType!
   priceId: String
   quantityBearing: BooleanType!
   saleEndsAt: DateTime
   salePriceId: String
   saleStartsAt: DateTime
-  shortDescription(
-    """Process content as markdown"""
-    markdown: Boolean
-  ): String
   sku: String
+  title: String
+}
+
+union ProductTabModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+
+type ProductTabModelContentField {
+  blocks: [ProductTabModelContentBlocksField!]!
+  inlineBlocks: [String!]!
+  links: [PageRecord!]!
+  value: JsonField!
+}
+
+"""Block of type Product Tab (product_tab)"""
+type ProductTabRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  content: ProductTabModelContentField
+  id: ItemId!
+  tab: String
   title: String
 }
 

@@ -31,9 +31,40 @@ import { Client } from "datocms/lib/cma-client-node"
  * (`docs/agents/datocms-pdp-buckets-migration.md` § 4).
  */
 
-// Fixed ids on the Forge Website project (docs/agents/datocms-pdp-buckets-migration.md § 1).
-const PDP_MODEL_ID = "InXj3XuhRNSp5BIsjepR_A"
-const PRODUCT_MODEL_ID = "LACQ-eAJQjSi9bWWrgdUQ"
+/**
+ * This migration's two models, resolved by api_key rather than hardcoded.
+ *
+ * The api_key is the stable identifier. Item type ids are per-project trivia, and
+ * the set recorded in `docs/agents/datocms-pdp-buckets-migration.md` § 1 is not
+ * trustworthy — the `product` id there is missing a character and 404s, which is
+ * how this migration failed its first sandbox run. Resolving instead also keeps it
+ * runnable against a sandbox, which is where it is verified before it is promoted.
+ *
+ * Assigned by `resolveModels` as the entry point's first act, before any of the
+ * functions below read them.
+ */
+let PDP_MODEL_ID = ""
+let PRODUCT_MODEL_ID = ""
+
+/** A model id by api_key, or a loud failure — never a 404 part-way through a run. */
+async function requireItemType(
+  client: Client,
+  apiKey: string
+): Promise<string> {
+  const id = await itemTypeId(client, apiKey)
+  if (!id) {
+    throw new Error(
+      `[reshape-pdp-copy] model "${apiKey}" not found in this environment`
+    )
+  }
+  return id
+}
+
+/** Resolve the two models this migration writes to. Called once, at the top. */
+async function resolveModels(client: Client): Promise<void> {
+  PDP_MODEL_ID = await requireItemType(client, "product_detail_page")
+  PRODUCT_MODEL_ID = await requireItemType(client, "product")
+}
 
 /**
  * The structured-text embed models `product_tab.content` accepts — the same set
@@ -406,6 +437,8 @@ async function addPageFields(
 export default async function reshapeProductCopyAndAddTabs(
   client: Client
 ): Promise<void> {
+  await resolveModels(client)
+
   await renameProductDescription(client)
   await createPageShortDescription(client)
   await dropPageDescription(client)
