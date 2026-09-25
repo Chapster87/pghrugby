@@ -1,0 +1,52 @@
+/* The tabs wrapper: a strip of labels over its panels. Styling only — the
+   behaviour (roving focus, arrow keys, `aria-selected`) is Radix's. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 1px solid var(--color-grey-300);
+}
+
+.trigger {
+  appearance: none;
+  margin-bottom: -1px;
+  padding: 8px 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--color-grey-600);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-grey-900);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-gold-800);
+    outline-offset: 2px;
+  }
+
+  &[data-state="active"] {
+    border-bottom-color: var(--color-gold-800);
+    color: var(--color-grey-900);
+  }
+}
+
+.content {
+  padding-top: 16px;
+
+  /* Radix moves focus to the panel so keyboard users land in the content; the
+     focus is worth having, the outline on a full-width panel is not. */
+  &:focus-visible {
+    outline: none;
+  }
+}

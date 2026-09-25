@@ -16,11 +16,6 @@
   font-weight: 600;
 }
 
-.lineNote {
-  font-size: 0.8rem;
-  color: var(--color-grey-600);
-}
-
 .lineEnd {
   display: flex;
   align-items: center;

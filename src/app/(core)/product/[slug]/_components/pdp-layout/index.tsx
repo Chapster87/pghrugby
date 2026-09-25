@@ -1,10 +1,11 @@
 "use client"
 
-import { useRef, type MouseEvent } from "react"
+import { useRef, useState, type MouseEvent } from "react"
 
 import { useCart } from "@/components/cart"
 import Button from "@components/button"
 import CollectorFields from "@components/collector-form"
+import Tabs from "@components/tabs"
 import { formatMoney } from "@/lib/checkout/cart-display"
 import type { CartAddGroup } from "@/lib/checkout/cart-mutations"
 
@@ -23,12 +24,19 @@ import s from "./style.module.css"
  * The PDP — gallery beside the buy box, the chosen "side-by-side" direction
  * (`docs/agents/pdp-layout-direction.md`).
  *
- * The buy box orders itself per the decision: title, intro, the full-description
- * anchor, the option selector for the page's `product_type`, add-ons, the
- * DataCollector, the running total, and **one** add-to-cart. "Add to cart"
- * commits a fully specified group — the primary line(s), their add-on lines, and
- * one collector entry carrying the answers plus a field snapshot — and opens the
- * flyout (`docs/pdp-to-minicart-to-checkout-spec.md` § 5.9).
+ * The buy box orders itself per the decision: the title, the event meta line (when
+ * the page sets one), the tagline, the full-description anchor, the option
+ * selector for the page's `product_type`, the add-ons, the DataCollector, the
+ * running total, and **one** add-to-cart. "Add to cart" commits a fully specified
+ * group — the primary line(s), their add-on lines, and one collector entry
+ * carrying the answers plus a field snapshot — and opens the flyout
+ * (`docs/pdp-to-minicart-to-checkout-spec.md` § 5.9).
+ *
+ * Below the fold the panel set is authored, so this renders what the CMS supplied
+ * rather than a fixed shape: one populated panel is a plain section with its
+ * heading, two or more go through the tabs wrapper, and nothing is populated means
+ * nothing renders at all (§ 5.6). The panel bodies arrive already rendered, which
+ * is why this component never touches CMS content.
  *
  * A client component because the whole buy box is interactive; every price and
  * product fact arrives resolved in the view model, so neither a content nor a
@@ -37,14 +45,25 @@ import s from "./style.module.css"
 export default function PdpLayout({ product }: { product: PdpViewModel }) {
   const sel = usePdpSelection(product)
   const { addToCart } = useCart()
-  const descriptionRef = useRef<HTMLDivElement>(null)
+  const panelsRef = useRef<HTMLDivElement>(null)
 
-  const goToDescription = (event: MouseEvent<HTMLAnchorElement>) => {
+  // Which panels exist is authored, so the description tab is looked up rather
+  // than assumed — a page need not have one (§ 5.6).
+  const descriptionPanel = product.panels.find(
+    (panel) => panel.kind === "description"
+  )
+  const [activePanel, setActivePanel] = useState(product.panels[0]?.id ?? "")
+
+  const goToPanels = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
+    // Selecting the Description tab before scrolling is what makes the anchor
+    // land on the copy it promises, whichever tab happened to be open.
+    if (descriptionPanel) setActivePanel(descriptionPanel.id)
+
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches
-    descriptionRef.current?.scrollIntoView({
+    panelsRef.current?.scrollIntoView({
       behavior: reduceMotion ? "auto" : "smooth",
       block: "start",
     })
@@ -87,14 +106,21 @@ export default function PdpLayout({ product }: { product: PdpViewModel }) {
         <div className={s.buyBox}>
           <header className={s.buyHead}>
             <h1 className={s.title}>{product.title}</h1>
+            {product.event && (
+              <p className={s.eventMeta}>
+                {[product.event.date, product.event.location]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
+            )}
             {product.shortDescription && (
               <p className={s.shortDescription}>{product.shortDescription}</p>
             )}
-            {product.longDescription && (
+            {descriptionPanel && (
               <a
-                href="#pdp-full-description"
+                href="#pdp-panels"
                 className={s.descriptionLink}
-                onClick={goToDescription}
+                onClick={goToPanels}
               >
                 Read the full description
                 <span aria-hidden className={s.descriptionLinkArrow}>
@@ -225,14 +251,29 @@ export default function PdpLayout({ product }: { product: PdpViewModel }) {
         </div>
       </div>
 
-      {product.longDescription && (
-        <div
-          ref={descriptionRef}
-          id="pdp-full-description"
-          className={s.descriptionAnchor}
-        >
-          <h2 className={s.sectionTitle}>Description</h2>
-          <p className={s.description}>{product.longDescription}</p>
+      {product.panels.length > 0 && (
+        <div ref={panelsRef} id="pdp-panels" className={s.panels}>
+          {product.panels.length === 1 ? (
+            <section>
+              <h2 className={s.sectionTitle}>{product.panels[0].title}</h2>
+              <div className={s.panelBody}>{product.panels[0].content}</div>
+            </section>
+          ) : (
+            <Tabs.Root value={activePanel} onValueChange={setActivePanel}>
+              <Tabs.List aria-label="Product details">
+                {product.panels.map((panel) => (
+                  <Tabs.Trigger key={panel.id} value={panel.id}>
+                    {panel.title}
+                  </Tabs.Trigger>
+                ))}
+              </Tabs.List>
+              {product.panels.map((panel) => (
+                <Tabs.Content key={panel.id} value={panel.id}>
+                  <div className={s.panelBody}>{panel.content}</div>
+                </Tabs.Content>
+              ))}
+            </Tabs.Root>
+          )}
         </div>
       )}
     </div>

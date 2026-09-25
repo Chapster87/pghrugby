@@ -73,8 +73,8 @@ export function QuantityStepper({
 }
 
 /**
- * The price card for a single-primary page (`product_type: simple`): the line,
- * its name and note, its price, and a stepper only when it is quantity-bearing.
+ * The price card for a single-primary page (`product_type: simple`): the line, its
+ * name, its price, and a stepper only when it is quantity-bearing.
  */
 export function SinglePrimaryLine({
   line,
@@ -89,7 +89,6 @@ export function SinglePrimaryLine({
     <div className={clsx(s.singlePrimary, !line.inStock && s.lineDisabled)}>
       <div className={s.lineText}>
         <span className={s.lineName}>{line.label}</span>
-        {line.note && <span className={s.lineNote}>{line.note}</span>}
       </div>
       <div className={s.lineEnd}>
         {line.inStock ? <LinePrice line={line} /> : <SoldOutBadge />}
@@ -192,7 +191,6 @@ export function GroupedPrimaries({
               </Checkbox.Root>
               <span className={s.lineText}>
                 <span className={s.lineName}>{line.label}</span>
-                {line.note && <span className={s.lineNote}>{line.note}</span>}
               </span>
             </Checkbox.Label>
             <div className={s.lineEnd}>
@@ -241,7 +239,6 @@ export function AddonRow({
         </Checkbox.Root>
         <span className={s.lineText}>
           <span className={s.lineName}>{line.label}</span>
-          {line.note && <span className={s.lineNote}>{line.note}</span>}
         </span>
       </Checkbox.Label>
       <div className={s.lineEnd}>

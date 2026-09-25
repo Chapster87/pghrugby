@@ -16,8 +16,12 @@ import type { CloudinaryImage } from "@/types/datocms"
 import { getBaseURL } from "@/lib/util/env"
 
 import PdpLayout from "./_components/pdp-layout"
+import PdpPanelContent from "./_components/pdp-panels"
 import type {
+  PdpEventMeta,
   PdpLine,
+  PdpPanel,
+  PdpPanelKind,
   PdpPhoto,
   PdpProductType,
   PdpViewModel,
@@ -69,7 +73,7 @@ export async function generateMetadata({
 
   return {
     title: `${productDetailPage.title} | Pittsburgh Forge Rugby Club`,
-    description: productDetailPage.description ?? undefined,
+    description: productDetailPage.shortDescription ?? undefined,
     alternates: { canonical },
     openGraph: { url: canonical },
   }
@@ -78,6 +82,92 @@ export async function generateMetadata({
 /** The page's `product_type`, narrowed to the three the buy box renders. */
 function toProductType(value: string | null): PdpProductType {
   return value === "variation" || value === "grouped" ? value : "simple"
+}
+
+/** A `product_tab`'s `tab`, narrowed. An unrecognised value files as `other`. */
+function toPanelKind(value: string | null): PdpPanelKind {
+  return value === "description" ||
+    value === "includes" ||
+    value === "goodToKnow" ||
+    value === "other"
+    ? value
+    : "other"
+}
+
+/** An ISO instant as a club-local date ("October 2, 2026"), or null if unparseable. */
+function formatClubDate(value: string): string | null {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return null
+
+  return date.toLocaleDateString("en-US", {
+    // A `date_time` is an absolute instant, so it is pinned to the club's zone
+    // rather than rendered in whatever zone the server happens to run in.
+    timeZone: "America/New_York",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  })
+}
+
+/**
+ * The buy box's date / location line, or null when the page sets neither half.
+ *
+ * Resolved here rather than in the layout because the layout is a client
+ * component: a date formatted on both sides hydrates mismatched as soon as the
+ * browser's locale or timezone differs from the server's
+ * (`_data/types.ts` `PdpEventMeta`).
+ */
+function toEventMeta(
+  startsAt: string | null,
+  location: string | null
+): PdpEventMeta | null {
+  const date = startsAt ? formatClubDate(startsAt) : null
+  if (!date && !location) return null
+
+  return { date, location }
+}
+
+/**
+ * The authored panel set, rendered and filtered.
+ *
+ * The renderer enumerates the `tabs` field rather than naming panels of its own,
+ * so a panel with nothing to show is never built and adding one needs no code
+ * (`docs/pdp-to-minicart-to-checkout-spec.md` § 5.6). The one exception is the
+ * Description tab: with no content of its own it falls back to the primary
+ * product's copy, which is what lets the full description stay on the product
+ * without being authored twice.
+ */
+function toPanels(
+  tabs: PdpQuery["tabs"],
+  fallbackDescription: string | null
+): PdpPanel[] {
+  const panels: PdpPanel[] = []
+
+  for (const tab of tabs) {
+    const kind = toPanelKind(tab.tab)
+    const title = tab.title ?? ""
+
+    if (tab.content) {
+      panels.push({
+        id: tab.id,
+        kind,
+        title,
+        content: <PdpPanelContent content={tab.content} />,
+      })
+      continue
+    }
+
+    if (kind === "description" && fallbackDescription) {
+      panels.push({
+        id: tab.id,
+        kind,
+        title,
+        content: <p>{fallbackDescription}</p>,
+      })
+    }
+  }
+
+  return panels
 }
 
 /** A DataCollector's `options` text (one per line) as a select's option list. */
@@ -130,7 +220,6 @@ function toLines(product: PdpQuery["primaryProducts"][number]): PdpLine[] {
   return items.map((item) => ({
     sku: item.sku,
     label: item.label,
-    note: product.shortDescription || null,
     unitAmount: item.unitAmount,
     compareAtAmount: null,
     quantityBearing: product.quantityBearing ?? false,
@@ -218,13 +307,19 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const product: PdpViewModel = {
     slug,
     title: productDetailPage.title ?? slug,
-    shortDescription: productDetailPage.description,
-    longDescription:
-      productDetailPage.primaryProducts[0]?.longDescription ?? null,
+    shortDescription: productDetailPage.shortDescription,
+    event: toEventMeta(
+      productDetailPage.eventStartsAt,
+      productDetailPage.eventLocation
+    ),
     productType: toProductType(productDetailPage.productType),
     photos,
     primaries: primaryLines.map(withDisplay),
     addons: addonLines.map(withDisplay),
+    panels: toPanels(
+      productDetailPage.tabs,
+      productDetailPage.primaryProducts[0]?.description ?? null
+    ),
     collectorRef: collector?.id ?? "",
     fields: toFields(collector),
   }

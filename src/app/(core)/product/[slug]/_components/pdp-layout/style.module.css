@@ -1,5 +1,5 @@
-/* The PDP layout: gallery beside the buy box above the fold, the full
-   description below. */
+/* The PDP layout: gallery beside the buy box above the fold, the authored panel
+   set below. */
 
 .pdp {
   display: flex;
@@ -32,6 +32,14 @@
   margin: 0;
   font-size: 1.75rem;
   line-height: 1.15;
+}
+
+/* The event's date / location line, under the title. The two halves arrive
+   pre-joined from the view model. */
+.eventMeta {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  color: var(--color-grey-600);
 }
 
 .shortDescription {
@@ -131,7 +139,7 @@
   font-weight: 700;
 }
 
-.descriptionAnchor {
+.panels {
   scroll-margin-top: 96px;
   margin-top: 40px;
 }
@@ -141,10 +149,19 @@
   font-size: 1.25rem;
 }
 
-.description {
-  margin: 0;
+.panelBody {
   max-width: 72ch;
   font-size: 1rem;
   line-height: 1.6;
   color: var(--color-grey-800);
+}
+
+/* A panel body is Structured Text, or the product-copy fallback in a single
+   paragraph, so its rhythm is set here rather than inherited from a page body. */
+.panelBody p {
+  margin: 0 0 12px;
+}
+
+.panelBody > :last-child {
+  margin-bottom: 0;
 }
