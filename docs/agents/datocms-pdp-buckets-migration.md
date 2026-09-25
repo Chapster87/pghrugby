@@ -208,6 +208,14 @@ flag for the first pass.
 
 ### 4. Migration mechanics — `datocms` CLI migration, forked sandbox first
 
+> **Superseded 2026-09-25.** The fork-first requirement below no longer applies.
+> The owner's preference is a single DatoCMS environment, so migrations run
+> **in place on `main`** and creating, promoting or destroying an environment needs
+> explicit approval — see `AGENTS.md` → "DatoCMS runs in a single environment".
+> What still holds from this section is the shape of a migration, not where it
+> runs: the split into reviewable files, and the guards inside each one, are what
+> make a destructive step safe now that there is no sandbox.
+
 **Decision: land this as `datocms` CLI migrations, in two timestamped files.**
 
 1. `…_pdp-add-buckets-and-gallery` — create `primary_products`,

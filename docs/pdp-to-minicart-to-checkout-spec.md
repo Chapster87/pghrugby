@@ -236,9 +236,11 @@ and [Task: Realign golf registration with the cart-line model](https://github.co
   primary (`--allow-primary`): a field's type cannot be changed in DatoCMS, so the
   tagline's move to Structured Text is create → convert → drop → rename, split so
   the additive half is separate from the lossy one.
-- **The rollback is the `main-pre-reshape` sandbox**, left in place by the promote:
-  the substrate is forward-only, so a snapshot of the pre-reshape schema and content
-  is the only way back. Do not destroy it casually.
+- **There is no environment rollback.** The promote left a `main-pre-reshape`
+  sandbox holding the pre-reshape schema and content; the owner had it destroyed
+  once `main` was confirmed current (2026-09-25), returning the project to a single
+  environment per `AGENTS.md`. The substrate is forward-only, so a schema mistake
+  from here is corrected forward, in a new migration — not restored.
 
 ### 4.6 Orphan event PDPs (the simple case)
 

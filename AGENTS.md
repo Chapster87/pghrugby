@@ -25,6 +25,25 @@ and custom field types (e.g. `standings_table`) live in the instance's
 Instance operations — the generator pin, update ritual, and what survives an
 update — are recorded in `docs/agents/forgecms-instance-operations.md`.
 
+### DatoCMS runs in a single environment
+
+This site's DatoCMS project has **exactly one environment, `main`**. Work in it.
+
+**Never create, fork, promote or destroy a DatoCMS environment without the
+owner's explicit approval.** A fork is a schema-level copy of the entire project,
+and the owner's stated preference is to work in a single environment — so the
+fork-first migration ritual recorded in
+`docs/agents/datocms-pdp-buckets-migration.md` § 4 is **superseded** by this rule.
+
+Two operational consequences:
+
+- `datocms migrations:run` **forks by default**. Pass `--in-place --allow-primary`
+  to run against `main`, or you will create an environment without meaning to.
+- A sandbox is not what makes a destructive migration safe — the migration's own
+  guards are. A step that drops or renames a populated field must refuse to act
+  until the data is confirmed present somewhere else, because a run that fails
+  part-way through the primary has no rollback.
+
 ## Coding conventions
 
 - **Node is pinned by `.nvmrc`** to **`24`**, the Active LTS. Run `nvm use` before
