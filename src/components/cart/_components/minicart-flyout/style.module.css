@@ -102,6 +102,57 @@
   font-weight: 700;
 }
 
+/* The promotion-code field: label, an input with an Apply button on its right,
+   and a note once a code is stored. */
+.promo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.promoLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-grey-700);
+}
+
+.promoRow {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.promoInput {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--color-grey-400);
+  border-radius: 4px;
+  /* Explicit colour + light scheme: next-themes drives `color-scheme: dark`, so
+     without these the native field renders white text on a white background. */
+  background-color: var(--color-white);
+  color: var(--color-grey-900);
+  color-scheme: light;
+  font-size: 0.95rem;
+  line-height: 1.5;
+
+  &::placeholder {
+    color: var(--color-grey-600);
+  }
+
+  &:focus,
+  &:focus-visible {
+    border-color: var(--color-gold);
+    outline: 1px solid var(--color-gold);
+  }
+}
+
+.promoNote {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-grey-600);
+}
+
 .checkout {
   width: 100%;
 }

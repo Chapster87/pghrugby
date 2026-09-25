@@ -81,6 +81,7 @@ Stripe's catalog rule: _a separate product per distinct option a customer choose
 - **Products**: one per division — `sc7s-mens-open`, `sc7s-mens-social`, `sc7s-mens-super-social`, `sc7s-womens-open`, `sc7s-womens-social`. The two additional-side products (`sc7s-mens-additional-side`, `sc7s-womens-additional-side`) are **retired**: the additional side is now a Stripe coupon/promotion-code discount, not a buyable product — see `docs/agents/sc7s-additional-side-pricing.md`.
 - **Prices**: one one-time price per division per event year. Live basis: `$350` entry / `$325` second side, `+$50` after the deadline (`$400`/`$375`). Which rate is live in Stripe at any time is an operational call (new price + archive old at the deadline).
 - **Flow**: same registration pattern as golf — one line item, quantity 1 per team per division, team payload beside the session.
+- **Additional-side coupons**: one per extra team — `sc7s-extra-1` … `sc7s-extra-5`, a flat `amount_off` of `$25 × extras`, each `applies_to` the five division products, with `EXTRASIDE` as the promotion code on `sc7s-extra-1`. The session build applies at most one of them (`discounts` accepts one coupon or promotion code); detail in `docs/agents/sc7s-additional-side-pricing.md`.
 
 ### 2.5 Donations (one-time) — exists (minimally); extend
 

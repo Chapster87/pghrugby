@@ -67,7 +67,9 @@ execution note.
 1. Apply the Supabase reshape (`carts.entries`; the orders header plus
    `order_lines` / `order_registrations`; `orders.flow` → `families`).
 2. Retire the `sc7s-*-additional-side` Stripe products in the same window (per
-   `sc7s-additional-side-pricing.md`).
+   `sc7s-additional-side-pricing.md`) — **done 2026-09-25**: both are archived,
+   and `catalog.ts` stopped listing them in
+   [#86](https://github.com/Chapster87/pghrugby/issues/86).
 3. Deploy the new flow.
 
 **Gate:** a manual end-to-end pass on a preview deploy — a real *mixed* cart

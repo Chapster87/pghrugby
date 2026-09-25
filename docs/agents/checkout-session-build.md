@@ -194,15 +194,19 @@ Registration x4: Jane Smith, John Doe"`. Names are every answered field of the
 
 ## 7. Not in this slice
 
-- **The SC7s additional-side coupon** (spec § 8.3) — the per-count coupons, the
-  `EXTRASIDE` promotion code, the `provision-stripe-catalog.mjs` extension, and
-  the retirement of the `sc7s-*-additional-side` products. This ticket builds no
-  `discounts`.
 - **Donation `submit_type`** (spec § 8.4) — `'pay'` vs `'donate'`, and the
   standalone pay-what-you-want session.
-- **The catalog clean-ups** spec § 3 lists as target state:
-  `findCatalogItemsForProduct`'s prefix fallback and the two additional-side
-  items. They belong with the coupon work above, not here.
+- **`findCatalogItemsForProduct`'s prefix fallback** (spec § 3 target state) — the
+  two additional-side items went with the coupon work below, but the fallback
+  still serves the donate PDP's variant skus, so removing it is its own change.
+
+**Built since:** the SC7s additional-side coupon (spec § 8.3) was the other
+item deferred here — it landed 2026-09-25 for
+[#86](https://github.com/Chapster87/pghrugby/issues/86): the per-count coupons,
+the `EXTRASIDE` promotion code, the `provision-stripe-catalog.mjs` extension, and
+the retirement of the two `sc7s-*-additional-side` products. The session now
+carries **one** `discounts` entry. Detail:
+`docs/agents/sc7s-additional-side-pricing.md` § Implementation.
 
 ## 8. Verification
 

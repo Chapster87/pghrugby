@@ -88,20 +88,6 @@
       "kind": "primary"
     },
     {
-      "sku": "sc7s-mens-additional-side",
-      "label": "SC7s Men's Additional Side",
-      "wcSlug": "sc7s-mens-additional-side",
-      "pdp": "steel-city-7s",
-      "kind": "addon"
-    },
-    {
-      "sku": "sc7s-womens-additional-side",
-      "label": "SC7s Women's Additional Side",
-      "wcSlug": "sc7s-womens-additional-side",
-      "pdp": "steel-city-7s",
-      "kind": "addon"
-    },
-    {
       "sku": "donation-club",
       "label": "Club Donation",
       "wcSlug": "club-donation",

@@ -33,10 +33,16 @@ export type CartState = {
   cartRef: string
   /** The cart's flat entry list, in add order. */
   entries: CartEntry[]
+  /**
+   * The promotion code the buyer entered in the flyout, if any. Display state
+   * only — the session build resolves it against Stripe and decides whether it
+   * applies (`src/lib/checkout/sc7s-discount.ts`).
+   */
+  promotionCode: string
 }
 
 /** The server + hydration snapshot: always an empty cart. */
-const EMPTY: CartState = { cartRef: "", entries: [] }
+const EMPTY: CartState = { cartRef: "", entries: [], promotionCode: "" }
 
 let state: CartState | null = null
 const listeners = new Set<() => void>()
@@ -58,18 +64,23 @@ function readStorage(): CartState {
       const parsed = JSON.parse(raw) as {
         cartRef?: unknown
         entries?: unknown
+        promotionCode?: unknown
       }
       if (typeof parsed?.cartRef === "string" && parsed.cartRef) {
         return {
           cartRef: parsed.cartRef,
           entries: parseCartEntries(parsed.entries),
+          promotionCode:
+            typeof parsed.promotionCode === "string"
+              ? parsed.promotionCode
+              : "",
         }
       }
     }
   } catch {
     // Unavailable or corrupt storage: start clean.
   }
-  return { cartRef: newCartRef(), entries: [] }
+  return { cartRef: newCartRef(), entries: [], promotionCode: "" }
 }
 
 /** The current cart; the browser's stored cart on its first client read. */
@@ -147,5 +158,13 @@ export const cartStore = {
       ...prev,
       entries: saveCollectorEntry(prev.entries, collectorId, answers, quantity),
     }))
+  },
+
+  /**
+   * Writes the buyer-entered promotion code (trimmed); an empty string clears
+   * it. Never validated here — the session build is the authority.
+   */
+  setPromotionCode(code: string): void {
+    commit((prev) => ({ ...prev, promotionCode: code.trim() }))
   },
 }

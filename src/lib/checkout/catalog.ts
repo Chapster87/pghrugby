@@ -14,7 +14,9 @@
  *
  * Amounts are the smallest currency unit (cents for USD). Rates were confirmed
  * by the club in the approval doc (dues $250/$200/$100 by season, SC7s $400
- * entry / $375 additional side, golf $110/$30/$30, event tickets per WP).
+ * entry, golf $110/$30/$30, event tickets per WP). The SC7s additional side is
+ * no longer a product: it is a per-count coupon over these divisions
+ * (`sc7s-discount.ts`, `docs/agents/sc7s-additional-side-pricing.md`).
  */
 export const CHECKOUT_CURRENCY = "usd"
 
@@ -85,7 +87,11 @@ export const CHECKOUT_CATALOG = {
       family: "golf",
     } as CatalogItem,
   },
-  /** Tournament divisions — one line item, quantity 1 per team per division. */
+  /**
+   * Tournament divisions — one line item, quantity 1 per team per division. The
+   * additional side is not a product here: it is a coupon over these divisions
+   * (`sc7s-discount.ts`).
+   */
   tournament: {
     divisions: [
       {
@@ -121,20 +127,6 @@ export const CHECKOUT_CATALOG = {
         label: "SC7s Women's Social",
         unitAmount: 40000,
         priceId: "price_1U8sVuJdsCjn0Z6o0n7Bd6xJ",
-        family: "tournament",
-      },
-      {
-        sku: "sc7s-mens-additional-side",
-        label: "SC7s Men's Additional Side",
-        unitAmount: 37500,
-        priceId: "price_1U8sVvJdsCjn0Z6oWBP498re",
-        family: "tournament",
-      },
-      {
-        sku: "sc7s-womens-additional-side",
-        label: "SC7s Women's Additional Side",
-        unitAmount: 37500,
-        priceId: "price_1U8sVvJdsCjn0Z6oKdrWG5XP",
         family: "tournament",
       },
     ] satisfies CatalogItem[],

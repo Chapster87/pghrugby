@@ -19,6 +19,8 @@ export type CartContextValue = {
   cartRef: string
   /** The cart's flat entry list, in add order. */
   entries: CartEntry[]
+  /** The buyer-entered promotion code, applied at the session build. */
+  promotionCode: string
   /** The derived views every surface renders against. */
   model: CartModel
   /** Whether the flyout is open. */
@@ -33,6 +35,8 @@ export type CartContextValue = {
   addToCart: (group: CartAddGroup, sourcePdp: string) => void
   setQuantity: (id: string, quantity: number) => void
   remove: (id: string) => void
+  /** Writes the buyer-entered promotion code; an empty string clears it. */
+  setPromotionCode: (code: string) => void
   /** Writes a registration's answers and its primary line's quantity together. */
   saveCollector: (
     collectorId: string,

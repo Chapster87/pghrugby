@@ -63,6 +63,60 @@ promotion codes**, not a buyable product. It is **gender-neutral** — "2 teams 
   The coupon count follows whatever that ticket decides (this doc assumes one
   registration per line, per map Foundation 2).
 
+## Implementation (2026-09-25)
+
+Built for
+[SC7s additional-side coupon and promotion code](https://github.com/Chapster87/pghrugby/issues/86).
+
+- **The ladder** lives in `src/lib/checkout/sc7s-discount.ts` as
+  `SC7S_EXTRA_COUPON_IDS` — `sc7s-extra-1` … `sc7s-extra-5`, `$25 × extras`,
+  capped at `SC7S_MAX_EXTRA_TEAMS = 5` (beyond the cap the largest rung applies).
+  The selection is pure and proves itself offline in
+  `pnpm sc7s-discount:round-trip`.
+- **Provisioned** by extending `scripts/provision-stripe-catalog.mjs`: the coupon
+  blocks in `docs/agents/stripe-catalog-approval.md`, each a flat `amount_off`
+  whose `applies_to` is **derived** from the checked `family=tournament` products
+  (so a division added there is covered without editing the coupon section), plus
+  `EXTRASIDE` as the promotion code on `sc7s-extra-1`. The script creates and
+  never retires; the two retired products were archived by hand.
+  - **A current-API detail** the "Verified constraints" section above predates:
+    `POST /v1/promotion_codes` now takes the coupon **nested** as
+    `promotion: { type: "coupon", coupon }`. The old flat `coupon` param is gone
+    and fails with `parameter_unknown`. The Checkout Session's
+    `discounts[].coupon` / `discounts[].promotion_code` are unchanged, so the
+    session route is unaffected.
+- **Teams are counted in units, not lines.** This doc's decision says
+  "registration lines", but a division line's quantity _is_ teams: two adds are
+  two quantity-1 lines (a registration line never merges), while a
+  quantity-bearing line carries its teams in its quantity. Counting units covers
+  both shapes and reads the same for the two-add cart the criteria describe.
+- **A code applies to a one-team cart only**, and the rule lives once, as
+  `canUsePromotionCode` — the route, the flyout's note and `selectDiscount` all
+  ask the same function, because three callers disagreeing about it is exactly
+  how a code ends up refusing a session it has no bearing on. The coupon is
+  restricted to the division products, so a cart with no SC7s team has nothing
+  for the code to discount, and one that qualifies (2+ teams) takes the automatic
+  coupon instead — so the two can never stack and Stripe's one-code-per-session
+  limit is never reached.
+- **Where the buyer enters it.** The promotion-code field is in the cart flyout
+  (the cart surface, per spec § 7.5); the code rides to the session build with the
+  entries. The build resolves it to a promotion code id only when the cart could
+  apply it, and an unresolvable code is then a `400` refusal raised **before** the
+  snapshot is written — so an irrelevant code never blocks a cart, and a refused
+  one leaves no `carts` row.
+- **`applies_to` and test mode.** A test-mode session bills inline `price_data`,
+  and the Product Stripe mints for it is not in `applies_to` — so a local
+  rehearsal shows no discount even on a qualifying cart. That is inherent to
+  `applies_to` (which is precisely what stops the coupon discounting non-SC7s
+  lines in a mixed cart), not a bug. The discount itself is therefore a live-mode
+  behaviour; what the offline round-trip proves is which coupon a cart selects.
+
+**Outstanding:** the two DatoCMS `product` records still exist. They cannot sell
+anything — `toLines` in `src/app/(core)/product/[slug]/page.tsx` renders no row
+for a sku the catalog does not hold, so the SC7s PDP shows no add-on even if the
+record is still linked — but archiving or deleting them is the tidy-up the
+section below asks for.
+
 ## Consequence for the DatoCMS migration
 
 `docs/agents/datocms-pdp-buckets-migration.md` previously listed the two

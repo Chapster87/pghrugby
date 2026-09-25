@@ -79,7 +79,13 @@ function CheckoutInner() {
       const res = await fetch("/api/checkout/sessions", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ cartRef, entries: cart.entries }),
+        // The promotion code rides with the entries: the session build is what
+        // resolves it against Stripe and decides whether it applies at all.
+        body: JSON.stringify({
+          cartRef,
+          entries: cart.entries,
+          promotionCode: cart.promotionCode,
+        }),
       })
       const data = await res.json()
       if (!res.ok) {

@@ -189,6 +189,10 @@ crawl, pig roast) are not attached to any PDP and must not appear.
 > ([Grilling: Steel City 7s additional-side pricing](https://github.com/Chapster87/pghrugby/issues/71) — decided;
 > detail in `docs/agents/sc7s-additional-side-pricing.md`). The backfill must not
 > place them; archive or delete their `product` records and Stripe products.
+> **Status 2026-09-25:** the Stripe products are archived and the catalog dropped
+> them ([#86](https://github.com/Chapster87/pghrugby/issues/86)); the two DatoCMS
+> `product` records remain, and the PDP renders no row for a sku the catalog does
+> not hold, so they are inert.
 
 **Algorithm** (idempotent, order-preserving):
 

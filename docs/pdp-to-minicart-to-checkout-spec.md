@@ -583,7 +583,8 @@ everything. An empty player row stays allowed.
 
 ### 7.5 Footer, empty state, header
 
-- Footer: `Subtotal` and a full-width **Checkout** CTA.
+- Footer: `Subtotal`, a **promotion-code** field (committed on apply/blur, and
+  applied at the session build — § 8.3), and a full-width **Checkout** CTA.
 - Empty: a dashed placeholder card and a "Keep browsing" action.
 - The header `Cart` control becomes a **button that opens the flyout in place**
   (no navigation) and carries the item count.
@@ -641,6 +642,13 @@ The additional side is a **gender-neutral discount**, not a product; the
   `discounts: [{ promotion_code }]`.
 - Checkout allows only **one** coupon/promotion code per session. If the cart
   already qualifies automatically, an entered code is **not** applied on top.
+
+  > **Amendment (2026-09-25,** > [#86](https://github.com/Chapster87/pghrugby/issues/86)**).** A code is
+  > resolved only for a cart that could use one — exactly one SC7s team — and
+  > never refuses a session it cannot apply to. The coupon is restricted to the
+  > division products, so a qualifying cart ignores the code and a cart with no
+  > division line has nothing for it to discount.
+
 - Coupons and the promotion code are provisioned by extending
   `scripts/provision-stripe-catalog.mjs`; `catalog.ts` drops the two
   additional-side items and their `priceId`s.

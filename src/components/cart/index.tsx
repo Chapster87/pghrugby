@@ -36,7 +36,7 @@ export { default as CartTrigger } from "./_components/cart-trigger"
  * See `docs/pdp-to-minicart-to-checkout-spec.md` § 6.
  */
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const { cartRef, entries } = useSyncExternalStore(
+  const { cartRef, entries, promotionCode } = useSyncExternalStore(
     subscribeToCart,
     getCartSnapshot,
     getCartServerSnapshot
@@ -61,6 +61,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     () => ({
       cartRef,
       entries,
+      promotionCode,
       model,
       open,
       setOpen,
@@ -68,8 +69,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setQuantity: cartStore.setQuantity,
       remove: cartStore.remove,
       saveCollector: cartStore.saveCollector,
+      setPromotionCode: cartStore.setPromotionCode,
     }),
-    [cartRef, entries, model, open, addToCart]
+    [cartRef, entries, promotionCode, model, open, addToCart]
   )
 
   return (

@@ -214,7 +214,7 @@ const sc7s: PdpFixture = {
     "Saturday night social",
   ],
   goodToKnow:
-    "Rosters are due two weeks before kickoff. Registration covers one team — additional sides are added at checkout.",
+    "Rosters are due two weeks before kickoff. Registration covers one team — extra teams in the same cart are discounted automatically.",
   productType: "variation",
   photos: [
     photo("sc7s-1", "Kickoff under the lights"),

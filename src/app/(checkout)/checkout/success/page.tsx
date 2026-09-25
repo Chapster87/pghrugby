@@ -144,8 +144,7 @@ const DIVISION_LABELS: Record<string, string> = {
   "sc7s-mens-social": "SC7s Men's Social",
   "sc7s-mens-super-social": "SC7s Men's Super Social",
   "sc7s-womens-open": "SC7s Women's Open",
-  "sc7s-mens-additional-side": "SC7s Men's Additional Side",
-  "sc7s-womens-additional-side": "SC7s Women's Additional Side",
+  "sc7s-womens-social": "SC7s Women's Social",
 }
 
 /** Renders a { name, email } person as "Name · email", or a fallback. */

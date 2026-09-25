@@ -5,14 +5,15 @@ Approval gate for wayfinder ticket **Task: Provision the live Stripe store catal
 want, delete items entirely, or change amounts — then run:
 
 ```bash
-cd pghrugby/nextjs
 pnpm provision:stripe          # dry-run: what WOULD be created (no writes)
 pnpm provision:stripe:apply    # create exactly the [x] items + print price map
 ```
 
-The provisioning script reads **only the `- [x]` product blocks below**. One block
-per product; multiple `- price:` lines add multiple prices. Metadata follows the
-SKU scheme in `docs/agents/stripe-catalog-spec.md` §4.
+The provisioning script reads **only the `- [x]` product and coupon blocks
+below**. One block per product; multiple `- price:` lines add multiple prices.
+One block per coupon; an optional `- promotion_code:` line adds a customer-facing
+code on top of it. Metadata follows the SKU scheme in
+`docs/agents/stripe-catalog-spec.md` §4.
 
 ## Live WooCommerce context (scanned 2026-08-26)
 
@@ -95,15 +96,11 @@ unchecked, in case the club runs a summer cycle.
   - metadata: family=tournament, division=womens-social, kind=one-time, registration=true
   - note: **missing from catalog.ts** — will be added
 
-- [x] product `sc7s-mens-additional-side` — SC7s Men's Additional Side
-  - price: 375.00, lookup_key: `sc7s-mens-additional-side-2026`
-  - metadata: family=tournament, division=mens-additional-side, kind=one-time, registration=true
-  - note:
-
-- [x] product `sc7s-womens-additional-side` — SC7s Women's Additional Side
-  - price: 375.00, lookup_key: `sc7s-womens-additional-side-2026`
-  - metadata: family=tournament, division=womens-additional-side, kind=one-time, registration=true
-  - note:
+> **Retired (2026-09-25):** `sc7s-mens-additional-side` and
+> `sc7s-womens-additional-side` are no longer products — the additional side is a
+> coupon over the divisions (see "SC7s additional-side coupons" below). Archive
+> both in Stripe (`stripe.products.update(id, { active: false })`) and archive or
+> delete their DatoCMS `product` records; `catalog.ts` no longer lists them.
 
 - [x] product `donation-club` — Club Donation
   - price: 10.00, lookup_key: `donation-club-preset-10`
@@ -150,6 +147,38 @@ unchecked, in case the club runs a summer cycle.
   - price: 25.00, lookup_key: `annual-forge-pig-roast-2026`
   - metadata: family=events, kind=one-time
   - note: WP $25
+
+## SC7s additional-side coupons — edit, then run `--apply`
+
+`- [x]` = create · `- [ ]` = skip
+
+The additional side is a per-count coupon over the divisions, not a product
+(`docs/agents/sc7s-additional-side-pricing.md`). `applies_to` is **derived** from
+the checked `family=tournament` products above, so a division added there is
+covered without editing this section. `amount_off` is the flat discount for that
+many extra teams; the API enforces the one-coupon-per-session rule that stops
+these stacking.
+
+- [x] coupon `sc7s-extra-1` — $25 off the additional side
+  - amount_off: 25.00
+  - promotion_code: EXTRASIDE
+  - note: extra team 1 — EXTRASIDE is the returning buyer's code
+
+- [x] coupon `sc7s-extra-2` — $50 off the additional side
+  - amount_off: 50.00
+  - note: extra team 2
+
+- [x] coupon `sc7s-extra-3` — $75 off the additional side
+  - amount_off: 75.00
+  - note: extra team 3
+
+- [x] coupon `sc7s-extra-4` — $100 off the additional side
+  - amount_off: 100.00
+  - note: extra team 4
+
+- [x] coupon `sc7s-extra-5` — $125 off the additional side
+  - amount_off: 125.00
+  - note: extra team 5 — the ladder's cap, applied to any larger cart
 
 ## Reuse — exists on the live account, do NOT create (verified by dry-run)
 

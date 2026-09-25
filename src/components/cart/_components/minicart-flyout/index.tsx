@@ -15,6 +15,7 @@ import {
 } from "@/lib/checkout/cart-entries"
 import { displayFor, formatMoney } from "@/lib/checkout/cart-display"
 import type { CartLineError } from "@/lib/checkout/cart-pricing"
+import { canUsePromotionCode } from "@/lib/checkout/sc7s-discount"
 
 import { useLinePricing } from "../../_hooks/use-line-pricing"
 import { useLineThumbnails } from "../../_hooks/use-line-thumbnails"
@@ -37,8 +38,17 @@ import s from "./style.module.css"
  * animates over whatever page is showing.
  */
 export default function MinicartFlyout() {
-  const { model, open, setOpen, entries, cartRef, remove, saveCollector } =
-    useCart()
+  const {
+    model,
+    open,
+    setOpen,
+    entries,
+    cartRef,
+    promotionCode,
+    remove,
+    saveCollector,
+    setPromotionCode,
+  } = useCart()
   const router = useRouter()
 
   const [view, setView] = useState<"cart" | "edit">("cart")
@@ -52,6 +62,9 @@ export default function MinicartFlyout() {
   // removable here rather than being silently dropped from the total.
   const [lineErrors, setLineErrors] = useState<CartLineError[]>([])
   const returnFocusId = useRef<string | null>(null)
+  // The promotion-code field is uncontrolled and commits on blur / Apply, so a
+  // code is one persisted write rather than one per keystroke.
+  const promotionRef = useRef<HTMLInputElement>(null)
 
   // Resolved only while the flyout is open: the resolution reaches Stripe, and
   // a closed flyout showing nothing should not cost a request per page load.
@@ -157,6 +170,11 @@ export default function MinicartFlyout() {
     }
   }
 
+  /** Commits the field's current text to the cart; an empty field clears it. */
+  const commitPromotionCode = () => {
+    setPromotionCode(promotionRef.current?.value ?? "")
+  }
+
   /** Removes a refused line (cascading, like any primary) and clears its error. */
   const removeRefusedLine = (entryId: string) => {
     remove(entryId)
@@ -239,6 +257,43 @@ export default function MinicartFlyout() {
                   <span>Subtotal</span>
                   <span>{formatMoney(subtotal)}</span>
                 </div>
+                {/* Entered here and carried to the session build, which resolves
+                    it against Stripe and applies it only when the cart does not
+                    already qualify for the SC7s coupon. */}
+                <form
+                  className={s.promo}
+                  onSubmit={(event) => {
+                    event.preventDefault()
+                    commitPromotionCode()
+                  }}
+                >
+                  <label className={s.promoLabel} htmlFor="cart-promotion-code">
+                    Promotion code
+                  </label>
+                  <div className={s.promoRow}>
+                    <input
+                      ref={promotionRef}
+                      id="cart-promotion-code"
+                      className={s.promoInput}
+                      type="text"
+                      name="promotionCode"
+                      defaultValue={promotionCode}
+                      placeholder="Add a code"
+                      autoComplete="off"
+                      autoCapitalize="characters"
+                      spellCheck={false}
+                      onBlur={commitPromotionCode}
+                    />
+                    <Button variant="secondary" type="submit">
+                      Apply
+                    </Button>
+                  </div>
+                  {promotionCode && canUsePromotionCode(entries) && (
+                    <p className={s.promoNote}>
+                      “{promotionCode}” will be applied at checkout.
+                    </p>
+                  )}
+                </form>
                 <RefusedLines
                   message={checkoutError}
                   errors={lineErrors}
