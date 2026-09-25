@@ -150,6 +150,33 @@ export default function PdpLayout({ product }: { product: PdpViewModel }) {
             />
           )}
 
+          {sel.pendingQuantity && (
+            <div className={s.quantityWarning} role="alert">
+              <p className={s.quantityWarningText}>
+                {sel.pendingQuantity.dropped.length === 1
+                  ? `This drops ${sel.pendingQuantity.dropped[0]}.`
+                  : `This drops ${sel.pendingQuantity.dropped.join(", ")}.`}
+              </p>
+              <div className={s.quantityWarningActions}>
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onClick={sel.cancelQuantityDrop}
+                >
+                  Keep{" "}
+                  {sel.pendingQuantity.dropped.length === 1 ? "it" : "them"}
+                </Button>
+                <Button
+                  variant="primary"
+                  size="small"
+                  onClick={sel.confirmQuantityDrop}
+                >
+                  Discard
+                </Button>
+              </div>
+            </div>
+          )}
+
           {product.addons.length > 0 && (
             <div className={s.addons}>
               <span className={s.miniLabel}>Add-ons</span>

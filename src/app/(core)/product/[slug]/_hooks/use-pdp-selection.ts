@@ -10,6 +10,9 @@ import type { PdpLine, PdpViewModel } from "../_data/types"
 /** An add-on's in-page state: whether it is ticked, and how many. */
 type AddonState = Record<string, { selected: boolean; quantity: number }>
 
+/** A quantity change held back because committing it would drop named rows. */
+type PendingQuantity = { sku: string; quantity: number; dropped: string[] }
+
 /**
  * The buyer's in-page selection state for one PDP.
  *
@@ -42,21 +45,58 @@ export function usePdpSelection(product: PdpViewModel) {
     )
   )
   const collector = useCollectorForm(product.fields)
+  const [pending, setPending] = useState<PendingQuantity | null>(null)
+
+  /**
+   * Whether this page's quantity stepper drives the collector's rows. Only a
+   * single-primary page with a collector has that shape — the same gate the
+   * `quantity → rows` mirror uses below.
+   */
+  const mirrorsRows =
+    product.productType === "simple" && product.fields.length > 0
 
   const quantityOf = (sku: string) => quantities[sku] ?? 1
+
+  /** Writes a primary's quantity and mirrors it into the collector's rows. */
+  const commitQuantity = (sku: string, quantity: number) => {
+    setQuantities((prev) => ({ ...prev, [sku]: quantity }))
+    if (mirrorsRows) collector.applyQuantity(quantity)
+  }
 
   /**
    * Writes a primary's quantity and mirrors it into the collector's repeatable
    * rows (`quantity → rows`) — but only for a single-primary page, which is the
    * only shape a registration has.
+   *
+   * A change that would drop a **named** player row is held back for
+   * confirmation rather than applied: the add-time form discards a name as
+   * silently as the flyout's edit panel would, and the rule is the same on both
+   * surfaces (`docs/agents/registration-editing.md` § 4).
    */
   const setPrimaryQuantity = (sku: string, quantity: number) => {
     const next = clampLineQuantity(quantity)
-    setQuantities((prev) => ({ ...prev, [sku]: next }))
-    if (product.productType === "simple" && product.fields.length > 0) {
-      collector.applyQuantity(next)
+    if (!mirrorsRows) {
+      commitQuantity(sku, next)
+      return
     }
+
+    const { dropped } = collector.planQuantity(next)
+    if (dropped.length > 0) {
+      setPending({ sku, quantity: next, dropped })
+      return
+    }
+    commitQuantity(sku, next)
   }
+
+  /** Applies the held-back change, dropping the rows the buyer accepted. */
+  const confirmQuantityDrop = () => {
+    if (!pending) return
+    commitQuantity(pending.sku, pending.quantity)
+    setPending(null)
+  }
+
+  /** Drops the held-back change, keeping the buyer's rows and quantity. */
+  const cancelQuantityDrop = () => setPending(null)
 
   const selectPrimary = (sku: string) => setSelectedSkus([sku])
 
@@ -107,6 +147,10 @@ export function usePdpSelection(product: PdpViewModel) {
     isSelected: (sku: string) => selectedSkus.includes(sku),
     quantityOf,
     setPrimaryQuantity,
+    /** The quantity change held back because it would drop a named row. */
+    pendingQuantity: pending,
+    confirmQuantityDrop,
+    cancelQuantityDrop,
     addons,
     setAddon,
     setAddonQuantity,
