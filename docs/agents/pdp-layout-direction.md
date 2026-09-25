@@ -26,15 +26,18 @@ Desktop: two columns above the fold.
     stay visually small while remaining tappable.
 - **Right column** — the buy box, in this order:
   1. Title.
-  2. Short description.
-  3. "Read the full description" anchor — smooth-scrolls to the description panel
-     below the fold. A real `#` anchor with a JS enhancement, honouring
-     `prefers-reduced-motion`.
-  4. Option selector (§ 3).
-  5. Add-ons (§ 4).
-  6. DataCollector — **in the buy box, above the add-to-cart** (§ 7).
-  7. Running total.
-  8. **One** add-to-cart button.
+  2. The event meta line — the date and the location, from the page's
+     `event_starts_at` / `event_location`. Omitted entirely when neither is set.
+  3. Short description — the page's `short_description`.
+  4. "Read the full description" anchor — smooth-scrolls to the panel below the
+     fold. A real `#` anchor with a JS enhancement, honouring
+     `prefers-reduced-motion`; when the panels render as tabs (§ 5) it also
+     selects the Description tab.
+  5. Option selector (§ 3).
+  6. Add-ons (§ 4).
+  7. DataCollector — **in the buy box, above the add-to-cart** (§ 7).
+  8. Running total.
+  9. **One** add-to-cart button.
 
 Mobile: single column, gallery above the buy box.
 
@@ -59,26 +62,32 @@ never hidden.
 
 ## 5. Bottom area
 
-Below the fold is a single panel, not a plain long-description block, so more
-product data can be added without lengthening the page:
+Below the fold, the panel set is **authored** — one panel per content, never a
+plain long-description block and never a panel with nothing in it. The page's
+`tabs` field holds one `product_tab` block per panel, each carrying its own title
+and its own structured content, so this is the club's choice of titles rather
+than a set fixed here:
 
-- **Description** — the long copy (the primary product's `longDescription`).
+- **Description** — the long copy. Left unauthored, this panel falls back to the
+  primary product's `description`, so a PDP keeps a description without the copy
+  being maintained twice.
 - **Includes** — a bulleted list.
 - **Good to know** — practical notes.
+- **Other** — whatever else the club wants.
 
-A panel renders **only when the CMS has content for it**; a panel with none is
-not rendered at all. Description is the only panel with a source, so every live
-PDP renders it alone, as a section with its heading — one panel needs no control
-of its own.
+Content decides the form as well as the set: nothing populated renders nothing;
+one populated panel renders as a plain section with its heading (one panel needs
+no control of its own); two or more render through the `@components/tabs`
+wrapper. Spec: `docs/pdp-to-minicart-to-checkout-spec.md` § 5.6.
 
-Implementation note: the prototype used Radix Tabs inline. **Amended
-2026-09-24** ([#117](https://github.com/Chapster87/pghrugby/issues/117)): the
-fixed tab set is dropped in favour of the content-driven rule above, because
-`product_detail_page` has no field for **Includes** or **Good to know** — nor for
-the date / location meta line § 2 once asked for. Should the club want those
-panels, the field comes first and a global wrapper (`@components/tabs`, once more
-than one panel has content) follows it; recorded as deferred in
-`docs/pdp-to-minicart-to-checkout-spec.md` § 13.
+Implementation note: the prototype used Radix Tabs inline. **Amended 2026-09-24**
+([#120](https://github.com/Chapster87/pghrugby/issues/120)): an earlier
+amendment — a content-driven rule with **no** page fields behind it, which left
+the panel set unbuildable and the § 2 meta line with no source — is replaced. The
+fields now exist (`tabs` / `product_tab`, plus `event_starts_at` /
+`event_location`), so the wrapper is built for real rather than deferred. That
+earlier amendment was [#117](https://github.com/Chapster87/pghrugby/issues/117),
+superseded by #120.
 
 ## 6. Quantity control
 
