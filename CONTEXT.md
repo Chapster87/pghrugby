@@ -41,6 +41,18 @@ The registration form attached to a PDP. Supplies the registration payload only 
 never determines quantity.
 _Avoid_: form (ambiguous with a group of fields)
 
+**Product tab**:
+One authored piece of a PDP's below-fold content: a kind, a title, and its own
+structured content. A PDP renders its tabs in order, and only those it has.
+_Avoid_: section, accordion — and do not confuse it with a Panel, which is what
+renders from it
+
+**Panel**:
+One below-fold section on a PDP, rendered from a Product tab. A single populated
+panel renders as a plain section with its heading; two or more render as a tab
+strip.
+_Avoid_: tab, tab content
+
 **Cart line**:
 One entry in the browser-held cart — either a priced line or a collector entry.
 _Avoid_: cart item
