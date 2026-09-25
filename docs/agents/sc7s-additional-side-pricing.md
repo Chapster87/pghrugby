@@ -104,12 +104,26 @@ Built for
   apply it, and an unresolvable code is then a `400` refusal raised **before** the
   snapshot is written — so an irrelevant code never blocks a cart, and a refused
   one leaves no `carts` row.
-- **`applies_to` and test mode.** A test-mode session bills inline `price_data`,
-  and the Product Stripe mints for it is not in `applies_to` — so a local
-  rehearsal shows no discount even on a qualifying cart. That is inherent to
-  `applies_to` (which is precisely what stops the coupon discounting non-SC7s
-  lines in a mixed cart), not a bug. The discount itself is therefore a live-mode
-  behaviour; what the offline round-trip proves is which coupon a cart selects.
+- **`applies_to` is enforced by Stripe, not hoped for, and the discount is
+  live-only.** Verified against the live account (2026-09-25) by creating real
+  sessions and reading them back, then expiring them:
+
+  | Cart           | Coupon         | subtotal | discount | total     |
+  | -------------- | -------------- | -------- | -------- | --------- |
+  | 1 side         | —              | $400     | $0       | $400      |
+  | 2 sides        | `sc7s-extra-1` | $800     | $25      | $775      |
+  | 2 sides + golf | `sc7s-extra-1` | $910     | $25      | $885      |
+  | golf only      | `sc7s-extra-1` | —        | —        | _refused_ |
+
+  The mixed cart discounts the SC7s portion only, and a cart with nothing eligible
+  is **refused** — "This coupon cannot be redeemed because it does not apply to
+  anything in this order" — not silently zeroed. Two consequences: the
+  `canUsePromotionCode` gate is load-bearing rather than defensive, and a
+  test-mode session (inline `price_data`, live coupons absent) would fail the same
+  way, so the session build passes **no** discount unless billing live. That
+  trades a local rehearsal of the discount for not failing a local checkout that
+  has nothing to gain from it; the selection stays proved offline by
+  `pnpm sc7s-discount:round-trip`.
 
 **Outstanding:** the two DatoCMS `product` records still exist. They cannot sell
 anything — `toLines` in `src/app/(core)/product/[slug]/page.tsx` renders no row

@@ -9,6 +9,7 @@ import { buildOrderMetadata } from "@/lib/checkout/order-metadata"
 import {
   canUsePromotionCode,
   selectDiscount,
+  type SessionDiscount,
 } from "@/lib/checkout/sc7s-discount"
 import { isLiveStripe, stripe } from "@/lib/checkout/stripe"
 import { getBaseURL } from "@/lib/util/env"
@@ -38,6 +39,8 @@ import { getBaseURL } from "@/lib/util/env"
  * entered on a one-team cart. A code is resolved against the live promotion codes
  * API only when it could apply, and one that cannot be honoured is a refusal — so
  * an irrelevant code can never block a cart, and a refused one writes no snapshot.
+ * The whole step is **live-only**: the coupons exist in the live account and
+ * Stripe refuses a discount nothing is eligible for, so test mode passes none.
  *
  * `client_reference_id` = cartRef — the reconciliation key the webhook and the
  * success page use to re-join the cart's entry list, and the `reg_ref` the
@@ -111,37 +114,48 @@ export async function POST(request: Request) {
     return NextResponse.json(refusalResponse(cart.errors), { status: 409 })
   }
 
-  // A code is resolved only when it could actually be applied. The coupon it maps
-  // to is restricted to the division products, so it needs exactly one SC7s team:
-  // a cart that already qualifies takes the automatic coupon and ignores the
-  // code, and one with no division line has nothing to discount. Resolving only
-  // in that case is what stops an irrelevant or mistyped code refusing a session
-  // it has no bearing on — and a refusal here precedes the snapshot write, so a
-  // refused cart leaves no `carts` row.
-  let promotionCodeId: string | null = null
-  if (promotionCode && canUsePromotionCode(cart.entries)) {
-    try {
-      promotionCodeId = await resolvePromotionCodeId(promotionCode)
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "unknown error"
-      return NextResponse.json(
-        { error: `Could not check the promotion code: ${message}` },
-        { status: 503 }
-      )
+  // Discounts are a **live-only** capability, so the whole step is gated on the
+  // billing account rather than only the coupon selection. The coupons exist in
+  // the live account, and a test-mode line is inline `price_data` whose minted
+  // Product appears in no coupon's `applies_to` — Stripe does not quietly apply
+  // nothing there, it refuses the session outright ("This coupon cannot be
+  // redeemed because it does not apply to anything in this order"), so a discount
+  // in test mode could only fail a checkout with nothing to gain from it. The
+  // selection itself is proved offline instead (`pnpm sc7s-discount:round-trip`).
+  let discount: SessionDiscount | null = null
+  if (isLiveStripe) {
+    // A code is resolved only when it could actually be applied. The coupon it
+    // maps to is restricted to the division products, so it needs exactly one
+    // SC7s team: a cart that already qualifies takes the automatic coupon and
+    // ignores the code, and one with no division line has nothing to discount.
+    // Resolving only in that case is what stops an irrelevant or mistyped code
+    // refusing a session it has no bearing on — and a refusal here precedes the
+    // snapshot write, so a refused cart leaves no `carts` row.
+    let promotionCodeId: string | null = null
+    if (promotionCode && canUsePromotionCode(cart.entries)) {
+      try {
+        promotionCodeId = await resolvePromotionCodeId(promotionCode)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "unknown error"
+        return NextResponse.json(
+          { error: `Could not check the promotion code: ${message}` },
+          { status: 503 }
+        )
+      }
+      if (!promotionCodeId) {
+        return NextResponse.json(
+          {
+            error: `The promotion code “${promotionCode}” isn’t valid — remove it from the cart and try again.`,
+          },
+          { status: 400 }
+        )
+      }
     }
-    if (!promotionCodeId) {
-      return NextResponse.json(
-        {
-          error: `The promotion code “${promotionCode}” isn’t valid — remove it from the cart and try again.`,
-        },
-        { status: 400 }
-      )
-    }
-  }
 
-  // One discount, never a stack: the cart's automatic SC7s coupon wins over an
-  // entered code, which is why Stripe's one-code-per-session limit is never hit.
-  const discount = selectDiscount(cart.entries, promotionCodeId)
+    // One discount, never a stack: the cart's automatic SC7s coupon wins over an
+    // entered code, which is why Stripe's one-code-per-session limit is never hit.
+    discount = selectDiscount(cart.entries, promotionCodeId)
+  }
 
   // The snapshot rides beside the session, never in metadata: the session
   // carries the reference (client_reference_id) and the webhook re-joins it.
