@@ -132,11 +132,11 @@ which field the editor used, not a `kind` enum.
 Cloudinary Picker JSON, not a native DatoCMS media field (free-tier constraint).
 Mirrors `page.featured_image`.
 
-| Field           | Type     | Required | Notes                                             |
-| --------------- | -------- | -------- | ------------------------------------------------- |
-| `desktop_media` | `json`   | yes      | Cloudinary Picker; `featured_image`-shaped object |
-| `mobile_media`  | `json`   | no       | Art-directed crop; falls back to desktop          |
-| `alt`           | `string` | no       | The Cloudinary object carries no alt text         |
+| Field           | Type     | Required | Notes                                               |
+| --------------- | -------- | -------- | --------------------------------------------------- |
+| `desktop_media` | `json`   | yes      | Cloudinary Picker; `featured_image`-shaped object   |
+| `mobile_media`  | `json`   | no       | Art-directed crop; falls back to desktop            |
+| `alt`           | `string` | no       | Optional override; blank defaults to the page title |
 
 - Renderer selects per breakpoint (`<picture>` / media query) and branches on the
   object's `resource_type` (`image` → `next/image` / `CloudinaryImageRenderer`;

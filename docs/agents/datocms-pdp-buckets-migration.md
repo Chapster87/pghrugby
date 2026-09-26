@@ -141,8 +141,12 @@ Because the picker is single-asset, `gallery` is a **Modular Content
 | --------------- | ------ | -------- | ----------------------------------------------------------- |
 | `desktop_media` | `json` | yes      | Cloudinary Picker; `featured_image`-shaped object           |
 | `mobile_media`  | `json` | no       | Cloudinary Picker; art-directed crop; falls back to desktop |
-| `alt`           | string | no       | The Cloudinary object carries no alt text                   |
+| `alt`           | string | no       | Optional override; blank falls back to the page title       |
 
+- **Alt**: optional, and blank is the **normal** state. A blank `alt` falls back
+  to the **page title** at render, so a gallery item needs no alt of its own to
+  be accessible; the field exists because a Cloudinary object carries no alt
+  text, and it stays available as a per-item override.
 - **Mobile + desktop**: the two stored Cloudinary objects are the art-directed
   variants; the renderer selects per breakpoint (`<picture>` / media query).
 - **Video**: no separate field. The Cloudinary object's `resource_type`
@@ -300,8 +304,6 @@ product-detail-page.query.ts`, `page.tsx`) from `pageComponents` to the new
 - The array-vs-block gallery choice depends on whether the Cloudinary Picker can
   emit an ordered set into one field. The block form is assumed; it works either
   way.
-- Whether an `alt` field is wanted on the block (Cloudinary objects carry no alt;
-  today the repo falls back to `public_id`).
 
 ## Related
 
