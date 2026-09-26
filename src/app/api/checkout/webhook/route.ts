@@ -41,19 +41,21 @@ export async function POST(request: Request) {
   const signature = request.headers.get("stripe-signature")
   const secret = STRIPE_WEBHOOK_SECRET
 
+  // These refusals are logged in full and answered generically. The endpoint is
+  // publicly reachable and unauthenticated, so a response body must not describe
+  // our configuration to whoever is probing it — the diagnostic belongs in the
+  // logs, which only we read.
   if (!stripe) {
-    return NextResponse.json(
-      { error: "STRIPE_SECRET_KEY is not set" },
-      { status: 500 }
-    )
+    console.error("[webhook] refusing: STRIPE_SECRET_KEY is not set")
+    return NextResponse.json({ error: "Webhook unavailable" }, { status: 500 })
   }
 
   if (!signature || !secret) {
+    console.error(
+      "[webhook] refusing: no stripe-signature header, or no STRIPE_WEBHOOK_SECRET to verify one against (locally: `stripe listen --forward-to localhost:8000/api/checkout/webhook`)"
+    )
     return NextResponse.json(
-      {
-        error:
-          "Missing stripe-signature header or STRIPE_WEBHOOK_SECRET. Run `stripe listen --forward-to localhost:8000/api/checkout/webhook`.",
-      },
+      { error: "Invalid webhook request" },
       { status: 400 }
     )
   }
@@ -65,8 +67,11 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(payload, signature, secret)
   } catch (error) {
     const message = error instanceof Error ? error.message : "unknown error"
+    console.error(
+      `[webhook] refusing: signature verification failed: ${message}`
+    )
     return NextResponse.json(
-      { error: `Webhook signature verification failed: ${message}` },
+      { error: "Invalid webhook signature" },
       { status: 400 }
     )
   }

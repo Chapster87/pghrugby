@@ -111,7 +111,10 @@ node --env-file=.env.local scripts/supabase-query.mjs orders \
   method can be enabled, leave this unexercised rather than claiming it.
 - **A bad signature is refused, and the unmatched-refund alert fires.**
   - _Bad signature:_ `curl -i -X POST https://next.pghrugby.com/api/checkout/webhook -H "stripe-signature: t=1,v1=deadbeef" -H "content-type: application/json" -d '{"id":"evt_probe","type":"checkout.session.expired"}'`
-    → `400` with `Webhook signature verification failed`.
+    → `400` with `{"error":"Invalid webhook signature"}`. The reason itself is
+    **logged, not returned** (`[webhook] refusing: signature verification failed: …`)
+    — the endpoint is public, so its refusals stay generic and the diagnostic is
+    read from the function logs.
   - _Unmatched refund:_ the alert is in `route.ts`'s `charge.refunded` branch,
     which fires when no `orders` row carries the charge's `payment_intent_id`.
     It needs a live charge whose PaymentIntent really is absent from `orders` —
