@@ -118,16 +118,17 @@ control is the shared `Button` at `variant="primary" size="small"`.
 
 ## 8. Prototype
 
-The reference prototype lives on as a dev-only workbench demo, kept as a record
-for implementing this layout:
+The reference prototype (`src/app/(core)/workbench/_demos/pdp-layout/`) was
+deleted at the cutover ([#88](https://github.com/Chapster87/pghrugby/issues/88)),
+once the real layout shipped — it used synthetic fixtures that would have drifted
+from the implementation.
 
-```
-/workbench/pdp-layout?product=golf-outing-2026      # simple + add-ons + collector
-/workbench/pdp-layout?product=annual-forge-pig-roast # simple, no collector
-/workbench/pdp-layout?product=steel-city-7s-2026     # variation, multi-primary
-```
+The three product shapes it exercised are worth keeping, as the record of what
+the layout was proved against and as the scenario set the Playwright suite adopts
+([#76](https://github.com/Chapster87/pghrugby/issues/76)):
 
-Code: `src/app/(core)/workbench/_demos/pdp-layout/` (fixtures, state, shared
-parts, the layout). It is dev-only (the workbench 404s in production) and uses
-synthetic fixtures — no DatoCMS, Stripe, or cart API. Delete it once the layout
-is built for real.
+| Fixture                  | Product shape                    |
+| ------------------------ | -------------------------------- |
+| `golf-outing-2026`       | simple + add-ons + DataCollector |
+| `annual-forge-pig-roast` | simple, no collector             |
+| `steel-city-7s-2026`     | variation, multi-primary         |

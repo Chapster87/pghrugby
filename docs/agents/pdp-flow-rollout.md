@@ -25,12 +25,12 @@ data to preserve, so the cutover carries no zero-downtime constraint.
 
 ## 2. What is deleted, what replaces it
 
-| Old | New |
-| --- | --- |
-| `product/[slug]/checkout-form.tsx` (one-shot PDP form) | the PDP layout from `pdp-layout-direction.md` |
-| `(core)/cart/page.tsx` dues + donation builder | the minicart flyout (the only cart surface) |
-| header `Cart` link → `/cart` navigation | an in-place flyout trigger carrying the item count |
-| `carts.flow` / `carts.registration` | `carts.entries` (per `order-records-and-reporting.md`) |
+| Old                                                    | New                                                    |
+| ------------------------------------------------------ | ------------------------------------------------------ |
+| `product/[slug]/checkout-form.tsx` (one-shot PDP form) | the PDP layout from `pdp-layout-direction.md`          |
+| `(core)/cart/page.tsx` dues + donation builder         | the minicart flyout (the only cart surface)            |
+| header `Cart` link → `/cart` navigation                | an in-place flyout trigger carrying the item count     |
+| `carts.flow` / `carts.registration`                    | `carts.entries` (per `order-records-and-reporting.md`) |
 
 Golf and Steel City 7s pages are rebuilt as PDPs in the same cutover — with the
 one-shot form gone there is no fallback for them.
@@ -78,7 +78,7 @@ execution note.
    `next.pghrugby.com` to the apex (a redirect is a delivery failure) —
    `stripe-webhook-wiring.md` § 5.
 
-**Gate:** a manual end-to-end pass on a preview deploy — a real *mixed* cart
+**Gate:** a manual end-to-end pass on a preview deploy — a real _mixed_ cart
 (golf registration + add-on + a dues line + a preset donation) through PDP →
 flyout → edit → checkout → success, asserting the `orders` header, child rows,
 and `families` land correctly. A thin automated smoke check may back this up but
@@ -89,10 +89,11 @@ ephemeral snapshots and nothing is live.
 
 ## 7. Prototypes and `/workbench`
 
-The two flow prototypes (`workbench/_demos/pdp-layout`,
-`workbench/_demos/minicart-flyout`) are deleted once the real PDP and flyout
-ship; they carry synthetic fixtures that would drift from the implementation
-(`minicart-flyout-direction.md` § 9 already called for this).
+The two flow prototypes (`src/app/(core)/workbench/_demos/pdp-layout`,
+`.../_demos/minicart-flyout`) were deleted at the cutover
+([#88](https://github.com/Chapster87/pghrugby/issues/88)), once the real PDP and
+flyout shipped; they carried synthetic fixtures that would have drifted from the
+implementation (`minicart-flyout-direction.md` § 9 already called for this).
 
 `/workbench` stays and is meant to grow — it is the shelf for the global
 component wrappers. **Temporary flow prototypes do not belong in `/workbench`;**

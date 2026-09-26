@@ -832,9 +832,10 @@ ephemeral snapshots and nothing is live.
 
 **Prototypes:** the two flow prototypes
 (`src/app/(core)/workbench/_demos/pdp-layout`,
-`.../_demos/minicart-flyout`) are deleted once the real PDP and flyout ship.
-`/workbench` stays as the shelf for global component wrappers; temporary flow
-prototypes do not belong in it.
+`.../_demos/minicart-flyout`) were deleted at the cutover
+([#88](https://github.com/Chapster87/pghrugby/issues/88)), once the real PDP and
+flyout shipped. `/workbench` stays as the shelf for global component wrappers;
+temporary flow prototypes do not belong in it.
 
 ---
 

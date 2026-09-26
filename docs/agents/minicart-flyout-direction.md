@@ -94,13 +94,11 @@ global wrapper components rather than copying the prototype:
 
 ## 9. Prototype
 
-The reference prototype lives on as a dev-only workbench demo:
+The reference prototype (`src/app/(core)/workbench/_demos/minicart-flyout/`) was
+deleted at the cutover ([#88](https://github.com/Chapster87/pghrugby/issues/88)),
+once the real flyout shipped.
 
-```
-/workbench/minicart-flyout
-```
-
-Code: `src/app/(core)/workbench/_demos/minicart-flyout/` (fixtures, cart state,
-the card panel, the shared shell, the edit panel). It is dev-only (the workbench
-404s in production) and uses synthetic fixtures — no DatoCMS, Stripe, or cart
-API. Delete it once the flyout is built for real.
+Its synthetic cart fixtures are the mixed-cart scenario the Playwright suite
+adopts ([#76](https://github.com/Chapster87/pghrugby/issues/76)): a golf
+registration line with its collector answers, its add-ons, a pig roast ticket
+line, a dues line, and a donation — several families in one cart.

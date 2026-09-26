@@ -119,7 +119,8 @@ snapshot to the entry shape in § 1.
   is `quantity_bearing: true`, and the direction of the quantity/collector
   relationship is `quantity → rows`. The "Golf Outing … one registration
   primary" row and the "quantity = golfers is wrong" note need restating.
-- **The workbench PDP fixture** (`/workbench/pdp-layout`) marks
+- **The workbench PDP fixture** (`/workbench/pdp-layout`, since deleted at the
+  cutover — [#88](https://github.com/Chapster87/pghrugby/issues/88)) marked
   `golf-outing-registration` `quantityBearing: false`; that is wrong.
 - **The golf DataCollector** (`Golf Outing — Captain & players`): the captain is
   player 1; the repeatable `golfers` field (`max: 8` today) becomes the
