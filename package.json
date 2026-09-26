@@ -23,6 +23,7 @@
     "order-storage:round-trip": "node --env-file=.env.local --import tsx scripts/order-storage-round-trip.ts",
     "cart:round-trip": "node --import tsx scripts/cart-mutations-round-trip.ts",
     "checkout:round-trip": "node --import tsx scripts/checkout-pricing-round-trip.ts",
+    "donations:round-trip": "node --import tsx scripts/donations-round-trip.ts",
     "sc7s-discount:round-trip": "node --import tsx scripts/sc7s-discount-round-trip.ts",
     "registration:round-trip": "node --import tsx scripts/registration-round-trip.ts"
   },

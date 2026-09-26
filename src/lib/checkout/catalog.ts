@@ -136,6 +136,10 @@ export const CHECKOUT_CATALOG = {
    * flow. A true pay-what-you-want amount is standalone-only (its own
    * sole-line Checkout Session) and never a cart line — see
    * `docs/agents/donations-in-mixed-carts.md`.
+   *
+   * The retired `donation-pass-the-hat` $1 placeholder is deliberately absent:
+   * it was never a real rung of the ladder, so the ladder is the three club
+   * presets (`docs/agents/donate-pdp-preset-selection.md` § 2).
    */
   donationPresets: [
     {
@@ -157,13 +161,6 @@ export const CHECKOUT_CATALOG = {
       label: "Club donation — $50",
       unitAmount: 5000,
       priceId: "price_1U8sVwJdsCjn0Z6oKlpr8BCC",
-      family: "donation",
-    },
-    {
-      sku: "donation-pass-the-hat",
-      label: "Pass the Hat Fund — $1",
-      unitAmount: 100,
-      priceId: "price_1U8sVwJdsCjn0Z6o0mwJoMle",
       family: "donation",
     },
   ] satisfies CatalogItem[],
@@ -238,23 +235,4 @@ export function findCatalogItem(sku: string): CatalogItem | undefined {
     if (item.sku === sku) return item
   }
   return undefined
-}
-
-/**
- * Catalog items selectable for a product record's sku. Exact match wins; when
- * a product has no direct sku (e.g. `donation-club` — a Stripe product with
- * several prices), returns every catalog item whose sku starts with
- * `<sku>-` (the preset variants). Empty when the product isn't sellable yet.
- */
-export function findCatalogItemsForProduct(sku: string): CatalogItem[] {
-  const exact = findCatalogItem(sku)
-  if (exact) return [exact]
-  const flat = [
-    ...Object.values(CHECKOUT_CATALOG.dues),
-    ...Object.values(CHECKOUT_CATALOG.golf),
-    ...CHECKOUT_CATALOG.tournament.divisions,
-    ...CHECKOUT_CATALOG.donationPresets,
-    ...CHECKOUT_CATALOG.events,
-  ]
-  return flat.filter((item) => item.sku.startsWith(`${sku}-`))
 }

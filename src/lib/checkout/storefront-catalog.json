@@ -95,13 +95,6 @@
       "kind": "primary"
     },
     {
-      "sku": "donation-pass-the-hat",
-      "label": "\"Pass the Hat\" Fund",
-      "wcSlug": "pass-the-hat",
-      "pdp": "donate",
-      "kind": "primary"
-    },
-    {
       "sku": "ballpark-day-adult",
       "label": "Forge Day at the Ballpark — Adult",
       "wcSlug": "ballpark-day-adult",

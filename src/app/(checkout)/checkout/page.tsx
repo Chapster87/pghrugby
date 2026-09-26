@@ -6,13 +6,13 @@ import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider,
 } from "@stripe/react-stripe-js"
-import { loadStripe } from "@stripe/stripe-js"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 
 import RefusedLines from "@/components/cart/_components/refused-lines"
 import { cartStore, getCartSnapshot } from "@/components/cart/cart-store"
 import type { CartLineError } from "@/lib/checkout/cart-pricing"
+import { stripePromise } from "@/lib/checkout/stripe-client"
 
 import s from "./styles.module.css"
 
@@ -33,17 +33,6 @@ import s from "./styles.module.css"
  * re-runs the build. On successful payment Stripe redirects to the return_url
  * set on the session (/checkout/success?session_id=...).
  */
-
-// Mirror the server-side STRIPE_ENV selector (build-time inlined). The session
-// is created with the matching secret key, so the publishable key must come
-// from the same account pair.
-const PUBLISHABLE_KEY =
-  (process.env.NEXT_PUBLIC_STRIPE_ENV === "live"
-    ? process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_LIVE
-    : process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_TEST) ||
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-
-const stripePromise = PUBLISHABLE_KEY ? loadStripe(PUBLISHABLE_KEY) : null
 
 function CheckoutInner() {
   const searchParams = useSearchParams()

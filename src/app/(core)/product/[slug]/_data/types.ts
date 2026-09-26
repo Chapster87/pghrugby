@@ -39,6 +39,22 @@ export type PdpLine = {
   inStock: boolean
 }
 
+/**
+ * The Donate page's standalone pay-what-you-want offering, read from the page's
+ * dedicated any-amount field (`donation-club-any`).
+ *
+ * It is deliberately not a `PdpLine`: the record is never a cart primary and
+ * never a cart line, so it carries no sku, price, or quantity here — the
+ * affordance opens its own sole-line session instead
+ * (`docs/agents/donations-in-mixed-carts.md` § 3).
+ */
+export type PdpAnyAmount = {
+  /** The record's title — the affordance's heading. */
+  label: string
+  /** The record's `in_stock`, the switch that turns any-amount giving off. */
+  available: boolean
+}
+
 /** How the buy box selects its primary — the page's `product_type`. */
 export type PdpProductType = "simple" | "variation" | "grouped"
 
@@ -106,6 +122,11 @@ export type PdpViewModel = {
   photos: PdpPhoto[]
   primaries: PdpLine[]
   addons: PdpLine[]
+  /**
+   * The standalone any-amount offering, when the page points at one; null
+   * otherwise. Rendered beside the presets, never as a cart primary.
+   */
+  anyAmount: PdpAnyAmount | null
   /** The authored below-fold panels, in the order the editor arranged them. */
   panels: PdpPanel[]
   /** The DatoCMS `data_collector` record id snapshotted onto the entries. */

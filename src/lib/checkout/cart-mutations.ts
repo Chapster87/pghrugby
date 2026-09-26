@@ -19,6 +19,8 @@ import {
   type CollectorField,
   type PricedLine,
 } from "./cart-entries"
+import { findCatalogItem } from "./catalog"
+import { DONATION_FAMILY } from "./donations"
 
 /**
  * Safety bound per line quantity, applied on every write. The real cap (e.g.
@@ -64,17 +66,33 @@ const clampQuantity = (quantity: number) =>
   Math.min(MAX_LINE_QUANTITY, Math.max(1, Math.floor(quantity || 1)))
 
 /**
+ * Whether a sku is a donation — always quantity 1
+ * (`docs/agents/donations-in-mixed-carts.md` § 1: a larger gift picks a larger
+ * preset, never a larger quantity). Read from the catalog, the same map the
+ * server bills from.
+ */
+export function isDonationSku(sku: string): boolean {
+  return findCatalogItem(sku)?.family === DONATION_FAMILY
+}
+
+/**
  * Clamps a line quantity to the server's write bounds: floored at 1 (leaving the
  * cart is an explicit remove, never a zero) and capped at `MAX_LINE_QUANTITY`.
+ *
+ * A **donation** is pinned to 1 rather than clamped, on every path that writes a
+ * quantity — add, merge, and an edit — so no surface can hold a donation the
+ * server would bill differently from what the flyout shows.
  *
  * Shared by the client store, the PDP's selection state, and the server's
  * snapshot validation, so no surface can hold a quantity the snapshot would
  * reject or silently rewrite.
  *
  * @param quantity - The requested quantity, from any source.
+ * @param sku - The line's sku, when the caller has it; a donation sku pins to 1.
  * @returns The clamp-safe quantity.
  */
-export function clampLineQuantity(quantity: number): number {
+export function clampLineQuantity(quantity: number, sku = ""): number {
+  if (sku && isDonationSku(sku)) return 1
   return clampQuantity(quantity)
 }
 
@@ -100,6 +118,9 @@ function hasCollector(entries: CartEntry[], lineId: string): boolean {
  * - A plain primary (no collector, no `parentId`) merges by `sku`; quantities
  *   sum. The incoming add-ons are attached to the survivor, so they follow
  *   their primary without any re-parenting of existing rows.
+ * - A **donation** merges by sku like any plain line but never accumulates:
+ *   adding the same preset twice is the same gift, not a doubled one
+ *   (`clampLineQuantity`).
  * - An add-on merges by `(sku, parentId)`; quantities sum.
  *
  * @param entries - The cart's current entries, in add order.
@@ -126,7 +147,7 @@ export function addGroup(
   const primaryIds: string[] = []
 
   for (const incoming of group.primaries) {
-    const quantity = clampQuantity(incoming.quantity)
+    const quantity = clampLineQuantity(incoming.quantity, incoming.sku)
     // A registration-bearing add never merges: the collector entry is what makes
     // it one, and two registrations are two lines. A plain line merges by sku.
     const target =
@@ -137,7 +158,13 @@ export function addGroup(
     if (target) {
       next = next.map((entry) =>
         entry.id === target.id && isPricedLine(entry)
-          ? { ...entry, quantity: clampQuantity(entry.quantity + quantity) }
+          ? {
+              ...entry,
+              // The merge is where a quantity would accumulate, so the sku goes
+              // through the same clamp: a donation stays at 1 however many times
+              // it is added.
+              quantity: clampLineQuantity(entry.quantity + quantity, entry.sku),
+            }
           : entry
       )
       primaryIds.push(target.id)
@@ -246,7 +273,7 @@ export function setEntryQuantity(
 ): CartEntry[] {
   return entries.map((entry) =>
     entry.id === id && isPricedLine(entry)
-      ? { ...entry, quantity: clampQuantity(quantity) }
+      ? { ...entry, quantity: clampLineQuantity(quantity, entry.sku) }
       : entry
   )
 }

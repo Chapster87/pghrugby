@@ -10,6 +10,14 @@ import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
  * disabled, never hidden) and `quantityBearing` (whether a line gets a stepper)
  * — plus the pricing fields.
  *
+ * `anyAmountProduct` is the Donate page's standalone pay-what-you-want record
+ * (`donation-club-any`), read **outside** the three buckets on purpose: it is not
+ * a cart primary and never a cart line
+ * (`docs/agents/donate-pdp-preset-selection.md` § 3). It carries only what the
+ * affordance renders — a label and the `in_stock` switch — plus its `sku`, which
+ * is what lets the render confirm the field points at the record the standalone
+ * route bills. The Price itself is resolved by that route, not here.
+ *
  * Copy comes from two places now, and only two. The page owns the tagline
  * (`shortDescription`) and the event meta line (`eventStartsAt` /
  * `eventLocation`); the product owns its full copy (`description`). A product has
@@ -84,6 +92,11 @@ export const productDetailPageQuery = graphql(
           saleEndsAt
           inStock
           quantityBearing
+        }
+        anyAmountProduct {
+          sku
+          title
+          inStock
         }
         addonProducts {
           title

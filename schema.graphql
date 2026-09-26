@@ -3299,6 +3299,7 @@ input ProductDetailPageModelFilter {
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
   addonProducts: LinksFilter
+  anyAmountProduct: LinkFilter
   dataCollectors: LinksFilter
   eventLocation: StringFilter
   eventStartsAt: DateTimeFilter
@@ -3370,6 +3371,7 @@ type ProductDetailPageRecord implements RecordInterface {
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
   addonProducts: [ProductRecord!]!
+  anyAmountProduct: ProductRecord
   dataCollectors: [DataCollectorRecord!]!
   eventLocation: String
   eventStartsAt: DateTime

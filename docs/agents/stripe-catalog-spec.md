@@ -90,7 +90,7 @@ Stripe's catalog rule: _a separate product per distinct option a customer choose
     - Fixed presets (`donation-club-preset-10` / `-25` / `-50`; the spike's defaults) — bundleable with dues.
     - One `custom_unit_amount` price (`donation-club-any`) for pay-what-you-want — **sole line item only** (hard constraint, see §3).
   - `donation-brendel` — the Brendel Scholarship Fund (live Buy Button already exists; reuse its price).
-  - `donation-pass-the-hat` — teammate hardship fund ($1 min), optional in first build.
+  - ~~`donation-pass-the-hat` — teammate hardship fund ($1 min), optional in first build.~~ **Retired 2026-09-25** — it was a `$1` placeholder, never a real rung of the ladder (see `docs/agents/donations-in-mixed-carts.md` § 2).
 - **Flow**: donations use `submit_type: 'donate'` and `customer_creation: 'always'`.
 
 ## 3. Grouping semantics (what can share a Checkout Session)

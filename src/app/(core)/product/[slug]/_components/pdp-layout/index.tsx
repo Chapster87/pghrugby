@@ -11,6 +11,7 @@ import type { CartAddGroup } from "@/lib/checkout/cart-mutations"
 
 import type { PdpViewModel } from "../../_data/types"
 import { usePdpSelection } from "../../_hooks/use-pdp-selection"
+import AnyAmountDonation from "../any-amount"
 import Gallery from "../gallery"
 import {
   AddonRow,
@@ -37,6 +38,10 @@ import s from "./style.module.css"
  * heading, two or more go through the tabs wrapper, and nothing is populated means
  * nothing renders at all (§ 5.6). The panel bodies arrive already rendered, which
  * is why this component never touches CMS content.
+ *
+ * A page that points at a standalone any-amount offering (the Donate page) renders
+ * it below the option selector as its own control — never a cart primary, and its
+ * own sole-line session (`docs/agents/donations-in-mixed-carts.md` § 3).
  *
  * A client component because the whole buy box is interactive; every price and
  * product fact arrives resolved in the view model, so neither a content nor a
@@ -204,6 +209,10 @@ export default function PdpLayout({ product }: { product: PdpViewModel }) {
                 </Button>
               </div>
             </div>
+          )}
+
+          {product.anyAmount && (
+            <AnyAmountDonation offering={product.anyAmount} />
           )}
 
           {product.addons.length > 0 && (

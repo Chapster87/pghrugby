@@ -5,6 +5,7 @@ import {
   resolveCartFromEntries,
   saveCart,
 } from "@/lib/checkout/cart-store"
+import { sessionSubmitType } from "@/lib/checkout/donations"
 import { buildOrderMetadata } from "@/lib/checkout/order-metadata"
 import {
   canUsePromotionCode,
@@ -41,6 +42,10 @@ import { getBaseURL } from "@/lib/util/env"
  * an irrelevant code can never block a cart, and a refused one writes no snapshot.
  * The whole step is **live-only**: the coupons exist in the live account and
  * Stripe refuses a discount nothing is eligible for, so test mode passes none.
+ *
+ * `submit_type` follows the donations rule: `'donate'` only when every priced
+ * line is a donation, `'pay'` otherwise
+ * (`docs/agents/donations-in-mixed-carts.md` § 1).
  *
  * `client_reference_id` = cartRef — the reconciliation key the webhook and the
  * success page use to re-join the cart's entry list, and the `reg_ref` the
@@ -179,6 +184,7 @@ export async function POST(request: Request) {
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded_page",
       mode: "payment",
+      submit_type: sessionSubmitType(cart.lines),
       line_items: cart.lines.map((line, lineIndex) => {
         // Quote-time validation already refused an unpriced line in live mode;
         // this only narrows the type, and fails loudly rather than minting an

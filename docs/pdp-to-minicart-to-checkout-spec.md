@@ -205,7 +205,7 @@ the owner already edits content.
 | Steel City 7s Bar Crawl   | `simple`       | one ticket                                                                                                       |
 | Golf Outing               | `simple`       | one registration primary (`quantity_bearing`, buyer-set 1–4); mulligan / drink band are quantity-bearing add-ons |
 | Dues                      | `variation`    | fall / spring / summer alternatives                                                                              |
-| Donate                    | `variation`    | three club presets + pass-the-hat (cart primaries only)                                                          |
+| Donate                    | `variation`    | the three club presets (cart primaries only)                                                                     |
 | Steel City 7s             | `variation`    | five divisions are alternatives; **no add-ons**                                                                  |
 | Forge Day at the Ballpark | `grouped`      | adult + 16 & under, each with its own quantity                                                                   |
 | NFL Survivor Pool         | `grouped`      | ticket + insurance, each with its own quantity                                                                   |
@@ -659,9 +659,11 @@ The additional side is a **gender-neutral discount**, not a product; the
   `quantity_bearing: false` (`Qty. 1`), merge by sku, `family=donation`.
 - `submit_type`: `'pay'` whenever a real product rides along; `'donate'` only on
   a donation-only session.
-- The preset ladder is `donation-club` $10 / $25 / $50 plus
-  `donation-pass-the-hat` $1 (the `donation-club-preset-10` / `-25` / `-50`
-  records — § 4, `docs/agents/donate-pdp-preset-selection.md`).
+- The preset ladder is `donation-club` $10 / $25 / $50 (the
+  `donation-club-preset-10` / `-25` / `-50` records — § 4,
+  `docs/agents/donate-pdp-preset-selection.md`). The `$1`
+  `donation-pass-the-hat` placeholder is retired (owner, 2026-09-25) and is not a
+  rung.
 - A true pay-what-you-want donation is a **standalone sole-line session**: a
   `custom_unit_amount` Price (preset $50 / min $1 / max $10,000) referenced by a
   dedicated standalone page field on the Donate PDP to the `donation-club`

@@ -38,10 +38,16 @@ session the flyout builds — the rule survives the mixed cart.
 ## 2. The preset ladder
 
 The live/provisioned ladder is canonical: `donation-club` **$10 / $25 / $50**
-plus `donation-pass-the-hat` **$1** (as approved in
-`docs/agents/stripe-catalog-approval.md`, mirrored in `catalog.ts` and the Donate
-PDP's `primary_products`). #18's recorded **$25/$50/$100/$250/$500** ladder is
-**stale** — superseded by the later catalog approval.
+(as approved in `docs/agents/stripe-catalog-approval.md`, mirrored in
+`catalog.ts` and the Donate PDP's `primary_products`). #18's recorded
+**$25/$50/$100/$250/$500** ladder is **stale** — superseded by the later catalog
+approval.
+
+> **Amended 2026-09-25** (owner). The `donation-pass-the-hat` **$1** product was a
+> placeholder, not a ladder rung: it is retired, so the ladder is the three club
+> presets. `catalog.ts` no longer lists it, the Donate PDP no longer offers it,
+> and the placeholder's Stripe product and DatoCMS record are archived
+> (`docs/agents/stripe-catalog-approval.md`).
 
 ## 3. Any-amount giving is standalone-only
 
@@ -69,13 +75,13 @@ Amended by
 is the repurposed `donation-club` record (detail in
 `docs/agents/donate-pdp-preset-selection.md`).
 
-- `product_type: variation` stays **cart-primaries only**, but its primaries are
-  the three club presets (`donation-club-preset-10` / `-25` / `-50`) followed by
-  `donation-pass-the-hat`, confirming the deferral in `pdp-product-model.md` § 4.
-  The any-amount option is not a primary and not a cart line.
+- `product_type: variation` stays **cart-primaries only**, and its primaries are
+  the three club presets (`donation-club-preset-10` / `-25` / `-50`), confirming
+  the deferral in `pdp-product-model.md` § 4. The any-amount option is not a
+  primary and not a cart line.
 - The any-amount option is a `product` record (`donation-club`, `sku`
   `donation-club-any`, `price_id` = the custom-amount Price, with `in_stock` and
   a label) referenced by a **dedicated standalone page field** on
-  `product_detail_page` — not `primary_products` — consistent with #72's "price
-  authority lives in DatoCMS". The field and record are build work the spec
-  hands off.
+  `product_detail_page` (api key `any_amount_product`) — not `primary_products`
+  — consistent with #72's "price authority lives in DatoCMS". The field and
+  record are build work the spec hands off.

@@ -7,11 +7,9 @@ import SidebarLayout from "@/layouts/sidebar"
 import { executeQuery } from "@/lib/datocms/executeQuery"
 import { ResultOf } from "@/lib/datocms/graphql"
 import type { ProductPriceRecord } from "@/lib/checkout/cart-pricing"
-import {
-  findCatalogItem,
-  findCatalogItemsForProduct,
-} from "@/lib/checkout/catalog"
+import { findCatalogItem } from "@/lib/checkout/catalog"
 import type { CollectorField } from "@/lib/checkout/cart-entries"
+import { ANY_AMOUNT_SKU } from "@/lib/checkout/donations"
 import { resolveLineDisplay } from "@/lib/checkout/price-display"
 import type { CloudinaryImage } from "@/types/datocms"
 import { getBaseURL } from "@/lib/util/env"
@@ -19,6 +17,7 @@ import { getBaseURL } from "@/lib/util/env"
 import PdpLayout from "./_components/pdp-layout"
 import PdpPanelContent from "./_components/pdp-panels"
 import type {
+  PdpAnyAmount,
   PdpEventMeta,
   PdpLine,
   PdpPanel,
@@ -247,10 +246,11 @@ function toFields(collector: PdpQuery["dataCollectors"][number] | undefined) {
  *
  * The amount and label come from the checkout catalog — the same map the server
  * bills from — so the PDP can never advertise a price the session build won't
- * charge. A product whose exact sku is not in the catalog expands to its
- * variant skus (the fixed-amount donation presets), which keeps a
- * variant-priced product sellable; a product with neither renders nothing
- * rather than an unpriced row.
+ * charge. A record resolves to its **exact** catalog item or to nothing: the
+ * prefix fallback that once expanded a multi-price `donation-club` record
+ * retired with the preset split, so a record whose sku is not in the catalog
+ * now renders no line rather than an unpriced row
+ * (`docs/agents/donate-pdp-preset-selection.md` § 4).
  *
  * `compareAtAmount` starts null: a sale is a Stripe fact, so the display pass in
  * the page resolves it afterwards.
@@ -259,17 +259,41 @@ function toLines(product: PdpQuery["primaryProducts"][number]): PdpLine[] {
   const sku = product.sku ?? ""
   if (!sku) return []
 
-  const exact = findCatalogItem(sku)
-  const items = exact ? [exact] : findCatalogItemsForProduct(sku)
+  const item = findCatalogItem(sku)
+  if (!item) return []
 
-  return items.map((item) => ({
-    sku: item.sku,
-    label: item.label,
-    unitAmount: item.unitAmount,
-    compareAtAmount: null,
-    quantityBearing: product.quantityBearing ?? false,
-    inStock: product.inStock ?? true,
-  }))
+  return [
+    {
+      sku: item.sku,
+      label: item.label,
+      unitAmount: item.unitAmount,
+      compareAtAmount: null,
+      quantityBearing: product.quantityBearing ?? false,
+      inStock: product.inStock ?? true,
+    },
+  ]
+}
+
+/**
+ * The page's standalone any-amount offering, or null when it points at none.
+ *
+ * The record is read through the page's dedicated field, never the primary
+ * bucket, so it can never join the cart. Its `in_stock` rides through as
+ * `available` — the affordance renders disabled rather than hidden, mirroring
+ * the sold-out rule the buy box already follows.
+ *
+ * The field must point at the record the standalone route bills, so anything
+ * else renders **nothing**: a mispointed field would otherwise surface one
+ * record's label above a session charged against another's Price.
+ */
+function toAnyAmount(
+  product: PdpQuery["anyAmountProduct"]
+): PdpAnyAmount | null {
+  if (!product || product.sku !== ANY_AMOUNT_SKU) return null
+  return {
+    label: product.title ?? "Give any amount",
+    available: product.inStock ?? true,
+  }
 }
 
 /** The CMS records a page's lines price against, as `cart-pricing` reads them. */
@@ -363,6 +387,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
     photos,
     primaries: primaryLines.map(withDisplay),
     addons: addonLines.map(withDisplay),
+    anyAmount: toAnyAmount(productDetailPage.anyAmountProduct),
     panels: toPanels(
       productDetailPage.tabs,
       productDetailPage.primaryProducts[0]?.description ?? null

@@ -12,6 +12,11 @@
  * products. Idempotent: existing products (by id), prices (by lookup_key),
  * coupons (by id) and promotion codes (by code) are reused, never duplicated.
  *
+ * A price row is either a fixed `- price: N.NN, lookup_key: `key`` or a
+ * customer-entered `- custom_unit_amount: preset=N.NN, minimum=N.NN,
+ * maximum=N.NN, lookup_key: `key`` (the pay-what-you-want donation). The two are
+ * mutually exclusive per Stripe's Price model.
+ *
  * It creates and never retires: archiving the products a decision drops stays a
  * deliberate, separate act (see the retirement note in the checklist).
  *
@@ -92,6 +97,7 @@ function parseChecklist() {
           productId: current.productId,
           name: current.name,
           amountUsd: p.amountUsd,
+          customUnitAmount: p.customUnitAmount,
           lookupKey: p.lookupKey,
           metadata: current.metadata,
         })
@@ -160,7 +166,25 @@ function parseChecklist() {
     if (price) {
       current.prices.push({
         amountUsd: parseFloat(price[1]),
+        customUnitAmount: null,
         lookupKey: price[2],
+      })
+      continue
+    }
+
+    // "  - custom_unit_amount: preset=50.00, minimum=1.00, maximum=10000.00, lookup_key: `donation-club-any`"
+    const custom = line.match(
+      /^\s*- custom_unit_amount:\s*preset=([0-9.]+)\s*,\s*minimum=([0-9.]+)\s*,\s*maximum=([0-9.]+)\s*,\s*lookup_key:\s*`([^`]+)`\s*$/
+    )
+    if (custom) {
+      current.prices.push({
+        amountUsd: null,
+        customUnitAmount: {
+          preset: parseFloat(custom[1]),
+          minimum: parseFloat(custom[2]),
+          maximum: parseFloat(custom[3]),
+        },
+        lookupKey: custom[4],
       })
       continue
     }
@@ -181,6 +205,15 @@ function parseMetadata(raw) {
     metadata[pair.slice(0, eq).trim()] = pair.slice(eq + 1).trim()
   }
   return metadata
+}
+
+/** How a price row reads in a log line: a fixed amount, or the PWYW bounds. */
+function describeRow(row) {
+  if (!row.customUnitAmount) return `$${row.amountUsd.toFixed(2)}`
+  const { preset, minimum, maximum } = row.customUnitAmount
+  return `custom $${preset.toFixed(2)} (min $${minimum.toFixed(
+    2
+  )}, max $${maximum.toFixed(2)})`
 }
 
 const { rows, coupons, skipped } = parseChecklist()
@@ -304,37 +337,48 @@ for (const [productId, priceRows] of byProduct) {
       priceMap[productId] ??= {}
       priceMap[productId][row.lookupKey] = existingPrice.id
       console.log(
-        `  [reused]  price ${row.lookupKey} — $${row.amountUsd.toFixed(2)} -> ${
+        `  [reused]  price ${row.lookupKey} — ${describeRow(row)} -> ${
           existingPrice.id
         }`
       )
     } else if (!product) {
       // dry-run with the product still to create — the price will be created with it
       console.log(
-        `  [create]  price ${row.lookupKey} — $${row.amountUsd.toFixed(
-          2
+        `  [create]  price ${row.lookupKey} — ${describeRow(
+          row
         )} on product ${productId}`
       )
     } else if (APPLY) {
       const price = await stripe.prices.create({
         product: product.id,
-        unit_amount: Math.round(row.amountUsd * 100),
         currency: "usd",
         lookup_key: row.lookupKey,
         metadata: row.metadata,
+        // A `custom_unit_amount` price carries no fixed `unit_amount`: the buyer
+        // enters the amount in Checkout, bounded by these values.
+        ...(row.customUnitAmount
+          ? {
+              custom_unit_amount: {
+                enabled: true,
+                preset: Math.round(row.customUnitAmount.preset * 100),
+                minimum: Math.round(row.customUnitAmount.minimum * 100),
+                maximum: Math.round(row.customUnitAmount.maximum * 100),
+              },
+            }
+          : { unit_amount: Math.round(row.amountUsd * 100) }),
       })
       created++
       priceMap[productId] ??= {}
       priceMap[productId][row.lookupKey] = price.id
       console.log(
-        `  [created] price ${row.lookupKey} — $${row.amountUsd.toFixed(2)} -> ${
+        `  [created] price ${row.lookupKey} — ${describeRow(row)} -> ${
           price.id
         }`
       )
     } else {
       console.log(
-        `  [create]  price ${row.lookupKey} — $${row.amountUsd.toFixed(
-          2
+        `  [create]  price ${row.lookupKey} — ${describeRow(
+          row
         )} on product ${productId}`
       )
     }

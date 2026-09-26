@@ -22,7 +22,9 @@ import {
 } from "../src/lib/checkout/cart-entries"
 import {
   addGroup,
+  clampLineQuantity,
   deriveCartModel,
+  isDonationSku,
   removeEntry,
   saveCollectorEntry,
   setEntryQuantity,
@@ -30,8 +32,10 @@ import {
   type IdFactory,
 } from "../src/lib/checkout/cart-mutations"
 
-// --- the pure amount lookup the flyout passes in (injected, not imported, so
-//     the check never pulls the catalog's Stripe Price ids into a test run) ---
+// --- the pure amount lookup the flyout passes in (injected, not imported) ---
+// `cart-mutations` reads the catalog itself for the donation quantity rule
+// (`isDonationSku`); amounts stay injected because the flyout resolves those
+// through the pricing route, sale windows included.
 
 const AMOUNTS: Record<string, number> = {
   "annual-forge-pig-roast": 2500,
@@ -77,6 +81,11 @@ const golf = (quantity: number, golfers: string[]): CartAddGroup => ({
   },
 })
 
+/** A donation-preset add: a plain line, never quantity-bearing. */
+const donationPreset = (sku: string): CartAddGroup => ({
+  primaries: [{ sku, quantity: 1, quantityBearing: false }],
+})
+
 // --- assertions ------------------------------------------------------------
 
 let failures = 0
@@ -111,6 +120,37 @@ function main(): void {
     check(
       "quantities summed",
       entries[0]?.kind === "product" && entries[0].quantity === 5
+    )
+  }
+
+  {
+    console.log("\nA donation merges by sku but is always quantity 1")
+    const ids = idFactory()
+    const sku = "donation-club-preset-25"
+    let entries = addGroup([], donationPreset(sku), {
+      sourcePdp: "donate",
+      idFactory: ids,
+    })
+    entries = addGroup(entries, donationPreset(sku), {
+      sourcePdp: "donate",
+      idFactory: ids,
+    })
+
+    const lines = entries.filter((entry) => entry.kind === "product")
+    check("the two adds merge into one line", lines.length === 1)
+    check(
+      "and it stays at Qty. 1 — the same gift, not a doubled one",
+      lines[0]?.kind === "product" && lines[0].quantity === 1
+    )
+    check(
+      "a donation sku is pinned on every write path",
+      clampLineQuantity(5, sku) === 1 &&
+        isDonationSku(sku) &&
+        !isDonationSku("dues-fall")
+    )
+    check(
+      "a non-donation line still sums",
+      clampLineQuantity(5, "dues-fall") === 5
     )
   }
 

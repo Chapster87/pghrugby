@@ -176,8 +176,9 @@ appended by seed-data-collectors.js.
 | `donate`        | donation-club, donation-pass-the-hat                                                           | —                                            | —                                 |
 
 > The `donate` row is what the applied backfill produced; the club presets later
-> split into `donation-club-preset-10` / `-25` / `-50` records and the primaries
-> reordered ladder-then-pass-the-hat
+> split into `donation-club-preset-10` / `-25` / `-50` records, and the primaries
+> are now those three — the `donation-pass-the-hat` `$1` placeholder was retired
+> 2026-09-25
 > ([Grilling: Donate PDP preset selection](https://github.com/Chapster87/pghrugby/issues/75)
 > — detail in `docs/agents/donate-pdp-preset-selection.md`).
 

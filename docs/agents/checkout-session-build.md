@@ -194,19 +194,30 @@ Registration x4: Jane Smith, John Doe"`. Names are every answered field of the
 
 ## 7. Not in this slice
 
-- **Donation `submit_type`** (spec § 8.4) — `'pay'` vs `'donate'`, and the
-  standalone pay-what-you-want session.
-- **`findCatalogItemsForProduct`'s prefix fallback** (spec § 3 target state) — the
-  two additional-side items went with the coupon work below, but the fallback
-  still serves the donate PDP's variant skus, so removing it is its own change.
+Both items that were deferred here have landed; nothing from the spec's build
+order is outstanding on this path.
 
-**Built since:** the SC7s additional-side coupon (spec § 8.3) was the other
-item deferred here — it landed 2026-09-25 for
+**Built since:** the SC7s additional-side coupon (spec § 8.3) was one item
+deferred here — it landed 2026-09-25 for
 [#86](https://github.com/Chapster87/pghrugby/issues/86): the per-count coupons,
 the `EXTRASIDE` promotion code, the `provision-stripe-catalog.mjs` extension, and
 the retirement of the two `sc7s-*-additional-side` products. The session now
 carries **one** `discounts` entry. Detail:
 `docs/agents/sc7s-additional-side-pricing.md` § Implementation.
+
+**Built since:** the donation rules (spec § 8.4) landed 2026-09-25 for
+[#87](https://github.com/Chapster87/pghrugby/issues/87). The cart session now
+states its `submit_type` — `'donate'` only when every priced line is a donation,
+`'pay'` otherwise — and a standalone any-amount session exists at
+`POST /api/checkout/donations/any-amount`: sole line item, quantity 1, no
+discounts, and cartless (no `client_reference_id`, no `carts` snapshot), so it
+proceeds while the browser cart is non-empty and never touches it. The rules are
+pure in `src/lib/checkout/donations.ts`. The Donate PDP renders the
+affordance from its dedicated `any_amount_product` field. And
+`findCatalogItemsForProduct`'s prefix fallback retired with the preset split — a
+record resolves to its exact catalog item or to nothing
+(`docs/agents/donate-pdp-preset-selection.md` § 4). Detail:
+`docs/agents/donations-in-mixed-carts.md`.
 
 ## 8. Verification
 
@@ -217,6 +228,14 @@ carries **one** `discounts` entry. Detail:
   half-authored cases, every refusal code, and the whole metadata surface
   including the truncation and >50-key overflow. No credentials needed. This is
   where criterion 4's _resolution_ is proved — which price id is chosen.
+- **The donation rules** (2026-09-25), offline through
+  `pnpm donations:round-trip` (`scripts/donations-round-trip.ts`): the ladder
+  order and labels, `submit_type` for the mixed / donation-only / real-only /
+  empty cases, and every rule the any-amount session params turn on — one line
+  item at quantity 1, `submit_type: 'donate'`, no `discounts`, no
+  `client_reference_id`, the `families`/`reg_count` metadata and no `reg_ref`.
+  The session create itself, and the live Price the CMS resolves, are
+  live-pass checks.
 - **Criterion 1** by hand, against embedded Checkout on a local dev server.
 - **Criterion 3's server half** (2026-09-23, against the local dev server): a cart
   holding a valid line beside an offending one answers `409` from **both**

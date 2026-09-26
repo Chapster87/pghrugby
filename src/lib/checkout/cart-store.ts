@@ -89,7 +89,7 @@ export function buildCartFromEntries(input: {
 
   const entries = parsed.map((entry) =>
     isPricedLine(entry)
-      ? { ...entry, quantity: clampLineQuantity(entry.quantity) }
+      ? { ...entry, quantity: clampLineQuantity(entry.quantity, entry.sku) }
       : entry
   )
 
