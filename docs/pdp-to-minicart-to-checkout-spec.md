@@ -139,8 +139,10 @@ Mirrors `page.featured_image`.
 | `alt`           | `string` | no       | Optional override; blank defaults to the page title |
 
 - Renderer selects per breakpoint (`<picture>` / media query) and branches on the
-  object's `resource_type` (`image` → `next/image` / `CloudinaryImageRenderer`;
-  `video` → `<video>` with the Cloudinary URL). `duration` is in the object.
+  object's `resource_type` (`image` → `getImageProps` from `next/image`, its
+  props onto the `<picture>`'s `<img>` and the mobile crop's `srcSet` onto its
+  `<source>`; `video` → `<video>` with the Cloudinary URL). `duration` is in the
+  object.
 - No uploads are created in DatoCMS, so nothing counts against free-tier media
   limits. Native `responsiveImage` / srcset / blur-up does not apply.
 - Draft/preview is per-record and already wired; the gallery needs no

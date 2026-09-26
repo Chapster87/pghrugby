@@ -151,7 +151,8 @@ Because the picker is single-asset, `gallery` is a **Modular Content
   variants; the renderer selects per breakpoint (`<picture>` / media query).
 - **Video**: no separate field. The Cloudinary object's `resource_type`
   (`image` vs `video`) and `format` decide; the renderer branches to
-  `next/image`/`CloudinaryImageRenderer` for images and a `<video>` (Cloudinary
+  `getImageProps` (its props go onto the `<picture>`'s `<img>`, and the mobile
+  crop's `srcSet` onto its `<source>`) for images and a `<video>` (Cloudinary
   video URL) for video. `duration` is already in the object shape.
 - **Storage-free**: no uploads are created in DatoCMS, so nothing counts against
   the free-tier media limits.
