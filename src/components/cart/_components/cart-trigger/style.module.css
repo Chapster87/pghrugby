@@ -1,0 +1,17 @@
+/* The header Cart trigger's item-count badge. The button's own chrome comes
+   from the header, which passes the nav-link button treatment. */
+
+.cartCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background-color: var(--color-gold);
+  color: var(--color-black);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+}

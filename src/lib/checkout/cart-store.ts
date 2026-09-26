@@ -1,140 +1,213 @@
 import "server-only"
 
-import { randomUUID } from "node:crypto"
-
-import { CHECKOUT_CURRENCY, findCatalogItem } from "./catalog"
-import { insertIgnoreDuplicates, selectRow } from "./supabase"
+import { isPricedLine, parseCartEntries, type CartEntry } from "./cart-entries"
+import { clampLineQuantity } from "./cart-mutations"
+import { quoteCart, type CartLineError, type QuotedLine } from "./cart-pricing"
+import { CHECKOUT_CURRENCY } from "./catalog"
+import { resolveLineDisplay } from "./price-display"
+import { resolveProductRecords } from "./product-records"
+import { isLiveStripe } from "./stripe"
+import { selectRow, upsertRow } from "./supabase"
 
 /**
- * Server-authoritative cart store, backed by the Supabase `carts` table.
+ * The checkout cart: parsing and validating the browser-held entries, resolving
+ * them against DatoCMS, and persisting the snapshot the session build hands to
+ * `recordOrder`.
  *
- * The client only sends selections (sku + quantity) plus an optional
- * registration payload; the server validates every sku against the catalog and
- * computes the line items and total. The cart is persisted so the
- * checkout-session route can replay it (even across server restarts) and the
- * webhook can re-join the registration payload via `client_reference_id`.
+ * Two halves, deliberately separate:
  *
- * `flow` is a reporting tag only (the PDP slug, e.g. "golf-outing") — it never
- * drives cart building. Order flow is derived from Stripe product family
- * metadata at record time (see recordOrder).
+ * - `buildCartFromEntries` is the **pure boundary** — it parses the untrusted
+ *   entry list (a `localStorage` round trip, a POST body) and throws when the
+ *   cart is structurally unusable. Skus and quantities are not judged here.
+ * - `resolveCartFromEntries` is the **content half** — one cache-tagged CDA read
+ *   supplies availability and the price ids, and a line that cannot be checked
+ *   out comes back as a per-line error rather than an exception, so a mixed cart
+ *   with one sold-out division still quotes its valid lines.
+ *
+ * The snapshot (`entries`, `currency`, `total`) is written **at session build**,
+ * not at add or validate time (`docs/pdp-to-minicart-to-checkout-spec.md` §
+ * 8.1): it is the checkout-time truth, and `recordOrder` re-joins it by
+ * `client_reference_id`. **No resolved amounts are persisted** — prices are
+ * re-resolved on every build; `total` is only the display figure.
  */
 
-/** Safety bound per line quantity; the real cap (e.g. max golfers) lives in the DataCollector form definition. */
-const MAX_LINE_QUANTITY = 100
-
-export type CheckoutCartItem = {
-  sku: string
-  label: string
-  /** Minor units (cents). */
-  unitAmount: number
-  quantity: number
-}
-
-export type CheckoutCart = {
+/** A cart that has passed the structural boundary, before it is quoted. */
+export type ValidatedCart = {
   cartRef: string
-  /** PDP slug this cart was built on (reporting tag only). */
-  flow: string
   currency: string
-  items: CheckoutCartItem[]
-  /** Minor units (cents). */
-  total: number
-  /** Form payload from the PDP's DataCollector (golf: captain + golfers; SC7s: team + contact). */
-  registration?: unknown
+  /** The flat, browser-held entry list, in add order. */
+  entries: CartEntry[]
 }
 
-export type CheckoutSelection = {
-  sku: string
-  quantity: number
+/** The persisted `carts` snapshot. */
+export type CheckoutCart = ValidatedCart & {
+  /** Minor units (cents) — server-computed display snapshot, not price authority. */
+  total: number
+}
+
+/** A cart validated and quoted: the snapshot plus its price/availability read. */
+export type ResolvedCart = CheckoutCart & {
+  /** The priced lines in cart order — the Stripe line items. */
+  lines: QuotedLine[]
+  /** Per-line refusals; the session is blocked whole when any is present. */
+  errors: CartLineError[]
 }
 
 type CartRow = {
   cart_ref: string
-  flow: string
   currency: string
-  line_items: CheckoutCartItem[]
+  entries: CartEntry[]
   total: number
-  registration: unknown
 }
 
-/** Builds a cart from client selections, validating every sku against the catalog. */
-export function buildCart(input: {
-  pdp: string
-  selections: CheckoutSelection[]
-  registration?: unknown
-}): CheckoutCart {
-  if (!input.pdp) {
-    throw new Error("pdp is required")
-  }
-  if (!Array.isArray(input.selections) || input.selections.length === 0) {
-    throw new Error("at least one selection is required")
-  }
-
-  const cartRef = `cart-${input.pdp}-${randomUUID().slice(0, 12)}`
-  const items: CheckoutCartItem[] = []
-
-  for (const selection of input.selections) {
-    const catalogItem = findCatalogItem(selection.sku)
-    if (!catalogItem) {
-      throw new Error(`"${selection.sku}" is not in the checkout catalog`)
-    }
-    const quantity = Math.min(
-      Math.max(1, Math.floor(selection.quantity || 1)),
-      MAX_LINE_QUANTITY
-    )
-    items.push({
-      sku: catalogItem.sku,
-      label: catalogItem.label,
-      unitAmount: catalogItem.unitAmount,
-      quantity,
-    })
+/**
+ * Parses and validates the browser-held entry list, throwing when the cart is
+ * structurally unusable (no `cartRef`, no priced line at all, unparsable body).
+ *
+ * Quantities are clamped here rather than trusted: the client is not the
+ * quantity authority (`MAX_LINE_QUANTITY`). Skus are **not** checked — an
+ * unknown or sold-out sku is a per-line error from `resolveCartFromEntries`, so
+ * the buyer is told which line to remove instead of being handed a whole-cart
+ * failure.
+ *
+ * @param input.cartRef - The client's `client_reference_id`.
+ * @param input.entries - The untrusted entry list.
+ * @returns The parsed entries with the cart's fixed attributes.
+ */
+export function buildCartFromEntries(input: {
+  cartRef: string
+  entries: unknown
+}): ValidatedCart {
+  if (!input.cartRef) {
+    throw new Error("cartRef is required")
   }
 
-  const total = items.reduce(
-    (sum, item) => sum + item.unitAmount * item.quantity,
-    0
+  const parsed = parseCartEntries(input.entries)
+  if (!parsed.some(isPricedLine)) {
+    throw new Error("the cart holds no priced lines")
+  }
+
+  const entries = parsed.map((entry) =>
+    isPricedLine(entry)
+      ? { ...entry, quantity: clampLineQuantity(entry.quantity, entry.sku) }
+      : entry
   )
 
+  return { cartRef: input.cartRef, currency: CHECKOUT_CURRENCY, entries }
+}
+
+/**
+ * Validates the browser-held cart and resolves it against DatoCMS: one CDA read
+ * for every sku, then the sale-window/availability quote.
+ *
+ * Called by the add-time validate route (`POST /api/checkout/cart`) and again by
+ * the session build, which re-resolves **fresh** so a window that closed while
+ * the cart sat open re-prices, and a line that sold out in between is refused.
+ *
+ * The returned lines carry the **display** pricing — the sale amount while a sale
+ * runs — so the amounts reported here match what the surfaces show and what a
+ * test-mode session bills.
+ *
+ * @param input.cartRef - The client's `client_reference_id`.
+ * @param input.entries - The untrusted entry list.
+ * @returns The quoted lines, the per-line errors, and the display total.
+ * @throws When the cart is structurally unusable (see `buildCartFromEntries`).
+ */
+export async function resolveCartFromEntries(input: {
+  cartRef: string
+  entries: unknown
+}): Promise<ResolvedCart> {
+  const cart = buildCartFromEntries(input)
+
+  const records = await resolveProductRecords(
+    cart.entries.filter(isPricedLine).map((line) => line.sku)
+  )
+  const { lines, errors } = quoteCart(cart.entries, records, {
+    requirePriceId: isLiveStripe,
+  })
+
+  // Fold in the display pricing. A sale amount is a Stripe fact the pure quote
+  // cannot see, and in test mode this amount **is** what gets billed (inline
+  // `price_data`), so taking it from here is what makes a local rehearsal charge
+  // exactly what the surfaces show. Live mode bills the Price id instead, and
+  // this only moves the figures the snapshot and the response report.
+  const display = await resolveLineDisplay(
+    lines.map((line) => line.sku),
+    records
+  )
+  const priced = lines.map((line) => {
+    const shown = display.get(line.sku)
+    return shown
+      ? {
+          ...line,
+          unitAmount: shown.unitAmount,
+          compareAtAmount: shown.compareAtAmount,
+        }
+      : line
+  })
+
   return {
-    cartRef,
-    flow: input.pdp,
-    currency: CHECKOUT_CURRENCY,
-    items,
-    total,
-    registration: input.registration,
+    ...cart,
+    lines: priced,
+    errors,
+    total: priced.reduce(
+      (sum, line) => sum + line.unitAmount * line.quantity,
+      0
+    ),
   }
 }
 
-/** Persists a computed cart. */
+/**
+ * The refusal body both checkout routes answer a request with: the summary line
+ * plus one entry per line the server will not bill.
+ *
+ * Shared so the buyer-facing wording cannot drift between the add-time validate
+ * call and the session build, which refuse the same lines in the same way.
+ *
+ * @param errors - The per-line refusals to report.
+ * @returns The `409` response body.
+ */
+export function refusalResponse(errors: CartLineError[]): {
+  error: string
+  errors: CartLineError[]
+} {
+  return {
+    error: "Some lines can't be checked out — remove them and try again.",
+    errors,
+  }
+}
+
+/**
+ * Persists the cart snapshot.
+ *
+ * Upsert, not insert-ignore: the snapshot must track the browser cart's latest
+ * state, so a second checkout on the same `cartRef` (after an edit) replaces the
+ * row. Orders are the opposite — first writer wins there.
+ */
 export async function saveCart(cart: CheckoutCart): Promise<void> {
-  await insertIgnoreDuplicates("carts", {
+  await upsertRow("carts", {
     cart_ref: cart.cartRef,
-    flow: cart.flow,
     currency: cart.currency,
-    line_items: cart.items,
+    entries: cart.entries,
     total: cart.total,
-    registration: cart.registration ?? null,
   } satisfies CartRow)
 }
 
-/** Loads a persisted cart by cartRef (the client_reference_id). */
+/**
+ * Loads the persisted snapshot by cartRef (the `client_reference_id`).
+ *
+ * Read by `recordOrder` in the webhook and on the return page, where the entry
+ * list is the only source of per-line provenance and registrations. The amounts
+ * are deliberately **not** re-derived here: `order_lines.unit_amount` comes from
+ * the Stripe session.
+ */
 export async function getCart(cartRef: string): Promise<CheckoutCart | null> {
   const row = await selectRow<CartRow>("carts", "cart_ref", cartRef)
   if (!row) return null
   return {
     cartRef: row.cart_ref,
-    flow: row.flow,
     currency: row.currency,
-    items: row.line_items,
+    entries: row.entries,
     total: row.total,
-    registration: row.registration ?? undefined,
   }
-}
-
-/** Validates + builds + persists a cart in one step (the POST /api/checkout/cart path). */
-export async function createCart(
-  input: Parameters<typeof buildCart>[0]
-): Promise<CheckoutCart> {
-  const cart = buildCart(input)
-  await saveCart(cart)
-  return cart
 }

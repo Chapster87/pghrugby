@@ -1,0 +1,88 @@
+/* The shared DataCollector field renderer — the PDP's add-time form and the
+   flyout's edit panel both render it, so the field controls stay identical. */
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.required {
+  color: var(--color-danger);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid var(--color-grey-400);
+  border-radius: 6px;
+  /* The field sits on white, and the theme flips the native scheme to dark —
+     without both of these the text renders white on white. */
+  background-color: var(--color-white);
+  color: var(--color-grey-900);
+  color-scheme: light;
+
+  &::placeholder {
+    color: var(--color-grey-600);
+  }
+
+  &:focus,
+  &:focus-visible {
+    border-color: var(--color-gold);
+    outline: 1px solid var(--color-gold);
+  }
+}
+
+.textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.inputError {
+  border-color: var(--color-danger);
+}
+
+.fieldError {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: var(--color-danger);
+}
+
+.repeatRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  & + & {
+    margin-top: 8px;
+  }
+}
+
+.rowAction {
+  flex: none;
+  border: none;
+  background: none;
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.addRow {
+  align-self: flex-start;
+  margin-top: 8px;
+}

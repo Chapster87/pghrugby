@@ -49,3 +49,15 @@ button {
   background: transparent;
   font-family: inherit;
 }
+
+/* next-themes writes `color-scheme: dark` onto <html> (its `enableColorScheme`
+   default), which flips a native control's UA colours to light. Every field in
+   this design sets a white background, so the UA text would be white on white.
+   Pin the native controls to the light scheme here rather than per component;
+   a component that also wants a guaranteed text colour sets it alongside this
+   (see `components/field`, `components/quantity-selector`). */
+input,
+textarea,
+select {
+  color-scheme: light;
+}

@@ -1,0 +1,226 @@
+/* The flyout's grouped card — one bordered card per add-to-cart action. */
+
+.card {
+  border: 1px solid var(--color-grey-300);
+  border-radius: 12px;
+  overflow: hidden;
+
+  & + & {
+    margin-top: 14px;
+  }
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  background-color: var(--color-grey-100);
+  border-bottom: 1px solid var(--color-grey-200);
+}
+
+.cardTitle {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-grey-600);
+}
+
+.cardTotal {
+  font-weight: 700;
+}
+
+.cardLine {
+  padding: 14px;
+
+  & + & {
+    border-top: 1px solid var(--color-grey-200);
+  }
+}
+
+.cardLineRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cardThumb {
+  width: 44px;
+  height: 44px;
+}
+
+.cardLineText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* The standardized right rail: quantity control on top, price beneath it. */
+.lineRail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex: none;
+}
+
+.thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 8px;
+  background-color: var(--color-grey-100);
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.price {
+  /* A pair while a sale runs (struck regular + sale), a single amount otherwise. */
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* The regular amount behind a sale amount. */
+.compareAt {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--color-grey-600);
+  text-decoration: line-through;
+}
+
+/* Wraps the global QuantitySelector — never class it directly, or its prop
+   spread drops its own root class and the field styling with it. */
+.stepper {
+  display: inline-flex;
+}
+
+.lineName {
+  font-weight: 600;
+}
+
+.answers {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: var(--color-grey-100);
+}
+
+.answersList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+}
+
+.answersRow {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 8px;
+}
+
+.answersLabel {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-grey-600);
+}
+
+.answersValue {
+  margin: 0;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.lineActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.iconAction,
+.iconActionDanger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--color-grey-300);
+  border-radius: 6px;
+  background-color: var(--color-white);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}
+
+.iconAction {
+  color: var(--color-grey-900);
+
+  &:hover {
+    border-color: var(--color-grey-500);
+    background-color: var(--color-grey-100);
+  }
+}
+
+.iconActionDanger {
+  color: var(--color-danger);
+
+  &:hover {
+    border-color: var(--color-danger);
+    background-color: rgba(198, 12, 48, 0.06);
+  }
+}
+
+.cardAddons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 14px 0 0;
+  padding: 14px 0 0;
+  border-top: 1px dashed var(--color-grey-300);
+  list-style: none;
+}
+
+.cardAddon {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.addonLeft {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding-top: 6px;
+}
+
+.addonName {
+  font-size: 0.85rem;
+}
+
+.qtyLabel {
+  font-size: 0.8rem;
+  color: var(--color-grey-600);
+}
+
+.addonPrice {
+  font-size: 0.85rem;
+}

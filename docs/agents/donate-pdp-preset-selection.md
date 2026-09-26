@@ -19,7 +19,7 @@ price. The PDP product model (`docs/agents/pdp-product-model.md`) gives each
 **one option per primary** with one price card — so a record carrying several
 preset prices has no representation.
 
-The model's grain is a *sellable unit keyed to one Stripe Price*: the cart keys
+The model's grain is a _sellable unit keyed to one Stripe Price_: the cart keys
 off `sku`, and `src/lib/checkout/catalog.ts` already holds the three preset SKUs
 (`donation-club-preset-10` / `-25` / `-50`), each with its own `priceId` and the
 Stripe `lookup_key` of the matching price.
@@ -30,11 +30,11 @@ Stripe `lookup_key` of the matching price.
 
 Three DatoCMS `product` records keyed to the existing preset Prices:
 
-| record `sku`              | `price_id`                | record title         |
-| ------------------------- | ------------------------- | -------------------- |
-| `donation-club-preset-10` | the `$10` preset Price    | Club donation — $10  |
-| `donation-club-preset-25` | the `$25` preset Price    | Club donation — $25  |
-| `donation-club-preset-50` | the `$50` preset Price    | Club donation — $50  |
+| record `sku`              | `price_id`             | record title        |
+| ------------------------- | ---------------------- | ------------------- |
+| `donation-club-preset-10` | the `$10` preset Price | Club donation — $10 |
+| `donation-club-preset-25` | the `$25` preset Price | Club donation — $25 |
+| `donation-club-preset-50` | the `$50` preset Price | Club donation — $50 |
 
 The record `sku` equals the existing `catalog.ts` SKU and the Stripe price
 `lookup_key`, so the sku → price/catalog seam is an exact match. Each record is
@@ -53,14 +53,18 @@ order, are:
 1. `donation-club-preset-10`
 2. `donation-club-preset-25`
 3. `donation-club-preset-50`
-4. `donation-pass-the-hat`
 
-The selector renders the club ladder ascending with the distinct hardship fund
-last; labels are `Club donation — $10` / `— $25` / `— $50` and
-`"Pass the Hat" Fund — $1`. Selection stays subject to the `variation` rule — one
-of N, no preselection (`docs/agents/pdp-product-model.md` § 5). Choosing a preset
-adds it as an ordinary cart line: a plain priced line, `quantity_bearing: false`,
-merging by sku like any plain line (`docs/agents/donations-in-mixed-carts.md` § 1).
+The selector renders the club ladder ascending; labels are
+`Club donation — $10` / `— $25` / `— $50`. Selection stays subject to the
+`variation` rule — one of N, no preselection (`docs/agents/pdp-product-model.md`
+§ 5). Choosing a preset adds it as an ordinary cart line: a plain priced line,
+`quantity_bearing: false`, merging by sku like any plain line — but never
+accumulating, since a donation is always quantity 1
+(`docs/agents/donations-in-mixed-carts.md` § 1).
+
+> **Amended 2026-09-25** (owner). `donation-pass-the-hat` — the **$1** fourth
+> primary this decision proposed — was a placeholder and is retired; the ladder is
+> the three club presets only (`docs/agents/donations-in-mixed-carts.md` § 2).
 
 ### 3. The `donation-club` record becomes the any-amount record
 
@@ -98,6 +102,17 @@ removed; a record resolves to its exact catalog item or to nothing.
 - **`catalog.ts`:** the three `donationPresets` entries stay as the sku → label /
   amount map; the live `priceId` comes from DatoCMS
   (`docs/agents/pdp-pricing-and-sale-windows.md`).
+
+> **Built 2026-09-25** for
+> [#87](https://github.com/Chapster87/pghrugby/issues/87). The migration
+> `migrations/1790384662_donatePresetsAndAnyAmount.ts` creates the three preset
+> records, adds the `any_amount_product` field, and repurposes the
+> `donation-club` record as `donation-club-any`; the follow-up
+> `migrations/1790385…_retirePassTheHatPlaceholder.ts` drops the retired
+> placeholder. The Donate page's `primary_products` is the three club presets. The
+> `custom_unit_amount` Price is minted by `provision-stripe-catalog.mjs` from its
+> approval-checklist row (`donation-club-any`); its id is handed to the migration
+> as `DONATION_ANY_AMOUNT_PRICE_ID`. The prefix fallback (§ 4) is removed.
 
 ## Forward direction (not part of this decision)
 

@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 import {
   findNextUpcomingMatch,
   getAllMatches,
@@ -64,10 +66,12 @@ export default async function Match({
           <>
             <div className={`${s.team} ${s.homeTeam}`}>
               <div className={s.teamLogo}>
-                <img
+                <Image
                   src={match.home_team?.team_logo?.url || "/placeholder.svg"}
                   alt={match.home_team?.team_name || "Home team"}
-                  className="w-full h-full object-contain"
+                  fill
+                  sizes="50px"
+                  className={s.objectContain}
                 />
               </div>
               <Text className={s.teamName}>{match.home_team?.team_name}</Text>
@@ -77,10 +81,12 @@ export default async function Match({
             </div>
             <div className={`${s.team} ${s.awayTeam}`}>
               <div className={s.teamLogo}>
-                <img
+                <Image
                   src={match.away_team?.team_logo?.url || "/placeholder.svg"}
                   alt={match.away_team?.team_name || "Away team"}
-                  className="w-full h-full object-contain"
+                  fill
+                  sizes="50px"
+                  className={s.objectContain}
                 />
               </div>
               <Text className={s.teamName}>{match.away_team?.team_name}</Text>
@@ -90,10 +96,12 @@ export default async function Match({
           <>
             <div className={`${s.team} ${s.awayTeam}`}>
               <div className={s.teamLogo}>
-                <img
+                <Image
                   src={match.away_team?.team_logo?.url || "/placeholder.svg"}
                   alt={match.away_team?.team_name || "Away team"}
-                  className="w-full h-full object-contain"
+                  fill
+                  sizes="50px"
+                  className={s.objectContain}
                 />
               </div>
               <Text className={s.teamName}>{match.away_team?.team_name}</Text>
@@ -103,10 +111,12 @@ export default async function Match({
             </div>
             <div className={`${s.team} ${s.homeTeam}`}>
               <div className={s.teamLogo}>
-                <img
+                <Image
                   src={match.home_team?.team_logo?.url || "/placeholder.svg"}
                   alt={match.home_team?.team_name || "Home team"}
-                  className="w-full h-full object-contain"
+                  fill
+                  sizes="50px"
+                  className={s.objectContain}
                 />
               </div>
               <Text className={s.teamName}>{match.home_team?.team_name}</Text>

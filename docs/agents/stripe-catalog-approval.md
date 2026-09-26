@@ -5,14 +5,15 @@ Approval gate for wayfinder ticket **Task: Provision the live Stripe store catal
 want, delete items entirely, or change amounts — then run:
 
 ```bash
-cd pghrugby/nextjs
 pnpm provision:stripe          # dry-run: what WOULD be created (no writes)
 pnpm provision:stripe:apply    # create exactly the [x] items + print price map
 ```
 
-The provisioning script reads **only the `- [x]` product blocks below**. One block
-per product; multiple `- price:` lines add multiple prices. Metadata follows the
-SKU scheme in `docs/agents/stripe-catalog-spec.md` §4.
+The provisioning script reads **only the `- [x]` product and coupon blocks
+below**. One block per product; multiple `- price:` lines add multiple prices.
+One block per coupon; an optional `- promotion_code:` line adds a customer-facing
+code on top of it. Metadata follows the SKU scheme in
+`docs/agents/stripe-catalog-spec.md` §4.
 
 ## Live WooCommerce context (scanned 2026-08-26)
 
@@ -41,51 +42,61 @@ unchecked, in case the club runs a summer cycle.
 `- [x]` = create · `- [ ]` = skip
 
 - [x] product `dues-fall` — Fall 2026 Season Dues
+
   - price: 250.00, lookup_key: `dues-fall-2026`
   - metadata: family=dues, season=fall, kind=one-time
   - note:
 
 - [x] product `dues-spring` — Spring Season Dues
+
   - price: 200.00, lookup_key: `dues-spring-2026`
   - metadata: family=dues, season=spring, kind=one-time
   - note: current live in-stock dues product
 
 - [x] product `dues-summer` — Summer Season Dues
+
   - price: 100.00, lookup_key: `dues-summer-2026`
   - metadata: family=dues, season=summer, kind=one-time
   - note: only if the club runs a summer cycle
 
 - [x] product `golf-outing-registration` — Golf Outing Registration
+
   - price: 110.00, lookup_key: `golf-outing-registration-2026`
   - metadata: family=golf, kind=one-time, registration=true
   - note: live $110
 
 - [x] product `golf-outing-mulligan` — Golf Outing — Mulligan (4 + contest entry)
+
   - price: 30.00, lookup_key: `golf-outing-mulligan-2026`
   - metadata: family=golf, kind=one-time
   - note: WP shows out of stock
 
 - [x] product `golf-outing-drink-band` — Golf Outing — All You Can Drink
+
   - price: 30.00, lookup_key: `golf-outing-drink-band-2026`
   - metadata: family=golf, kind=one-time
   - note: WP shows out of stock
 
 - [x] product `sc7s-mens-open` — SC7s Men's Open
+
   - price: 400.00, lookup_key: `sc7s-mens-open-2026`
   - metadata: family=tournament, division=mens-open, kind=one-time, registration=true
   - note:
 
 - [x] product `sc7s-mens-social` — SC7s Men's Social
+
   - price: 400.00, lookup_key: `sc7s-mens-social-2026`
   - metadata: family=tournament, division=mens-social, kind=one-time, registration=true
   - note:
 
 - [x] product `sc7s-mens-super-social` — SC7s Men's Super Social
+
   - price: 400.00, lookup_key: `sc7s-mens-super-social-2026`
   - metadata: family=tournament, division=mens-super-social, kind=one-time, registration=true
   - note:
 
 - [x] product `sc7s-womens-open` — SC7s Women's Open
+
   - price: 400.00, lookup_key: `sc7s-womens-open-2026`
   - metadata: family=tournament, division=womens-open, kind=one-time, registration=true
   - note:
@@ -95,53 +106,58 @@ unchecked, in case the club runs a summer cycle.
   - metadata: family=tournament, division=womens-social, kind=one-time, registration=true
   - note: **missing from catalog.ts** — will be added
 
-- [x] product `sc7s-mens-additional-side` — SC7s Men's Additional Side
-  - price: 375.00, lookup_key: `sc7s-mens-additional-side-2026`
-  - metadata: family=tournament, division=mens-additional-side, kind=one-time, registration=true
-  - note:
-
-- [x] product `sc7s-womens-additional-side` — SC7s Women's Additional Side
-  - price: 375.00, lookup_key: `sc7s-womens-additional-side-2026`
-  - metadata: family=tournament, division=womens-additional-side, kind=one-time, registration=true
-  - note:
+> **Retired (2026-09-25):** `sc7s-mens-additional-side` and
+> `sc7s-womens-additional-side` are no longer products — the additional side is a
+> coupon over the divisions (see "SC7s additional-side coupons" below). Archive
+> both in Stripe (`stripe.products.update(id, { active: false })`) and archive or
+> delete their DatoCMS `product` records; `catalog.ts` no longer lists them.
 
 - [x] product `donation-club` — Club Donation
+
   - price: 10.00, lookup_key: `donation-club-preset-10`
   - price: 25.00, lookup_key: `donation-club-preset-25`
   - price: 50.00, lookup_key: `donation-club-preset-50`
+  - custom_unit_amount: preset=50.00, minimum=1.00, maximum=10000.00, lookup_key: `donation-club-any`
   - metadata: family=donation, kind=donation
-  - note: fixed presets, bundleable
+  - note: fixed presets, bundleable; the `custom_unit_amount` row is the standalone pay-what-you-want price — sole line item only, never a mixed session ([#87](https://github.com/Chapster87/pghrugby/issues/87))
 
-- [x] product `donation-pass-the-hat` — "Pass the Hat" Fund
-  - price: 1.00, lookup_key: `donation-pass-the-hat`
-  - metadata: family=donation, kind=donation
-  - note:
+> **Retired (2026-09-25):** `donation-pass-the-hat` is no longer a product — it was
+> a `$1` placeholder, never a rung of the donation ladder
+> (see `docs/agents/donations-in-mixed-carts.md` § 2). Archive it in Stripe
+> (`stripe.products.update(id, { active: false })`), archive or delete its DatoCMS
+> `product` record, and leave it out of `catalog.ts` — all three are done, so the
+> row is gone from this checklist.
 
 ### Event tickets — added per club request (`family=events`)
 
 > `family=events` extends the spec's family enum (membership|dues|golf|tournament|donation) to cover these one-off event tickets.
 
 - [x] product `ballpark-day-adult` — Forge Day at the Ballpark — Adult
+
   - price: 40.00, lookup_key: `ballpark-day-adult-2026`
   - metadata: family=events, kind=one-time
   - note: WP "Ballpark Day Adult" $40
 
 - [x] product `ballpark-ticket-16-under` — Forge Day at the Ballpark — 16 & Under
+
   - price: 35.00, lookup_key: `ballpark-ticket-16-under-2026`
   - metadata: family=events, kind=one-time
   - note: WP "16-or-Under Ballpark Ticket" $35
 
 - [x] product `nfl-survivor-pool-ticket` — NFL Survivor Pool — Ticket
+
   - price: 20.00, lookup_key: `nfl-survivor-pool-ticket-2026`
   - metadata: family=events, kind=one-time
   - note: WP "NFL Survivor Pool Ticket" $20
 
 - [x] product `nfl-survivor-pool-insurance` — NFL Survivor Pool — Insurance
+
   - price: 10.00, lookup_key: `nfl-survivor-pool-insurance-2026`
   - metadata: family=events, kind=one-time
   - note: WP "NFL Survivor Pool Insurance" $10
 
 - [x] product `steel-city-7s-bar-crawl` — Steel City 7s Bar Crawl
+
   - price: 5.00, lookup_key: `steel-city-7s-bar-crawl-2026`
   - metadata: family=events, kind=one-time
   - note: WP $5
@@ -150,6 +166,42 @@ unchecked, in case the club runs a summer cycle.
   - price: 25.00, lookup_key: `annual-forge-pig-roast-2026`
   - metadata: family=events, kind=one-time
   - note: WP $25
+
+## SC7s additional-side coupons — edit, then run `--apply`
+
+`- [x]` = create · `- [ ]` = skip
+
+The additional side is a per-count coupon over the divisions, not a product
+(`docs/agents/sc7s-additional-side-pricing.md`). `applies_to` is **derived** from
+the checked `family=tournament` products above, so a division added there is
+covered without editing this section. `amount_off` is the flat discount for that
+many extra teams; the API enforces the one-coupon-per-session rule that stops
+these stacking.
+
+- [x] coupon `sc7s-extra-1` — $25 off the additional side
+
+  - amount_off: 25.00
+  - promotion_code: EXTRASIDE
+  - note: extra team 1 — EXTRASIDE is the returning buyer's code
+
+- [x] coupon `sc7s-extra-2` — $50 off the additional side
+
+  - amount_off: 50.00
+  - note: extra team 2
+
+- [x] coupon `sc7s-extra-3` — $75 off the additional side
+
+  - amount_off: 75.00
+  - note: extra team 3
+
+- [x] coupon `sc7s-extra-4` — $100 off the additional side
+
+  - amount_off: 100.00
+  - note: extra team 4
+
+- [x] coupon `sc7s-extra-5` — $125 off the additional side
+  - amount_off: 125.00
+  - note: extra team 5 — the ladder's cap, applied to any larger cart
 
 ## Reuse — exists on the live account, do NOT create (verified by dry-run)
 
@@ -160,5 +212,10 @@ unchecked, in case the club runs a summer cycle.
 - **Pay the Forge**
   - existing donation product with 2 custom-amount prices — decide: reuse for `donation-club` or keep separate
 
-The PWYW (`custom_unit_amount`) price on `donation-club` is **not** in this
-checklist — it belongs to the pay-what-you-want donation UX ticket.
+The PWYW (`custom_unit_amount`) price on `donation-club` was previously held
+back from this checklist as the pay-what-you-want donation ticket's work. It is
+now minted here as `donation-club-any` ([#87](https://github.com/Chapster87/pghrugby/issues/87)).
+After `pnpm provision:stripe:apply` prints the price map, put its id in
+`.env.local` as `DONATION_ANY_AMOUNT_PRICE_ID` and run the DatoCMS migration
+(`migrations/1790384662_donatePresetsAndAnyAmount.ts`), which writes it onto the
+`donation-club-any` record's `price_id`.

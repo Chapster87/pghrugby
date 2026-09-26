@@ -43,6 +43,26 @@ const secretKey = pickStripeKey(
 export const stripe = secretKey ? new Stripe(secretKey) : null
 
 /**
+ * A client for the **live** account, for display reads only.
+ *
+ * A sale is a live Price object, and the amounts the site *advertises* are the
+ * live provisioned ones — `catalog.ts` carries live amounts, and the PDP has
+ * always shown them whatever `STRIPE_ENV` says. So resolving a sale Price's
+ * amount for display must reach the live account even when billing is a
+ * rehearsal against test; otherwise a sale authored in the CMS is invisible to
+ * the owner who just set it up, and the test-mode display silently disagrees with
+ * production. Billing is unaffected: it uses `stripe` above, per `STRIPE_ENV`.
+ *
+ * Null when no live key is configured (a preview or CI without one), where
+ * display falls back to the regular amount.
+ */
+export const liveStripe = isLiveStripe
+  ? stripe
+  : process.env.STRIPE_SECRET_KEY_LIVE
+  ? new Stripe(process.env.STRIPE_SECRET_KEY_LIVE)
+  : null
+
+/**
  * Publishable key for the client. `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` is the
  * canonical name (the Medusa-era `NEXT_PUBLIC_STRIPE_KEY` is kept as a
  * fallback until the environment inventory cleanup lands).

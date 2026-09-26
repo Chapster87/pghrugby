@@ -1,0 +1,172 @@
+/* The PDP layout: gallery beside the buy box above the fold, the authored panel
+   set below. */
+
+.pdp {
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+
+  @media (--viewport-md-up) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.buyBox {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.buyHead {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.15;
+}
+
+/* The event's date / location line, under the title. The two halves arrive
+   pre-joined from the view model. */
+.eventMeta {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  color: var(--color-grey-600);
+}
+
+.shortDescription {
+  margin: 8px 0 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-grey-800);
+}
+
+/* The tagline is Structured Text and renders its own paragraph, so the wrapper
+   above owns the spacing rather than a bare <p>. */
+.shortDescription p {
+  margin: 0 0 8px;
+}
+
+.shortDescription > :last-child {
+  margin-bottom: 0;
+}
+
+.descriptionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-start;
+  margin-top: 8px;
+  color: var(--color-gold-800);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.descriptionLinkArrow {
+  transition: transform 0.2s ease;
+}
+
+.descriptionLink:hover .descriptionLinkArrow {
+  transform: translateY(2px);
+}
+
+.miniLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-grey-600);
+}
+
+.addons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quantityWarning {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-gold-300);
+  border-radius: 8px;
+  background-color: var(--color-gold-100);
+}
+
+.quantityWarningText {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-gold-900);
+}
+
+.quantityWarningActions {
+  display: flex;
+  gap: 8px;
+}
+
+.buyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.addToCart {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.addButton {
+  width: 100%;
+}
+
+.unavailableNote {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-grey-600);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-top: 2px solid var(--color-grey-300);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.panels {
+  scroll-margin-top: 96px;
+  margin-top: 40px;
+}
+
+.panelBody {
+  max-width: 72ch;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-grey-800);
+}
+
+/* A panel body is Structured Text, or the product-copy fallback in a single
+   paragraph, so its rhythm is set here rather than inherited from a page body. */
+.panelBody p {
+  margin: 0 0 12px;
+}
+
+.panelBody > :last-child {
+  margin-bottom: 0;
+}

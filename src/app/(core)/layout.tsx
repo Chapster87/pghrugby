@@ -1,3 +1,4 @@
+import { CartProvider } from "@/components/cart"
 import BreakpointIndicator from "@/components/breakpoint-indicator"
 import Footer from "@/components/footer"
 import Header from "@/components/header"
@@ -16,6 +17,10 @@ export const revalidate = 3600
  * Layout for the `(core)` route group — the main public site. No <html>/<body>
  * here: the root layout owns the document shell. This wrapper keeps the site's
  * providers, breakpoint indicator, and header/footer chrome under it.
+ *
+ * `CartProvider` wraps the chrome as well as the page: the header's Cart trigger
+ * and every PDP act on one browser-held cart, and the provider renders the
+ * minicart flyout itself so it is mounted once for the whole group.
  */
 export default function CoreLayout({
   children,
@@ -24,12 +29,14 @@ export default function CoreLayout({
 }) {
   return (
     <Providers>
-      <BreakpointIndicator />
-      <div className="siteMain">
-        <Header />
-        {children}
-        <Footer />
-      </div>
+      <CartProvider>
+        <BreakpointIndicator />
+        <div className="siteMain">
+          <Header />
+          {children}
+          <Footer />
+        </div>
+      </CartProvider>
     </Providers>
   )
 }

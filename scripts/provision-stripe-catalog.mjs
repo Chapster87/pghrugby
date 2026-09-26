@@ -1,14 +1,26 @@
 #!/usr/bin/env node
 /**
- * Provision the Stripe store catalog (products + prices) on the LIVE account
- * from the approval checklist in `docs/agents/stripe-catalog-approval.md`.
+ * Provision the Stripe store catalog (products, prices, coupons, promotion
+ * codes) on the LIVE account from the approval checklist in
+ * `docs/agents/stripe-catalog-approval.md`.
  *
  * Only rows checked `[x]` in the checklist are created. Rows sharing a Product
  * ID create one product (metadata from the first checked row) plus one price
- * each. Idempotent: existing products (by id) and prices (by lookup_key) are
- * reused, never duplicated.
+ * each. A checked coupon block creates one coupon, with an optional
+ * `- promotion_code:` line creating a customer-facing code on top of it; the
+ * coupon's `applies_to` is derived from the checked `family=tournament`
+ * products. Idempotent: existing products (by id), prices (by lookup_key),
+ * coupons (by id) and promotion codes (by code) are reused, never duplicated.
  *
- * Usage (from pghrugby/nextjs):
+ * A price row is either a fixed `- price: N.NN, lookup_key: `key`` or a
+ * customer-entered `- custom_unit_amount: preset=N.NN, minimum=N.NN,
+ * maximum=N.NN, lookup_key: `key`` (the pay-what-you-want donation). The two are
+ * mutually exclusive per Stripe's Price model.
+ *
+ * It creates and never retires: archiving the products a decision drops stays a
+ * deliberate, separate act (see the retirement note in the checklist).
+ *
+ * Usage (from the repo root):
  *   pnpm provision:stripe            # dry-run: planned catalog + live diff, no writes
  *   pnpm provision:stripe:apply      # create exactly the [x] rows + print price map
  *
@@ -23,7 +35,7 @@ const APPLY = process.argv.includes("--apply")
 
 const APPROVAL_DOC = resolve(
   import.meta.dirname,
-  "../../docs/agents/stripe-catalog-approval.md"
+  "../docs/agents/stripe-catalog-approval.md"
 )
 const ENV_LOCAL = resolve(import.meta.dirname, "../.env.local")
 
@@ -65,17 +77,27 @@ const stripe = new Stripe(secretKey)
 function parseChecklist() {
   const lines = readFileSync(APPROVAL_DOC, "utf8").split(/\r?\n/)
   const rows = []
+  const coupons = []
   const skipped = []
   let current = null
 
   const flush = () => {
     if (!current) return
+
+    if (current.kind === "coupon") {
+      if (current.checked) coupons.push(current)
+      else skipped.push(`${current.id} (coupon)`)
+      current = null
+      return
+    }
+
     if (current.checked) {
       for (const p of current.prices) {
         rows.push({
           productId: current.productId,
           name: current.name,
           amountUsd: p.amountUsd,
+          customUnitAmount: p.customUnitAmount,
           lookupKey: p.lookupKey,
           metadata: current.metadata,
         })
@@ -95,6 +117,7 @@ function parseChecklist() {
     if (header) {
       flush()
       current = {
+        kind: "product",
         productId: header[2],
         name: header[3].trim(),
         metadata: {},
@@ -103,7 +126,38 @@ function parseChecklist() {
       }
       continue
     }
+
+    // "- [x] coupon `id` — $25 off the additional side"
+    const couponHeader = line.match(
+      /^\s*-\s*\[([ xX])\]\s*coupon\s+`([^`]+)`\s*—\s*(.+)$/
+    )
+    if (couponHeader) {
+      flush()
+      current = {
+        kind: "coupon",
+        id: couponHeader[2],
+        name: couponHeader[3].trim(),
+        amountOffUsd: null,
+        promotionCode: null,
+        checked: couponHeader[1].toLowerCase() === "x",
+      }
+      continue
+    }
+
     if (!current) continue
+
+    if (current.kind === "coupon") {
+      // "  - amount_off: 25.00"
+      const amount = line.match(/^\s*- amount_off:\s*([0-9.]+)\s*$/)
+      if (amount) {
+        current.amountOffUsd = parseFloat(amount[1])
+        continue
+      }
+      // "  - promotion_code: EXTRASIDE"
+      const code = line.match(/^\s*- promotion_code:\s*(\S+)\s*$/)
+      if (code) current.promotionCode = code[1]
+      continue
+    }
 
     // "  - price: 200.00, lookup_key: `dues-fall-2026`"
     const price = line.match(
@@ -112,7 +166,25 @@ function parseChecklist() {
     if (price) {
       current.prices.push({
         amountUsd: parseFloat(price[1]),
+        customUnitAmount: null,
         lookupKey: price[2],
+      })
+      continue
+    }
+
+    // "  - custom_unit_amount: preset=50.00, minimum=1.00, maximum=10000.00, lookup_key: `donation-club-any`"
+    const custom = line.match(
+      /^\s*- custom_unit_amount:\s*preset=([0-9.]+)\s*,\s*minimum=([0-9.]+)\s*,\s*maximum=([0-9.]+)\s*,\s*lookup_key:\s*`([^`]+)`\s*$/
+    )
+    if (custom) {
+      current.prices.push({
+        amountUsd: null,
+        customUnitAmount: {
+          preset: parseFloat(custom[1]),
+          minimum: parseFloat(custom[2]),
+          maximum: parseFloat(custom[3]),
+        },
+        lookupKey: custom[4],
       })
       continue
     }
@@ -122,7 +194,7 @@ function parseChecklist() {
     if (meta) current.metadata = parseMetadata(meta[1].trim())
   }
   flush()
-  return { rows, skipped }
+  return { rows, coupons, skipped }
 }
 
 function parseMetadata(raw) {
@@ -135,8 +207,17 @@ function parseMetadata(raw) {
   return metadata
 }
 
-const { rows, skipped } = parseChecklist()
-if (rows.length === 0) {
+/** How a price row reads in a log line: a fixed amount, or the PWYW bounds. */
+function describeRow(row) {
+  if (!row.customUnitAmount) return `$${row.amountUsd.toFixed(2)}`
+  const { preset, minimum, maximum } = row.customUnitAmount
+  return `custom $${preset.toFixed(2)} (min $${minimum.toFixed(
+    2
+  )}, max $${maximum.toFixed(2)})`
+}
+
+const { rows, coupons, skipped } = parseChecklist()
+if (rows.length === 0 && coupons.length === 0) {
   console.error("No [x] rows found in the approval checklist — nothing to do.")
   process.exit(1)
 }
@@ -163,6 +244,22 @@ async function getPriceByLookupKey(lookupKey) {
     lookup_keys: [lookupKey],
     limit: 1,
   })
+  return data[0] ?? null
+}
+
+/** A coupon by id, or null when it does not exist yet. */
+async function getCoupon(id) {
+  try {
+    return await stripe.coupons.retrieve(id)
+  } catch (error) {
+    if (error instanceof Stripe.errors.StripeInvalidRequestError) return null
+    throw error
+  }
+}
+
+/** An active promotion code by its customer-facing code, or null. */
+async function getPromotionCode(code) {
+  const { data } = await stripe.promotionCodes.list({ code, limit: 1 })
   return data[0] ?? null
 }
 
@@ -240,38 +337,115 @@ for (const [productId, priceRows] of byProduct) {
       priceMap[productId] ??= {}
       priceMap[productId][row.lookupKey] = existingPrice.id
       console.log(
-        `  [reused]  price ${row.lookupKey} — $${row.amountUsd.toFixed(2)} -> ${
+        `  [reused]  price ${row.lookupKey} — ${describeRow(row)} -> ${
           existingPrice.id
         }`
       )
     } else if (!product) {
       // dry-run with the product still to create — the price will be created with it
       console.log(
-        `  [create]  price ${row.lookupKey} — $${row.amountUsd.toFixed(
-          2
+        `  [create]  price ${row.lookupKey} — ${describeRow(
+          row
         )} on product ${productId}`
       )
     } else if (APPLY) {
       const price = await stripe.prices.create({
         product: product.id,
-        unit_amount: Math.round(row.amountUsd * 100),
         currency: "usd",
         lookup_key: row.lookupKey,
         metadata: row.metadata,
+        // A `custom_unit_amount` price carries no fixed `unit_amount`: the buyer
+        // enters the amount in Checkout, bounded by these values.
+        ...(row.customUnitAmount
+          ? {
+              custom_unit_amount: {
+                enabled: true,
+                preset: Math.round(row.customUnitAmount.preset * 100),
+                minimum: Math.round(row.customUnitAmount.minimum * 100),
+                maximum: Math.round(row.customUnitAmount.maximum * 100),
+              },
+            }
+          : { unit_amount: Math.round(row.amountUsd * 100) }),
       })
       created++
       priceMap[productId] ??= {}
       priceMap[productId][row.lookupKey] = price.id
       console.log(
-        `  [created] price ${row.lookupKey} — $${row.amountUsd.toFixed(2)} -> ${
+        `  [created] price ${row.lookupKey} — ${describeRow(row)} -> ${
           price.id
         }`
       )
     } else {
       console.log(
-        `  [create]  price ${row.lookupKey} — $${row.amountUsd.toFixed(
-          2
+        `  [create]  price ${row.lookupKey} — ${describeRow(
+          row
         )} on product ${productId}`
+      )
+    }
+  }
+}
+
+// --- coupons + promotion codes ------------------------------------------------
+if (coupons.length) {
+  // `applies_to` is the checked tournament products, so the ladder follows the
+  // division rows rather than repeating their ids here.
+  const appliesTo = [...byProduct.keys()].filter(
+    (productId) => byProduct.get(productId)[0].metadata.family === "tournament"
+  )
+  console.log(
+    `\n=== Planned coupons (applies_to: ${
+      appliesTo.join(", ") || "nothing checked"
+    }) ===`
+  )
+
+  for (const coupon of coupons) {
+    if (coupon.amountOffUsd == null) {
+      console.warn(`  [skip]    coupon ${coupon.id} — no amount_off given`)
+      continue
+    }
+
+    const existingCoupon = await getCoupon(coupon.id)
+    if (existingCoupon) {
+      reused++
+      console.log(`  [reused]  coupon ${coupon.id} — "${existingCoupon.name}"`)
+    } else if (APPLY) {
+      await stripe.coupons.create({
+        id: coupon.id,
+        // Stripe caps a coupon's name at 40 characters.
+        name: coupon.name.slice(0, 40),
+        amount_off: Math.round(coupon.amountOffUsd * 100),
+        currency: "usd",
+        metadata: { kind: "sc7s-additional-side" },
+        ...(appliesTo.length ? { applies_to: { products: appliesTo } } : {}),
+      })
+      created++
+      console.log(`  [created] coupon ${coupon.id} — "${coupon.name}"`)
+    } else {
+      console.log(`  [create]  coupon ${coupon.id} — "${coupon.name}"`)
+    }
+
+    if (!coupon.promotionCode) continue
+
+    const existingCode = await getPromotionCode(coupon.promotionCode)
+    if (existingCode) {
+      reused++
+      console.log(
+        `  [reused]  promotion code ${coupon.promotionCode} -> ${coupon.id}`
+      )
+    } else if (APPLY) {
+      await stripe.promotionCodes.create({
+        // The API nests the underlying coupon under `promotion`; the old flat
+        // `coupon` param is gone and errors `parameter_unknown`.
+        promotion: { type: "coupon", coupon: coupon.id },
+        code: coupon.promotionCode,
+      })
+      created++
+      console.log(
+        `  [created] promotion code ${coupon.promotionCode} -> ${coupon.id}`
+      )
+    } else {
+      console.log(
+        `  [create]  promotion code ${coupon.promotionCode} -> ${coupon.id}`
       )
     }
   }

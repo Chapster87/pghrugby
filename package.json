@@ -13,13 +13,21 @@
     "generate-typings": "pnpm gql-tada generate output",
     "provision:stripe": "node ./scripts/provision-stripe-catalog.mjs",
     "provision:stripe:apply": "node ./scripts/provision-stripe-catalog.mjs --apply",
+    "provision:stripe:webhook": "node ./scripts/provision-stripe-webhook.mjs",
+    "provision:stripe:webhook:apply": "node ./scripts/provision-stripe-webhook.mjs --apply",
     "scan:woocommerce": "node ./scripts/scan-woocommerce.mjs",
     "competition:extract": "node ./scripts/competition-migration/extract.mjs",
     "competition:reconcile": "node --env-file=.env.local scripts/competition-migration/reconcile.mjs",
     "competition:insert": "node --env-file=.env.local scripts/competition-migration/insert.mjs",
     "legacy-pages:cleanup": "node ./scripts/delete-legacy-datocms-pages.mjs",
     "supabase:query": "node --env-file=.env.local scripts/supabase-query.mjs",
-    "supabase:inspect-forgecms": "node --env-file=.env.local scripts/inspect-forgecms.mjs"
+    "supabase:inspect-forgecms": "node --env-file=.env.local scripts/inspect-forgecms.mjs",
+    "order-storage:round-trip": "node --env-file=.env.local --import tsx scripts/order-storage-round-trip.ts",
+    "cart:round-trip": "node --import tsx scripts/cart-mutations-round-trip.ts",
+    "checkout:round-trip": "node --import tsx scripts/checkout-pricing-round-trip.ts",
+    "donations:round-trip": "node --import tsx scripts/donations-round-trip.ts",
+    "sc7s-discount:round-trip": "node --import tsx scripts/sc7s-discount-round-trip.ts",
+    "registration:round-trip": "node --import tsx scripts/registration-round-trip.ts"
   },
   "dependencies": {
     "@datocms/cda-client": "^0.2.10",

@@ -73,6 +73,35 @@
   }
 }
 
+/* The Cart control: the nav-link treatment as a button (it opens the flyout in
+   place rather than navigating). */
+.cartButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 12px;
+  border: none;
+  background: none;
+  color: var(--color-white);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+
+  @media (prefers-color-scheme: light) {
+    color: var(--color-black);
+  }
+
+  &:hover {
+    color: var(--color-gold);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: -2px;
+  }
+}
+
 .headerInnerContainer {
   max-width: var(--container-max-width);
   margin-left: auto;

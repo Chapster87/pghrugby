@@ -23,7 +23,9 @@ export default function CloudinaryImageRenderer({
   if (width && height) {
     return <Image src={src} alt={alt} width={width} height={height} />
   }
+  // Intentionally a raw <img>; the JSDoc above states why the rule is off here.
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} style={{ maxWidth: "100%", height: "auto" }} />
   )
 }

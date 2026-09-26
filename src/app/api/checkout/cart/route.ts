@@ -1,22 +1,26 @@
 import { NextResponse } from "next/server"
 
-import { createCart } from "@/lib/checkout/cart-store"
+import {
+  refusalResponse,
+  resolveCartFromEntries,
+} from "@/lib/checkout/cart-store"
 
 /**
- * POST /api/checkout/cart
+ * POST /api/checkout/cart  { cartRef, entries }
  *
- * Builds a server-authoritative cart from client selections. The client only
- * sends selections (sku + quantity, mirroring what the PDP page rendered) plus
- * an optional registration payload; amounts come from the server catalog and
- * are never client-dictated.
+ * The add-time resolve/validate call: resolves every priced line against
+ * DatoCMS (availability + the effective Stripe Price id) and returns the quoted
+ * unit amounts. **It does not persist** — the `carts` snapshot is written at
+ * session build, so what `recordOrder` re-joins is the checkout-time cart, not
+ * an earlier one (`docs/pdp-to-minicart-to-checkout-spec.md` § 8.1).
  *
- * Body: { pdp, selections: [{ sku, quantity }], registration? }
- * Returns: { cartRef, cart }
+ * A line that cannot be checked out (sold out, unknown sku, no price) answers
+ * `409` with `errors`, one entry per offending line, carrying the cart entry id
+ * the buyer removes. Lines are never dropped and the whole cart is never
+ * blocked by one bad line.
+ *
+ * Returns: { cartRef, currency, lines, total } | { error, errors }
  */
-
-function strings(value: unknown) {
-  return typeof value === "string" ? value.trim() : ""
-}
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null)
@@ -25,42 +29,30 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
 
-  const pdp = strings((body as { pdp?: unknown }).pdp)
-  if (!pdp) {
-    return NextResponse.json({ error: "pdp is required" }, { status: 400 })
+  const cartRef = (body as { cartRef?: unknown }).cartRef
+  if (typeof cartRef !== "string" || !cartRef.trim()) {
+    return NextResponse.json({ error: "cartRef is required" }, { status: 400 })
   }
-
-  const selections = Array.isArray(
-    (body as { selections?: unknown }).selections
-  )
-    ? (body as { selections: unknown[] }).selections
-        .map((s) => {
-          if (!s || typeof s !== "object") return null
-          const sel = s as { sku?: unknown; quantity?: unknown }
-          const sku = strings(sel.sku)
-          if (!sku) return null
-          const quantity =
-            typeof sel.quantity === "number" && Number.isFinite(sel.quantity)
-              ? Math.floor(sel.quantity)
-              : 1
-          return { sku, quantity }
-        })
-        .filter((s): s is { sku: string; quantity: number } => s !== null)
-    : []
-
-  if (selections.length === 0) {
-    return NextResponse.json(
-      { error: "at least one selection is required" },
-      { status: 400 }
-    )
-  }
-
-  const registration = (body as { registration?: unknown }).registration
 
   try {
-    const cart = await createCart({ pdp, selections, registration })
-    return NextResponse.json({ cartRef: cart.cartRef, cart })
+    const cart = await resolveCartFromEntries({
+      cartRef: cartRef.trim(),
+      entries: (body as { entries?: unknown }).entries,
+    })
+
+    if (cart.errors.length > 0) {
+      return NextResponse.json(refusalResponse(cart.errors), { status: 409 })
+    }
+
+    return NextResponse.json({
+      cartRef: cart.cartRef,
+      currency: cart.currency,
+      lines: cart.lines,
+      total: cart.total,
+    })
   } catch (error) {
+    // A structural failure (no priced line, unreadable body, DatoCMS
+    // unreachable) is not a per-line refusal — it is a retryable request error.
     const message = error instanceof Error ? error.message : "unknown error"
     return NextResponse.json({ error: message }, { status: 400 })
   }

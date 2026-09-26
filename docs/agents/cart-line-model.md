@@ -119,7 +119,8 @@ snapshot to the entry shape in § 1.
   is `quantity_bearing: true`, and the direction of the quantity/collector
   relationship is `quantity → rows`. The "Golf Outing … one registration
   primary" row and the "quantity = golfers is wrong" note need restating.
-- **The workbench PDP fixture** (`/workbench/pdp-layout`) marks
+- **The workbench PDP fixture** (`/workbench/pdp-layout`, since deleted at the
+  cutover — [#88](https://github.com/Chapster87/pghrugby/issues/88)) marked
   `golf-outing-registration` `quantityBearing: false`; that is wrong.
 - **The golf DataCollector** (`Golf Outing — Captain & players`): the captain is
   player 1; the repeatable `golfers` field (`max: 8` today) becomes the
@@ -129,6 +130,14 @@ snapshot to the entry shape in § 1.
   `docs/agents/stripe-checkout-registration-metadata.md`'s `"Golf Reg x4"`
   example must be read as **four players on one line**, not one line with a
   bolt-on quantity.
+- **`PricedLine` gains an optional `quantityBearing`**, snapshotting the
+  product's `quantity_bearing` at add-time (landed with
+  [#81](https://github.com/Chapster87/pghrugby/issues/81); § 1's shape did not
+  carry it). The browser cart holds no DatoCMS access, so without the snapshot
+  the flyout cannot tell a line that gets a stepper from one that shows
+  `Qty. N` (§ 5). It follows `docs/agents/registration-editing.md` § 7's `fields`
+  snapshot: the buyer sees the line they added, not what the CMS says later.
+  Display only — the server still clamps every quantity at session build.
 
 ## 7. Deferred
 

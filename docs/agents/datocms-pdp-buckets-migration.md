@@ -141,13 +141,18 @@ Because the picker is single-asset, `gallery` is a **Modular Content
 | --------------- | ------ | -------- | ----------------------------------------------------------- |
 | `desktop_media` | `json` | yes      | Cloudinary Picker; `featured_image`-shaped object           |
 | `mobile_media`  | `json` | no       | Cloudinary Picker; art-directed crop; falls back to desktop |
-| `alt`           | string | no       | The Cloudinary object carries no alt text                   |
+| `alt`           | string | no       | Optional override; blank falls back to the page title       |
 
+- **Alt**: optional, and blank is the **normal** state. A blank `alt` falls back
+  to the **page title** at render, so a gallery item needs no alt of its own to
+  be accessible; the field exists because a Cloudinary object carries no alt
+  text, and it stays available as a per-item override.
 - **Mobile + desktop**: the two stored Cloudinary objects are the art-directed
   variants; the renderer selects per breakpoint (`<picture>` / media query).
 - **Video**: no separate field. The Cloudinary object's `resource_type`
   (`image` vs `video`) and `format` decide; the renderer branches to
-  `next/image`/`CloudinaryImageRenderer` for images and a `<video>` (Cloudinary
+  `getImageProps` (its props go onto the `<picture>`'s `<img>`, and the mobile
+  crop's `srcSet` onto its `<source>`) for images and a `<video>` (Cloudinary
   video URL) for video. `duration` is already in the object shape.
 - **Storage-free**: no uploads are created in DatoCMS, so nothing counts against
   the free-tier media limits.
@@ -176,8 +181,9 @@ appended by seed-data-collectors.js.
 | `donate`        | donation-club, donation-pass-the-hat                                                           | —                                            | —                                 |
 
 > The `donate` row is what the applied backfill produced; the club presets later
-> split into `donation-club-preset-10` / `-25` / `-50` records and the primaries
-> reordered ladder-then-pass-the-hat
+> split into `donation-club-preset-10` / `-25` / `-50` records, and the primaries
+> are now those three — the `donation-pass-the-hat` `$1` placeholder was retired
+> 2026-09-25
 > ([Grilling: Donate PDP preset selection](https://github.com/Chapster87/pghrugby/issues/75)
 > — detail in `docs/agents/donate-pdp-preset-selection.md`).
 
@@ -189,6 +195,10 @@ crawl, pig roast) are not attached to any PDP and must not appear.
 > ([Grilling: Steel City 7s additional-side pricing](https://github.com/Chapster87/pghrugby/issues/71) — decided;
 > detail in `docs/agents/sc7s-additional-side-pricing.md`). The backfill must not
 > place them; archive or delete their `product` records and Stripe products.
+> **Status 2026-09-25:** the Stripe products are archived and the catalog dropped
+> them ([#86](https://github.com/Chapster87/pghrugby/issues/86)); the two DatoCMS
+> `product` records remain, and the PDP renders no row for a sku the catalog does
+> not hold, so they are inert.
 
 **Algorithm** (idempotent, order-preserving):
 
@@ -207,6 +217,14 @@ accept plain id arrays, so no `buildBlockRecord` is needed. Support a `DRY_RUN`
 flag for the first pass.
 
 ### 4. Migration mechanics — `datocms` CLI migration, forked sandbox first
+
+> **Superseded 2026-09-25.** The fork-first requirement below no longer applies.
+> The owner's preference is a single DatoCMS environment, so migrations run
+> **in place on `main`** and creating, promoting or destroying an environment needs
+> explicit approval — see `AGENTS.md` → "DatoCMS runs in a single environment".
+> What still holds from this section is the shape of a migration, not where it
+> runs: the split into reviewable files, and the guards inside each one, are what
+> make a destructive step safe now that there is no sandbox.
 
 **Decision: land this as `datocms` CLI migrations, in two timestamped files.**
 
@@ -287,8 +305,6 @@ product-detail-page.query.ts`, `page.tsx`) from `pageComponents` to the new
 - The array-vs-block gallery choice depends on whether the Cloudinary Picker can
   emit an ordered set into one field. The block form is assumed; it works either
   way.
-- Whether an `alt` field is wanted on the block (Cloudinary objects carry no alt;
-  today the repo falls back to `public_id`).
 
 ## Related
 

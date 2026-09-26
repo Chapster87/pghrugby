@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import clsx from "clsx"
+import Image from "next/image"
 
 import type { ForgeCmsMatch } from "@/lib/forgecms/competition.query"
 import Heading from "@components/typography/heading"
@@ -102,11 +103,13 @@ export function MatchCountdown({ match }: MatchCountdownProps) {
               {venue === "Home" ? (
                 <>
                   <div className={s.teamLogo}>
-                    <img
+                    <Image
                       src={
                         match.home_team?.team_logo?.url || "/placeholder.svg"
                       }
                       alt={match.home_team?.team_name || "Home team"}
+                      fill
+                      sizes="64px"
                       className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
@@ -120,11 +123,13 @@ export function MatchCountdown({ match }: MatchCountdownProps) {
                     </Text>
                   </div>
                   <div className={s.teamLogo}>
-                    <img
+                    <Image
                       src={
                         match.away_team?.team_logo?.url || "/placeholder.svg"
                       }
                       alt={match.away_team?.team_name || "Away team"}
+                      fill
+                      sizes="64px"
                       className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
@@ -132,11 +137,13 @@ export function MatchCountdown({ match }: MatchCountdownProps) {
               ) : (
                 <>
                   <div className={s.teamLogo}>
-                    <img
+                    <Image
                       src={
                         match.away_team?.team_logo?.url || "/placeholder.svg"
                       }
                       alt={match.away_team?.team_name || "Away team"}
+                      fill
+                      sizes="64px"
                       className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>
@@ -150,11 +157,13 @@ export function MatchCountdown({ match }: MatchCountdownProps) {
                     </Text>
                   </div>
                   <div className={s.teamLogo}>
-                    <img
+                    <Image
                       src={
                         match.home_team?.team_logo?.url || "/placeholder.svg"
                       }
                       alt={match.home_team?.team_name || "Home team"}
+                      fill
+                      sizes="64px"
                       className={clsx(s.fullSizeImage, s.objectContain)}
                     />
                   </div>

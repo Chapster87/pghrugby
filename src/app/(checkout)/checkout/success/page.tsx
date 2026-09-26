@@ -11,8 +11,12 @@ import {
 
 import {
   getOrder,
+  getOrderLines,
+  getOrderRegistrations,
   recordOrder,
+  type OrderLine,
   type OrderRecord,
+  type OrderRegistration,
 } from "@/lib/checkout/record-order"
 import {
   returnPageView,
@@ -30,9 +34,11 @@ import s from "./styles.module.css"
  * webhook uses (fast path — the webhook stays the source of truth because the
  * customer isn't guaranteed to reach this page; first writer wins), guarded by
  * `onlyWhenComplete` so a stale/expired session_id in the return URL can never
- * create an order row. The winning prototype variant (hero header + order
- * receipt + styled registration details on a white rounded container) renders
- * the outcome, branched on session/payment status via `returnPageView`.
+ * create an order row. The order renders from its rows: the header's receipt
+ * and one registration card per registration row, grouped by its line. The
+ * winning prototype variant (hero header + order receipt + styled registration
+ * details on a white rounded container) renders the outcome, branched on
+ * session/payment status via `returnPageView`.
  */
 
 const ICONS: Record<ReturnIcon, typeof CheckCircle2> = {
@@ -60,9 +66,11 @@ function formatMoney(cents: number, currency = "USD"): string {
 /** The dense order receipt (meta + line items + totals). */
 function OrderReceipt({
   order,
+  lines,
   statusLabel,
 }: {
   order: OrderRecord
+  lines: OrderLine[]
   statusLabel: string
 }) {
   return (
@@ -99,12 +107,12 @@ function OrderReceipt({
           </tr>
         </thead>
         <tbody>
-          {order.line_items.map((item) => (
-            <tr key={`${item.sku ?? item.description}-${item.quantity}`}>
-              <td>{item.description}</td>
-              <td>{item.quantity}</td>
+          {lines.map((line) => (
+            <tr key={line.id}>
+              <td>{line.description ?? line.sku ?? "Item"}</td>
+              <td>{line.quantity}</td>
               <td className={s.num}>
-                {formatMoney(item.amount_total, order.currency)}
+                {formatMoney(line.amount_total, order.currency)}
               </td>
             </tr>
           ))}
@@ -136,8 +144,7 @@ const DIVISION_LABELS: Record<string, string> = {
   "sc7s-mens-social": "SC7s Men's Social",
   "sc7s-mens-super-social": "SC7s Men's Super Social",
   "sc7s-womens-open": "SC7s Women's Open",
-  "sc7s-mens-additional-side": "SC7s Men's Additional Side",
-  "sc7s-womens-additional-side": "SC7s Women's Additional Side",
+  "sc7s-womens-social": "SC7s Women's Social",
 }
 
 /** Renders a { name, email } person as "Name · email", or a fallback. */
@@ -157,69 +164,95 @@ function strOr(value: unknown): string {
 }
 
 /**
- * Registration details rendered as readable data, not raw JSON. Handles the
+ * A registration's answers rendered as readable data, not raw JSON. Handles the
  * two known flow shapes (golf = captain + golfers, tournament = division +
  * team name + contact); anything else falls back to the payload as-is.
  */
-function RegistrationDetails({ registration }: { registration: unknown }) {
-  if (registration === null || typeof registration !== "object") {
+function RegistrationAnswers({ answers }: { answers: unknown }) {
+  if (answers === null || typeof answers !== "object") {
     return null
   }
-  const reg = registration as Record<string, unknown>
+  const reg = answers as Record<string, unknown>
   const golfers = reg.golfers
 
   if (Array.isArray(golfers)) {
     return (
-      <section className={s.card}>
-        <h2 className={s.cardTitle}>Registration details</h2>
-        <dl className={s.regList}>
-          <div className={s.regRow}>
-            <dt className={s.regLabel}>Captain</dt>
-            <dd className={s.regValue}>{personLabel(reg.captain)}</dd>
-          </div>
-          <div className={s.regRow}>
-            <dt className={s.regLabel}>Golfers ({golfers.length})</dt>
-            {golfers.map((golfer, i) => (
-              <dd key={i} className={s.regValue}>
-                {personLabel(golfer)}
-              </dd>
-            ))}
-          </div>
-        </dl>
-      </section>
+      <dl className={s.regList}>
+        <div className={s.regRow}>
+          <dt className={s.regLabel}>Captain</dt>
+          <dd className={s.regValue}>{personLabel(reg.captain)}</dd>
+        </div>
+        <div className={s.regRow}>
+          <dt className={s.regLabel}>Golfers ({golfers.length})</dt>
+          {golfers.map((golfer, i) => (
+            <dd key={i} className={s.regValue}>
+              {personLabel(golfer)}
+            </dd>
+          ))}
+        </div>
+      </dl>
     )
   }
 
   if (typeof reg.division === "string") {
     const division = reg.division
     return (
-      <section className={s.card}>
-        <h2 className={s.cardTitle}>Registration details</h2>
-        <dl className={s.regList}>
-          <div className={s.regRow}>
-            <dt className={s.regLabel}>Division</dt>
-            <dd className={s.regValue}>
-              {DIVISION_LABELS[division] ?? division}
-            </dd>
-          </div>
-          <div className={s.regRow}>
-            <dt className={s.regLabel}>Team name</dt>
-            <dd className={s.regValue}>{strOr(reg.teamName)}</dd>
-          </div>
-          <div className={s.regRow}>
-            <dt className={s.regLabel}>Contact</dt>
-            <dd className={s.regValue}>{personLabel(reg.contact)}</dd>
-          </div>
-        </dl>
-      </section>
+      <dl className={s.regList}>
+        <div className={s.regRow}>
+          <dt className={s.regLabel}>Division</dt>
+          <dd className={s.regValue}>
+            {DIVISION_LABELS[division] ?? division}
+          </dd>
+        </div>
+        <div className={s.regRow}>
+          <dt className={s.regLabel}>Team name</dt>
+          <dd className={s.regValue}>{strOr(reg.teamName)}</dd>
+        </div>
+        <div className={s.regRow}>
+          <dt className={s.regLabel}>Contact</dt>
+          <dd className={s.regValue}>{personLabel(reg.contact)}</dd>
+        </div>
+      </dl>
     )
   }
 
+  return <pre className={s.payload}>{JSON.stringify(answers, null, 2)}</pre>
+}
+
+/**
+ * The order's registrations, one card per registration row, grouped by its
+ * line and ordered by line position (the `reg_N` scheme's order).
+ */
+function RegistrationList({
+  lines,
+  registrations,
+}: {
+  lines: OrderLine[]
+  registrations: OrderRegistration[]
+}) {
+  if (registrations.length === 0) return null
+
+  const byLineId = new Map(registrations.map((r) => [r.line_id, r]))
+  const registered = lines.flatMap((line) => {
+    const registration = byLineId.get(line.id)
+    return registration ? [{ line, registration }] : []
+  })
+
   return (
-    <section className={s.card}>
-      <h2 className={s.cardTitle}>Registration details</h2>
-      <pre className={s.payload}>{JSON.stringify(registration, null, 2)}</pre>
-    </section>
+    <>
+      {registered.map(({ line, registration }) => (
+        <section key={registration.id} className={s.card}>
+          <h2 className={s.cardTitle}>Registration details</h2>
+          <dl className={s.meta}>
+            <div className={s.metaRow}>
+              <dt>Item</dt>
+              <dd>{line.description ?? line.sku ?? "Registration"}</dd>
+            </div>
+          </dl>
+          <RegistrationAnswers answers={registration.answers} />
+        </section>
+      ))}
+    </>
   )
 }
 
@@ -231,6 +264,8 @@ export default async function SuccessPage({
   const { session_id: sessionId } = await searchParams
 
   let order: OrderRecord | null = null
+  let lines: OrderLine[] = []
+  let registrations: OrderRegistration[] = []
   let error: string | null = null
 
   if (!sessionId) {
@@ -244,6 +279,11 @@ export default async function SuccessPage({
       order =
         (await getOrder(sessionId)) ??
         (await recordOrder(sessionId, { onlyWhenComplete: true }))
+
+      if (order) {
+        lines = await getOrderLines(order.session_id)
+        registrations = await getOrderRegistrations(order.session_id)
+      }
     } catch (err) {
       error = err instanceof Error ? err.message : "Failed to retrieve session"
     }
@@ -276,10 +316,12 @@ export default async function SuccessPage({
 
         {order && (
           <div className={s.heroDetails}>
-            <OrderReceipt order={order} statusLabel={view.label} />
-            {order.registration ? (
-              <RegistrationDetails registration={order.registration} />
-            ) : null}
+            <OrderReceipt
+              order={order}
+              lines={lines}
+              statusLabel={view.label}
+            />
+            <RegistrationList lines={lines} registrations={registrations} />
           </div>
         )}
       </div>

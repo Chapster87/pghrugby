@@ -91,7 +91,7 @@ one-shot form gone there is no fallback for them.
 | `src/app/(checkout)/checkout/success/page.tsx`                            | Renders `order.registration` via `RegistrationDetails`                                                                                                                                             | Renders registration rows grouped by their line (§ 9.4)                                                                                                                                                  |
 | `supabase/migrations/`                                                    | `orders` with `flow` / `line_items` / `registration`; `carts` with `flow` / `line_items` / `registration`                                                                                          | Header + child tables, `carts.entries`; legacy columns dropped, no backfill (§ 9.5)                                                                                                                      |
 | `scripts/provision-stripe-catalog.mjs`                                    | Products + prices only                                                                                                                                                                             | Also provisions the SC7s per-count coupons + `EXTRASIDE` promotion code (§ 8.3)                                                                                                                          |
-| `src/components/`                                                         | `button`, `dialog`, `select`, `checkbox`, `radio-group`, `quantity-selector`, …                                                                                                                    | Adds a `tabs` wrapper, a Sheet/Drawer wrapper, and a cart-line card (§ 5.8)                                                                                                                              |
+| `src/components/`                                                         | `button`, `dialog`, `select`, `checkbox`, `radio-group`, `quantity-selector`, …                                                                                                                    | Adds a Sheet/Drawer wrapper and a cart-line card (§ 5.8)                                                                                                                                                 |
 
 `src/lib/checkout/storefront-catalog.json` is a migration/backfill guide, not
 runtime config — it is not imported by `src/`. It needs reconciling (retired
@@ -103,19 +103,26 @@ additional sides, donation-preset split) but drives nothing at runtime.
 
 Detail: `docs/agents/datocms-pdp-buckets-migration.md`,
 `docs/agents/pdp-product-model.md`, `docs/agents/pdp-pricing-and-sale-windows.md`,
-`docs/agents/donate-pdp-preset-selection.md`. **The schema migration is already
-applied** — these fields are live on the `main` environment (§ 4.5).
+`docs/agents/donate-pdp-preset-selection.md`. **Every field below is live on the
+`main` environment** (§ 4.5) — the buckets, gallery, product-type and pricing
+fields from the original restructure, then the copy reshape and the tab system,
+then the tagline's move to Structured Text.
 
 ### 4.1 `product_detail_page`
 
-| Field            | API key            | Type                       | Notes                                                                                                              |
-| ---------------- | ------------------ | -------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Primary products | `primary_products` | `links` → `product`        | Ordered; `size.min: 1` stands in for required; `fail` cascades                                                     |
-| Add-on products  | `addon_products`   | `links` → `product`        | Ordered; no `size`; `fail` cascades                                                                                |
-| Data collectors  | `data_collectors`  | `links` → `data_collector` | Ordered; `fail` cascades                                                                                           |
-| Product type     | `product_type`     | `string` enum              | `simple` \| `variation` \| `grouped`; required, default `simple`, `string_select`; hint-only (not schema-enforced) |
-| Gallery          | `gallery`          | Modular `rich_text`        | Restricted to `gallery_item_block` (§ 4.2)                                                                         |
-| —                | `page_components`  | —                          | **Dropped.** Superseded by the three buckets                                                                       |
+| Field             | API key             | Type                       | Notes                                                                                                                                         |
+| ----------------- | ------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Primary products  | `primary_products`  | `links` → `product`        | Ordered; `size.min: 1` stands in for required; `fail` cascades                                                                                |
+| Add-on products   | `addon_products`    | `links` → `product`        | Ordered; no `size`; `fail` cascades                                                                                                           |
+| Data collectors   | `data_collectors`   | `links` → `data_collector` | Ordered; `fail` cascades                                                                                                                      |
+| Product type      | `product_type`      | `string` enum              | `simple` \| `variation` \| `grouped`; required, default `simple`, `string_select`; hint-only (not schema-enforced)                            |
+| Gallery           | `gallery`           | Modular `rich_text`        | Restricted to `gallery_item_block` (§ 4.2)                                                                                                    |
+| Short description | `short_description` | Structured Text, optional  | The tagline under the meta line, above the option selector (§ 5.1). The page owns the tagline — the product model keeps no short copy (§ 4.3) |
+| Event starts at   | `event_starts_at`   | `date_time`, optional      | The buy box meta line's date (§ 5.1). Blank on anything that is not a scheduled event                                                         |
+| Event location    | `event_location`    | `string`, optional         | The meta line's other half; either half alone still renders the line                                                                          |
+| Tabs              | `tabs`              | Modular `rich_text`        | Ordered panels, restricted to `tab` and `tab_desc` (§ 4.7). Content decides what renders and in what form (§ 5.6)                             |
+| —                 | `description`       | —                          | **Dropped.** Its copy is `short_description`                                                                                                  |
+| —                 | `page_components`   | —                          | **Dropped.** Superseded by the three buckets                                                                                                  |
 
 Ordering is positional array order. Primary vs add-on is **structural** — it is
 which field the editor used, not a `kind` enum.
@@ -125,15 +132,17 @@ which field the editor used, not a `kind` enum.
 Cloudinary Picker JSON, not a native DatoCMS media field (free-tier constraint).
 Mirrors `page.featured_image`.
 
-| Field           | Type     | Required | Notes                                             |
-| --------------- | -------- | -------- | ------------------------------------------------- |
-| `desktop_media` | `json`   | yes      | Cloudinary Picker; `featured_image`-shaped object |
-| `mobile_media`  | `json`   | no       | Art-directed crop; falls back to desktop          |
-| `alt`           | `string` | no       | The Cloudinary object carries no alt text         |
+| Field           | Type     | Required | Notes                                               |
+| --------------- | -------- | -------- | --------------------------------------------------- |
+| `desktop_media` | `json`   | yes      | Cloudinary Picker; `featured_image`-shaped object   |
+| `mobile_media`  | `json`   | no       | Art-directed crop; falls back to desktop            |
+| `alt`           | `string` | no       | Optional override; blank defaults to the page title |
 
 - Renderer selects per breakpoint (`<picture>` / media query) and branches on the
-  object's `resource_type` (`image` → `next/image` / `CloudinaryImageRenderer`;
-  `video` → `<video>` with the Cloudinary URL). `duration` is in the object.
+  object's `resource_type` (`image` → `getImageProps` from `next/image`, its
+  props onto the `<picture>`'s `<img>` and the mobile crop's `srcSet` onto its
+  `<source>`; `video` → `<video>` with the Cloudinary URL). `duration` is in the
+  object.
 - No uploads are created in DatoCMS, so nothing counts against free-tier media
   limits. Native `responsiveImage` / srcset / blur-up does not apply.
 - Draft/preview is per-record and already wired; the gallery needs no
@@ -142,14 +151,41 @@ Mirrors `page.featured_image`.
 
 ### 4.3 `product` model fields
 
-| Field              | Type                 | Notes                                                                                    |
-| ------------------ | -------------------- | ---------------------------------------------------------------------------------------- |
-| `in_stock`         | `boolean`            | Default `true`. Drives the PDP "Sold out" display and the server-side availability check |
-| `quantity_bearing` | `boolean`            | Default `false`. Whether a line renders a quantity control; orthogonal to `product_type` |
-| `price_id`         | `string`             | The **authoritative** regular Stripe Price id                                            |
-| `sale_price_id`    | `string`, optional   | The sale / early-bird Stripe Price id                                                    |
-| `sale_starts_at`   | `datetime`, optional | Single sale window start (club-local, `America/New_York`)                                |
-| `sale_ends_at`     | `datetime`, optional | Single sale window end                                                                   |
+| Field              | Type                 | Notes                                                                                                                                     |
+| ------------------ | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `description`      | `text`               | The product's full copy. Renamed from `long_description`; also the fallback body for a Description-typed tab with none of its own (§ 5.6) |
+| `in_stock`         | `boolean`            | Default `true`. Drives the PDP "Sold out" display and the server-side availability check                                                  |
+| `quantity_bearing` | `boolean`            | Default `false`. Whether a line renders a quantity control; orthogonal to `product_type`                                                  |
+| `price_id`         | `string`             | The **authoritative** regular Stripe Price id                                                                                             |
+| `sale_price_id`    | `string`, optional   | The sale / early-bird Stripe Price id                                                                                                     |
+| `sale_starts_at`   | `datetime`, optional | Single sale window start (club-local, `America/New_York`)                                                                                 |
+| `sale_ends_at`     | `datetime`, optional | Single sale window end                                                                                                                    |
+
+**Copy reshape** ([#120](https://github.com/Chapster87/pghrugby/issues/120),
+2026-09-24). The product model holds **one** copy field. `description` is
+`long_description` renamed, so its values come across untouched;
+`short_description` is **dropped**. The drop is the considered part: the field was
+populated per _variant_ — one line per Steel City 7s division, one per dues
+season — while the page's replacement is a single string, so there was no
+faithful destination for it. What it uniquely carried is already on the row: the
+catalog `label` names the variant, and the line's price is rendered beside it.
+
+**Verified against the live CDA** (2026-09-24, before the migration was run). 11
+of 20 products carry short copy: the three dues seasons, the five live SC7s
+divisions, the two retired additional sides, and two records that are legacy
+migration fallout — `golf-outing-registration` (a PayPal-outage notice) and
+`donation-club` (a donation appeal with a pasted PayPal button script inside it).
+Both currently render as the line's `note`, so broken JavaScript and a wall of
+text reach the DOM on the golf and donate PDPs today; dropping the field ends
+that. Whether the _notice_ in them is still operationally wanted is a content
+question, recorded on #120 — it is not an argument for keeping the field.
+
+The tagline is a **move, not authoring**: all eight PDPs already carry good
+flow-level intro copy in the page's `description`, which becomes
+`short_description` unchanged. Two alternatives to the drop were rejected: keeping
+the field under an honest product-level name (`option_note`), which contradicts
+"one copy field on `product`"; and hoisting six divisions' worth of strings into
+one page string.
 
 **Price resolution** (server-side, at cart build and at session creation; read on
 the PDP for display):
@@ -171,7 +207,7 @@ the owner already edits content.
 | Steel City 7s Bar Crawl   | `simple`       | one ticket                                                                                                       |
 | Golf Outing               | `simple`       | one registration primary (`quantity_bearing`, buyer-set 1–4); mulligan / drink band are quantity-bearing add-ons |
 | Dues                      | `variation`    | fall / spring / summer alternatives                                                                              |
-| Donate                    | `variation`    | three club presets + pass-the-hat (cart primaries only)                                                          |
+| Donate                    | `variation`    | the three club presets (cart primaries only)                                                                     |
 | Steel City 7s             | `variation`    | five divisions are alternatives; **no add-ons**                                                                  |
 | Forge Day at the Ballpark | `grouped`      | adult + 16 & under, each with its own quantity                                                                   |
 | NFL Survivor Pool         | `grouped`      | ticket + insurance, each with its own quantity                                                                   |
@@ -193,6 +229,28 @@ and [Task: Realign golf registration with the cart-line model](https://github.co
   at `max: 3` (remaining players; the captain is player 1).
 - **Credential caveat:** `.env.local`'s `DATOCMS_CMA_TOKEN` cannot write. Live
   record edits required the linked `datocms` CLI with owner OAuth.
+- **Applied 2026-09-25** ([#120](https://github.com/Chapster87/pghrugby/issues/120)):
+  `migrations/1790305040_reshapeProductCopyAndAddTabs.ts` was run on a fork of
+  `main`, verified there, and promoted — the copy reshape and the tab system land
+  together with the app change, because the promote drops fields `trunk` still
+  read. `migrations/1790313304_addRichPageTagline.ts` and
+  `migrations/1790313305_swapPageTaglineToRich.ts` then ran **in place** on the
+  primary (`--allow-primary`): a field's type cannot be changed in DatoCMS, so the
+  tagline's move to Structured Text is create → convert → drop → rename, split so
+  the additive half is separate from the lossy one.
+- **Applied 2026-09-25** ([#120](https://github.com/Chapster87/pghrugby/issues/120)):
+  `migrations/1790343591_replaceProductTabWithTabBlocks.ts` ran **in place** on
+  `main` (`--in-place --allow-primary`). It creates the `tab` and `tab_desc`
+  blocks, points the page's `tabs` field at both — making it the union
+  `TabDescRecord | TabRecord` — and destroys `product_tab`, whose `tab` enum it
+  replaces. The run reported **no page holding a tab**, so nothing was lost: a
+  page's `tabs` is empty across the board, and the implicit Description panel is
+  what every PDP renders below the fold today.
+- **There is no environment rollback.** The promote left a `main-pre-reshape`
+  sandbox holding the pre-reshape schema and content; the owner had it destroyed
+  once `main` was confirmed current (2026-09-25), returning the project to a single
+  environment per `AGENTS.md`. The substrate is forward-only, so a schema mistake
+  from here is corrected forward, in a new migration — not restored.
 
 ### 4.6 Orphan event PDPs (the simple case)
 
@@ -204,6 +262,49 @@ authored the four events through the new format and published them on `main`
 `src/lib/checkout/storefront-catalog.json` `flows`, which drives the
 `next.config.js` rewrites. Intro copy is a first draft and galleries are empty
 — both owner follow-ups; detail in the ticket.
+
+### 4.7 `tab` and `tab_desc`
+
+The panel set is authored, not fixed ([#120](https://github.com/Chapster87/pghrugby/issues/120)).
+One block per panel, on the page's ordered `tabs` field (§ 4.1) — the same
+arrangement `gallery` has with `gallery_item_block` (§ 4.2).
+
+Two blocks are allowed on that field, and their **type** is the whole of what
+separates them: `tab` is a generic panel, `tab_desc` is the Description panel.
+
+| Block      | `title`                                   | `content`       | Notes                 |
+| ---------- | ----------------------------------------- | --------------- | --------------------- |
+| `tab`      | `string`, required, no default            | Structured Text | Any other panel       |
+| `tab_desc` | `string`, required, default "Description" | Structured Text | The Description panel |
+
+`tab_desc` is the one block the render has an opinion about. With no `tab_desc`
+authored, the page's Description panel is supplied from the primary product's
+`description` (§ 5.6); an authored `tab_desc` **replaces that default**, at
+whatever position the editor dragged it to. That is how a page moves its
+description below an Includes panel, or retitles it, without the copy being
+maintained twice. A second `tab_desc` is allowed and renders a second Description
+panel — the set is the club's to arrange.
+
+The enum that used to file these panels — `description` \| `includes` \|
+`goodToKnow` \| `other` — is gone. It had exactly one functional role, marking
+the Description panel, and on the other three values it only restated what
+`title` already says. So `includes` and `goodToKnow` are now just a `tab`
+carrying those titles, a panel is never forced to fit one of four names, and
+adding the next panel needs no migration.
+
+Both `title` and `content` are **required**, on both blocks: a tab with no body is
+a control with nothing to control, so the set holds no empty tabs. The only panel
+that may be absent is the implicit Description panel, and only when the primary
+product carries no `description` either.
+
+`content` is Structured Text rather than a plain `text` field so a panel can carry
+images and video, rendered by the same `StructuredText` + `renderBlock` switch the
+page bodies use. Its allow-lists mirror the page body's own Structured Text
+field: the shared embed blocks, and record links to `page` only. The API requires
+**both** lists together, which is why the `required` flag on this field always
+arrives beside them rather than on its own. Stega covers text fields alone, so
+visual editing does not reach this field or `tabs` any more than it reaches
+`gallery` (§ 4.2).
 
 ---
 
@@ -224,11 +325,16 @@ so the gallery sits beside the buy box.
   the mobile/desktop variant and branch image vs video (§ 4.2).
 - **Right column** — the buy box, in order:
   1. title
-  2. date / location meta line
-  3. short description
-  4. "Read the full description" anchor — smooth-scrolls to the tabbed section
-     and returns it to the Description tab; a real `#` anchor with a JS
-     enhancement honouring `prefers-reduced-motion`
+  2. the event meta line — the date and location from `event_starts_at` /
+     `event_location` (§ 4.1), directly under the title. Rendered only when at
+     least one of the two is set, so a page that is not a scheduled event shows
+     nothing here
+  3. short description — the page's `short_description`, Structured Text
+     restricted to links and emphasis (§ 4.1), rendered as its own paragraph
+  4. "Read the full description" anchor — smooth-scrolls to the panel below the
+     fold; a real `#` anchor with a JS enhancement honouring
+     `prefers-reduced-motion`, and it selects the Description panel before it
+     scrolls, whichever tab happened to be open (§ 5.6)
   5. option selector (§ 5.2)
   6. add-ons (§ 5.3)
   7. DataCollector (above the add-to-cart, § 5.4)
@@ -270,8 +376,31 @@ server-side (§ 8.2) — the flag is not editorial-only.
 
 ### 5.6 Bottom panel
 
-Below the fold, a single Radix Tabs panel (not a long block): **Description**
-(default) / **Includes** / **Good to know**.
+Below the fold the panel set is **authored**, and content decides the form. The
+page's `tabs` field holds one block per panel (§ 4.7), in order; the renderer
+enumerates that field rather than naming panels of its own, so a new panel needs
+no code and an empty one cannot render. The block's _type_ is what tells the two
+apart: a `tab_desc` is the Description panel, a `tab` is anything else.
+
+- **The Description panel is the one a page need not author.** With no `tab_desc`
+  authored, the primary product's `description` (§ 4.3) renders as an implicit
+  panel titled "Description", **first** in the set. That is what keeps the copy on
+  the product instead of being maintained twice, and what lets the eight PDPs that
+  predate the tab system keep the below-fold copy they already had.
+- **An authored `tab_desc` takes over.** Where one is present the implicit panel is
+  not built at all, and the authored panel renders at the position the editor put
+  it — so a page can move its description below an Includes panel, or retitle it,
+  without retyping it.
+- **Nothing to show → nothing rendered.** `content` is required on both blocks, so
+  in practice this covers the implicit panel alone: a page whose product carries no
+  `description` and which authors no `tab_desc` gets no Description panel, and a
+  page with no panels at all renders no strip.
+- **One or more → the `tabs` wrapper** (§ 5.8), labelled from each block's `title`,
+  in the order they are dragged. A single panel renders as a **one-tab strip**
+  rather than a plain section: the Description panel gives essentially every PDP at
+  least one panel, so the strip is the only shape the set takes.
+- The full-description anchor (§ 5.1) scrolls here, and selects the Description
+  panel before it does.
 
 ### 5.7 Quantity control
 
@@ -284,10 +413,11 @@ props spread.
 ### 5.8 Controls and global wrappers
 
 Prefer Radix primitives, wrapped **once** as global components. Already present:
-`button`, `dialog`, `select`, `checkbox`, `radio-group`, `quantity-selector`.
-To add: a **`tabs`** wrapper, a **Sheet/Drawer** wrapper around `@components/dialog`,
-and a **cart-line card** component (shared by the flyout, the future `/cart`, and
-order summaries).
+`button`, `dialog`, `select`, `checkbox`, `radio-group`, `quantity-selector`,
+and `tabs` (`@components/tabs`), which renders the PDP's below-fold panel set at
+any panel count (§ 5.6).
+To add: a **Sheet/Drawer** wrapper around `@components/dialog`, and a **cart-line
+card** component (shared by the flyout, the future `/cart`, and order summaries).
 
 ### 5.9 Add-to-cart handoff
 
@@ -455,7 +585,8 @@ everything. An empty player row stays allowed.
 
 ### 7.5 Footer, empty state, header
 
-- Footer: `Subtotal` and a full-width **Checkout** CTA.
+- Footer: `Subtotal`, a **promotion-code** field (committed on apply/blur, and
+  applied at the session build — § 8.3), and a full-width **Checkout** CTA.
 - Empty: a dashed placeholder card and a "Keep browsing" action.
 - The header `Cart` control becomes a **button that opens the flyout in place**
   (no navigation) and carries the item count.
@@ -513,6 +644,13 @@ The additional side is a **gender-neutral discount**, not a product; the
   `discounts: [{ promotion_code }]`.
 - Checkout allows only **one** coupon/promotion code per session. If the cart
   already qualifies automatically, an entered code is **not** applied on top.
+
+  > **Amendment (2026-09-25,** > [#86](https://github.com/Chapster87/pghrugby/issues/86)**).** A code is
+  > resolved only for a cart that could use one — exactly one SC7s team — and
+  > never refuses a session it cannot apply to. The coupon is restricted to the
+  > division products, so a qualifying cart ignores the code and a cart with no
+  > division line has nothing for it to discount.
+
 - Coupons and the promotion code are provisioned by extending
   `scripts/provision-stripe-catalog.mjs`; `catalog.ts` drops the two
   additional-side items and their `priceId`s.
@@ -523,9 +661,11 @@ The additional side is a **gender-neutral discount**, not a product; the
   `quantity_bearing: false` (`Qty. 1`), merge by sku, `family=donation`.
 - `submit_type`: `'pay'` whenever a real product rides along; `'donate'` only on
   a donation-only session.
-- The preset ladder is `donation-club` $10 / $25 / $50 plus
-  `donation-pass-the-hat` $1 (the `donation-club-preset-10` / `-25` / `-50`
-  records — § 4, `docs/agents/donate-pdp-preset-selection.md`).
+- The preset ladder is `donation-club` $10 / $25 / $50 (the
+  `donation-club-preset-10` / `-25` / `-50` records — § 4,
+  `docs/agents/donate-pdp-preset-selection.md`). The `$1`
+  `donation-pass-the-hat` placeholder is retired (owner, 2026-09-25) and is not a
+  rung.
 - A true pay-what-you-want donation is a **standalone sole-line session**: a
   `custom_unit_amount` Price (preset $50 / min $1 / max $10,000) referenced by a
   dedicated standalone page field on the Donate PDP to the `donation-club`
@@ -692,9 +832,10 @@ ephemeral snapshots and nothing is live.
 
 **Prototypes:** the two flow prototypes
 (`src/app/(core)/workbench/_demos/pdp-layout`,
-`.../_demos/minicart-flyout`) are deleted once the real PDP and flyout ship.
-`/workbench` stays as the shelf for global component wrappers; temporary flow
-prototypes do not belong in it.
+`.../_demos/minicart-flyout`) were deleted at the cutover
+([#88](https://github.com/Chapster87/pghrugby/issues/88)), once the real PDP and
+flyout shipped. `/workbench` stays as the shelf for global component wrappers;
+temporary flow prototypes do not belong in it.
 
 ---
 
@@ -707,14 +848,15 @@ prototypes do not belong in it.
 3. **Checkout API** — `POST /api/checkout/cart` resolve/validate;
    `POST /api/checkout/sessions` price + availability + coupon + metadata +
    snapshot write.
-4. **Global components** — `tabs` wrapper, Sheet/Drawer wrapper, cart-line card,
-   `QuantitySelector` restyle.
+4. **Global components** — Sheet/Drawer wrapper, cart-line card, `tabs` wrapper
+   (built in #120), `QuantitySelector` restyle.
 5. **Cart store (client)** — React context + `localStorage`, `cartRef`, entry
    mutations, merge/cascade rules.
 6. **Minicart flyout** — shell, grouped cards, edit panel, header trigger,
    `/cart` alias.
 7. **PDP render** — gallery, option selector per type, add-ons, DataCollector
-   (`quantity → rows`), availability, bottom tabs, add-to-cart handoff.
+   (`quantity → rows`), availability, the authored panel set (§ 5.6), add-to-cart
+   handoff.
 8. **SC7s pricing** — coupon/promotion-code provisioning and the session step.
 9. **Donate** — preset records, standalone any-amount field + sole-line session.
 10. **Success page** — registration rows grouped by line.
@@ -724,6 +866,15 @@ Both content-gate siblings are now resolved: [Task: Author PDPs for the four orp
 authored the orphan PDPs, and [Task: Stripe product photos for cart line thumbnails](https://github.com/Chapster87/pghrugby/issues/64)
 settled that thumbnails read Stripe product images with a fallback — no Stripe
 image population is needed.
+
+Step 7 additionally waits on the DatoCMS reshape
+([Task: Reshape product copy and add the authored PDP tab
+system](https://github.com/Chapster87/pghrugby/issues/120)): `product.description`
+from the renamed `long_description`, the page's `short_description`, the
+`tab` / `tab_desc` blocks and the `tabs` field, and the two meta fields. The docs
+and the migration are authored there; the promotion is the owner's, and the
+checked-in `schema.graphql` cannot select the new fields until it is regenerated
+(§ 4.5).
 
 ---
 
@@ -746,6 +897,7 @@ image population is needed.
 | [Grilling: Scheduled sale / early-bird pricing](https://github.com/Chapster87/pghrugby/issues/72)                                               | `docs/agents/pdp-pricing-and-sale-windows.md`          |
 | [Task: Realign golf registration with the cart-line model](https://github.com/Chapster87/pghrugby/issues/74)                                    | § 4.5 (applied state)                                  |
 | [Grilling: Donate PDP preset selection under the single-price product model](https://github.com/Chapster87/pghrugby/issues/75)                  | `docs/agents/donate-pdp-preset-selection.md`           |
+| [Task: Reshape product copy and add the authored PDP tab system](https://github.com/Chapster87/pghrugby/issues/120)                             | § 4.1, § 4.3, § 4.7 (supersedes #117)                  |
 
 Related foundations: `docs/agents/stripe-embedded-checkout-capabilities.md`,
 `docs/agents/stripe-catalog-spec.md`, `docs/agents/stripe-catalog-approval.md`.
@@ -765,3 +917,11 @@ build from, and nothing here forecloses them:
 - **Funnel analytics** (add-to-cart → cart-open → checkout-start).
 - **Donate any-amount surfacing** — the owner foresees replacing the in-page
   standalone CTA with a link below the dropdown to its own page.
+
+Two gaps have left this list. The PDP's panel set beyond Description — and the
+§ 5.1 date / location meta line, which turned out to be the same gap — are now
+authored content: `tab` / `tab_desc` blocks on the `tabs` field (§ 4.7, § 5.6),
+plus `event_starts_at` / `event_location` (§ 4.1). Delivered by
+[Task: Reshape product copy and add the authored PDP tab
+system](https://github.com/Chapster87/pghrugby/issues/120), which superseded
+[#117](https://github.com/Chapster87/pghrugby/issues/117).

@@ -147,6 +147,8 @@ CMS_WEBHOOK_SECRET=
 
 The Stripe trio can be toggled between accounts with `STRIPE_ENV` (server) / `NEXT_PUBLIC_STRIPE_ENV` (client, build-time). Each key prefers a `_LIVE`/`_TEST`-suffixed name when set (`STRIPE_SECRET_KEY_LIVE`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_LIVE`, `STRIPE_WEBHOOK_SECRET_LIVE`, and the `_TEST` counterparts), falling back to the canonical names above — so local `.env.local` can hold both pairs and flip the selector, while production hosting sets the canonical trio (or the `_LIVE` names) with `STRIPE_ENV=live`. The checkout session builder uses live Price IDs only when `STRIPE_ENV=live`; test mode falls back to inline `price_data`.
 
+`STRIPE_WEBHOOK_SECRET_LIVE` is only knowable once the live event destination is registered, so it is set as cutover work rather than alongside the rest of the trio — `stripe-webhook-wiring.md` ([#118](https://github.com/Chapster87/pghrugby/issues/118)).
+
 ### 3.2 Naming cleanups (do during Medusa/checkout productionization)
 
 | Today                        | Target                                              | Why                                                                                                                |
