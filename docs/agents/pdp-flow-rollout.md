@@ -70,7 +70,13 @@ execution note.
    `sc7s-additional-side-pricing.md`) — **done 2026-09-25**: both are archived,
    and `catalog.ts` stopped listing them in
    [#86](https://github.com/Chapster87/pghrugby/issues/86).
-3. Deploy the new flow.
+3. Wire the live Stripe webhook: register the event destination and set
+   `STRIPE_WEBHOOK_SECRET_LIVE` in the production context, verified against live
+   traffic — `stripe-webhook-wiring.md`
+   ([#118](https://github.com/Chapster87/pghrugby/issues/118)).
+4. Deploy the new flow, then re-point the webhook endpoint from
+   `next.pghrugby.com` to the apex (a redirect is a delivery failure) —
+   `stripe-webhook-wiring.md` § 5.
 
 **Gate:** a manual end-to-end pass on a preview deploy — a real *mixed* cart
 (golf registration + add-on + a dues line + a preset donation) through PDP →

@@ -13,6 +13,8 @@
     "generate-typings": "pnpm gql-tada generate output",
     "provision:stripe": "node ./scripts/provision-stripe-catalog.mjs",
     "provision:stripe:apply": "node ./scripts/provision-stripe-catalog.mjs --apply",
+    "provision:stripe:webhook": "node ./scripts/provision-stripe-webhook.mjs",
+    "provision:stripe:webhook:apply": "node ./scripts/provision-stripe-webhook.mjs --apply",
     "scan:woocommerce": "node ./scripts/scan-woocommerce.mjs",
     "competition:extract": "node ./scripts/competition-migration/extract.mjs",
     "competition:reconcile": "node --env-file=.env.local scripts/competition-migration/reconcile.mjs",
