@@ -36,6 +36,17 @@ A PDP whose products are alternatives — the buyer chooses exactly one.
 **Grouped** (PDP):
 A PDP whose products are multi-select, each chosen product with its own quantity.
 
+**Sponsorship**:
+A buyable package that puts a business's name on the club's golf outing — signage,
+foursomes, promotion. Bought by a business, never as an add-on to a golfer's
+registration.
+_Avoid_: sponsor — that is the club's sponsor-logo chrome, an unrelated concept
+
+**Sponsorship tier**:
+One level of a sponsorship offering: a fixed-price product. A single outing's
+tiers are the alternatives of one Variation PDP.
+_Avoid_: package
+
 **Data collector**:
 The registration form attached to a PDP. Supplies the registration payload only — it
 never determines quantity.
@@ -82,8 +93,8 @@ with.
 
 **Family**:
 The product-metadata bucket a product belongs to (membership, dues, golf,
-tournament, donation); the coarse axis orders are reported on. A product may have
-no family.
+tournament, donation, events, sponsorship); the coarse axis orders are reported
+on. A product may have no family.
 
 **Clean URL**:
 The public root URL of a product detail page (e.g. `/dues`), produced by rewriting the
