@@ -402,6 +402,22 @@ function main(): void {
     "a field the buyer never answered contributes nothing",
     registrationNames({ ...golfCollector, answers: {} }).length === 0
   )
+  check(
+    "an acknowledgement is not a registrant",
+    registrationNames({
+      ...golfCollector,
+      fields: [
+        ...golfCollector.fields,
+        {
+          name: "refundAgreement",
+          label: "Refund agreement",
+          type: "checkbox",
+          required: true,
+        },
+      ],
+      answers: { ...golfCollector.answers, refundAgreement: "true" },
+    }).join(" | ") === "Jane Smith | Mike Torres"
+  )
 
   console.log("\nThe session metadata")
   const plan = buildOrderMetadata(GOLF_ENTRIES, "cart-ref-1")

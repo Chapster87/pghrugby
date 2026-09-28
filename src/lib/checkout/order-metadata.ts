@@ -51,7 +51,10 @@ export function deriveLineFamilies(entries: CartEntry[]): string[] {
 
 /**
  * The registrant names a collector entry holds, in the field order the buyer
- * filled: every answered field, repeatable values flattened, blanks dropped.
+ * filled: every answered name-bearing field, repeatable values flattened, blanks
+ * dropped. A `checkbox` is an acknowledgement, not a registrant, so it is skipped
+ * — its answer is the `"true"` marker, which would otherwise read as a name
+ * beside the real ones (`docs/adr/0004-sc7s-refund-agreement-is-a-collector-checkbox.md`).
  *
  * Read from the entry's own field snapshot rather than any collector definition
  * fetched now, so the summary describes the form the buyer actually submitted
@@ -63,6 +66,7 @@ export function deriveLineFamilies(entries: CartEntry[]): string[] {
 export function registrationNames(collector: CollectorEntry): string[] {
   const names: string[] = []
   for (const field of collector.fields) {
+    if (field.type === "checkbox") continue
     const raw = collector.answers[field.name]
     const values = Array.isArray(raw) ? raw : [raw]
     for (const value of values) {
