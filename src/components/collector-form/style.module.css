@@ -86,3 +86,12 @@
   align-self: flex-start;
   margin-top: 8px;
 }
+
+/* A `checkbox` field: the box and its label share one row, so the label reads as a
+   statement to tick rather than a caption above a control. Sized to match the
+   other fields' labels. */
+.checkboxLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+}

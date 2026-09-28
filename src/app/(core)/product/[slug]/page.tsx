@@ -166,7 +166,8 @@ function toEventMeta(
  * instead of being maintained twice. An authored `tab_desc` replaces that default
  * outright, at whatever position the editor dragged it to: the order is the
  * field's order, and the implicit panel is only what stands in for "nothing
- * authored yet".
+ * authored yet". A `variation` page passes no fallback: there the copy belongs to
+ * the selected option, which shows it in the buy box instead.
  */
 function toPanels(
   tabs: PdpQuery["tabs"],
@@ -254,8 +255,16 @@ function toFields(collector: PdpQuery["dataCollectors"][number] | undefined) {
  *
  * `compareAtAmount` starts null: a sale is a Stripe fact, so the display pass in
  * the page resolves it afterwards.
+ *
+ * `includeDescription` carries the product's own copy onto the line, for a
+ * `variation` page only — there the copy belongs to the chosen option, so the buy
+ * box shows it beneath the price card and the page drops the below-fold fallback
+ * (`docs/adr/0002-golf-sponsorship-is-its-own-pdp.md`).
  */
-function toLines(product: PdpQuery["primaryProducts"][number]): PdpLine[] {
+function toLines(
+  product: PdpQuery["primaryProducts"][number],
+  includeDescription = false
+): PdpLine[] {
   const sku = product.sku ?? ""
   if (!sku) return []
 
@@ -270,6 +279,7 @@ function toLines(product: PdpQuery["primaryProducts"][number]): PdpLine[] {
       compareAtAmount: null,
       quantityBearing: product.quantityBearing ?? false,
       inStock: product.inStock ?? true,
+      description: includeDescription ? product.description ?? null : null,
     },
   ]
 }
@@ -344,8 +354,14 @@ export default async function ProductDetailPage({ params }: PageProps) {
     mobile: (item.mobileMedia as CloudinaryImage | null) ?? null,
   }))
 
+  const productType = toProductType(productDetailPage.productType)
+
+  // A `variation` page's copy belongs to the selected option, so its primaries
+  // carry the description into the buy box; add-ons never show copy there, and
+  // `simple` / `grouped` pages keep rendering it below the fold unchanged.
+  const isVariation = productType === "variation"
   const primaryLines = productDetailPage.primaryProducts.flatMap((product) =>
-    toLines(product)
+    toLines(product, isVariation)
   )
   const addonLines = productDetailPage.addonProducts.flatMap((product) =>
     toLines(product)
@@ -383,14 +399,18 @@ export default async function ProductDetailPage({ params }: PageProps) {
       productDetailPage.eventStartsAt,
       productDetailPage.eventLocation
     ),
-    productType: toProductType(productDetailPage.productType),
+    productType,
     photos,
     primaries: primaryLines.map(withDisplay),
     addons: addonLines.map(withDisplay),
     anyAmount: toAnyAmount(productDetailPage.anyAmountProduct),
     panels: toPanels(
       productDetailPage.tabs,
-      productDetailPage.primaryProducts[0]?.description ?? null
+      // Suppressed on a `variation` page: the first primary's copy is one
+      // option's, not the page's, and the buy box now shows the selected one.
+      isVariation
+        ? null
+        : productDetailPage.primaryProducts[0]?.description ?? null
     ),
     collectorRef: collector?.id ?? "",
     fields: toFields(collector),

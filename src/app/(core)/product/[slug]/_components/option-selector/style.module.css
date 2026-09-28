@@ -77,6 +77,23 @@
   color: var(--color-grey-900);
 }
 
+/* Only when the card carries the option's `description`: the row wraps so the copy
+   drops onto its own line, inside the card. A card without copy keeps the plain
+   single-line row. */
+.singlePrimaryWrapped {
+  flex-wrap: wrap;
+}
+
+/* The selected option's own copy, beneath the name/price row. `pre-line` keeps the
+   authored line breaks in a perks list. */
+.lineDescription {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-grey-700);
+  white-space: pre-line;
+}
+
 .stepper {
   flex: none;
 }

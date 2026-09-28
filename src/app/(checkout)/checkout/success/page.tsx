@@ -165,8 +165,9 @@ function strOr(value: unknown): string {
 
 /**
  * A registration's answers rendered as readable data, not raw JSON. Handles the
- * two known flow shapes (golf = captain + golfers, tournament = division +
- * team name + contact); anything else falls back to the payload as-is.
+ * three known flow shapes (golf = captain + golfers, tournament = division +
+ * team name + contact, sponsorship = business + logo + contact); anything else
+ * falls back to the payload as-is.
  */
 function RegistrationAnswers({ answers }: { answers: unknown }) {
   if (answers === null || typeof answers !== "object") {
@@ -211,6 +212,25 @@ function RegistrationAnswers({ answers }: { answers: unknown }) {
         <div className={s.regRow}>
           <dt className={s.regLabel}>Contact</dt>
           <dd className={s.regValue}>{personLabel(reg.contact)}</dd>
+        </div>
+      </dl>
+    )
+  }
+
+  if (typeof reg.businessName === "string") {
+    return (
+      <dl className={s.regList}>
+        <div className={s.regRow}>
+          <dt className={s.regLabel}>Business</dt>
+          <dd className={s.regValue}>{strOr(reg.businessName)}</dd>
+        </div>
+        <div className={s.regRow}>
+          <dt className={s.regLabel}>Sending a logo</dt>
+          <dd className={s.regValue}>{strOr(reg.logo)}</dd>
+        </div>
+        <div className={s.regRow}>
+          <dt className={s.regLabel}>Contact</dt>
+          <dd className={s.regValue}>{strOr(reg.sponsorEmail)}</dd>
         </div>
       </dl>
     )

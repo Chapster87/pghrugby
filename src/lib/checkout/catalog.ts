@@ -212,6 +212,48 @@ export const CHECKOUT_CATALOG = {
       family: "events",
     },
   ] satisfies CatalogItem[],
+  /**
+   * Golf outing sponsorship tiers — one fixed-price product per level, on their
+   * own `variation` PDP (`/golf-outing-sponsorship`). Its own `family` so
+   * sponsorship revenue reports apart from golfer registration
+   * (`docs/adr/0002-golf-sponsorship-is-its-own-pdp.md`).
+   *
+   * The live store's sixth option, "Custom Sponsor", carries no price and is
+   * handled by email; deliberately not a product here. `priceId` is filled from
+   * `pnpm provision:stripe:apply`'s price map once the approval rows run.
+   */
+  sponsorshipTiers: [
+    {
+      sku: "golf-sponsor-masters",
+      label: "Masters Sponsor",
+      unitAmount: 500000,
+      family: "sponsorship",
+    },
+    {
+      sku: "golf-sponsor-pro",
+      label: "Pro Sponsor",
+      unitAmount: 250000,
+      family: "sponsorship",
+    },
+    {
+      sku: "golf-sponsor-hole-in-one",
+      label: "Hole-in-One Sponsor",
+      unitAmount: 100000,
+      family: "sponsorship",
+    },
+    {
+      sku: "golf-sponsor-eagle",
+      label: "Eagle Sponsor",
+      unitAmount: 50000,
+      family: "sponsorship",
+    },
+    {
+      sku: "golf-sponsor-birdie",
+      label: "Birdie Sponsor",
+      unitAmount: 25000,
+      family: "sponsorship",
+    },
+  ] satisfies CatalogItem[],
 } as const
 
 /** Max golfers the cart form allows (keeps the payload bounded). */
@@ -232,6 +274,9 @@ export function findCatalogItem(sku: string): CatalogItem | undefined {
     if (item.sku === sku) return item
   }
   for (const item of CHECKOUT_CATALOG.events) {
+    if (item.sku === sku) return item
+  }
+  for (const item of CHECKOUT_CATALOG.sponsorshipTiers) {
     if (item.sku === sku) return item
   }
   return undefined

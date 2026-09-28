@@ -2,6 +2,7 @@
   "flows": [
     { "slug": "dues", "title": "Season Dues" },
     { "slug": "golf-outing", "title": "Golf Outing" },
+    { "slug": "golf-outing-sponsorship", "title": "Golf Outing Sponsorship" },
     { "slug": "steel-city-7s", "title": "Steel City 7s" },
     { "slug": "donate", "title": "Donate" },
     { "slug": "pig-roast", "title": "Annual Forge Pig Roast" },
@@ -134,6 +135,46 @@
       "label": "Annual Forge Pig Roast Ticket",
       "wcSlug": "annual-forge-pig-roast",
       "pdp": "pig-roast",
+      "kind": "primary"
+    },
+    {
+      "sku": "golf-sponsor-masters",
+      "label": "Masters Sponsor",
+      "wcSlug": "golf-outing-sponsorship",
+      "wcVariation": "Masters Sponsor ($5,000)",
+      "pdp": "golf-outing-sponsorship",
+      "kind": "primary"
+    },
+    {
+      "sku": "golf-sponsor-pro",
+      "label": "Pro Sponsor",
+      "wcSlug": "golf-outing-sponsorship",
+      "wcVariation": "Pro Sponsor ($2,500)",
+      "pdp": "golf-outing-sponsorship",
+      "kind": "primary"
+    },
+    {
+      "sku": "golf-sponsor-hole-in-one",
+      "label": "Hole-in-One Sponsor",
+      "wcSlug": "golf-outing-sponsorship",
+      "wcVariation": "Hole-in-One Sponsor ($1,000)",
+      "pdp": "golf-outing-sponsorship",
+      "kind": "primary"
+    },
+    {
+      "sku": "golf-sponsor-eagle",
+      "label": "Eagle Sponsor",
+      "wcSlug": "golf-outing-sponsorship",
+      "wcVariation": "Eagle Sponsor ($500)",
+      "pdp": "golf-outing-sponsorship",
+      "kind": "primary"
+    },
+    {
+      "sku": "golf-sponsor-birdie",
+      "label": "Birdie Sponsor",
+      "wcSlug": "golf-outing-sponsorship",
+      "wcVariation": "Birdie Sponsor ($250)",
+      "pdp": "golf-outing-sponsorship",
       "kind": "primary"
     }
   ]

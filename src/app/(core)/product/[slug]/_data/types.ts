@@ -37,6 +37,13 @@ export type PdpLine = {
   quantityBearing: boolean
   /** Sold-out lines render disabled and labelled, never hidden. */
   inStock: boolean
+  /**
+   * The line's own copy, rendered beneath the price card. Only a `variation` page
+   * populates it: there the copy belongs to the chosen option, so the page shows
+   * it in the buy box rather than below the fold
+   * (`docs/adr/0002-golf-sponsorship-is-its-own-pdp.md`).
+   */
+  description: string | null
 }
 
 /**

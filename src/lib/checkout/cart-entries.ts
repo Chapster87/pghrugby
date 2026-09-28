@@ -23,7 +23,11 @@ export type CollectorField = {
   /** The field's API key — the key its answer is stored under in `answers`. */
   name: string
   label: string
-  /** DatoCMS field type (text | email | select | …). */
+  /**
+   * The control the field renders: `text`, `email`, `select`, `radio`,
+   * `textarea`, or `checkbox` (a single boolean tick). A DatoCMS free string, so
+   * a new type is an app change only (`@components/collector-form`).
+   */
   type: string
   required?: boolean
   repeatable?: boolean

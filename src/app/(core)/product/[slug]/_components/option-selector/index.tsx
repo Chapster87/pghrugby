@@ -75,6 +75,10 @@ export function QuantityStepper({
 /**
  * The price card for a single-primary page (`product_type: simple`): the line, its
  * name, its price, and a stepper only when it is quantity-bearing.
+ *
+ * A line that carries `description` — a `variation` page's selected option — wraps
+ * the card so the copy sits beneath the name/price row, inside the card. A line
+ * with none renders exactly as before.
  */
 export function SinglePrimaryLine({
   line,
@@ -86,7 +90,13 @@ export function SinglePrimaryLine({
   setQuantity: (quantity: number) => void
 }) {
   return (
-    <div className={clsx(s.singlePrimary, !line.inStock && s.lineDisabled)}>
+    <div
+      className={clsx(
+        s.singlePrimary,
+        line.description && s.singlePrimaryWrapped,
+        !line.inStock && s.lineDisabled
+      )}
+    >
       <div className={s.lineText}>
         <span className={s.lineName}>{line.label}</span>
       </div>
@@ -96,6 +106,9 @@ export function SinglePrimaryLine({
           <QuantityStepper quantity={quantity} setQuantity={setQuantity} />
         )}
       </div>
+      {line.description && (
+        <p className={s.lineDescription}>{line.description}</p>
+      )}
     </div>
   )
 }

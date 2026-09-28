@@ -167,6 +167,45 @@ unchecked, in case the club runs a summer cycle.
   - metadata: family=events, kind=one-time
   - note: WP $25
 
+### Golf outing sponsorship — `family=sponsorship`
+
+> `family=sponsorship` extends the family enum so the outing's sponsorship revenue
+> reports apart from golfer registration
+> (`docs/adr/0002-golf-sponsorship-is-its-own-pdp.md`). Five fixed-price tiers
+> (`variation` on their own PDP, `/golf-outing-sponsorship`). The live store's
+> sixth option, **Custom Sponsor**, carries no price and is handled by email, so
+> it is deliberately **not** a product here.
+
+- [x] product `golf-sponsor-masters` — Golf Outing Sponsorship — Masters Sponsor
+
+  - price: 5000.00, lookup_key: `golf-sponsor-masters-2026`
+  - metadata: family=sponsorship, kind=one-time
+  - note: event naming rights, 2 foursomes, banner + 2 tee boxes, press release
+
+- [x] product `golf-sponsor-pro` — Golf Outing Sponsorship — Pro Sponsor
+
+  - price: 2500.00, lookup_key: `golf-sponsor-pro-2026`
+  - metadata: family=sponsorship, kind=one-time
+  - note: 1 foursome, banner + 1 tee box, sponsored item, social promotion
+
+- [x] product `golf-sponsor-hole-in-one` — Golf Outing Sponsorship — Hole-in-One Sponsor
+
+  - price: 1000.00, lookup_key: `golf-sponsor-hole-in-one-2026`
+  - metadata: family=sponsorship, kind=one-time
+  - note: 1 twosome, banner at clubhouse + 1 tee box
+
+- [x] product `golf-sponsor-eagle` — Golf Outing Sponsorship — Eagle Sponsor
+
+  - price: 500.00, lookup_key: `golf-sponsor-eagle-2026`
+  - metadata: family=sponsorship, kind=one-time
+  - note: tee box or drink-cart takeover, 1 tee box sign
+
+- [x] product `golf-sponsor-birdie` — Golf Outing Sponsorship — Birdie Sponsor
+
+  - price: 250.00, lookup_key: `golf-sponsor-birdie-2026`
+  - metadata: family=sponsorship, kind=one-time
+  - note: signage at 1 tee box
+
 ## SC7s additional-side coupons — edit, then run `--apply`
 
 `- [x]` = create · `- [ ]` = skip
