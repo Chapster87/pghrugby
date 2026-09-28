@@ -2,6 +2,9 @@ import { createHmac, timingSafeEqual } from "node:crypto"
 import { revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
+import { cacheTag } from "@/lib/datocms/executeQuery"
+import { cmsCacheTag } from "@/lib/forgecms/execute-query"
+
 /**
  * Receives publish signals from the site's content sources and invalidates the
  * CDA-fed caches behind them.
@@ -39,6 +42,16 @@ const SHARED_SECRET_HEADER = "x-revalidate-secret"
 type Delivery = { event?: string; cacheTags?: unknown }
 
 /**
+ * Every tag this route can purge, read from the clients that set them so the names cannot
+ * drift: `datocms` from `src/lib/datocms/executeQuery.ts`, `cms-content` from
+ * `src/lib/forgecms/execute-query.ts`.
+ *
+ * Only the untagged-delivery fallback uses this list. A delivery that names tags purges
+ * exactly what it named.
+ */
+const KNOWN_CACHE_TAGS = [cacheTag, cmsCacheTag]
+
+/**
  * Compares two secrets in constant time. A length mismatch is rejected outright
  * — `timingSafeEqual` throws on unequal buffers, and a differing length is
  * already a mismatch.
@@ -70,7 +83,8 @@ function deliveredTags(delivery: Delivery): string[] {
  * POST /api/revalidate
  *
  * @param request - A delivery from the ForgeCMS instance or a DatoCMS webhook.
- * @returns 200 with the tags invalidated, or 401/400/503 when refused.
+ * @returns 200 naming the tags invalidated — with `fallback: true` when the delivery
+ *   named none — or 401/400/503 when refused.
  */
 export async function POST(request: Request) {
   // Read the raw body FIRST — the ForgeCMS signature covers these exact bytes,
@@ -127,7 +141,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid json" }, { status: 400 })
   }
 
-  const tags = deliveredTags(delivery)
+  const named = deliveredTags(delivery)
+
+  // A sender that authenticated but named nothing is a misconfiguration, not a no-op:
+  // DatoCMS's default webhook payload carries no `cacheTags`, and a 200 that purged
+  // nothing is indistinguishable from success. Trust the signal rather than the name
+  // list — purge everything this route knows, and report it, so the sender's delivery
+  // history records what happened. Over-purging costs a re-read and is idempotent.
+  const fallback = named.length === 0
+  const tags = fallback ? KNOWN_CACHE_TAGS : named
+
+  if (fallback) {
+    console.warn(
+      `[revalidate] a ${sender} delivery named no cacheTags; purged ` +
+        `${KNOWN_CACHE_TAGS.join(", ")} instead. Fix the sender's payload.`
+    )
+  }
 
   // `{ expire: 0 }` rather than the `"max"` cache-life profile: a publish should
   // make the next request re-read, not serve the stale entry while revalidation
@@ -136,5 +165,11 @@ export async function POST(request: Request) {
     revalidateTag(tag, { expire: 0 })
   }
 
-  return NextResponse.json({ ok: true, sender, event: delivery.event, tags })
+  return NextResponse.json({
+    ok: true,
+    sender,
+    event: delivery.event,
+    tags,
+    fallback,
+  })
 }
