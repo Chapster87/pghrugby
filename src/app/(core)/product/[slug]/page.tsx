@@ -215,38 +215,111 @@ function toPanels(
   return panels
 }
 
+/** One DatoCMS field block, as the query selects it. */
+type CollectorFieldRecord =
+  PdpQuery["dataCollectors"][number]["formFields"][number]
+
+/** A choice block — the two blocks that carry an `options` list. */
+type ChoiceFieldRecord = Extract<
+  CollectorFieldRecord,
+  { __typename: "DataFieldSelectRecord" | "DataFieldRadioRecord" }
+>
+
 /**
- * A DataCollector's `options` text as a choice list.
+ * A choice block's option labels, in order.
  *
- * One option per line is the format the field is authored in. A value with no line
- * break is also read as a comma-separated list: that is what a hand-typed value
- * looks like, and reading it literally renders a two-choice radio as a single
- * option named "Yes, No".
+ * Options are their own records, so they arrive as a list and nothing splits a
+ * string on a delimiter any more — the defect that prompted the split, where a
+ * hand-typed `"Yes, No"` rendered as a single option.
+ *
+ * @param field - The choice block as the query returns it.
+ * @returns The option labels, blanks dropped.
  */
-function parseOptions(value: string | null): string[] | undefined {
-  const raw = value ?? ""
-  const options = raw
-    .split(raw.includes("\n") ? /\r?\n/ : ",")
-    .map((option) => option.trim())
-    .filter(Boolean)
-  return options.length > 0 ? options : undefined
+function optionLabels(field: ChoiceFieldRecord): string[] {
+  return field.options.map((option) => option.label ?? "").filter(Boolean)
+}
+
+/**
+ * One DatoCMS field block as the collector entry's add-time field snapshot.
+ *
+ * Discriminates on the block's `__typename`, one case per block, so a block this
+ * renderer has no case for cannot reach it — there is no unrecognised `field_type`
+ * left to fall back from. A new control is a new block, a new fragment in the
+ * query, and a new case here.
+ *
+ * @param field - The field block as the query returns it.
+ * @returns The client-side field definition.
+ */
+function toCollectorField(field: CollectorFieldRecord): CollectorField {
+  const name = field.fieldName ?? ""
+  const label = field.label ?? name
+  const required = field.required ?? undefined
+
+  switch (field.__typename) {
+    case "DataFieldCheckboxRecord":
+      return { type: "checkbox", name, label, required }
+
+    case "DataFieldTextRecord":
+      return {
+        type: "text",
+        name,
+        label,
+        required,
+        placeholder: field.placeholder ?? undefined,
+        repeatable: field.repeatable ?? undefined,
+        max: field.max ?? undefined,
+      }
+
+    case "DataFieldTextareaRecord":
+      return {
+        type: "textarea",
+        name,
+        label,
+        required,
+        placeholder: field.placeholder ?? undefined,
+        repeatable: field.repeatable ?? undefined,
+        max: field.max ?? undefined,
+      }
+
+    case "DataFieldEmailRecord":
+      return {
+        type: "email",
+        name,
+        label,
+        required,
+        placeholder: field.placeholder ?? undefined,
+        repeatable: field.repeatable ?? undefined,
+        max: field.max ?? undefined,
+      }
+
+    case "DataFieldSelectRecord":
+      return {
+        type: "select",
+        name,
+        label,
+        required,
+        placeholder: field.placeholder ?? undefined,
+        options: optionLabels(field),
+      }
+
+    case "DataFieldRadioRecord":
+      return {
+        type: "radio",
+        name,
+        label,
+        required,
+        placeholder: field.placeholder ?? undefined,
+        options: optionLabels(field),
+      }
+  }
 }
 
 /** The DatoCMS form fields as the collector entry's add-time field snapshot. */
-function toFields(collector: PdpQuery["dataCollectors"][number] | undefined) {
+function toFields(
+  collector: PdpQuery["dataCollectors"][number] | undefined
+): CollectorField[] {
   return (collector?.formFields ?? [])
-    .map(
-      (field): CollectorField => ({
-        name: field.fieldName ?? "",
-        label: field.label ?? field.fieldName ?? "",
-        type: field.fieldType ?? "text",
-        required: field.required ?? undefined,
-        repeatable: field.repeatable ?? undefined,
-        max: field.max ?? undefined,
-        options: parseOptions(field.options),
-        placeholder: field.placeholder ?? undefined,
-      })
-    )
+    .map(toCollectorField)
     .filter((field) => field.name.length > 0)
 }
 

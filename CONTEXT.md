@@ -49,7 +49,9 @@ _Avoid_: package
 
 **Data collector**:
 The registration form attached to a PDP. Supplies the registration payload only — it
-never determines quantity.
+never determines quantity. Its fields are DatoCMS modular blocks, one block per
+control, so a field's block type **is** its type
+(`docs/adr/0003-collector-field-type-is-the-block.md`).
 _Avoid_: form (ambiguous with a group of fields)
 
 **Product tab**:

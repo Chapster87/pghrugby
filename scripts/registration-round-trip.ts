@@ -23,6 +23,7 @@
 import type Stripe from "stripe"
 
 import {
+  isChoiceField,
   isCollectorEntry,
   parseCartEntries,
   pricedLines,
@@ -528,7 +529,9 @@ function main(): void {
   check(
     "the radio keeps its options",
     same(
-      sponsorCollector?.fields.find((field) => field.name === "logo")?.options,
+      sponsorCollector?.fields
+        .filter(isChoiceField)
+        .find((field) => field.name === "logo")?.options,
       ["Yes", "No"]
     )
   )

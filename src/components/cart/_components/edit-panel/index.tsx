@@ -7,7 +7,11 @@ import Button from "@components/button"
 import CollectorFields from "@components/collector-form"
 import { useCollectorForm } from "@components/collector-form/use-collector-form"
 import QuantitySelector from "@components/quantity-selector"
-import type { CollectorEntry, PricedLine } from "@/lib/checkout/cart-entries"
+import {
+  isRepeatableField,
+  type CollectorEntry,
+  type PricedLine,
+} from "@/lib/checkout/cart-entries"
 import { lineLabel } from "@/lib/checkout/cart-display"
 import { MAX_LINE_QUANTITY } from "@/lib/checkout/cart-mutations"
 
@@ -63,9 +67,7 @@ export default function EditPanel({
   // repeatable field's snapshot `max` plus the first (named) player.
   const repeatableMax = Math.max(
     0,
-    ...collector.fields
-      .filter((field) => field.repeatable)
-      .map((field) => field.max ?? 0)
+    ...collector.fields.filter(isRepeatableField).map((field) => field.max ?? 0)
   )
   const maxQuantity = repeatableMax > 0 ? repeatableMax + 1 : MAX_LINE_QUANTITY
 

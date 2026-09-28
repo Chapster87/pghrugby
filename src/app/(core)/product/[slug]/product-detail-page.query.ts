@@ -36,6 +36,13 @@ import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
  * fragment and discriminated by `__typename` in `page.tsx`. The renderer
  * enumerates this field rather than naming panels of its own (§ 5.6).
  *
+ * `dataCollectors.formFields` is a union for the same reason: one block per
+ * control, so the block type carries the field type and each block is selected
+ * through its own fragment. Only a choice block has `options`, and only a
+ * free-input block has `placeholder`/`repeatable`/`max`, which is what makes the
+ * invalid combinations unrepresentable rather than merely unrendered
+ * (`docs/adr/0003-collector-field-type-is-the-block.md`).
+ *
  * The pricing fields are read but not used here: the *amount* of a sale Price
  * lives in Stripe, so `page.tsx` resolves the display through
  * `src/lib/checkout/price-display.ts`, which needs the CMS record to know whether
@@ -113,14 +120,54 @@ export const productDetailPageQuery = graphql(
           id
           title
           formFields {
-            label
-            fieldName
-            fieldType
-            required
-            options
-            placeholder
-            repeatable
-            max
+            __typename
+            ... on DataFieldTextRecord {
+              label
+              fieldName
+              required
+              placeholder
+              repeatable
+              max
+            }
+            ... on DataFieldTextareaRecord {
+              label
+              fieldName
+              required
+              placeholder
+              repeatable
+              max
+            }
+            ... on DataFieldEmailRecord {
+              label
+              fieldName
+              required
+              placeholder
+              repeatable
+              max
+            }
+            ... on DataFieldSelectRecord {
+              label
+              fieldName
+              required
+              placeholder
+              options {
+                label
+              }
+            }
+            ... on DataFieldRadioRecord {
+              label
+              fieldName
+              required
+              placeholder
+              options {
+                label
+              }
+            }
+            ... on DataFieldCheckboxRecord {
+              label
+              fieldName
+              required
+            }
           }
         }
       }

@@ -7,7 +7,11 @@ import Checkbox from "@components/checkbox"
 import Radio from "@components/radio"
 import Select from "@components/select"
 
-import type { CollectorField } from "@/lib/checkout/cart-entries"
+import {
+  isRepeatableField,
+  type CollectorField,
+  type FreeInputCollectorField,
+} from "@/lib/checkout/cart-entries"
 import type { CollectorAnswers, CollectorErrors } from "./use-collector-form"
 
 import s from "./style.module.css"
@@ -20,6 +24,60 @@ import s from "./style.module.css"
 const CHECKED = "true"
 
 /**
+ * One value of a free-input field: a textarea for `textarea`, and a text or email
+ * input otherwise.
+ *
+ * Shared by the single-value render and the repeatable rows, so a repeated email
+ * is still an email input and a repeated `textarea` is still multi-line — the
+ * repeat branch used to collapse every type to a single-line text box.
+ */
+function FreeInput({
+  field,
+  id,
+  value,
+  placeholder,
+  error,
+  ariaLabel,
+  onChange,
+}: {
+  field: FreeInputCollectorField
+  /** Omitted on a repeat row, which is labelled by `aria-label` instead. */
+  id?: string
+  value: string
+  placeholder?: string
+  error?: string
+  ariaLabel?: string
+  onChange: (value: string) => void
+}) {
+  if (field.type === "textarea") {
+    return (
+      <textarea
+        id={id}
+        className={clsx(s.textarea, error && s.inputError)}
+        value={value}
+        placeholder={placeholder}
+        aria-label={ariaLabel}
+        aria-invalid={error ? true : undefined}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    )
+  }
+
+  return (
+    <input
+      id={id}
+      className={clsx(s.input, error && s.inputError)}
+      type={field.type === "email" ? "email" : "text"}
+      value={value}
+      placeholder={placeholder}
+      aria-label={ariaLabel}
+      aria-invalid={error ? true : undefined}
+      onChange={(event) => onChange(event.target.value)}
+    />
+  )
+}
+
+/**
  * The DataCollector fields, rendered from the collector's field definitions.
  *
  * Purely presentational and controlled: the PDP renders it under its buy box at
@@ -27,10 +85,11 @@ const CHECKED = "true"
  * entry's snapshotted fields, so the buyer always edits the form they filled
  * (`docs/agents/registration-editing.md` § 7).
  *
- * The field's `type` picks the control: `select` and `radio` choose one of the
- * field's `options`, `checkbox` is a single boolean tick, `textarea` is
- * multi-line, and `email` / `text` are single-line. An unrecognised type renders
- * as `text`.
+ * The field's `type` picks the control, and the union it is read from is the
+ * DatoCMS block set, so every case here has a block behind it and there is no
+ * unrecognised value to fall back from: a `select` and a `radio` choose one of
+ * their `options`, a `checkbox` is a single boolean tick, a `textarea` is
+ * multi-line, and `text` / `email` are single-line.
  *
  * A repeatable field renders one row per answer, an empty trailing row allowed;
  * its "+ Add" control is disabled at the field's `max`.
@@ -55,8 +114,8 @@ export default function CollectorFields({
   rowsFor: (name: string) => string[]
   onChange: (name: string, value: string) => void
   onSetRow: (name: string, index: number, value: string) => void
-  onAddRow: (field: CollectorField) => void
-  onRemoveRow: (field: CollectorField, index: number) => void
+  onAddRow: (field: FreeInputCollectorField) => void
+  onRemoveRow: (field: FreeInputCollectorField, index: number) => void
   /** Namespaces the input ids, so two forms on one page never collide. */
   idPrefix: string
   className?: string
@@ -67,7 +126,7 @@ export default function CollectorFields({
         const error = errors?.[field.name]
         const inputId = `${idPrefix}-${field.name}`
 
-        if (field.repeatable) {
+        if (isRepeatableField(field)) {
           const rows = rowsFor(field.name)
           const atMax = Boolean(field.max && rows.length >= field.max)
           return (
@@ -78,17 +137,15 @@ export default function CollectorFields({
               </span>
               {rows.map((row, index) => (
                 <div key={index} className={s.repeatRow}>
-                  <input
-                    className={clsx(s.input, error && s.inputError)}
-                    type={field.type === "email" ? "email" : "text"}
+                  <FreeInput
+                    field={field}
                     value={row}
-                    aria-label={`${field.label} ${index + 1}`}
+                    error={error}
+                    ariaLabel={`${field.label} ${index + 1}`}
                     placeholder={
                       field.placeholder ?? `${field.label} ${index + 1}`
                     }
-                    onChange={(event) =>
-                      onSetRow(field.name, index, event.target.value)
-                    }
+                    onChange={(value) => onSetRow(field.name, index, value)}
                   />
                   {rows.length > 1 && (
                     <button
@@ -169,13 +226,13 @@ export default function CollectorFields({
           )
         }
 
-        return (
-          <div key={field.name} className={s.field}>
-            <label className={s.fieldLabel} htmlFor={inputId}>
-              {field.label}
-              {field.required && <span className={s.required}> *</span>}
-            </label>
-            {field.type === "select" ? (
+        if (field.type === "select") {
+          return (
+            <div key={field.name} className={s.field}>
+              <label className={s.fieldLabel} htmlFor={inputId}>
+                {field.label}
+                {field.required && <span className={s.required}> *</span>}
+              </label>
               <Select.Root
                 value={String(values[field.name] ?? "") || undefined}
                 onValueChange={(value) => onChange(field.name, value)}
@@ -197,25 +254,26 @@ export default function CollectorFields({
                   </Select.Content>
                 </Select.Portal>
               </Select.Root>
-            ) : field.type === "textarea" ? (
-              <textarea
-                id={inputId}
-                className={clsx(s.textarea, error && s.inputError)}
-                value={String(values[field.name] ?? "")}
-                placeholder={field.placeholder ?? undefined}
-                onChange={(event) => onChange(field.name, event.target.value)}
-              />
-            ) : (
-              <input
-                id={inputId}
-                className={clsx(s.input, error && s.inputError)}
-                type={field.type === "email" ? "email" : "text"}
-                value={String(values[field.name] ?? "")}
-                placeholder={field.placeholder ?? undefined}
-                aria-invalid={error ? true : undefined}
-                onChange={(event) => onChange(field.name, event.target.value)}
-              />
-            )}
+              {error && <p className={s.fieldError}>{error}</p>}
+            </div>
+          )
+        }
+
+        // The free-input family: `text`, `textarea` and `email`, single-valued.
+        return (
+          <div key={field.name} className={s.field}>
+            <label className={s.fieldLabel} htmlFor={inputId}>
+              {field.label}
+              {field.required && <span className={s.required}> *</span>}
+            </label>
+            <FreeInput
+              field={field}
+              id={inputId}
+              value={String(values[field.name] ?? "")}
+              placeholder={field.placeholder ?? undefined}
+              error={error}
+              onChange={(value) => onChange(field.name, value)}
+            />
             {error && <p className={s.fieldError}>{error}</p>}
           </div>
         )

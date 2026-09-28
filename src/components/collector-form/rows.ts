@@ -13,7 +13,10 @@
  * holds anything.
  */
 
-import type { CollectorField } from "@/lib/checkout/cart-entries"
+import {
+  isRepeatableField,
+  type CollectorField,
+} from "@/lib/checkout/cart-entries"
 
 /** A DataCollector payload as the form holds it, keyed by field name. */
 export type CollectorAnswers = Record<string, string | string[]>
@@ -101,13 +104,13 @@ export function planQuantityChange(
   quantity: number
 ): QuantityPlan {
   const rowCounts = fields
-    .filter((field) => field.repeatable)
+    .filter(isRepeatableField)
     .map((field) => registrationRowCount(quantity, field.max))
   const rowCount = Math.max(MIN_ROWS, ...rowCounts)
 
   const dropped: string[] = []
   for (const field of fields) {
-    if (!field.repeatable) continue
+    if (!isRepeatableField(field)) continue
     dropped.push(
       ...rowsOf(values, field.name)
         .slice(rowCount)
@@ -135,7 +138,7 @@ export function applyQuantityChange(
   const next = { ...values }
 
   for (const field of fields) {
-    if (!field.repeatable) continue
+    if (!isRepeatableField(field)) continue
     next[field.name] = resizeRows(rowsOf(values, field.name), plan.rowCount)
   }
 

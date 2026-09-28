@@ -292,6 +292,8 @@ input DataCollectorModelFilter {
   AND: [DataCollectorModelFilter]
 }
 
+union DataCollectorModelFormFieldsField = DataFieldCheckboxRecord | DataFieldEmailRecord | DataFieldRadioRecord | DataFieldSelectRecord | DataFieldTextRecord | DataFieldTextareaRecord
+
 enum DataCollectorModelOrderBy {
   _createdAt_ASC
   _createdAt_DESC
@@ -335,13 +337,13 @@ type DataCollectorRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
-  formFields: [DataFieldRecord!]!
+  formFields: [DataCollectorModelFormFieldsField!]!
   id: ItemId!
   title: String
 }
 
-"""Block of type Data Field (data_field)"""
-type DataFieldRecord implements RecordInterface {
+"""Block of type Checkbox field (data_field_checkbox)"""
+type DataFieldCheckboxRecord implements RecordInterface {
   _createdAt: DateTime!
 
   """Editing URL"""
@@ -361,14 +363,173 @@ type DataFieldRecord implements RecordInterface {
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
   fieldName: String
-  fieldType: String
+  id: ItemId!
+  label: String
+  required: BooleanType!
+}
+
+"""Block of type Email field (data_field_email)"""
+type DataFieldEmailRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  fieldName: String
   id: ItemId!
   label: String
   max: IntType
-  options(
-    """Process content as markdown"""
-    markdown: Boolean
-  ): String
+  placeholder: String
+  repeatable: BooleanType!
+  required: BooleanType!
+}
+
+"""Block of type Choice option (data_field_option)"""
+type DataFieldOptionRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  label: String
+}
+
+"""Block of type Radio field (data_field_radio)"""
+type DataFieldRadioRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  fieldName: String
+  id: ItemId!
+  label: String
+  options: [DataFieldOptionRecord!]!
+  placeholder: String
+  required: BooleanType!
+}
+
+"""Block of type Select field (data_field_select)"""
+type DataFieldSelectRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  fieldName: String
+  id: ItemId!
+  label: String
+  options: [DataFieldOptionRecord!]!
+  placeholder: String
+  required: BooleanType!
+}
+
+"""Block of type Text field (data_field_text)"""
+type DataFieldTextRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  fieldName: String
+  id: ItemId!
+  label: String
+  max: IntType
+  placeholder: String
+  repeatable: BooleanType!
+  required: BooleanType!
+}
+
+"""Block of type Text area field (data_field_textarea)"""
+type DataFieldTextareaRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  fieldName: String
+  id: ItemId!
+  label: String
+  max: IntType
   placeholder: String
   repeatable: BooleanType!
   required: BooleanType!

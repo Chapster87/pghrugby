@@ -2,7 +2,11 @@
 
 import { useCallback, useState } from "react"
 
-import type { CollectorField } from "@/lib/checkout/cart-entries"
+import {
+  isRepeatableField,
+  type CollectorField,
+  type FreeInputCollectorField,
+} from "@/lib/checkout/cart-entries"
 
 import {
   applyQuantityChange,
@@ -39,7 +43,7 @@ function initialValues(
   const values: CollectorAnswers = {}
   for (const field of fields) {
     const raw = initial?.[field.name]
-    if (field.repeatable) {
+    if (isRepeatableField(field)) {
       values[field.name] = Array.isArray(raw) ? raw.map(String) : [""]
     } else {
       values[field.name] = Array.isArray(raw)
@@ -81,7 +85,7 @@ export function useCollectorForm(
     })
   }, [])
 
-  const addRow = useCallback((field: CollectorField) => {
+  const addRow = useCallback((field: FreeInputCollectorField) => {
     setValues((prev) => {
       const rows = [...rowsOf(prev, field.name)]
       if (field.max && rows.length >= field.max) return prev
@@ -90,14 +94,17 @@ export function useCollectorForm(
     })
   }, [])
 
-  const removeRow = useCallback((field: CollectorField, index: number) => {
-    setValues((prev) => {
-      const rows = [...rowsOf(prev, field.name)]
-      if (rows.length <= 1) return prev
-      rows.splice(index, 1)
-      return { ...prev, [field.name]: rows }
-    })
-  }, [])
+  const removeRow = useCallback(
+    (field: FreeInputCollectorField, index: number) => {
+      setValues((prev) => {
+        const rows = [...rowsOf(prev, field.name)]
+        if (rows.length <= 1) return prev
+        rows.splice(index, 1)
+        return { ...prev, [field.name]: rows }
+      })
+    },
+    []
+  )
 
   /**
    * Plans a quantity change against the repeatable rows without committing it,
@@ -135,7 +142,7 @@ export function useCollectorForm(
     const next: CollectorErrors = {}
     for (const field of fields) {
       if (!field.required) continue
-      if (field.repeatable) {
+      if (isRepeatableField(field)) {
         const filled = rowsOf(values, field.name).some(
           (row) => row.trim().length > 0
         )
@@ -158,7 +165,7 @@ export function useCollectorForm(
   const answers = useCallback((): CollectorAnswers => {
     const payload: CollectorAnswers = {}
     for (const field of fields) {
-      if (field.repeatable) {
+      if (isRepeatableField(field)) {
         payload[field.name] = rowsOf(values, field.name).filter(
           (row) => row.trim().length > 0
         )

@@ -18,27 +18,112 @@
  * types, and the order-row builders (and the round-trip script) share them.
  */
 
-/** A DataCollector field definition, snapshotted onto a collector entry at add-time. */
-export type CollectorField = {
+/**
+ * The fields every collector field carries: its API key, its label, and whether an
+ * answer is required.
+ */
+type CollectorFieldBase = {
   /** The field's API key — the key its answer is stored under in `answers`. */
   name: string
   label: string
-  /**
-   * The control the field renders: free input (`text`, `textarea`, `email`), a
-   * choice of the field's `options` (`select`, `radio`), or a single boolean tick
-   * (`checkbox`). An unrecognised value falls back to `text`.
-   *
-   * The vocabulary is an enum validator on the DatoCMS `data_field` block, so a new
-   * value is an app change **and** a widening of that enum — a value outside it
-   * invalidates the whole collector, which the app's reads then exclude.
-   */
-  type: string
   required?: boolean
+}
+
+/** Repeat behaviour, shared by the free-input fields — the only ones that repeat. */
+type Repeatable = {
+  placeholder?: string
   repeatable?: boolean
   /** Repeat cap for a repeatable field — mirrors `quantity -> rows`. */
   max?: number
-  options?: string[]
+}
+
+/** A single-line text input. */
+export type TextCollectorField = CollectorFieldBase &
+  Repeatable & {
+    type: "text"
+  }
+
+/** A multi-line text input. */
+export type TextareaCollectorField = CollectorFieldBase &
+  Repeatable & {
+    type: "textarea"
+  }
+
+/** An email input. */
+export type EmailCollectorField = CollectorFieldBase &
+  Repeatable & {
+    type: "email"
+  }
+
+/** A one-of-`options` dropdown. */
+export type SelectCollectorField = CollectorFieldBase & {
+  type: "select"
   placeholder?: string
+  options: string[]
+}
+
+/** A one-of-`options` radio group. */
+export type RadioCollectorField = CollectorFieldBase & {
+  type: "radio"
+  placeholder?: string
+  options: string[]
+}
+
+/** A single boolean tick — the only field with nothing beyond the shared three. */
+export type CheckboxCollectorField = CollectorFieldBase & {
+  type: "checkbox"
+}
+
+/** The free-input family: what a text box renders, and the only fields that repeat. */
+export type FreeInputCollectorField =
+  | TextCollectorField
+  | TextareaCollectorField
+  | EmailCollectorField
+
+/** The choice family: the fields whose answer is one of `options`. */
+export type ChoiceCollectorField = SelectCollectorField | RadioCollectorField
+
+/**
+ * A DataCollector field definition, snapshotted onto a collector entry at add-time.
+ *
+ * One member per DatoCMS block — the block **is** the field type — so a consumer
+ * must narrow before reading `options` (choice blocks only) or
+ * `placeholder`/`repeatable`/`max` (free-input blocks only). The discriminant keeps
+ * the six values the old `field_type` string used, because
+ * `order_registrations.fields` is a persisted snapshot of the old shape and must
+ * keep parsing.
+ */
+export type CollectorField =
+  | FreeInputCollectorField
+  | ChoiceCollectorField
+  | CheckboxCollectorField
+
+/** Narrows a field to the free-input family — the fields a text box renders. */
+export function isFreeInputField(
+  field: CollectorField
+): field is FreeInputCollectorField {
+  return (
+    field.type === "text" || field.type === "textarea" || field.type === "email"
+  )
+}
+
+/** Narrows a field to the choice family — the fields that pick one of `options`. */
+export function isChoiceField(
+  field: CollectorField
+): field is ChoiceCollectorField {
+  return field.type === "select" || field.type === "radio"
+}
+
+/**
+ * Narrows a field to one that renders repeatable rows.
+ *
+ * `quantity -> rows` reads this: the rows that mirror a registration's quantity
+ * are the repeatable free-input fields and nothing else.
+ */
+export function isRepeatableField(
+  field: CollectorField
+): field is FreeInputCollectorField & { repeatable: true } {
+  return isFreeInputField(field) && field.repeatable === true
 }
 
 /** A priced line — one sku, a buyer-set quantity, the only kind Stripe bills. */
