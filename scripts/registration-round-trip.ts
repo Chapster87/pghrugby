@@ -88,6 +88,60 @@ const ANSWERS = {
 }
 
 /**
+ * A sponsorship's DataCollector as DatoCMS holds it — business, the logo question
+ * as a `radio`, and the contact address. The trailing `checkbox` is **not** on the
+ * live collector: the type is new and nothing uses it yet, so it rides here to
+ * prove a boolean field round-trips like any other.
+ */
+const SPONSORSHIP_FIELDS: CollectorField[] = [
+  {
+    name: "businessName",
+    label: "Business name",
+    type: "text",
+    required: true,
+  },
+  {
+    name: "logo",
+    label: "Sending a logo",
+    type: "radio",
+    required: true,
+    options: ["Yes", "No"],
+  },
+  {
+    name: "sponsorEmail",
+    label: "Sponsor contact email",
+    type: "email",
+    required: true,
+  },
+  {
+    name: "acknowledged",
+    label: "I have read the sponsorship terms",
+    type: "checkbox",
+  },
+]
+
+const SPONSORSHIP_ANSWERS = {
+  businessName: "Acme Corp",
+  logo: "Yes",
+  sponsorEmail: "cfo@acme.example",
+  acknowledged: "true",
+}
+
+/** One add-to-cart action as the sponsorship PDP commits it. */
+function sponsorAdd(): CartAddGroup {
+  return {
+    primaries: [
+      { sku: "golf-sponsor-masters", quantity: 1, quantityBearing: false },
+    ],
+    collector: {
+      collectorRef: "golf-outing-sponsorship-collector",
+      answers: SPONSORSHIP_ANSWERS,
+      fields: SPONSORSHIP_FIELDS,
+    },
+  }
+}
+
+/**
  * One add-to-cart action as the golf PDP commits it: the quantity-bearing
  * registration, its two add-on lines, and one collector entry snapshotting the
  * field definitions.
@@ -459,6 +513,43 @@ function main(): void {
   const reloadedCollector = reloaded.filter(isCollectorEntry)[0]
   check("the field snapshot survives", same(reloadedCollector?.fields, FIELDS))
   check("the answers survive", same(reloadedCollector?.answers, ANSWERS))
+
+  console.log("\nA sponsorship's choice fields survive the browser round trip")
+  const sponsorCart = addGroup([], sponsorAdd(), {
+    sourcePdp: "golf-outing-sponsorship",
+    idFactory: idFactory(),
+  })
+  const sponsorCollector = sponsorCart.filter(isCollectorEntry)[0]
+  const sponsorLine = sponsorCart.find((entry) => !isCollectorEntry(entry))
+  check(
+    "the collector rides the tier line",
+    Boolean(sponsorLine) && sponsorCollector?.parentId === sponsorLine?.id
+  )
+  check(
+    "the radio keeps its options",
+    same(
+      sponsorCollector?.fields.find((field) => field.name === "logo")?.options,
+      ["Yes", "No"]
+    )
+  )
+  check(
+    "the checkbox keeps its type",
+    sponsorCollector?.fields.find((field) => field.name === "acknowledged")
+      ?.type === "checkbox"
+  )
+  const sponsorReloaded = parseCartEntries(
+    JSON.parse(JSON.stringify(sponsorCart))
+  )
+  check("every entry comes back", sponsorReloaded.length === sponsorCart.length)
+  const sponsorReloadedCollector = sponsorReloaded.filter(isCollectorEntry)[0]
+  check(
+    "the field snapshot deep-equals after the round trip",
+    same(sponsorReloadedCollector?.fields, SPONSORSHIP_FIELDS)
+  )
+  check(
+    "the answers deep-equal after the round trip",
+    same(sponsorReloadedCollector?.answers, SPONSORSHIP_ANSWERS)
+  )
 
   // --- the durable order rows ------------------------------------------------
 

@@ -14,6 +14,10 @@
  * and the `families` / `reg_N` / `reg_count` / `reg_ref` metadata — including
  * the truncation and >50-key overflow rules.
  *
+ * The golf outing's sponsorship tiers ride here too, because a new `family` is a
+ * reporting claim: the quoted line's family, the session metadata, and a mixed
+ * cart's family ordering are all asserted against the real catalog.
+ *
  *   node --import tsx scripts/checkout-pricing-round-trip.ts
  *   pnpm checkout:round-trip
  */
@@ -126,6 +130,60 @@ const GOLF_ENTRIES: CartEntry[] = [
   line("line-mulligan", "golf-outing-mulligan", 2, "line-golf"),
   line("line-pig-roast", "annual-forge-pig-roast"),
   line("line-donation", "donation-club-preset-25"),
+]
+
+/** A sponsorship tier's DataCollector as DatoCMS holds it. */
+const SPONSORSHIP_FIELDS: CollectorField[] = [
+  {
+    name: "businessName",
+    label: "Business name",
+    type: "text",
+    required: true,
+  },
+  {
+    name: "logo",
+    label: "Sending a logo",
+    type: "radio",
+    required: true,
+    options: ["Yes", "No"],
+  },
+  {
+    name: "sponsorEmail",
+    label: "Sponsor contact email",
+    type: "email",
+    required: true,
+  },
+]
+
+/** The tier skus' DatoCMS `product` records — in stock, no sale running. */
+const SPONSORSHIP_RECORDS = new Map<string, ProductPriceRecord>([
+  ["golf-sponsor-masters", record("golf-sponsor-masters")],
+])
+
+/** One sponsorship purchase: the chosen tier line and its collector. */
+const SPONSORSHIP_ENTRIES: CartEntry[] = [
+  {
+    id: "line-sponsor",
+    kind: "product",
+    sku: "golf-sponsor-masters",
+    quantity: 1,
+    sourcePdp: "golf-outing-sponsorship",
+    groupRef: "group-sponsor",
+  },
+  {
+    id: "collector-sponsor",
+    kind: "collector",
+    collectorRef: "golf-outing-sponsorship-collector",
+    answers: {
+      businessName: "Acme Corp",
+      logo: "Yes",
+      sponsorEmail: "cfo@acme.example",
+    },
+    fields: SPONSORSHIP_FIELDS,
+    sourcePdp: "golf-outing-sponsorship",
+    groupRef: "group-sponsor",
+    parentId: "line-sponsor",
+  },
 ]
 
 // --- assertions --------------------------------------------------------------
@@ -373,6 +431,40 @@ function main(): void {
   check(
     "no line overflows a 5-line cart",
     Object.keys(plan.lineMetadata).length === 0
+  )
+
+  console.log("\nA sponsorship is its own family")
+  const sponsorQuote = quoteCart(SPONSORSHIP_ENTRIES, SPONSORSHIP_RECORDS, {
+    now: at("2026-09-15T12:00:00Z"),
+  })
+  check(
+    "the tier is quoted as one line, with nothing refused",
+    sponsorQuote.lines.length === 1 && sponsorQuote.errors.length === 0
+  )
+  check(
+    "the quoted line carries family=sponsorship",
+    sponsorQuote.lines[0]?.family === "sponsorship"
+  )
+  const sponsorPlan = buildOrderMetadata(
+    SPONSORSHIP_ENTRIES,
+    "cart-ref-sponsor"
+  )
+  check(
+    "the session metadata carries family=sponsorship",
+    sponsorPlan.metadata.families === "sponsorship"
+  )
+  check("one registration is counted", sponsorPlan.metadata.reg_count === "1")
+  check(
+    "the summary names the business, then the two answers",
+    sponsorPlan.metadata.reg_0 ===
+      "Masters Sponsor x1: Acme Corp, Yes, cfo@acme.example"
+  )
+  check(
+    "a mixed cart lists families in cart order",
+    buildOrderMetadata(
+      [...GOLF_ENTRIES, ...SPONSORSHIP_ENTRIES],
+      "cart-ref-mixed"
+    ).metadata.families === "golf,events,donation,sponsorship"
   )
 
   console.log("\nThe metadata caps")
