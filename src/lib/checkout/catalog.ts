@@ -219,38 +219,42 @@ export const CHECKOUT_CATALOG = {
    * (`docs/adr/0002-golf-sponsorship-is-its-own-pdp.md`).
    *
    * The live store's sixth option, "Custom Sponsor", carries no price and is
-   * handled by email; deliberately not a product here. `priceId` is filled from
-   * `pnpm provision:stripe:apply`'s price map once the approval rows run.
+   * handled by email; deliberately not a product here.
    */
   sponsorshipTiers: [
     {
       sku: "golf-sponsor-masters",
       label: "Masters Sponsor",
       unitAmount: 500000,
+      priceId: "price_1UKTZZJdsCjn0Z6oAteLLBhD",
       family: "sponsorship",
     },
     {
       sku: "golf-sponsor-pro",
       label: "Pro Sponsor",
       unitAmount: 250000,
+      priceId: "price_1UKTZZJdsCjn0Z6ovxZQZIRu",
       family: "sponsorship",
     },
     {
       sku: "golf-sponsor-hole-in-one",
       label: "Hole-in-One Sponsor",
       unitAmount: 100000,
+      priceId: "price_1UKTZaJdsCjn0Z6oT3qqr7hN",
       family: "sponsorship",
     },
     {
       sku: "golf-sponsor-eagle",
       label: "Eagle Sponsor",
       unitAmount: 50000,
+      priceId: "price_1UKTZaJdsCjn0Z6oQy8lE7O2",
       family: "sponsorship",
     },
     {
       sku: "golf-sponsor-birdie",
       label: "Birdie Sponsor",
       unitAmount: 25000,
+      priceId: "price_1UKTZaJdsCjn0Z6oUDbUoLja",
       family: "sponsorship",
     },
   ] satisfies CatalogItem[],
