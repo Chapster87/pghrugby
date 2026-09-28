@@ -12,14 +12,17 @@ import { findCatalogItem } from "../src/lib/checkout/catalog"
  *
  * What it lands:
  *
- * 1. One `product` record per tier (`golf-sponsor-*`), `in_stock: true`,
+ * 1. A `data_field.field_type` **enum**, so the field-type vocabulary is a
+ *    dropdown in the CMS rather than free text. The renderer falls back to a text
+ *    input for a value it does not know, so a typo is silent — and an invalid
+ *    block invalidates its whole collector, which the app's reads then exclude.
+ *    Landing this before the collector below is what keeps its `radio` valid.
+ * 2. One `product` record per tier (`golf-sponsor-*`), `in_stock: true`,
  *    `quantity_bearing: false`, and `description` set to that tier's perks — the
  *    copy a `variation` page renders beneath the selected option.
- * 2. A `data_collector` — business name, the logo question as a `radio`, and the
- *    sponsor's contact email, all three required. `radio` is an app-side field
- *    type (`@components/collector-form`); `field_type` is a free string, so no
- *    schema change is needed for it.
- * 3. The `product_detail_page` at slug `golf-outing-sponsorship`,
+ * 3. A `data_collector` — business name, the logo question as a `radio`, and the
+ *    sponsor's contact email, all three required.
+ * 4. The `product_detail_page` at slug `golf-outing-sponsorship`,
  *    `product_type: variation`, the five tiers as `primary_products` richest
  *    first, no add-ons, and the collector attached.
  *
@@ -92,6 +95,24 @@ const TIERS: Tier[] = [
     perks: bullets(["Signage at 1 tee box"]),
   },
 ]
+
+/**
+ * The `field_type` vocabulary, in the order the CMS dropdown offers it.
+ *
+ * Every value the renderer understands belongs here, and none may be dropped while
+ * a record uses it: a value outside this list makes its `data_field` block invalid,
+ * which invalidates the whole `data_collector`, which the app's reads then exclude
+ * (`src/lib/datocms/executeQuery.ts` defaults to `excludeInvalid`) — the
+ * registration form disappears from the page rather than erroring.
+ */
+const FIELD_TYPES = [
+  "text",
+  "textarea",
+  "email",
+  "select",
+  "radio",
+  "checkbox",
+] as const
 
 /** The collector record's title. */
 const COLLECTOR_TITLE = "Golf Outing Sponsorship — Business & contact"
@@ -238,6 +259,48 @@ async function ensureTier(
 }
 
 /**
+ * Constrain `data_field.field_type` to the renderer's vocabulary.
+ *
+ * A `string` field plus an `enum` validator is DatoCMS's dropdown, and validators —
+ * unlike `field_type` itself — are updatable in place, so this is one field update
+ * rather than the create → convert → drop → rename a type change would need
+ * (`1790313304_addRichPageTagline.ts`). Existing validators are preserved.
+ *
+ * @param client - The CMA client for the environment being migrated.
+ */
+async function ensureFieldTypeEnum(client: Client): Promise<void> {
+  const fields = await client.fields.list(DATA_FIELD_MODEL_ID)
+  const field = fields.find((candidate) => candidate.api_key === "field_type")
+  if (!field) {
+    throw new Error(
+      '[sponsorship] data_field has no "field_type" field — cannot constrain the vocabulary'
+    )
+  }
+
+  const validators = (field.validators ?? {}) as unknown as Record<
+    string,
+    unknown
+  > & { enum?: { values?: unknown } }
+  const current = validators.enum?.values
+
+  if (
+    Array.isArray(current) &&
+    current.length === FIELD_TYPES.length &&
+    current.every((value, index) => value === FIELD_TYPES[index])
+  ) {
+    console.log("[sponsorship] data_field.field_type: enum already set")
+    return
+  }
+
+  await client.fields.update(field.id, {
+    validators: { ...validators, enum: { values: [...FIELD_TYPES] } },
+  })
+  console.log(
+    `[sponsorship] data_field.field_type: enum set → ${FIELD_TYPES.join(", ")}`
+  )
+}
+
+/**
  * Ensure the sponsorship collector exists and carries the three fields.
  *
  * Rebuilt from `COLLECTOR_FIELDS` on every run (found by title), so the field set
@@ -363,6 +426,10 @@ export default async function golfSponsorshipPdp(
   PDP_MODEL_ID = await requireItemType(client, "product_detail_page")
   DATA_COLLECTOR_MODEL_ID = await requireItemType(client, "data_collector")
   DATA_FIELD_MODEL_ID = await requireItemType(client, "data_field")
+
+  // Before the collector: its logo field is a `radio`, which must be inside the
+  // enum or the block — and so the collector — lands invalid.
+  await ensureFieldTypeEnum(client)
 
   const bySku = await productIdsBySku(client)
 

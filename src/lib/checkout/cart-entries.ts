@@ -24,9 +24,13 @@ export type CollectorField = {
   name: string
   label: string
   /**
-   * The control the field renders: `text`, `email`, `select`, `radio`,
-   * `textarea`, or `checkbox` (a single boolean tick). A DatoCMS free string, so
-   * a new type is an app change only (`@components/collector-form`).
+   * The control the field renders: free input (`text`, `textarea`, `email`), a
+   * choice of the field's `options` (`select`, `radio`), or a single boolean tick
+   * (`checkbox`). An unrecognised value falls back to `text`.
+   *
+   * The vocabulary is an enum validator on the DatoCMS `data_field` block, so a new
+   * value is an app change **and** a widening of that enum — a value outside it
+   * invalidates the whole collector, which the app's reads then exclude.
    */
   type: string
   required?: boolean
