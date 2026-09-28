@@ -215,10 +215,18 @@ function toPanels(
   return panels
 }
 
-/** A DataCollector's `options` text (one per line) as a select's option list. */
+/**
+ * A DataCollector's `options` text as a choice list.
+ *
+ * One option per line is the format the field is authored in. A value with no line
+ * break is also read as a comma-separated list: that is what a hand-typed value
+ * looks like, and reading it literally renders a two-choice radio as a single
+ * option named "Yes, No".
+ */
 function parseOptions(value: string | null): string[] | undefined {
-  const options = (value ?? "")
-    .split("\n")
+  const raw = value ?? ""
+  const options = raw
+    .split(raw.includes("\n") ? /\r?\n/ : ",")
     .map((option) => option.trim())
     .filter(Boolean)
   return options.length > 0 ? options : undefined

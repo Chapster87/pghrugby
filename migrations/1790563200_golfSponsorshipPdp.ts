@@ -318,7 +318,9 @@ async function ensureCollector(client: Client): Promise<string> {
       field_name: field.fieldName,
       field_type: field.fieldType,
       required: field.required ?? false,
-      options: field.options ? field.options.join(", ") : null,
+      // One option per line — the format `parseOptions` reads, and the only one an
+      // option containing a comma survives.
+      options: field.options ? field.options.join("\n") : null,
       placeholder: null,
       repeatable: false,
       max: null,
