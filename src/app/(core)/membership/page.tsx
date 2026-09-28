@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import Image from "next/image"
-import { draftMode } from "next/headers"
+import { isDatocmsPreviewEnabled } from "@/lib/cms-preview"
 import { executeQuery } from "@/lib/datocms/executeQuery"
 import { StructuredText } from "react-datocms"
 import { membershipQuery } from "./membership.query"
@@ -26,12 +26,12 @@ type MembershipContentBlocks = NonNullable<
 export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { isEnabled } = await draftMode()
+  const isPreviewEnabled = isDatocmsPreviewEnabled()
 
   const { membership: page } = await executeQuery(membershipQuery, {
     variables: {},
     excludeInvalid: false,
-    includeDrafts: isEnabled,
+    includeDrafts: isPreviewEnabled,
   })
 
   if (!page) {
@@ -143,13 +143,12 @@ function generateStructuredData(
 }
 
 export default async function Membership() {
-  const { isEnabled: isDraftModeEnabled } = await draftMode()
+  const isPreviewEnabled = isDatocmsPreviewEnabled()
 
   const { membership: page } = await executeQuery(membershipQuery, {
     variables: {},
     excludeInvalid: false,
-    includeDrafts: isDraftModeEnabled,
-    baseEditingUrl: true,
+    includeDrafts: isPreviewEnabled,
   })
 
   if (!page) {

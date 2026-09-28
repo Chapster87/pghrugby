@@ -22,6 +22,7 @@
     "legacy-pages:cleanup": "node ./scripts/delete-legacy-datocms-pages.mjs",
     "supabase:query": "node --env-file=.env.local scripts/supabase-query.mjs",
     "supabase:inspect-forgecms": "node --env-file=.env.local scripts/inspect-forgecms.mjs",
+    "probe:cda": "node --env-file=.env.local scripts/probe-forgecms-cda.mjs",
     "order-storage:round-trip": "node --env-file=.env.local --import tsx scripts/order-storage-round-trip.ts",
     "cart:round-trip": "node --import tsx scripts/cart-mutations-round-trip.ts",
     "checkout:round-trip": "node --import tsx scripts/checkout-pricing-round-trip.ts",

@@ -1,0 +1,6 @@
+# The DatoCMS gql.tada output is regenerated wholesale by `pnpm generate-typings`
+# and by the Next build. Left to git's line-ending conversion it churns: git
+# rewrites the checked-out copy one way while the generator writes LF, so every
+# build leaves it "modified" with a zero-content diff. Pinning it to LF makes the
+# working copy match what the generator actually writes.
+src/lib/datocms/graphql-env.d.ts text eol=lf

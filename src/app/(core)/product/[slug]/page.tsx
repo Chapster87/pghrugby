@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { draftMode } from "next/headers"
 import { StructuredText } from "react-datocms"
 
 import SidebarLayout from "@/layouts/sidebar"
+import { isDatocmsPreviewEnabled } from "@/lib/cms-preview"
 import { executeQuery } from "@/lib/datocms/executeQuery"
 import { ResultOf } from "@/lib/datocms/graphql"
 import type { ProductPriceRecord } from "@/lib/checkout/cart-pricing"
@@ -55,12 +55,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { isEnabled } = await draftMode()
+  const isPreviewEnabled = isDatocmsPreviewEnabled()
   const { slug } = await params
 
   const { productDetailPage } = await executeQuery(productDetailPageQuery, {
     variables: { slug },
-    includeDrafts: isEnabled,
+    includeDrafts: isPreviewEnabled,
+    contentLink: false,
   })
 
   if (!productDetailPage) return {}
@@ -411,17 +412,19 @@ function toRecords(
  * A Product Detail Page.
  *
  * Assembles the view model server-side — content plus catalog prices — and hands
- * it to the interactive layout. Draft/preview parity matches every other page
- * (`includeDrafts` + `baseEditingUrl`).
+ * it to the interactive layout. Preview matches every other content route
+ * (`includeDrafts` under the dev-only switch), but this is the one read that also
+ * selects identifiers (`sku`, `priceId`), so it takes no Content-Link overlays:
+ * stega would rewrite them.
  */
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const { isEnabled: isDraftModeEnabled } = await draftMode()
+  const isPreviewEnabled = isDatocmsPreviewEnabled()
 
   const { productDetailPage } = await executeQuery(productDetailPageQuery, {
     variables: { slug },
-    includeDrafts: isDraftModeEnabled,
-    baseEditingUrl: true,
+    includeDrafts: isPreviewEnabled,
+    contentLink: false,
   })
 
   if (!productDetailPage) {

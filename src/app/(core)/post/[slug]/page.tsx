@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
-import { draftMode } from "next/headers"
+import { isDatocmsPreviewEnabled } from "@/lib/cms-preview"
 import SidebarLayout from "@/layouts/sidebar"
 import Image from "next/image"
 import { executeQuery } from "@/lib/datocms/executeQuery"
@@ -56,13 +56,13 @@ export async function generateMetadata(
   props: PostProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { isEnabled } = await draftMode()
+  const isPreviewEnabled = isDatocmsPreviewEnabled()
   const { slug } = await props.params
 
   const { article } = await executeQuery(postQuery, {
     variables: { slug },
     excludeInvalid: false,
-    includeDrafts: isEnabled,
+    includeDrafts: isPreviewEnabled,
   })
 
   if (!article) {
@@ -174,13 +174,12 @@ function generateStructuredData(
 
 export default async function PostPage({ params }: PostProps) {
   const { slug } = await params
-  const { isEnabled: isDraftModeEnabled } = await draftMode()
+  const isPreviewEnabled = isDatocmsPreviewEnabled()
 
   const { article } = await executeQuery(postQuery, {
     variables: { slug },
     excludeInvalid: false,
-    includeDrafts: isDraftModeEnabled,
-    baseEditingUrl: true,
+    includeDrafts: isPreviewEnabled,
   })
 
   if (!article) {

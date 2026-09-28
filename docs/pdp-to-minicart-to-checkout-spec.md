@@ -427,11 +427,13 @@ snapshot — all sharing a `groupRef`. The flyout then opens (§ 7).
 
 ### 5.10 Draft / preview parity
 
-The PDP query threads `includeDrafts: draftMode().isEnabled` and
-`baseEditingUrl: true`, matching every other page. Caveat: a draft PDP can
-reference a not-yet-live Stripe price; draft preview must not create a chargeable
-session against an unreleased price. Treat this as an authoring/validation
-concern, not a cutover blocker.
+The PDP query previews drafts under the dev-only switch (`@/lib/cms-preview`:
+`includeDrafts` is honoured only in a non-production runtime carrying
+`DATOCMS_DRAFT_CONTENT_CDA_TOKEN`), matching every other content route — but it passes
+`contentLink: false`, because it is the one read that also selects identifiers (`sku`,
+`priceId`) and stega would rewrite them. Caveat: a draft PDP can reference a not-yet-live
+Stripe price; draft preview must not create a chargeable session against an unreleased
+price. Treat this as an authoring/validation concern, not a cutover blocker.
 
 ---
 

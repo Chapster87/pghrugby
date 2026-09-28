@@ -1,5 +1,9 @@
+import "server-only"
+
 import { executeQuery as libExecuteQuery } from "@datocms/cda-client"
 import type { TadaDocumentNode } from "gql.tada"
+
+import { isDatocmsPreviewEnabled } from "@/lib/cms-preview"
 
 export const cacheTag = "datocms"
 
@@ -22,6 +26,12 @@ const DATOCMS_CACHE_TTL_SECONDS = 3600
  * the result in Next.js Data Cache using the `cache: 'force-cache'` option.
  * This means that regular visitors won't generate additional calls to DatoCMS.
  *
+ * `includeDrafts` is a *local* affordance: the caller asks to preview, and the
+ * dev-only switch (`@/lib/cms-preview`) has to agree, or the read stays on the
+ * published token. The two are composed once here so the token, the Content-Link
+ * stega and the editing URL can never disagree — and so a production runtime
+ * cannot reach the draft token even if a caller asks.
+ *
  * The fetch carries the `datocms` tag and an explicit `revalidate` window, so
  * freshness has two paths: the window bounds a missed webhook, and
  * `src/app/api/revalidate/route.ts` purges the tag the moment DatoCMS's webhook
@@ -34,11 +44,19 @@ export async function executeQuery<Result, Variables>(
   query: TadaDocumentNode<Result, Variables>,
   options?: ExecuteQueryOptions<Variables>
 ) {
+  const includeDrafts =
+    options?.includeDrafts === true && isDatocmsPreviewEnabled()
+
+  // Overlays ride with a draft read by default, but they are separable: stega
+  // rewrites *every* string field, so a read that carries an identifier — the
+  // PDP's `sku` and `priceId` — asks for drafts without them.
+  const withOverlays = includeDrafts && (options?.contentLink ?? true)
+
   const result = await libExecuteQuery(query, {
     variables: options?.variables,
     excludeInvalid: options?.excludeInvalid ?? true, // Always exclude invalid by default
-    includeDrafts: options?.includeDrafts,
-    token: options?.includeDrafts
+    includeDrafts,
+    token: includeDrafts
       ? process.env.DATOCMS_DRAFT_CONTENT_CDA_TOKEN!
       : process.env.DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN!,
     /*
@@ -51,10 +69,14 @@ export async function executeQuery<Result, Variables>(
      * - On the standalone website (opens DatoCMS in a new tab)
      * - Inside the Web Previews plugin Visual mode (opens field in side panel)
      *
-     * Only enabled for draft content to avoid the overhead in production.
+     * Only a draft read carries them, so production pays nothing; and a caller
+     * passes `contentLink: false` to drop them, which a read selecting an
+     * identifier must do — stega rewrites every string, so a `sku` or a
+     * `priceId` comes back encoded and stops matching the plain value it is
+     * compared against.
      */
-    contentLink: options?.includeDrafts ? "v1" : undefined,
-    baseEditingUrl: options?.includeDrafts
+    contentLink: withOverlays ? "v1" : undefined,
+    baseEditingUrl: withOverlays
       ? process.env.DATOCMS_BASE_EDITING_URL
       : undefined,
     requestInitOptions: {
@@ -88,5 +110,9 @@ type ExecuteQueryOptions<Variables> = {
   variables?: Variables
   excludeInvalid?: boolean
   includeDrafts?: boolean
-  baseEditingUrl?: boolean
+  /**
+   * Content-Link stega and click-to-edit on a draft read. Defaults to true; pass
+   * false from a read that selects an identifier, which stega would rewrite.
+   */
+  contentLink?: boolean
 }

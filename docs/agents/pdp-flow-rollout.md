@@ -47,10 +47,17 @@ one-shot form gone there is no fallback for them.
 
 ## 4. Draft / preview parity
 
-Full parity at cutover, matching every other page: the new PDP query threads
-`includeDrafts: draftMode().isEnabled` and `baseEditingUrl: true`, so editors can
-preview unpublished PDPs and use Content Link visual editing on the new fields.
-The cart and minicart are client state and have no draft-specific behaviour.
+Preview is a **local, dev-only** affordance rather than a deploy posture: the content
+routes gate `includeDrafts` on `src/lib/cms-preview.ts`, true only in a non-production
+runtime carrying `DATOCMS_DRAFT_CONTENT_CDA_TOKEN` (secrets inventory § 3.1.1). The PDP
+previews like the other content routes but takes **no Content-Link overlays** — it is the
+one read that also selects identifiers (`sku`, `priceId`), and stega rewrites every string
+field. The cart and minicart are client state and have no draft-specific behaviour.
+
+_(As rolled out this threaded `includeDrafts: draftMode().isEnabled` and
+`baseEditingUrl: true`. The draft-mode cookie had no enable route in this repo, so the
+path was inert, and it was replaced by the switch above — which also dropped the overlays
+from the PDP for the reason just given.)_
 
 Caveat: a draft PDP can reference a Stripe price that is not live yet; draft
 preview must not create a chargeable session against an unreleased price. Treat

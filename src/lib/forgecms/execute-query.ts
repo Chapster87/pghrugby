@@ -1,4 +1,8 @@
+import "server-only"
+
 import { ClientError, GraphQLClient } from "graphql-request"
+
+import { isForgeCmsPreviewEnabled } from "@/lib/cms-preview"
 
 export const cmsCacheTag = "cms-content"
 
@@ -65,6 +69,31 @@ export function getCmsGraphqlUrl(): string {
 }
 
 /**
+ * The ForgeCMS preview key, read only for a call that asked to preview.
+ *
+ * Server-only, non-`NEXT_PUBLIC_`, and absent from every production environment:
+ * the key is what gates unpublished reads on the CDA, so no deploy can reach a
+ * draft with it. Only called once `isForgeCmsPreviewEnabled()` has established
+ * the variable is set; the guard mirrors `cmsEnv()` so a future refactor that
+ * decouples the two fails loudly rather than sending an empty key.
+ *
+ * @returns The value for the `x-api-key` header on a preview read.
+ * @throws {CmsEnvError} When called without `CMS_PREVIEW_TOKEN` configured.
+ */
+function previewKey(): string {
+  const key = process.env.CMS_PREVIEW_TOKEN
+
+  if (!key) {
+    throw new CmsEnvError(
+      "ForgeCMS preview was requested but CMS_PREVIEW_TOKEN is unset. Set it " +
+        "in .env.local — never in a production environment."
+    )
+  }
+
+  return key
+}
+
+/**
  * True when a failure is a genuine CMS outage: a 5xx, or a network-level failure
  * with no HTTP response at all (DNS, TLS, connection reset, timeout).
  */
@@ -110,6 +139,14 @@ function isExecutionError(error: unknown): boolean {
  * chaining / `?? []`).
  *
  * Pass `graceful` only where no stale copy exists to serve instead.
+ *
+ * Pass `preview` — and pass `variables: { preview: true }` with it — only from a
+ * draft-capable read, and only where `isForgeCmsPreviewEnabled()` is true. The two
+ * travel together because the CDA forces the query arguments off for any
+ * credential but the preview key: sending the arguments without the key reads
+ * published content and looks like a silent no-op, and sending the key without
+ * the arguments does the same. Preview is ignored in a production runtime
+ * regardless, so a stray `preview: true` cannot leak a draft to a deploy.
  */
 export async function executeQuery<
   Result = any,
@@ -121,14 +158,19 @@ export async function executeQuery<
     cache?: RequestCache
     revalidate?: number | false
     graceful?: boolean
+    preview?: boolean
   }
 ): Promise<Result> {
   // Outside the try: an unconfigured client fails loudly and is never degraded.
   const { url, token } = cmsEnv()
 
+  // The key swap is scoped to a call that asked to preview, so the preview key
+  // never rides along on an ordinary read (see `src/lib/cms-preview.ts`).
+  const usePreview = options?.preview === true && isForgeCmsPreviewEnabled()
+
   const headers = {
     "Content-Type": "application/json",
-    "x-api-key": token,
+    "x-api-key": usePreview ? previewKey() : token,
   }
 
   // Next.js Data Cache options.

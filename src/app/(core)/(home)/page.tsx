@@ -1,7 +1,7 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { draftMode } from "next/headers"
+import { isDatocmsPreviewEnabled } from "@/lib/cms-preview"
 import { executeQuery } from "@/lib/datocms/executeQuery"
 import { StructuredText } from "react-datocms"
 import { homeQuery, latestContentQuery } from "./homepage.query"
@@ -25,11 +25,11 @@ type PageContentBlocks = NonNullable<
 export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { isEnabled } = await draftMode()
+  const isPreviewEnabled = isDatocmsPreviewEnabled()
 
   const { homepage: page } = await executeQuery(homeQuery, {
     excludeInvalid: false,
-    includeDrafts: isEnabled,
+    includeDrafts: isPreviewEnabled,
   })
 
   if (!page) {
@@ -161,12 +161,12 @@ function formatContentSliderData(latestContent: any[]) {
 }
 
 export default async function Home() {
-  const { isEnabled: isDraftModeEnabled } = await draftMode()
+  const isPreviewEnabled = isDatocmsPreviewEnabled()
 
   const { homepage: page } = await executeQuery(homeQuery, {
     variables: {},
     excludeInvalid: false,
-    includeDrafts: isDraftModeEnabled,
+    includeDrafts: isPreviewEnabled,
   })
 
   if (!page) {
@@ -178,7 +178,7 @@ export default async function Home() {
     {
       variables: {},
       excludeInvalid: false,
-      includeDrafts: isDraftModeEnabled,
+      includeDrafts: isPreviewEnabled,
     }
   )
 

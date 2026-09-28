@@ -4,6 +4,7 @@ import Heading from "@components/typography/heading"
 import contentStyles from "@/styles/content.module.css"
 import { linksQuery } from "./links.query"
 import { executeQuery } from "@/lib/forgecms/execute-query"
+import { isForgeCmsPreviewEnabled } from "@/lib/cms-preview"
 import s from "./styles.module.css"
 
 /**
@@ -31,7 +32,14 @@ export async function generateMetadata(
 }
 
 export default async function LinksPage() {
-  const { linktree: linkTreeData } = await executeQuery(linksQuery)
+  // Draft viewing is a local affordance: the switch is false on every deploy, so
+  // this is a published read in production (see `@/lib/cms-preview`).
+  const preview = isForgeCmsPreviewEnabled()
+
+  const { linktree: linkTreeData } = await executeQuery(linksQuery, {
+    preview,
+    variables: { preview },
+  })
 
   return (
     <div className={`${contentStyles.contentBlock} ${s.linktreeMain}`}>

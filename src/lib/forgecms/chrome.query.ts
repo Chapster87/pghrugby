@@ -94,9 +94,13 @@ export const socialSettingsQuery = `
 // Sponsors (sponsor bar)
 // ---------------------------------------------------------------------------
 
+// `preview` / `includeDrafts` are inert unless the request presents the preview
+// key; `CMS_PREVIEW_TOKEN` is what makes them take effect, and it exists only in
+// a developer's `.env.local`. The defaults keep the published read unchanged for
+// every caller that passes no variables.
 export const sponsorsQuery = `
-  query sponsorsQuery {
-    sponsorsCollection {
+  query sponsorsQuery($preview: Boolean = false, $includeDrafts: Boolean = false) {
+    sponsorsCollection(preview: $preview, includeDrafts: $includeDrafts) {
       edges {
         node {
           id

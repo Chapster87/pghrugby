@@ -1,14 +1,23 @@
 import s from "./style.module.css"
 import { executeQuery } from "@/lib/forgecms/execute-query"
+import { isForgeCmsPreviewEnabled } from "@/lib/cms-preview"
 import { sponsorsQuery, ForgeCmsSponsor } from "@/lib/forgecms/chrome.query"
 import Image from "next/image"
 
 export default async function SponsorBar() {
+  // Draft viewing is a local affordance: the switch is false on every deploy, so
+  // the sponsor bar reads published sponsors in production (see
+  // `@/lib/cms-preview`).
+  const preview = isForgeCmsPreviewEnabled()
+
   const { sponsorsCollection } = await executeQuery<{
     sponsorsCollection?: {
       edges?: { node: ForgeCmsSponsor }[]
     } | null
-  }>(sponsorsQuery)
+  }>(sponsorsQuery, {
+    preview,
+    variables: { preview, includeDrafts: preview },
+  })
   const sponsors = (sponsorsCollection?.edges ?? []).map((edge) => edge.node)
 
   return (

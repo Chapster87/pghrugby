@@ -529,7 +529,9 @@ npx netlify-cli@latest env:set STRIPE_SECRET_KEY --secret
 npx netlify-cli@latest env:set STRIPE_WEBHOOK_SECRET --secret
 npx netlify-cli@latest env:set SUPABASE_SERVICE_ROLE_KEY --secret
 npx netlify-cli@latest env:set DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN --secret
-npx netlify-cli@latest env:set DATOCMS_DRAFT_CONTENT_CDA_TOKEN --secret
+# NOT DATOCMS_DRAFT_CONTENT_CDA_TOKEN, and NOT CMS_PREVIEW_TOKEN: preview is a
+# dev-only affordance, so a deploy must hold no credential that unlocks
+# unpublished content (secrets inventory § 3.1.1, pghrugby#102).
 npx netlify-cli@latest env:set DATOCMS_CMA_TOKEN --secret
 npx netlify-cli@latest env:set CMS_API_TOKEN --secret
 npx netlify-cli@latest env:set RESEND_API_KEY --secret

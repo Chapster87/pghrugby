@@ -122,8 +122,6 @@ SUPABASE_SERVICE_ROLE_KEY=
 
 # DatoCMS (editorial + interim product content)
 DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN=
-DATOCMS_DRAFT_CONTENT_CDA_TOKEN=
-DATOCMS_BASE_EDITING_URL=
 # CMA for schema gen / migrations (server/dev only):
 DATOCMS_CMA_TOKEN=
 
@@ -148,6 +146,22 @@ CMS_WEBHOOK_SECRET=
 The Stripe trio can be toggled between accounts with `STRIPE_ENV` (server) / `NEXT_PUBLIC_STRIPE_ENV` (client, build-time). Each key prefers a `_LIVE`/`_TEST`-suffixed name when set (`STRIPE_SECRET_KEY_LIVE`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_LIVE`, `STRIPE_WEBHOOK_SECRET_LIVE`, and the `_TEST` counterparts), falling back to the canonical names above — so local `.env.local` can hold both pairs and flip the selector, while production hosting sets the canonical trio (or the `_LIVE` names) with `STRIPE_ENV=live`. The checkout session builder uses live Price IDs only when `STRIPE_ENV=live`; test mode falls back to inline `price_data`.
 
 `STRIPE_WEBHOOK_SECRET_LIVE` is only knowable once the live event destination is registered, so it is set as cutover work rather than alongside the rest of the trio — `stripe-webhook-wiring.md` ([#118](https://github.com/Chapster87/pghrugby/issues/118)).
+
+### 3.1.1 Dev-only preview (absent from every deploy)
+
+Two credentials let a developer running `next dev` see unpublished content. Both live in `.env.local`
+only, and their **absence** is the switch: a non-production runtime carrying one previews from that
+source, while `next build` / `next start` (`NODE_ENV=production`) never can — so a deploy can neither
+read a draft nor bake one into a prerender. The gate is `src/lib/cms-preview.ts`.
+
+| Variable                          | Source   | Notes                                                                                                                                                                                                        |
+| --------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `CMS_PREVIEW_TOKEN`               | ForgeCMS | Unlocks `preview` / `includeDrafts` on the CDA. **Must match the instance's Railway service variable of the same name** — the CDA fails closed, and an unset instance value authorizes no draft read at all. |
+| `DATOCMS_DRAFT_CONTENT_CDA_TOKEN` | DatoCMS  | The draft-read token. It also turns on Content-Link stega, so it is requested only by the content routes — never by a read that compares a string (the cart's sku → `product` match).                        |
+| `DATOCMS_BASE_EDITING_URL`        | DatoCMS  | Read alongside the draft token, for click-to-edit overlays.                                                                                                                                                  |
+
+`pnpm probe:cda` runs one document on both keys and prints the difference between them, which is the
+end-to-end check (`scripts/probe-forgecms-cda.mjs`).
 
 ### 3.2 Naming cleanups (do during Medusa/checkout productionization)
 
