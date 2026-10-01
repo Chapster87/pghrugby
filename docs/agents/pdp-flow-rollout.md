@@ -1,6 +1,7 @@
 # PDP to minicart to checkout: rollout plan
 
-Status: **decided 2026-09-13** for
+Status: **spent** · the cutover it plans has shipped; kept as the record. It was
+decided 2026-09-13 for
 [Grilling: Rollout of the new PDP to minicart to checkout flow](https://github.com/Chapster87/pghrugby/issues/61)
 on
 [Wayfinder map: Multi-product PDP to minicart to checkout](https://github.com/Chapster87/pghrugby/issues/54).

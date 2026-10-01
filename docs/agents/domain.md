@@ -55,3 +55,28 @@ If your output contradicts an existing ADR, surface it explicitly rather than
 silently overriding:
 
 > _Contradicts ADR-0007 (event-sourced orders), but worth reopening because…_
+
+## Docs record decisions; the tracker owns scope
+
+A `docs/agents/*.md` doc records a decision and its rationale. It must never
+declare a permanent boundary — no "out of scope", no "never graduates". What is
+live, deferred, or rejected belongs to the **issue tracker** (and, for
+rejections, `.out-of-scope/`), because a tracker is mutable by design and a
+document is not. A doc that lists scope is a doc that will one day stand in the
+way of the work; link to the tracker instead.
+
+Open every doc with a one-line status, so a reader knows its currency without
+guessing:
+
+```
+Status: **<state>** · <what it was, when>
+```
+
+where `<state>` is one of:
+
+- **live** — the decisions still govern; read it as current
+- **superseded** — replaced; carry a `Superseded by:` pointer to what replaced it
+- **spent** — the work it describes has shipped; kept as the record
+
+This generalises the in-place `**Superseded …**` banners already used in
+`datocms-pdp-buckets-migration.md` and `pdp-layout-direction.md`.

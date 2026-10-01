@@ -1,9 +1,14 @@
 # PDP → minicart → checkout: implementation spec
 
-Status: **assembled 2026-09-13** for
+Status: **live** · assembled 2026-09-13 for
 [Task: Assemble the PDP to minicart to checkout spec](https://github.com/Chapster87/pghrugby/issues/66),
 the destination of
 [Wayfinder map: Multi-product PDP to minicart to checkout](https://github.com/Chapster87/pghrugby/issues/54).
+
+> **Shipped.** The flow described here is live in production. The sections that
+> narrate how it got there — § 2 (cutover), § 3 (current → target), § 10
+> (rollout), § 11 (build order) — are the record of that work, not pending tasks.
+> The contracts the code depends on (§ 4–§ 9) are current.
 
 This is the hand-off build document for a **multi-product** storefront flow —
 **PDP → minicart flyout → Stripe checkout**. It pulls together the settled
@@ -39,12 +44,11 @@ The flow fixes three things:
 **In scope:** the storefront flow above, the DatoCMS schema it reads, the
 Supabase order/cart reshape it writes, and the SC7s coupon pricing it applies.
 
-**Out of scope** (never graduates — see the map's _Out of scope_): cross-device /
-account-backed carts, shipping and tax rework, the membership purchase flow
-(Stays on Stripe Payment Links), order-records read paths
-([Order records portal + transactional email](https://github.com/Chapster87/pghrugby/issues/67)),
-and E2E regression coverage
-([Add Playwright end-to-end tests for the ordering / checkout flow](https://github.com/Chapster87/pghrugby/issues/76)).
+**Scope is owned by the tracker, not this document.** What is live, deferred, or
+rejected changes as the work does — see the flow's map
+([#54](https://github.com/Chapster87/pghrugby/issues/54)) for the current
+boundary. This document records the decisions and the build contract; nothing
+here is a permanent "never".
 
 **Deferred** (in scope, not yet specifiable — see § 13): price drift, add-ons on
 a grouped PDP, PDP SEO/structured data, funnel analytics, and the future Donate
@@ -59,8 +63,9 @@ coexistence** — detail in `docs/agents/pdp-flow-rollout.md`.
 
 - There is no feature-flag infrastructure; the reshaped `carts` snapshot is not
   readable by the old builder anyway, so a flag would offer no real fallback.
-- The site is not live and there is no historical `orders` / `carts` data worth
-  preserving, so the schema is reshaped rather than dual-read.
+- The site was not live at cutover and there was no historical `orders` /
+  `carts` data worth preserving, so the schema was reshaped rather than
+  dual-read.
 - The old one-shot flow is deleted in the same change that ships the new one.
 
 | Old                                                                   | New                                                |
