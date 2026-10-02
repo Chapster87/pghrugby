@@ -1,0 +1,94 @@
+# CI container for the post-launch regression-safety foundation (#126).
+#
+# Static gates: typecheck (`tsc --noEmit`), lint (`eslint .`), build
+# (`next build`). Every later layer of the foundation — Vitest pure/integration,
+# Playwright E2E, the read-only production smoke — plugs in here as additional
+# jobs. The nightly schedule is the drift backstop and grows with them.
+#
+# Tests never run inside the Netlify build; this workflow is the gate surface.
+# See docs/adr/0005-testing-strategy-and-regression-gates.md.
+name: CI
+
+on:
+  pull_request:
+    branches: [trunk]
+  push:
+    branches: [trunk]
+  # Nightly backstop for drift. A scheduled run executes the workflow on the
+  # default branch (`trunk`), so it reports the same gates a pull request does.
+  schedule:
+    - cron: "0 5 * * *"
+  # Lets a run be kicked off by hand (e.g. to re-verify after a secret change).
+  workflow_dispatch:
+
+# Every job only reads the repository; nothing here writes back.
+permissions:
+  contents: read
+
+# One run per ref. A superseded push or PR run is cancelled rather than left to
+# finish against code that has already moved on.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          # No `packageManager` field in package.json; pinned here and matched
+          # against the committed pnpm-lock.yaml.
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsc --noEmit
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec eslint .
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    # `next build` prerenders the `(core)` ISR pages, which read DatoCMS and the
+    # ForgeCMS CDA, and `next.config.js` type-checks during the build. So the
+    # build gate needs read-only CDA credentials plus a resolvable site origin:
+    # `src/lib/util/env.ts` throws in a production build with no origin.
+    #
+    # These are repository secrets, seeded by hand — see #127. Live billing
+    # credentials (Stripe) and the Supabase service role are deliberately absent:
+    # the Stripe client is null-safe, Supabase is on the write path only, and the
+    # calendar page degrades to an empty list, so none of them is needed to build.
+    env:
+      NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
+      DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN: ${{ secrets.DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN }}
+      CMS_GRAPHQL_URL: ${{ secrets.CMS_GRAPHQL_URL }}
+      CMS_API_TOKEN: ${{ secrets.CMS_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec next build
