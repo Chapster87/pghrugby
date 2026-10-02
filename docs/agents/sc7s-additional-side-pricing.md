@@ -72,7 +72,7 @@ Built for
   `SC7S_EXTRA_COUPON_IDS` — `sc7s-extra-1` … `sc7s-extra-5`, `$25 × extras`,
   capped at `SC7S_MAX_EXTRA_TEAMS = 5` (beyond the cap the largest rung applies).
   The selection is pure and proves itself offline in
-  `pnpm sc7s-discount:round-trip`.
+  `pnpm test` (`src/lib/checkout/sc7s-discount.test.ts`).
 - **Provisioned** by extending `scripts/provision-stripe-catalog.mjs`: the coupon
   blocks in `docs/agents/stripe-catalog-approval.md`, each a flat `amount_off`
   whose `applies_to` is **derived** from the checked `family=tournament` products
@@ -123,7 +123,7 @@ Built for
   way, so the session build passes **no** discount unless billing live. That
   trades a local rehearsal of the discount for not failing a local checkout that
   has nothing to gain from it; the selection stays proved offline by
-  `pnpm sc7s-discount:round-trip`.
+  `pnpm test` (`src/lib/checkout/sc7s-discount.test.ts`).
 
 **Outstanding:** the two DatoCMS `product` records still exist. They cannot sell
 anything — `toLines` in `src/app/(core)/product/[slug]/page.tsx` renders no row

@@ -126,7 +126,8 @@ export async function POST(request: Request) {
   // nothing there, it refuses the session outright ("This coupon cannot be
   // redeemed because it does not apply to anything in this order"), so a discount
   // in test mode could only fail a checkout with nothing to gain from it. The
-  // selection itself is proved offline instead (`pnpm sc7s-discount:round-trip`).
+  // selection itself is proved offline instead (`pnpm test`, see
+  // src/lib/checkout/sc7s-discount.test.ts).
   let discount: SessionDiscount | null = null
   if (isLiveStripe) {
     // A code is resolved only when it could actually be applied. The coupon it
