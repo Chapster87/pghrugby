@@ -81,6 +81,11 @@ jobs:
       DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN: ${{ secrets.DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN }}
       CMS_GRAPHQL_URL: ${{ secrets.CMS_GRAPHQL_URL }}
       CMS_API_TOKEN: ${{ secrets.CMS_API_TOKEN }}
+      # `src/app/api/send-contact-email/route.ts` constructs its Resend client at
+      # module scope, which throws on a missing key as Next collects route config
+      # during the build. The route is never invoked by a build, so a non-secret
+      # placeholder is enough to construct it; the handler still guards real use.
+      RESEND_API_KEY: re_ci_build_placeholder_not_a_real_key
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
