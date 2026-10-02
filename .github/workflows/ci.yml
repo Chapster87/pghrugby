@@ -1,9 +1,9 @@
 # CI container for the post-launch regression-safety foundation (#126).
 #
-# Static gates: typecheck (`tsc --noEmit`), lint (`eslint .`), build
-# (`next build`). Every later layer of the foundation — Vitest pure/integration,
-# Playwright E2E, the read-only production smoke — plugs in here as additional
-# jobs. The nightly schedule is the drift backstop and grows with them.
+# Gates: typecheck (`tsc --noEmit`), lint (`eslint .`), the pure/unit suite
+# (`pnpm test`), and build (`next build`). The integration layer, Playwright E2E,
+# and the read-only production smoke plug in here as additional jobs; the nightly
+# schedule is the drift backstop and grows with them.
 #
 # Tests never run inside the Netlify build; this workflow is the gate surface.
 # See docs/adr/0005-testing-strategy-and-regression-gates.md.
@@ -63,6 +63,22 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec eslint .
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Pure/unit suite (Vitest): co-located `*.test.ts`, offline, no credentials.
+      - run: pnpm test
 
   build:
     name: Build

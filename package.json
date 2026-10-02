@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start -p 8000",
     "lint": "eslint .",
+    "test": "vitest run",
     "analyze": "ANALYZE=true next build",
     "generate-schema": "node ./scripts/generate-datocms-schema.mjs",
     "generate-typings": "pnpm gql-tada generate output",
@@ -24,12 +25,7 @@
     "supabase:inspect-forgecms": "node --env-file=.env.local scripts/inspect-forgecms.mjs",
     "probe:cda": "node --env-file=.env.local scripts/probe-forgecms-cda.mjs",
     "revalidate": "node --env-file=.env.local scripts/revalidate.mjs",
-    "order-storage:round-trip": "node --env-file=.env.local --import tsx scripts/order-storage-round-trip.ts",
-    "cart:round-trip": "node --import tsx scripts/cart-mutations-round-trip.ts",
-    "checkout:round-trip": "node --import tsx scripts/checkout-pricing-round-trip.ts",
-    "donations:round-trip": "node --import tsx scripts/donations-round-trip.ts",
-    "sc7s-discount:round-trip": "node --import tsx scripts/sc7s-discount-round-trip.ts",
-    "registration:round-trip": "node --import tsx scripts/registration-round-trip.ts"
+    "order-storage:round-trip": "node --env-file=.env.local --import tsx scripts/order-storage-round-trip.ts"
   },
   "dependencies": {
     "@datocms/cda-client": "^0.2.10",
@@ -88,6 +84,7 @@
     "react-datocms": "^8.0.2",
     "tsx": "^4.21.0",
     "typescript": "^5.7.2",
+    "vitest": "^5.0.3",
     "wp-types": "^4.68.0"
   }
 }

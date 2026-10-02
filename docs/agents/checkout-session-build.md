@@ -223,13 +223,13 @@ record resolves to its exact catalog item or to nothing
 
 **Verified**
 
-- **Offline**, through `pnpm checkout:round-trip`
-  (`scripts/checkout-pricing-round-trip.ts`): the sale window's in/out/boundary/
+- **Offline**, through `pnpm test`
+  (`src/lib/checkout/cart-pricing.test.ts`): the sale window's in/out/boundary/
   half-authored cases, every refusal code, and the whole metadata surface
   including the truncation and >50-key overflow. No credentials needed. This is
   where criterion 4's _resolution_ is proved — which price id is chosen.
 - **The donation rules** (2026-09-25), offline through
-  `pnpm donations:round-trip` (`scripts/donations-round-trip.ts`): the ladder
+  `pnpm test` (`src/lib/checkout/donations.test.ts`): the ladder
   order and labels, `submit_type` for the mixed / donation-only / real-only /
   empty cases, and every rule the any-amount session params turn on — one line
   item at quantity 1, `submit_type: 'donate'`, no `discounts`, no
