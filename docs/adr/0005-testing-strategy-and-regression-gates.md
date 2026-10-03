@@ -1,10 +1,10 @@
 # Testing strategy and post-launch regression gates
 
-The site is live, so development *after* launch has to catch its own regressions
+The site is live, so development _after_ launch has to catch its own regressions
 without ever touching production data. We run **Vitest** for the pure and
 integration layers and **Playwright** for the buy path, against a **local
-ephemeral Supabase** (Docker, seeded from `supabase/migrations/`) and Stripe test
-mode, gated by **GitHub Actions** on pull requests into `trunk` and pushes to
+ephemeral Postgres** (seeded from `supabase/migrations/`, fronted by a fetched
+PostgREST) and Stripe test mode, gated by **GitHub Actions** on pull requests into `trunk` and pushes to
 `trunk`; a **read-only smoke** runs against the production deploy after it
 publishes, and a nightly job backstops drift. Tests never write to the production
 database, and never run inside the Netlify build. Tracked by the
@@ -32,7 +32,9 @@ database, and never run inside the Netlify build. Tracked by the
   only `production` touches live Stripe.
 - The six home-grown `scripts/*-round-trip.ts` checks are **replaced** by the
   Vitest suites, not kept alongside them.
-- The suite depends on Docker (the local Supabase stack) and the Supabase CLI, so
-  both a laptop and CI need them present.
+- The integration suite depends on a local Postgres (a documented prerequisite)
+  and a PostgREST binary the harness fetches — not Docker, and not the Supabase
+  CLI. (Map #126 decision 3 was amended to this during [#129](https://github.com/Chapster87/pghrugby/issues/129): the app's only Supabase
+  surface is PostgREST, so `supabase start` bought a container runtime for nothing.)
 - The read-only production smoke is bound by contract: it may never write an
   order or hit a mutating endpoint.

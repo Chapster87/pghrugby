@@ -1,6 +1,6 @@
-import { fileURLToPath } from "node:url"
-
 import { defineConfig } from "vitest/config"
+
+import { resolveAlias } from "./vitest.shared.mts"
 
 /**
  * Vitest configuration for the pure/unit layer (testing-foundation map #126).
@@ -8,30 +8,17 @@ import { defineConfig } from "vitest/config"
  * The specs are co-located `*.test.ts` files beside the modules they cover, and
  * they exercise **pure** logic only — no network, no credentials, no browser. So
  * the environment is plain Node and the globals are off (specs import `expect`
- * etc. explicitly, which also keeps `tsc` honest about them).
+ * etc. explicitly, which also keeps things honest).
  *
- * The `@/…` aliases mirror `tsconfig.json`'s `paths`: the modules under test
- * import each other through them, so Vitest has to resolve the same map. (This
- * file's own imports use relative paths, as Vite config files do.)
+ * Integration specs (`*.integration.test.ts`) are excluded here; they need the
+ * local Postgres/PostgREST stack and run via `pnpm test:integration`
+ * (`vitest.integration.config.mts`).
  */
-const src = fileURLToPath(new URL("./src", import.meta.url))
-
 export default defineConfig({
-  resolve: {
-    alias: {
-      "@": src,
-      "@components": `${src}/components`,
-      "@fragments": `${src}/fragments`,
-      "@layouts": `${src}/layouts`,
-      "@lib": `${src}/lib`,
-      "@modules": `${src}/modules`,
-      "@styles": `${src}/styles`,
-      "@svg": `${src}/svg`,
-      "@types": `${src}/types`,
-    },
-  },
+  resolve: { alias: resolveAlias },
   test: {
     environment: "node",
     include: ["src/**/*.test.ts"],
+    exclude: ["**/node_modules/**", "**/dist/**", "**/*.integration.test.ts"],
   },
 })

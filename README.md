@@ -55,6 +55,22 @@ pnpm start      # serve the production build
 | `pnpm legacy-pages:cleanup`                        | Dry-run verification of legacy DatoCMS pages; `--apply` deletes shadowed/orphaned records |
 | `pnpm prototype:datocms-models`                    | Run the DatoCMS product-model prototype                                                   |
 
+## Tests
+
+Two Vitest layers plus, later, a Playwright E2E layer.
+
+- `pnpm test` — the pure/unit suite. Offline, no credentials.
+- `pnpm test:integration` — drives the real order/cart write path against a
+  throwaway local Postgres, with PostgREST fetched on first run by
+  `scripts/db/postgrest.mjs`. It needs **PostgreSQL** installed (`initdb`,
+  `pg_ctl`, `psql`); nothing else. It refuses any non-loopback Supabase URL and
+  never touches the production project.
+
+| Command                 | Purpose                                                      |
+| ----------------------- | ------------------------------------------------------------ |
+| `pnpm test`             | Pure/unit suite (Vitest) — offline                           |
+| `pnpm test:integration` | Integration suite against a local Postgres + PostgREST stack |
+
 ## Notes
 
 - TypeScript errors and lint are ignored during builds (`next.config.js`) while
