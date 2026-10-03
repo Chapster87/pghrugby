@@ -16,7 +16,7 @@ import { spawn, spawnSync } from "node:child_process"
 import { createHmac } from "node:crypto"
 import { closeSync, existsSync, openSync, readdirSync } from "node:fs"
 import { createServer, request as httpRequest } from "node:http"
-import { mkdir, readdir, rm, writeFile } from "node:fs/promises"
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -188,22 +188,41 @@ export async function startStack() {
     "initdb"
   )
 
-  run(
-    "pg_ctl",
-    [
-      "-D",
-      PGDATA,
-      "-l",
-      PG_LOG,
-      "-o",
-      `-p ${PG_PORT} -c listen_addresses=127.0.0.1`,
-      "-w",
-      "-t",
-      "60",
-      "start",
-    ],
-    "pg_ctl start"
-  )
+  // Debian/Ubuntu PostgreSQL defaults its unix socket to /var/run/postgresql,
+  // which the CI runner user cannot write to — the server then fails to start.
+  // Put the socket in the throwaway directory instead. (Windows has no unix
+  // sockets, so the flag is Linux/macOS only.)
+  const sockDir = path.join(LOCAL_DIR, "pgsock")
+  await mkdir(sockDir, { recursive: true })
+  const serverOptions =
+    `-p ${PG_PORT} -c listen_addresses=127.0.0.1` +
+    (process.platform === "win32"
+      ? ""
+      : ` -c unix_socket_directories=${sockDir}`)
+
+  try {
+    run(
+      "pg_ctl",
+      [
+        "-D",
+        PGDATA,
+        "-l",
+        PG_LOG,
+        "-o",
+        serverOptions,
+        "-w",
+        "-t",
+        "60",
+        "start",
+      ],
+      "pg_ctl start"
+    )
+  } catch (err) {
+    // Surface the server log; otherwise a startup failure is opaque in CI.
+    const log = await readFile(PG_LOG, "utf8").catch(() => "")
+    console.error(`[stack] Postgres failed to start. ${PG_LOG}:\n${log}`)
+    throw err
+  }
 
   // Apply every migration in filename (timestamp) order.
   const migrations = (await readdir(MIGRATIONS_DIR))
