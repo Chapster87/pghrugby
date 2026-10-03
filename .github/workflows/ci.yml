@@ -1,9 +1,10 @@
 # CI container for the post-launch regression-safety foundation (#126).
 #
 # Gates: typecheck (`tsc --noEmit`), lint (`eslint .`), the pure/unit suite
-# (`pnpm test`), and build (`next build`). The integration layer, Playwright E2E,
-# and the read-only production smoke plug in here as additional jobs; the nightly
-# schedule is the drift backstop and grows with them.
+# (`pnpm test`), the integration suite (`pnpm test:integration`, against a local
+# Postgres + PostgREST stack), and build (`next build`). Playwright E2E and the
+# read-only production smoke plug in here as additional jobs; the nightly schedule
+# is the drift backstop and grows with them.
 #
 # Tests never run inside the Netlify build; this workflow is the gate surface.
 # See docs/adr/0005-testing-strategy-and-regression-gates.md.
@@ -79,6 +80,38 @@ jobs:
       - run: pnpm install --frozen-lockfile
       # Pure/unit suite (Vitest): co-located `*.test.ts`, offline, no credentials.
       - run: pnpm test
+
+  integration:
+    name: Integration
+    runs-on: ubuntu-latest
+    # Drives the real order/cart write path against a throwaway local Postgres +
+    # PostgREST stack (`scripts/db/stack.mjs`). No production credentials are in
+    # scope: the harness fetches its own PostgREST and refuses anything but a
+    # loopback Supabase URL.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      # Postgres is the one prerequisite. The runner image ships it; install only
+      # if absent, and make sure xz is present for the PostgREST `.tar.xz`.
+      - name: Ensure PostgreSQL
+        run: |
+          if ! ls /usr/lib/postgresql/*/bin/initdb >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y postgresql xz-utils
+          fi
+      - run: pnpm install --frozen-lockfile
+      # The harness downloads a pinned PostgREST; cache it across runs.
+      - uses: actions/cache@v4
+        with:
+          path: .local/postgrest
+          key: postgrest-${{ runner.os }}-16.4
+      - run: pnpm test:integration
 
   build:
     name: Build

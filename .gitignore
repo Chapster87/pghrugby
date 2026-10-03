@@ -45,6 +45,9 @@ yarn-error.log*
 # (stage-managed by scripts/netlify-standup-wizard.sh; it holds live secrets)
 .netlify/
 
+# local integration stack (fetched PostgREST binary + throwaway Postgres data)
+/.local/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
