@@ -57,7 +57,8 @@ pnpm start      # serve the production build
 
 ## Tests
 
-Two Vitest layers plus, later, a Playwright E2E layer.
+Two Vitest layers, a Playwright post-deploy smoke, and (later) a Playwright E2E
+layer.
 
 - `pnpm test` — the pure/unit suite. Offline, no credentials.
 - `pnpm test:integration` — drives the real order/cart write path against a
@@ -65,11 +66,15 @@ Two Vitest layers plus, later, a Playwright E2E layer.
   `scripts/db/postgrest.mjs`. It needs **PostgreSQL** installed (`initdb`,
   `pg_ctl`, `psql`); nothing else. It refuses any non-loopback Supabase URL and
   never touches the production project.
+- `pnpm test:smoke` — the read-only production smoke (Playwright/Chromium),
+  run after a deploy and hourly; see `docs/agents/production-smoke.md`. Needs
+  `pnpm exec playwright install chromium` once.
 
-| Command                 | Purpose                                                      |
-| ----------------------- | ------------------------------------------------------------ |
-| `pnpm test`             | Pure/unit suite (Vitest) — offline                           |
-| `pnpm test:integration` | Integration suite against a local Postgres + PostgREST stack |
+| Command                 | Purpose                                                             |
+| ----------------------- | ------------------------------------------------------------------- |
+| `pnpm test`             | Pure/unit suite (Vitest) — offline                                  |
+| `pnpm test:integration` | Integration suite against a local Postgres + PostgREST stack        |
+| `pnpm test:smoke`       | Read-only production smoke (Playwright) against the deployed origin |
 
 ## Notes
 

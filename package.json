@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:integration": "vitest run --config vitest.integration.config.mts",
+    "test:smoke": "playwright test",
     "analyze": "ANALYZE=true next build",
     "generate-schema": "node ./scripts/generate-datocms-schema.mjs",
     "generate-typings": "pnpm gql-tada generate output",
@@ -61,6 +62,7 @@
   },
   "devDependencies": {
     "@csstools/postcss-global-data": "^3.0.0",
+    "@playwright/test": "^1.63.0",
     "@types/jsdom": "^21.1.7",
     "@types/node": "22.15.29",
     "@types/react": "^19.2.0",

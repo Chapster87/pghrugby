@@ -1,0 +1,61 @@
+# Post-deploy production smoke (map #126 decision 4).
+#
+# Answers "is the live site broken right now?" after a deploy ships. Read-only:
+# it drives a real browser against the deployed origin and never writes — the spec
+# enforces that with a network guard (e2e/production-smoke.spec.ts).
+#
+# Trigger: Netlify's "deploy succeeded" notification reaches
+# `netlify/functions/dispatch-smoke.mjs`, which calls the workflow-dispatch API
+# with a token scoped to *Actions: write only* (it cannot touch code). The hourly
+# schedule is the backstop, so a dead trigger degrades to "late", never "never".
+#
+# No secrets are needed here: the smoke only reads public pages.
+name: Production smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Origin to smoke
+        required: false
+        default: https://next.pghrugby.com
+        type: string
+  schedule:
+    # Hourly backstop for a missed or broken deploy notification.
+    - cron: "0 * * * *"
+
+permissions:
+  contents: read
+
+# Latest wins: a newer deploy's smoke supersedes an in-flight one.
+concurrency:
+  group: production-smoke-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: Smoke
+    runs-on: ubuntu-latest
+    env:
+      # The app's production origin is `next.pghrugby.com` until the apex cutover
+      # (ADR-0001). `inputs.base_url` is empty for a scheduled run, hence the `||`.
+      SMOKE_BASE_URL: ${{ inputs.base_url || 'https://next.pghrugby.com' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:smoke
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
