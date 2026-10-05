@@ -113,6 +113,50 @@ jobs:
           key: postgrest-${{ runner.os }}-16.4
       - run: pnpm test:integration
 
+  e2e:
+    name: E2E
+    runs-on: ubuntu-latest
+    # Drives the real buy path in a browser against the local ephemeral Postgres
+    # + PostgREST stack (`scripts/db/stack.mjs`) and Stripe **test mode**. The
+    # suite's global setup refuses any non-loopback Supabase URL, so it cannot
+    # reach a real project. The `next build` it runs needs the read-only CDA
+    # credentials; `.env.local` is absent in CI, so they arrive as job env.
+    env:
+      DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN: ${{ secrets.DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN }}
+      CMS_GRAPHQL_URL: ${{ secrets.CMS_GRAPHQL_URL }}
+      CMS_API_TOKEN: ${{ secrets.CMS_API_TOKEN }}
+      RESEND_API_KEY: re_ci_build_placeholder_not_a_real_key
+      STRIPE_SECRET_KEY_TEST: ${{ secrets.STRIPE_SECRET_KEY_TEST }}
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_TEST: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_TEST }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      # Postgres is the one prerequisite; the runner image ships it.
+      - name: Ensure PostgreSQL
+        run: |
+          if ! ls /usr/lib/postgresql/*/bin/initdb >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y postgresql xz-utils
+          fi
+      - run: pnpm install --frozen-lockfile
+      # The harness downloads a pinned PostgREST; cache it across runs.
+      - uses: actions/cache@v4
+        with:
+          path: .local/postgrest
+          key: postgrest-${{ runner.os }}-16.4
+      # `--with-deps` also installs xvfb, needed because Checkout must run
+      # headed (Stripe's bot mitigation blocks a headless browser).
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Run E2E buy path
+        run: xvfb-run -a pnpm test:e2e
+
   build:
     name: Build
     runs-on: ubuntu-latest
