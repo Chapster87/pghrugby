@@ -1,8 +1,12 @@
 :root {
-  --font-noto-sans: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-oswald: "Oswald", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-lemon-milk: "Lemon Milk", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+  /*
+   * Font-family variables (--font-noto-sans, --font-oswald, --font-lemon-milk)
+   * are defined by the self-hosted next/font/local loaders in `src/lib/fonts.ts`
+   * and applied to <html> by the root layout. They are intentionally not
+   * declared here: a `:root` rule and the loader's variable class have equal
+   * specificity, so a `:root` value would override the self-hosted faces. The
+   * loaders carry the fallback lists.
+   */
 
   --color-white: #ffffff;
   --color-grey-100: #f8f9fa;

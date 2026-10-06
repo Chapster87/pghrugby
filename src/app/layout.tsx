@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 import { getBaseURL } from "@lib/util/env"
-import { lemonMilk } from "@/lib/fonts"
+import { lemonMilk, notoSans, oswald } from "@/lib/fonts"
 
 import "@styles/globals.css"
 
@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`light ${lemonMilk.variable}`}
+      className={`light ${lemonMilk.variable} ${notoSans.variable} ${oswald.variable}`}
       style={{ colorScheme: "light" }}
     >
       <body>{children}</body>
