@@ -68,4 +68,5 @@ export const lemonMilk = localFont({
   ],
   variable: "--font-lemon-milk",
   display: "swap",
+  fallback: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
 })
