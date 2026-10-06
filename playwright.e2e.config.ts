@@ -18,13 +18,18 @@ import { E2E_BASE_URL, E2E_PORT, e2eWebServerEnv } from "./e2e/stack-env"
  * already on the process beats `.env.local`. See `e2e/stack-env.ts`.
  *
  * `globalSetup` starts the stack and runs the loopback guard; `globalTeardown`
- * stops it. Only `buy-path.spec.ts` is matched — the remote read-only smoke is
- * a separate config against a deployed site and is never repurposed here.
+ * stops it. Every spec in `./e2e` is run except the remote read-only smoke,
+ * which is a separate config against a deployed site and is never repurposed
+ * here.
+ *
+ * Serial (`workers: 1`): the buy specs drive real Stripe Checkout sessions, and
+ * a flaky gate is worse than a slower one. The suite is small enough that the
+ * wall-clock cost is modest.
  */
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: "**/buy-path.spec.ts",
-  fullyParallel: true,
+  testIgnore: "**/production-smoke.spec.ts",
+  workers: 1,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   // A prod build and a real Stripe round trip; the default 30s is far too tight.

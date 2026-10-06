@@ -1,6 +1,6 @@
 # E2E buy path
 
-Status: **live** · phase 1 of the E2E layer for the testing-foundation map
+Status: **live** · phases 1 + 2 of the E2E layer for the testing-foundation map
 ([#126](https://github.com/Chapster87/pghrugby/issues/126)) — ticket
 [#76](https://github.com/Chapster87/pghrugby/issues/76).
 
@@ -10,22 +10,44 @@ real buy flow in a browser against the app running **locally**.
 
 ## What it covers
 
-One canonical happy path, end to end:
+Five specs, run serially (see below):
 
-1. `/golf-outing` — fill the golf DataCollector (`captainName`, `captainEmail`,
-   the repeatable `golfers`) and tick the **Mulligan** add-on.
-2. **Add to cart** → the **minicart flyout** shows the group (registration +
-   add-on).
-3. **Checkout** → `/checkout?cartRef=…`, which builds a real Checkout Session.
-4. The **real Stripe test-mode embedded Checkout** — select the **Card** method,
-   enter `4242 4242 4242 4242`, `12/34`, `123`, postal `15213`.
-5. The **success page** (`/checkout/success?session_id=…`), where `recordOrder`
-   writes the order server-side.
-6. Read the rows back from the **local ephemeral Supabase** over PostgREST and
-   assert them.
+- `buy-path.spec.ts` — the canonical single-line happy path: a golf
+  registration (collector + Mulligan add-on) bought end to end.
+- `mixed-cart.spec.ts` — the **mixed cart**: golf registration + add-on +
+  pig-roast ticket (quantity 2) + a season-dues line + a preset donation, added
+  from four pages into one cart and bought end to end. Asserts the order's
+  distinct **families** (`golf`, `events`, `dues`, `donation`), five
+  `order_lines`, the add-on linked to its primary, the registration tied to the
+  golf line, and the buyer-set quantity.
+- `pdp-shapes.spec.ts` — one **light** check per PDP shape (render + the
+  shape-specific control + add-to-cart + minicart). No Stripe purchase: one full
+  buy per scenario _type_ is enough, so the two specs above carry the checkout
+  cost.
 
-Phase 2 (a mixed cart and the three PDP shapes) is deliberately out of scope
-here.
+The full-path specs each: add to cart on the PDP, assert the **minicart
+flyout**, click **Checkout** → `/checkout?cartRef=…`, drive the **real Stripe
+test-mode embedded Checkout** (Card, `4242 4242 4242 4242`, `12/34`, `123`,
+postal `15213`), land on `/checkout/success?session_id=…` (where `recordOrder`
+writes server-side), then read the rows back from the **local ephemeral
+Supabase** over PostgREST and assert them.
+
+### The three PDP shapes
+
+The ticket's authoring names map to real routes (`storefront-catalog.json`
+`flows` + the `next.config.js` rewrites):
+
+| Authoring name           | Route            | Shape                                     |
+| ------------------------ | ---------------- | ----------------------------------------- |
+| `golf-outing-2026`       | `/golf-outing`   | `simple`, quantity-bearing, DataCollector |
+| `annual-forge-pig-roast` | `/pig-roast`     | `simple`, quantity-bearing, no collector  |
+| `steel-city-7s-2026`     | `/steel-city-7s` | `variation` + DataCollector               |
+
+There is no separate "any amount" shape among those three: the
+pay-what-you-want affordance lives on `/donate` beside the preset ladder, as its
+own standalone (cartless) session — `donations.ts` `anyAmountSessionParams` — and
+is not a PDP buy-box shape. The mixed cart uses `/dues` (another `variation`)
+and the `/donate` preset ladder as ordinary cart lines.
 
 ## Where it runs
 
@@ -113,6 +135,12 @@ suite starts and stops the local stack itself via Playwright global
 setup/teardown; `reuseExistingServer` keeps a running `next start` for local
 iterations when not on CI.
 
+Every spec in `./e2e` runs except the remote read-only smoke
+(`production-smoke.spec.ts`, a separate config). The run is **serial**
+(`workers: 1`): the buy specs drive real Checkout sessions and a flaky gate is
+worse than a slower one. Whole-suite wall clock is ~40–70s (a prod build plus
+~25s of tests).
+
 ## Selectors worth knowing
 
 - Golf collector inputs are addressed by id: `#pdp-golf-outing-captainName`,
@@ -131,6 +159,12 @@ iterations when not on CI.
   is by role.
 - Link's phone field, when present, is `#phoneNumber` (the country code defaults
   to US); "Save my information" is `#enableStripePass`.
+- `variation` pages expose their Radix option select by a `<slug>-primary` id
+  (`dues-primary`, `donate-primary`, `steel-city-7s-primary`);
+  `chooseFirstVariation` opens it and picks the first enabled `[role="option"]`.
+- The Steel City 7s collector is `#pdp-steel-city-7s-contactName` /
+  `-contactEmail` / `-teamName` / `-refundAgreement` (four required fields).
+- The pig-roast quantity is a plain `input[name="quantity"]`.
 
 ## Residual nondeterminism
 
