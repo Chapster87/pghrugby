@@ -1,21 +1,36 @@
-import { Noto_Sans, Oswald } from "next/font/google"
 import localFont from "next/font/local"
 
 /**
- * Shared font loaders for the site. Loaded once here and imported by both the
- * `(core)` and `(checkout)` root layouts so every route tree has the same
- * @font-face rules and CSS variables.
+ * Shared font loaders for the site. Loaded once here and imported by the root
+ * layout so every route tree has the same @font-face rules and CSS variables.
+ *
+ * Noto Sans and Oswald are self-hosted (latin-subset variable woff2) rather
+ * than fetched from Google Fonts at build time. The Google fetch was a
+ * nondeterministic build dependency: Google intermittently answers with an
+ * extensionless `/l/font?kit=…` URL that Turbopack/Webpack cannot parse, which
+ * failed `next build` (#139, upstream vercel/next.js#99114). Vendoring removes
+ * the network fetch entirely.
+ *
+ * The `variable` names are the ones the stylesheets already consume
+ * (`src/styles/globals.css`, `src/styles/components/typography.css`) via the
+ * `:root` fallback stacks in `src/styles/variables.css`.
  */
-export const notoSans = Noto_Sans({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
+export const notoSans = localFont({
+  src: "../styles/fonts/notosans-latin.woff2",
+  weight: "400 700",
+  style: "normal",
+  variable: "--font-noto-sans",
   display: "swap",
+  fallback: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
 })
 
-export const oswald = Oswald({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+export const oswald = localFont({
+  src: "../styles/fonts/oswald-latin.woff2",
+  weight: "400 700",
+  style: "normal",
+  variable: "--font-oswald",
   display: "swap",
+  fallback: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
 })
 
 export const lemonMilk = localFont({
