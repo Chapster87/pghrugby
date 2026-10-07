@@ -4,29 +4,23 @@ Status: **verified 2026-08-24** from code references + local env _names_ (values
 
 Part of the wayfinder map: [Wayfinder map: Single-repo Next.js site on Stripe + DatoCMS + ForgeCMS](https://github.com/Chapster87/pghrugby/issues/1) — ticket [Task: Environment and secrets inventory](https://github.com/Chapster87/pghrugby/issues/7).
 
-Companion: [railway-inventory.md](./railway-inventory.md) — **rewritten 2026-09-21** as the CMS instance's Railway platform inventory. This file's Medusa rows describe a stack on the same host that has since been decommissioned.
+Companion: [railway-inventory.md](./railway-inventory.md) — the CMS instance's Railway platform inventory.
 
 ## 1. Scope
 
-Three runtime surfaces today, collapsing to **one** (`pghrugby/nextjs`) after Medusa/Sanity/Strapi removal:
+One runtime surface — the Next.js app at the repo root — after the Medusa/Sanity/Strapi removal:
 
-| Surface           | Path                    | Role today                          | End state                                |
-| ----------------- | ----------------------- | ----------------------------------- | ---------------------------------------- |
-| Next.js app       | `pghrugby` (repo root)  | Live site + storefront + prototypes | **Keep** — sole app                      |
-| Medusa backend    | `pghrugby-store`        | Commerce API on Railway             | **Delete** with Medusa                   |
-| Strapi            | `pghrugby/strapi`       | Abandoned CMS experiment            | **Delete**                               |
-| Migration scripts | `pghrugby/migrations/*` | One-shot WP → CMS                   | Keep only while WP content still landing |
+| Surface           | Path                    | Role                   | State                                      |
+| ----------------- | ----------------------- | ---------------------- | ------------------------------------------ |
+| Next.js app       | `pghrugby` (repo root)  | Live site + storefront | **Sole app**                               |
+| Migration scripts | `pghrugby/migrations/*` | One-shot WP → CMS      | **Removed** — legacy scripts deleted (#73) |
 
-## 2. Before — full inventory (today)
+## 2. Local `.env.local` inventory
 
-### 2.1 Next.js (`pghrugby/nextjs`) — present in `.env.local`
+### 2.1 Next.js app
 
 | Variable                                            | Used by                                                                                                                                                    | Family                  | Fate                                                                                   |
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------- |
-| `MEDUSA_BACKEND_URL`                                | `src/lib/config.ts`, `src/middleware.ts`                                                                                                                   | Medusa                  | **Die**                                                                                |
-| `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY`                | `src/lib/config.ts`, middleware, `check-env-variables.js`                                                                                                  | Medusa                  | **Die**                                                                                |
-| `NEXT_PUBLIC_MEDUSA_DEFAULT_COUNTRY_CODE`           | store/category/collection/product pages                                                                                                                    | Medusa                  | **Die**                                                                                |
-| `NEXT_PUBLIC_DEFAULT_REGION`                        | `src/middleware.ts`                                                                                                                                        | Medusa region           | **Die** (with Medusa regions)                                                          |
 | `NEXT_PUBLIC_BASE_URL`                              | `src/lib/util/env.ts`, prototype Stripe return URLs                                                                                                        | Site                    | **Stay**                                                                               |
 | `NEXT_PUBLIC_STRIPE_KEY`                            | Medusa checkout payment-wrapper                                                                                                                            | Stripe (legacy name)    | **Consolidate** → `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`                                 |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`                | prototype embedded Checkout                                                                                                                                | Stripe                  | **Stay**                                                                               |
@@ -36,14 +30,6 @@ Three runtime surfaces today, collapsing to **one** (`pghrugby/nextjs`) after Me
 | `RESEND_FROM_EMAIL`                                 | contact form `from` (default `web@pghrugby.com`)                                                                                                           | Resend                  | **Stay**                                                                               |
 | `GOOGLE_CALENDAR_API_KEY`                           | `calendar/page.tsx`                                                                                                                                        | Google Calendar         | **Stay** — server-only (renamed from `NEXT_PUBLIC_GOOGLE_API_KEY`)                     |
 | `NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY`             | `components/contact-form`                                                                                                                                  | reCAPTCHA               | **Stay**                                                                               |
-| `NEXT_PUBLIC_SANITY_PROJECT_ID`                     | Sanity client/env/cli, image URLs                                                                                                                          | Sanity                  | **Die** (after Sanity teardown)                                                        |
-| `NEXT_PUBLIC_SANITY_DATASET`                        | Sanity client/env                                                                                                                                          | Sanity                  | **Die**                                                                                |
-| `NEXT_PUBLIC_SANITY_API_VERSION`                    | Sanity client/env                                                                                                                                          | Sanity                  | **Die**                                                                                |
-| `NEXT_PUBLIC_SANITY_STUDIO_URL`                     | Sanity client/env                                                                                                                                          | Sanity                  | **Die**                                                                                |
-| `SANITY_VIEWER_TOKEN`                               | draft-mode enable, Sanity live                                                                                                                             | Sanity                  | **Die**                                                                                |
-| `STRAPI_GRAPHQL_ENDPOINT`                           | `src/lib/data/strapi.ts`                                                                                                                                   | Strapi                  | **Die**                                                                                |
-| `FORGECMS_API_URL`                                  | (retired) separate-process CDA base                                                                                                                        | ForgeCMS                | **Die** → `CMS_GRAPHQL_URL`                                                            |
-| `FORGECMS_API_TOKEN`                                | (retired) CDA x-api-key                                                                                                                                    | ForgeCMS                | **Die** → `CMS_API_TOKEN`                                                              |
 | `CMS_GRAPHQL_URL`                                   | `src/lib/forgecms/execute-query.ts` — the instance's CDA endpoint                                                                                          | ForgeCMS                | **Stay** — required, server-only, no fallback                                          |
 | `CMS_API_TOKEN`                                     | site CDA `x-api-key` (delivery key)                                                                                                                        | ForgeCMS                | **Stay**                                                                               |
 | `NEXT_PUBLIC_CMS_PRODUCT_NAME`                      | admin chrome wordmark                                                                                                                                      | ForgeCMS                | **Move to the instance** — the admin is `cms.pghrugby.com`                             |
@@ -60,8 +46,6 @@ Three runtime surfaces today, collapsing to **one** (`pghrugby/nextjs`) after Me
 | `NEXT_PUBLIC_SUPABASE_URL`                          | in `.env.local`; not yet imported in app src                                                                                                               | Supabase orders         | **Stay** (required for `orders`)                                                       |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY`                     | not referenced in app src                                                                                                                                  | Supabase                | **Drop** — no browser-side Supabase read; orders use the service role                  |
 | `SUPABASE_SERVICE_ROLE_KEY`                         | in `.env.local`; not yet imported                                                                                                                          | Supabase orders         | **Stay** — **required** for `recordOrder` (RLS on, zero policies; service-role bypass) |
-| `WORDPRESS_APP_USERNAME`                            | WP migration scripts                                                                                                                                       | Migration               | **Stay until WP content confirmed landed**                                             |
-| `WORDPRESS_APP_PASSWORD`                            | WP migration scripts                                                                                                                                       | Migration               | **Stay until WP content confirmed landed**                                             |
 
 Also referenced in code but not always in `.env.local`:
 
@@ -69,38 +53,6 @@ Also referenced in code but not always in `.env.local`:
 | ------------------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_VERCEL_URL` | _(no longer referenced)_ | **Removed** — its only consumer, `next-sitemap.js`, was Vercel-era dead code (no dependency, no script, no references) and has been deleted |
 | `NODE_ENV`               | framework                | Stay (set by runtime)                                                                                                                       |
-
-### 2.2 Medusa (`pghrugby-store`) — dies entirely
-
-| Variable                                                     | Role                                                                                                                    |
-| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`                                               | Railway Postgres                                                                                                        |
-| `REDIS_URL`                                                  | Railway Redis (often unset locally)                                                                                     |
-| `MEDUSA_WORKER_MODE`, `PORT`, `DISABLE_MEDUSA_ADMIN`         | Process shape                                                                                                           |
-| `STORE_CORS`, `ADMIN_CORS`, `AUTH_CORS`                      | CORS                                                                                                                    |
-| `JWT_SECRET`, `COOKIE_SECRET`                                | Auth/session                                                                                                            |
-| `MEDUSA_BACKEND_URL`                                         | Admin backend URL                                                                                                       |
-| `STRIPE_API_KEY`                                             | **Test-mode sandbox** `acct_1RT7eIR1ZGc2p07H` — empty, dead weight ([stripe-catalog-spec.md](./stripe-catalog-spec.md)) |
-| `RESEND_API_KEY`, `RESEND_FROM_EMAIL`                        | Medusa notification module                                                                                              |
-| `SANITY_API_TOKEN`, `SANITY_PROJECT_ID`, `SANITY_STUDIO_URL` | Medusa↔Sanity sync module                                                                                               |
-| `MEDUSA_ADMIN_ONBOARDING_TYPE`                               | Starter leftover                                                                                                        |
-
-When Medusa goes: delete `pghrugby-store/.env*`, Railway service env vars, and stop using `STRIPE_API_KEY` (Next.js uses `STRIPE_SECRET_KEY` on the **live** Stripe account instead).
-
-### 2.3 Strapi (`pghrugby/strapi`) — dies entirely
-
-Standard Strapi secrets only (`HOST`, `PORT`, `APP_KEYS`, `API_TOKEN_SALT`, `ADMIN_JWT_SECRET`, `TRANSFER_TOKEN_SALT`, `ENCRYPTION_KEY`, `JWT_SECRET`, optional `DATABASE_*`). Local `.env` points at sqlite-style defaults. No production dependency.
-
-### 2.4 Migration-only
-
-| Variable                                           | Scripts                                      |
-| -------------------------------------------------- | -------------------------------------------- |
-| `WORDPRESS_URL` (default `https://pghrugby.com`)   | `migrations/dato-cms/*`                      |
-| `WORDPRESS_APP_USERNAME`, `WORDPRESS_APP_PASSWORD` | `migrations/dato-cms/*`                      |
-| `DATOCMS_API_TOKEN`, `DATOCMS_ENVIRONMENT`         | `migrations/dato-cms/*` (alias of CMA token) |
-| `STRAPI_API_KEY`                                   | `migrations/strapi/*`                        |
-
-Preserve until WordPress content is confirmed landed (map standing preference). Then delete.
 
 ## 3. After — target env for the single Next.js app
 
@@ -238,8 +190,7 @@ Railway Medusa service env vars died with the Railway project, which has since b
 ## 6. Facts recorded
 
 - Single end-state app env is Stripe + Supabase orders + DatoCMS + ForgeCMS + Resend + Google (Calendar/reCAPTCHA) + base URL + revalidate secret.
-- Entire Medusa and Strapi env surfaces are disposable.
-- Sanity env dies with teardown ticket, not before (site still reads Sanity for remaining types).
+- The Medusa, Strapi and Sanity env surfaces were removed with their stacks.
 - Supabase service role is mandatory for `orders`; anon is not required for the locked write path.
 - Hardcoded DatoCMS token removed from `package.json`; **human must rotate the leaked token in DatoCMS**.
 - Orphans to clean: `DATACMA_FULL_API_TOKEN`, `SECRET_API_TOKEN`; Resend key should stop using `NEXT_PUBLIC_`.
