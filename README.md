@@ -53,7 +53,6 @@ pnpm start      # serve the production build
 | `pnpm provision:stripe` / `provision:stripe:apply` | Dry-run / apply the live Stripe catalog from the approval checklist                       |
 | `pnpm scan:woocommerce`                            | Scan the live WordPress site for the catalog build                                        |
 | `pnpm legacy-pages:cleanup`                        | Dry-run verification of legacy DatoCMS pages; `--apply` deletes shadowed/orphaned records |
-| `pnpm prototype:datocms-models`                    | Run the DatoCMS product-model prototype                                                   |
 
 ## Tests
 
