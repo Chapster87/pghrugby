@@ -96,6 +96,14 @@
   text-decoration: line-through;
 }
 
+/* A line's share of the resolved SC7s discount, on the right rail. */
+.lineDiscount {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-green);
+  white-space: nowrap;
+}
+
 /* Wraps the global QuantitySelector — never class it directly, or its prop
    spread drops its own root class and the field styling with it. */
 .stepper {

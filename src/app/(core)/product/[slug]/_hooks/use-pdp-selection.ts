@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 
 import { useCollectorForm } from "@components/collector-form/use-collector-form"
 import { clampLineQuantity } from "@/lib/checkout/cart-mutations"
@@ -12,6 +12,21 @@ type AddonState = Record<string, { selected: boolean; quantity: number }>
 
 /** A quantity change held back because committing it would drop named rows. */
 type PendingQuantity = { sku: string; quantity: number; dropped: string[] }
+
+/** The primaries a fresh page selects: a `simple` page commits its in-stock
+ * primaries without asking; the other two types start unselected. */
+function initialSelectedSkus(product: PdpViewModel): string[] {
+  return product.productType === "simple"
+    ? product.primaries.filter((line) => line.inStock).map((line) => line.sku)
+    : []
+}
+
+/** A fresh page's add-on state: every add-on unticked, quantity 1. */
+function initialAddons(product: PdpViewModel): AddonState {
+  return Object.fromEntries(
+    product.addons.map((addon) => [addon.sku, { selected: false, quantity: 1 }])
+  )
+}
 
 /**
  * The buyer's in-page selection state for one PDP.
@@ -29,21 +44,10 @@ type PendingQuantity = { sku: string; quantity: number; dropped: string[] }
  */
 export function usePdpSelection(product: PdpViewModel) {
   const [selectedSkus, setSelectedSkus] = useState<string[]>(() =>
-    // A `simple` page commits its primaries without asking; the other two types
-    // start unselected (no preselection, per the settled control semantics).
-    product.productType === "simple"
-      ? product.primaries.filter((line) => line.inStock).map((line) => line.sku)
-      : []
+    initialSelectedSkus(product)
   )
   const [quantities, setQuantities] = useState<Record<string, number>>({})
-  const [addons, setAddons] = useState<AddonState>(() =>
-    Object.fromEntries(
-      product.addons.map((addon) => [
-        addon.sku,
-        { selected: false, quantity: 1 },
-      ])
-    )
-  )
+  const [addons, setAddons] = useState<AddonState>(() => initialAddons(product))
   const collector = useCollectorForm(product.fields)
   const [pending, setPending] = useState<PendingQuantity | null>(null)
 
@@ -140,6 +144,19 @@ export function usePdpSelection(product: PdpViewModel) {
     0
   )
 
+  /**
+   * Returns the page to a fresh state after a successful add: the initial
+   * primary selection, cleared quantities and add-ons, and a blank collector —
+   * so the next add starts clean instead of reusing the previous team's answers.
+   */
+  const reset = useCallback(() => {
+    setSelectedSkus(initialSelectedSkus(product))
+    setQuantities({})
+    setAddons(initialAddons(product))
+    collector.reset()
+    setPending(null)
+  }, [product, collector])
+
   return {
     selectedSkus,
     selectPrimary,
@@ -159,6 +176,7 @@ export function usePdpSelection(product: PdpViewModel) {
     selectedAddons,
     lines,
     total,
+    reset,
     /** True when every primary on the page is sold out. */
     unavailable:
       product.primaries.length > 0 &&

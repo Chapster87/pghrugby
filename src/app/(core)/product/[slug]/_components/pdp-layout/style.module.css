@@ -4,6 +4,7 @@
 .pdp {
   display: flex;
   flex-direction: column;
+  padding: 16px;
 }
 
 .top {
@@ -57,6 +58,31 @@
 
 .shortDescription > :last-child {
   margin-bottom: 0;
+}
+
+/* The authored promo block: a darker panel under the tagline. Static content —
+   an offer or notice — so it renders whatever the editor wrote, with the same
+   structured-text rhythm as the tagline. */
+.promo {
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background-color: var(--color-grey-900);
+  color: var(--color-white);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.promo p {
+  margin: 0 0 8px;
+}
+
+.promo > :last-child {
+  margin-bottom: 0;
+}
+
+.promo a {
+  color: var(--color-gold-300);
 }
 
 .descriptionLink {

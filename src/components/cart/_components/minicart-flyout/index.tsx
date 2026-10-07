@@ -19,6 +19,7 @@ import { canUsePromotionCode } from "@/lib/checkout/sc7s-discount"
 
 import { useLinePricing } from "../../_hooks/use-line-pricing"
 import { useLineThumbnails } from "../../_hooks/use-line-thumbnails"
+import { useCartDiscount } from "../../_hooks/use-cart-discount"
 import { useCart } from "../../context"
 import CartLineCard from "../cart-line-card"
 import EditPanel from "../edit-panel"
@@ -75,13 +76,19 @@ export default function MinicartFlyout() {
     open ? model.lines.map((line) => line.sku) : []
   )
 
+  // The SC7s additional-side discount the session build will apply, resolved
+  // server-side and re-read on every cart edit so the row tracks the cart.
+  const discount = useCartDiscount(cartRef, entries, promotionCode, open)
+
   // The subtotal the flyout shows is the display subtotal, so it agrees with the
-  // line amounts beside it and with what Checkout will bill.
+  // line amounts beside it and with what Checkout will bill. The discount row and
+  // the total subtract the resolved discount from it.
   const subtotal = model.lines.reduce(
     (sum, line) =>
       sum + displayFor(line.sku, pricing).unitAmount * line.quantity,
     0
   )
+  const total = discount ? Math.max(subtotal - discount.amount, 0) : subtotal
 
   // A closed flyout always reopens on the cart list. Reset on the dismiss that
   // closes it rather than in an effect, so no state is set while rendering.
@@ -247,6 +254,7 @@ export default function MinicartFlyout() {
                     group={group}
                     thumbnails={thumbnails}
                     pricing={pricing}
+                    discount={discount}
                     onEdit={startEdit}
                   />
                 ))}
@@ -257,6 +265,18 @@ export default function MinicartFlyout() {
                   <span>Subtotal</span>
                   <span>{formatMoney(subtotal)}</span>
                 </div>
+                {discount && (
+                  <>
+                    <div className={s.discountRow}>
+                      <span>{discount.label}</span>
+                      <span>−{formatMoney(discount.amount)}</span>
+                    </div>
+                    <div className={s.totalRow}>
+                      <span>Total</span>
+                      <span>{formatMoney(total)}</span>
+                    </div>
+                  </>
+                )}
                 {/* Entered here and carried to the session build, which resolves
                     it against Stripe and applies it only when the cart does not
                     already qualify for the SC7s coupon. */}
@@ -288,11 +308,13 @@ export default function MinicartFlyout() {
                       Apply
                     </Button>
                   </div>
-                  {promotionCode && canUsePromotionCode(entries) && (
-                    <p className={s.promoNote}>
-                      “{promotionCode}” will be applied at checkout.
-                    </p>
-                  )}
+                  {promotionCode &&
+                    canUsePromotionCode(entries) &&
+                    !discount && (
+                      <p className={s.promoNote}>
+                        “{promotionCode}” will be applied at checkout.
+                      </p>
+                    )}
                 </form>
                 <RefusedLines
                   message={checkoutError}

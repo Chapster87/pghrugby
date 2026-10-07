@@ -179,6 +179,17 @@ export function useCollectorForm(
 
   const rowsFor = useCallback((name: string) => rowsOf(values, name), [values])
 
+  /**
+   * Returns the form to its initial state — the values a fresh mount would hold
+   * (seeded from `initial`, so an edit's reset returns to the edited record, not
+   * to blank). Used by the PDP after a successful add so the next add starts
+   * clean instead of reusing the previous team's answers.
+   */
+  const reset = useCallback(() => {
+    setValues(initialValues(fields, initial))
+    setErrors({})
+  }, [fields, initial])
+
   return {
     values,
     errors,
@@ -191,5 +202,6 @@ export function useCollectorForm(
     applyQuantity,
     validate,
     answers,
+    reset,
   }
 }

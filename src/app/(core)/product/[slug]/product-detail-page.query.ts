@@ -57,6 +57,9 @@ export const productDetailPageQuery = graphql(
         shortDescription {
           value
         }
+        promo {
+          value
+        }
         eventStartsAt
         eventLocation
         productType
@@ -97,6 +100,8 @@ export const productDetailPageQuery = graphql(
           salePriceId
           saleStartsAt
           saleEndsAt
+          showSaleStartsAt
+          showSaleEndsAt
           inStock
           quantityBearing
         }
@@ -113,6 +118,8 @@ export const productDetailPageQuery = graphql(
           salePriceId
           saleStartsAt
           saleEndsAt
+          showSaleStartsAt
+          showSaleEndsAt
           inStock
           quantityBearing
         }

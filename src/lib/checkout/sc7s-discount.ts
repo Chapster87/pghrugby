@@ -62,6 +62,23 @@ export const SC7S_EXTRA_COUPON_IDS = Array.from(
 /** One Checkout Session discount — Stripe's one-or-the-other shape. */
 export type SessionDiscount = { coupon: string } | { promotion_code: string }
 
+/**
+ * A resolved discount as a surface displays it: the total taken off the cart,
+ * a label, and that total attributed back to the SC7s lines it discounts.
+ *
+ * The total is the coupon's `amount_off`, resolved from Stripe by the caller
+ * (never carried here); the per-line split is a display convention derived from
+ * the ladder's linear shape, not a figure Stripe reports.
+ */
+export type CartDiscount = {
+  /** Total discount in minor units (cents). */
+  amount: number
+  /** The buyer-facing label, e.g. `Additional side discount`. */
+  label: string
+  /** The discount attributed to each cart entry, keyed by entry id. */
+  perLine: Record<string, number>
+}
+
 /** Whether a sku is one of the five SC7s division products. */
 function isSc7sDivisionSku(sku: string): boolean {
   return (SC7S_DIVISION_SKUS as readonly string[]).includes(sku)
@@ -86,6 +103,52 @@ export function sc7sTeams(entries: CartEntry[]): number {
     }
   }
   return teams
+}
+
+/**
+ * Splits a resolved SC7s discount back across the division lines it lowers, for
+ * per-line display.
+ *
+ * A display convention, not a Stripe fact: the coupon lands once on the session
+ * subtotal, so this reconstructs the ladder's linear shape — the first team at
+ * full price, every team after it carrying an equal share — which is what makes
+ * a per-line figure possible at all. A single-team cart (the promotion-code case)
+ * carries the whole amount on its one line. The shares are integers, with the
+ * last line absorbing any rounding remainder, so the parts always sum to `amount`.
+ *
+ * @param entries - The cart's entries, in add order.
+ * @param amount - The resolved total discount, in minor units.
+ * @returns The amount attributed to each discounted entry id.
+ */
+export function sc7sDiscountPerLine(
+  entries: CartEntry[],
+  amount: number
+): Record<string, number> {
+  const perLine: Record<string, number> = {}
+  if (amount <= 0) return perLine
+
+  const units: string[] = []
+  for (const line of entries) {
+    if (isPricedLine(line) && isSc7sDivisionSku(line.sku)) {
+      for (let unit = 0; unit < line.quantity; unit++) units.push(line.id)
+    }
+  }
+  if (units.length === 0) return perLine
+
+  if (units.length === 1) {
+    perLine[units[0]] = amount
+    return perLine
+  }
+
+  const extras = units.length - 1
+  const share = Math.floor(amount / extras)
+  let assigned = 0
+  for (let index = 1; index < units.length; index++) {
+    const value = index === units.length - 1 ? amount - assigned : share
+    perLine[units[index]] = (perLine[units[index]] ?? 0) + value
+    assigned += value
+  }
+  return perLine
 }
 
 /** The coupon id for `extras` extra teams, capped at the ladder's top rung. */

@@ -12,6 +12,7 @@ import {
   selectDiscount,
   type SessionDiscount,
 } from "@/lib/checkout/sc7s-discount"
+import { resolvePromotionCodeId } from "@/lib/checkout/promotion-code"
 import { isLiveStripe, stripe } from "@/lib/checkout/stripe"
 import { getBaseURL } from "@/lib/util/env"
 
@@ -51,40 +52,6 @@ import { getBaseURL } from "@/lib/util/env"
  * success page use to re-join the cart's entry list, and the `reg_ref` the
  * order is traced back by.
  */
-
-/**
- * Resolves a buyer-entered promotion code to its Stripe promotion code id.
- *
- * Stripe is the authority on a code's usability, but a session built with a
- * lapsed or fully-redeemed code fails there with an opaque error, so the two
- * conditions Stripe would refuse on are checked here and read as "no such code".
- * Codes are case-insensitive.
- *
- * @param code - The code as the buyer typed it.
- * @returns The promotion code id, or null when no active, redeemable code matches.
- */
-async function resolvePromotionCodeId(code: string): Promise<string | null> {
-  if (!stripe) return null
-
-  const { data } = await stripe.promotionCodes.list({
-    code,
-    active: true,
-    limit: 1,
-  })
-  const promotion = data[0]
-  if (!promotion) return null
-
-  if (promotion.expires_at && promotion.expires_at * 1000 <= Date.now()) {
-    return null
-  }
-  if (
-    promotion.max_redemptions != null &&
-    promotion.times_redeemed >= promotion.max_redemptions
-  ) {
-    return null
-  }
-  return promotion.id
-}
 
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as {
@@ -140,7 +107,7 @@ export async function POST(request: Request) {
     let promotionCodeId: string | null = null
     if (promotionCode && canUsePromotionCode(cart.entries)) {
       try {
-        promotionCodeId = await resolvePromotionCodeId(promotionCode)
+        promotionCodeId = await resolvePromotionCodeId(stripe, promotionCode)
       } catch (error) {
         const message = error instanceof Error ? error.message : "unknown error"
         return NextResponse.json(

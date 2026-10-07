@@ -23,6 +23,7 @@ import type {
   PdpPanel,
   PdpPhoto,
   PdpProductType,
+  PdpSaleWindow,
   PdpViewModel,
 } from "./_data/types"
 import {
@@ -343,6 +344,32 @@ function toFields(
  * box shows it beneath the price card and the page drops the below-fold fallback
  * (`docs/adr/0002-golf-sponsorship-is-its-own-pdp.md`).
  */
+/**
+ * A product's advertised sale window, or null when the owner shows neither date.
+ *
+ * Each half is printed only when the product's matching `show_sale_*` flag is
+ * ticked (both default off) and the date parses — a blank date with the flag on
+ * still prints nothing rather than "Sale ends Invalid Date". The dates are
+ * formatted here, server-side, for the same hydration reason as the event meta.
+ *
+ * Independent of whether the sale is currently running: the point of showing the
+ * start date is to advertise a window that has not opened yet.
+ */
+function toSaleWindow(
+  product: PdpQuery["primaryProducts"][number]
+): PdpSaleWindow | null {
+  const startsAt =
+    product.showSaleStartsAt && product.saleStartsAt
+      ? formatClubDate(product.saleStartsAt)
+      : null
+  const endsAt =
+    product.showSaleEndsAt && product.saleEndsAt
+      ? formatClubDate(product.saleEndsAt)
+      : null
+  if (!startsAt && !endsAt) return null
+  return { startsAt, endsAt }
+}
+
 function toLines(
   product: PdpQuery["primaryProducts"][number],
   includeDescription = false
@@ -359,6 +386,7 @@ function toLines(
       label: item.label,
       unitAmount: item.unitAmount,
       compareAtAmount: null,
+      saleWindow: toSaleWindow(product),
       quantityBearing: product.quantityBearing ?? false,
       inStock: product.inStock ?? true,
       description: includeDescription ? product.description ?? null : null,
@@ -478,6 +506,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
     title: productDetailPage.title ?? slug,
     shortDescription: productDetailPage.shortDescription ? (
       <StructuredText data={productDetailPage.shortDescription} />
+    ) : null,
+    promo: productDetailPage.promo ? (
+      <StructuredText data={productDetailPage.promo} />
     ) : null,
     event: toEventMeta(
       productDetailPage.eventStartsAt,

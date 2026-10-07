@@ -52,6 +52,23 @@
   text-decoration: line-through;
 }
 
+/* A line's advertised sale window, on its own full-width line beneath the price. */
+.saleWindow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-gold-800);
+}
+
+/* Lets a grouped / add-on row drop its sale-window note onto a second line. */
+.rowWrapped {
+  flex-wrap: wrap;
+}
+
 .soldOut {
   display: inline-block;
   padding: 2px 8px;

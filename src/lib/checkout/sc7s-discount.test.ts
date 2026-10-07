@@ -12,6 +12,7 @@ import {
   SC7S_MAX_EXTRA_TEAMS,
   canUsePromotionCode,
   sc7sAutoCouponId,
+  sc7sDiscountPerLine,
   sc7sTeams,
   selectDiscount,
 } from "@/lib/checkout/sc7s-discount"
@@ -200,7 +201,8 @@ describe("A code is accepted only when the cart does not already qualify", () =>
 
   it("a qualifying cart cannot — the auto coupon wins instead", () => {
     expect(
-      !canUsePromotionCode(TWO_TEAMS) && !canUsePromotionCode(TWO_TEAMS_ONE_LINE)
+      !canUsePromotionCode(TWO_TEAMS) &&
+        !canUsePromotionCode(TWO_TEAMS_ONE_LINE)
     ).toBe(true)
   })
 
@@ -237,5 +239,56 @@ describe("Only one coupon or promotion code is ever applied", () => {
         return discount === null || Object.keys(discount).length === 1
       })
     ).toBe(true)
+  })
+})
+
+describe("A resolved discount splits back across the lines it lowers", () => {
+  const THREE_TEAMS: CartEntry[] = [
+    ...TWO_TEAMS,
+    line("line-social", "sc7s-mens-social"),
+  ]
+
+  it("no SC7s line: nothing attributed", () => {
+    expect(sc7sDiscountPerLine(NO_SC7S, 2500)).toEqual({})
+  })
+
+  it("a non-positive amount: nothing attributed", () => {
+    expect(sc7sDiscountPerLine(TWO_TEAMS, 0)).toEqual({})
+  })
+
+  it("a one-team cart (the code case) carries the whole amount", () => {
+    expect(sc7sDiscountPerLine(ONE_TEAM, 2500)).toEqual({ "line-men": 2500 })
+  })
+
+  it("the first team is full price; the second carries the discount", () => {
+    expect(sc7sDiscountPerLine(TWO_TEAMS, 2500)).toEqual({
+      "line-women": 2500,
+    })
+  })
+
+  it("a quantity-bearing line attributes to its one entry", () => {
+    expect(sc7sDiscountPerLine(TWO_TEAMS_ONE_LINE, 2500)).toEqual({
+      "line-men": 2500,
+    })
+  })
+
+  it("three teams split the discount across the two extras", () => {
+    expect(sc7sDiscountPerLine(THREE_TEAMS, 5000)).toEqual({
+      "line-women": 2500,
+      "line-social": 2500,
+    })
+  })
+
+  it("the attributed parts always sum to the amount", () => {
+    for (const [entries, amount] of [
+      [ONE_TEAM, 2500],
+      [TWO_TEAMS, 2500],
+      [THREE_TEAMS, 5000],
+      [SIX_TEAMS, 12500],
+    ] as [CartEntry[], number][]) {
+      const perLine = sc7sDiscountPerLine(entries, amount)
+      const sum = Object.values(perLine).reduce((total, v) => total + v, 0)
+      expect(sum).toBe(amount)
+    }
   })
 })
