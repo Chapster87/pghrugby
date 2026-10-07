@@ -12,6 +12,7 @@ import {
   pdpLabel,
   type LineDisplay,
 } from "@/lib/checkout/cart-display"
+import type { CartDiscount } from "@/lib/checkout/sc7s-discount"
 import { collectorDetail, type CartGroup } from "@/lib/checkout/cart-mutations"
 
 import { useCart } from "../../context"
@@ -34,17 +35,21 @@ import s from "./style.module.css"
  * @param props.thumbnails - Resolved sku → thumbnail URL, possibly incomplete.
  * @param props.pricing - Resolved sku → display pricing; an unresolved sku falls
  *   back to the catalog's regular amount.
+ * @param props.discount - The resolved SC7s discount, whose `perLine` map names
+ *   the saving on each discounted line; null when the cart earns none.
  * @param props.onEdit - Opens the registration edit panel for a collector entry.
  */
 export default function CartLineCard({
   group,
   thumbnails,
   pricing,
+  discount,
   onEdit,
 }: {
   group: CartGroup
   thumbnails: Record<string, string>
   pricing: Record<string, LineDisplay>
+  discount: CartDiscount | null
   onEdit: (collectorId: string) => void
 }) {
   const { model, remove, setQuantity } = useCart()
@@ -95,6 +100,11 @@ export default function CartLineCard({
                   <span className={s.qtyLabel}>Qty. {line.quantity}</span>
                 )}
                 <LineAmount line={line} pricing={pricing} />
+                {discount?.perLine[line.id] ? (
+                  <span className={s.lineDiscount}>
+                    −{formatMoney(discount.perLine[line.id])}
+                  </span>
+                ) : null}
               </div>
             </div>
 
@@ -168,6 +178,11 @@ export default function CartLineCard({
                         pricing={pricing}
                         className={s.addonPrice}
                       />
+                      {discount?.perLine[addon.id] ? (
+                        <span className={s.lineDiscount}>
+                          −{formatMoney(discount.perLine[addon.id])}
+                        </span>
+                      ) : null}
                     </div>
                   </li>
                 ))}

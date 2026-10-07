@@ -89,5 +89,10 @@
     "typescript": "^5.7.2",
     "vitest": "^5.0.3",
     "wp-types": "^4.68.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "next-themes@0.4.6": "patches/next-themes@0.4.6.patch"
+    }
   }
 }

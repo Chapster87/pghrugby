@@ -102,6 +102,9 @@ export default function PdpLayout({ product }: { product: PdpViewModel }) {
     }
 
     addToCart(group, product.slug)
+    // The add is committed: return the buy box to a fresh state so the next add
+    // starts clean rather than carrying this team's answers (ticket #121).
+    sel.reset()
   }
 
   return (
@@ -124,6 +127,7 @@ export default function PdpLayout({ product }: { product: PdpViewModel }) {
                 {product.shortDescription}
               </div>
             )}
+            {product.promo && <div className={s.promo}>{product.promo}</div>}
             {descriptionPanel && (
               <a
                 href="#pdp-panels"

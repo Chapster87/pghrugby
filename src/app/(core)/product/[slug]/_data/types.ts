@@ -33,6 +33,13 @@ export type PdpLine = {
   unitAmount: number
   /** The regular amount to strike through while a sale runs; null otherwise. */
   compareAtAmount: number | null
+  /**
+   * The sale window's own dates, formatted club-local for display, or null when
+   * the product shows none. Each half is present only when the product's
+   * corresponding `show_sale_*` flag is ticked (both default off), so the owner
+   * controls whether the date is advertised at all.
+   */
+  saleWindow: PdpSaleWindow | null
   /** Renders a quantity control, from the product's `quantity_bearing`. */
   quantityBearing: boolean
   /** Sold-out lines render disabled and labelled, never hidden. */
@@ -44,6 +51,18 @@ export type PdpLine = {
    * (`docs/adr/0002-golf-sponsorship-is-its-own-pdp.md`).
    */
   description: string | null
+}
+
+/**
+ * A line's advertised sale window, resolved and formatted server-side (the dates
+ * are absolute instants, so the browser must not format them). Either half may be
+ * absent when its display flag is off; a window with neither half never exists.
+ */
+export type PdpSaleWindow = {
+  /** The start date, formatted club-local (`America/New_York`), or null. */
+  startsAt: string | null
+  /** The end date, formatted club-local, or null. */
+  endsAt: string | null
 }
 
 /**
@@ -123,6 +142,12 @@ export type PdpViewModel = {
    * (§ 4.1), and only the tab strip and buy box need to be interactive.
    */
   shortDescription: ReactNode | null
+  /**
+   * The page's authored promo block, rendered in a darker block below the
+   * tagline. Static content — nothing derived from a sale or live pricing — so it
+   * is rendered on the server like the tagline. Null when the page sets none.
+   */
+  promo: ReactNode | null
   /** The buy box's date / location line, or `null` when neither is set. */
   event: PdpEventMeta | null
   productType: PdpProductType

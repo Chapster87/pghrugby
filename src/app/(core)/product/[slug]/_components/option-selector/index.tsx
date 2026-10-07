@@ -7,7 +7,7 @@ import QuantitySelector from "@components/quantity-selector"
 import Select from "@components/select"
 import { formatMoney } from "@/lib/checkout/cart-display"
 
-import type { PdpLine } from "../../_data/types"
+import type { PdpLine, PdpSaleWindow } from "../../_data/types"
 import s from "./style.module.css"
 
 /**
@@ -47,6 +47,23 @@ export function LinePrice({
 /** A sold-out marker. Sold-out lines render disabled and labelled, never hidden. */
 export function SoldOutBadge() {
   return <span className={s.soldOut}>Sold out</span>
+}
+
+/**
+ * A line's advertised sale window — the dates the owner chose to show.
+ *
+ * Rendered on its own full-width line beneath the price, so it reads as a note
+ * about the price rather than crowding the name/price row. It is shown whenever
+ * the dates are set, including before the window opens: "Sale starts …" is the
+ * whole point of advertising a start date.
+ */
+export function SaleWindowNote({ value }: { value: PdpSaleWindow }) {
+  return (
+    <p className={s.saleWindow}>
+      {value.startsAt && <span>Sale starts {value.startsAt}</span>}
+      {value.endsAt && <span>Sale ends {value.endsAt}</span>}
+    </p>
+  )
 }
 
 /**
@@ -93,7 +110,7 @@ export function SinglePrimaryLine({
     <div
       className={clsx(
         s.singlePrimary,
-        line.description && s.singlePrimaryWrapped,
+        (line.description || line.saleWindow) && s.singlePrimaryWrapped,
         !line.inStock && s.lineDisabled
       )}
     >
@@ -106,6 +123,7 @@ export function SinglePrimaryLine({
           <QuantityStepper quantity={quantity} setQuantity={setQuantity} />
         )}
       </div>
+      {line.saleWindow && <SaleWindowNote value={line.saleWindow} />}
       {line.description && (
         <p className={s.lineDescription}>{line.description}</p>
       )}
@@ -192,7 +210,11 @@ export function GroupedPrimaries({
         return (
           <div
             key={line.sku}
-            className={clsx(s.groupedRow, !line.inStock && s.lineDisabled)}
+            className={clsx(
+              s.groupedRow,
+              line.saleWindow && s.rowWrapped,
+              !line.inStock && s.lineDisabled
+            )}
           >
             <Checkbox.Label className={s.groupedLabel}>
               <Checkbox.Root
@@ -215,6 +237,7 @@ export function GroupedPrimaries({
                 />
               )}
             </div>
+            {line.saleWindow && <SaleWindowNote value={line.saleWindow} />}
           </div>
         )
       })}
@@ -241,7 +264,13 @@ export function AddonRow({
   onQuantity: (quantity: number) => void
 }) {
   return (
-    <div className={clsx(s.addonRow, !line.inStock && s.lineDisabled)}>
+    <div
+      className={clsx(
+        s.addonRow,
+        line.saleWindow && s.rowWrapped,
+        !line.inStock && s.lineDisabled
+      )}
+    >
       <Checkbox.Label className={s.addonLabel}>
         <Checkbox.Root
           checked={selected}
@@ -260,6 +289,7 @@ export function AddonRow({
           <QuantityStepper quantity={quantity} setQuantity={onQuantity} />
         )}
       </div>
+      {line.saleWindow && <SaleWindowNote value={line.saleWindow} />}
     </div>
   )
 }

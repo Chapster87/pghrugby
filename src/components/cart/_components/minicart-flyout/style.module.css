@@ -102,6 +102,26 @@
   font-weight: 700;
 }
 
+/* The resolved SC7s discount, between the subtotal and the total. */
+.discountRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: var(--color-green);
+}
+
+/* The discounted total, only present when a discount row is. */
+.totalRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-grey-200);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
 /* The promotion-code field: label, an input with an Apply button on its right,
    and a note once a code is stored. */
 .promo {
