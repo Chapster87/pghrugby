@@ -116,12 +116,13 @@ Key fields per table:
 - The `migrations/import-wp/` WP → Sanity importer (since deleted) used
   `BASE_URL = "https://pghrugby.com/wp-json/wp/v2"` with a per-type paginated
   fetch helper.
-- `migrations/dato-cms/migrate-{articles,categories,pages}.js` →
-  `WORDPRESS_URL = "https://pghrugby.com"` + `/wp-json/wp/v2/{posts,categories,pages}?per_page=100&status=any`
-  with app-password auth (env: `WORDPRESS_APP_USERNAME` / `WORDPRESS_APP_PASSWORD`
-  in `nextjs/.env.local` — see `docs/agents/environment-secrets-inventory.md`).
-- `docs/handoffs/wordpress-to-datocms-migration.md` — migration is REST-driven
-  (`migrate-categories.js`, `migrate-articles.js`); no WXR/export in the repo.
+- The `migrations/dato-cms/migrate-{articles,categories,pages}.js` scripts
+  (since deleted) → `WORDPRESS_URL = "https://pghrugby.com"` +
+  `/wp-json/wp/v2/{posts,categories,pages}?per_page=100&status=any` with
+  app-password auth (env: `WORDPRESS_APP_USERNAME` / `WORDPRESS_APP_PASSWORD`
+  in `.env.local` — see `docs/agents/environment-secrets-inventory.md`).
+- The WP → DatoCMS migration was REST-driven (the since-deleted
+  `migrate-categories.js`, `migrate-articles.js`); no WXR/export in the repo.
 - `scripts/scan-woocommerce.mjs:18` → `SITE = "https://pghrugby.com"`; REST-probe
   pattern (wc/v3; notes app passwords often 401 for WC — fallback to public
   scraping). Same probe pattern works for `sportspress/v2`.
@@ -150,7 +151,7 @@ Not currently needed. If a future need outgrows the REST surface (e.g. raw
       SportsPress-specific export if the plugin ships one. Import target: a throwaway
       WP instance to re-derive REST JSON.
 - [ ] DB access: wp*postmeta rows keyed `sp*\*`(e.g.`sp_date`, `sp_team`,
-  `sp_result`, `sp_winner`, `sp_league`, `sp_season`, `sp_venue`, `sp_players`),
-  wp_posts for `sp_event`/`sp_table` rows, wp_term_taxonomy for taxonomies.
+`sp_result`, `sp_winner`, `sp_league`, `sp_season`, `sp_venue`, `sp_players`),
+wp_posts for `sp_event`/`sp_table` rows, wp_term_taxonomy for taxonomies.
       Requires production DB creds + host — do not invent or print them.
 - [ ] Any export/DB dump must be treated as PII-bearing and stored outside the repo.
