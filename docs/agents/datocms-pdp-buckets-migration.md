@@ -35,7 +35,7 @@ plus a page-owned `gallery`, and migrate the four existing PDP records (`dues`,
 - **Field type**: `links`, validator `items_item_type.item_types: [<model id>]`.
   The validator takes model **ids**, not api_keys — `product` is
   `LACQ-eAJQjSix9bWWrgdUQ`, `data_collector` is `f6LpE7kYTm6R7gJXxbCXlg`
-  (migrations/dato-cms/fill-product-editorial.js, seed-data-collectors.js).
+  (recorded from the since-removed `migrations/dato-cms/` scripts).
 - **Ordering** is positional array order (drag to reorder). There is no ordering
   validator or attribute, and no `position` field is added.
 - **`links` has no `required` validator.** Require at least one primary product
@@ -109,7 +109,8 @@ media storage, the thing being avoided
 `responsiveImage`/srcset/blur-up therefore does not apply here.
 
 **Shape.** The picker returns one Cloudinary object per field, modelled on
-`page.featured_image`. Its stored shape (migrations/dato-cms/migrate-articles.js):
+`page.featured_image`. Its stored shape (from the since-removed
+`migrations/dato-cms/migrate-articles.js`):
 
 ```js
 {
@@ -169,9 +170,9 @@ Because the picker is single-asset, `gallery` is a **Modular Content
 ### 3. Data backfill for the four PDPs
 
 `kind` in `src/lib/checkout/storefront-catalog.json` is the guide. Records were
-seeded with all products where `pdp === slug`, in manifest order
-(migrations/dato-cms/seed-detail-pages.js), and the two DataCollectors were
-appended by seed-data-collectors.js.
+seeded with all products where `pdp === slug`, in manifest order (the
+since-removed `migrations/dato-cms/seed-detail-pages.js`), and the two
+DataCollectors were appended by the likewise-removed `seed-data-collectors.js`.
 
 | PDP slug        | `primary_products` (ordered)                                                                   | `addon_products` (ordered)                   | `data_collectors`                 |
 | --------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------- | --------------------------------- |
@@ -241,18 +242,16 @@ sandbox → production, which the skill classes as migration code, not a one-off
 CMA script (`SKILL.md` content-operation row). Splitting the drop into its own
 file makes the lossy step reviewable and skippable if verification fails.
 
-**Relationship to the existing `migrations/dato-cms/*.js` scripts.** Those are
-plain `@datocms/cma-client-node` scripts run by hand, with no `datocms.config.json`,
-no CLI migrations directory, and no `schema_migration` tracking. They are
-grandfathered; this change does not retrofit them or point the CLI at that
-folder (its filenames — `seed-*.js` / `migrate-*.js` — do not match the CLI's
-`/^\d+.*\.(js|ts)$/` discovery, and the folder is `"type": "module"` while the
-CLI's JS template is CommonJS; use `--ts`).
+**Relationship to the old `migrations/dato-cms/*.js` scripts (since removed).**
+Those were plain `@datocms/cma-client-node` scripts run by hand, with no
+`datocms.config.json`, no CLI migrations directory, and no `schema_migration`
+tracking. They were grandfathered rather than retrofitted, and have now been
+deleted (#73). The CLI format below is what replaced them.
 
 **Bootstrap required first (mostly human):**
 
 ```bash
-npm install --save-dev datocms          # repo root; CLI currently only under migrations/dato-cms
+npm install --save-dev datocms          # repo root dev dependency
 npx datocms login                       # HUMAN — browser OAuth, interactive
 npx datocms projects:list <hint> --json # agent
 npx datocms link --site-id=<ID>         # after HUMAN confirms the target project
@@ -310,8 +309,6 @@ product-detail-page.query.ts`, `page.tsx`) from `pageComponents` to the new
 
 - `docs/agents/stripe-checkout-registration-metadata.md` — the per-line
   registration metadata decision (sibling research).
-- `docs/handoffs/wordpress-to-datocms-migration.md` — the `featured_image`
-  Cloudinary Picker shape this gallery mirrors.
 - [Grilling: PDP product model — product_type (variation/grouped), per-line quantity, in-stock](https://github.com/Chapster87/pghrugby/issues/69)
   — decided; adds the fields in § 1b. Detail in `docs/agents/pdp-product-model.md`.
 - [Grilling: Steel City 7s additional-side pricing](https://github.com/Chapster87/pghrugby/issues/71)

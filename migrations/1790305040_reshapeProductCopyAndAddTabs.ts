@@ -264,8 +264,9 @@ async function dropPageDescription(client: Client): Promise<void> {
  *
  * The values are printed rather than moved: they are per-variant, while the
  * replacement is one string per page, so there is no faithful destination. The
- * log is the audit trail — the same strings remain readable in
- * `migrations/dato-cms/fill-product-editorial.js` and `seed-products.js`.
+ * log is the audit trail — the same strings were readable in the since-removed
+ * `migrations/dato-cms/fill-product-editorial.js` and `seed-products.js`
+ * (deleted in the tech-removal cleanup).
  */
 async function dropProductShortDescription(client: Client): Promise<void> {
   const legacy = await fieldId(client, PRODUCT_MODEL_ID, "short_description")
