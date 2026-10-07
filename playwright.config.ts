@@ -9,6 +9,11 @@ import { defineConfig, devices } from "@playwright/test"
  */
 export default defineConfig({
   testDir: "./e2e",
+  // Only the remote read-only smoke belongs to this config. The local buy-path
+  // specs (#137) share this directory but are driven by playwright.e2e.config.ts,
+  // which excludes this one in turn. `testMatch` rather than naming the local
+  // specs, so a new one cannot silently re-enter the smoke.
+  testMatch: "**/production-smoke.spec.ts",
   fullyParallel: true,
   // A stray `test.only` must never silently shrink the smoke on CI.
   forbidOnly: !!process.env.CI,
