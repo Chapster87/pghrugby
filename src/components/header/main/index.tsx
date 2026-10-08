@@ -42,12 +42,14 @@ export default function HeaderMain({ title, mainNav, mobileNav }: NavProps) {
   return (
     <header ref={headerRef} className={s.header} data-home={isHome}>
       <div className={s.headerInnerContainer}>
-        <div key="mobile-nav">{mobileNav}</div>
+        {mobileNav}
         <Link href="/" aria-label="View Homepage" className={s.siteLogo}>
           <Crest className={s.crest} />
           <VisuallyHidden>{title}</VisuallyHidden>
         </Link>
-        <div key="main-nav">{mainNav}</div>
+        <div className={s.mainNav} key="main-nav">
+          {mainNav}
+        </div>
         <div className={s.accountSection}>
           <Link
             href="/account"

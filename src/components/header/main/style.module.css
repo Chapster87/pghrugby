@@ -46,6 +46,12 @@
       max-width: 220px;
     }
   }
+
+  .mainNav {
+    @media (--viewport-md-up) {
+      padding-left: 230px;
+    }
+  }
 }
 
 .stuck {
@@ -111,6 +117,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.mainNav {
+  transform: padding 0.3s ease-in-out;
+  @media (--viewport-md-up) {
+    padding-left: 180px;
+
+    .stuck & {
+      padding-left: 120px;
+    }
+  }
 }
 
 .accountSection {
