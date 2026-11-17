@@ -5,6 +5,20 @@ posts, and Stripe-backed buyable products (dues, registrations, donations).
 
 ## Language
 
+**Record**:
+An instance of a model — a page, post, product, or any other addressable entry —
+that exists independently of any other content. A record can be referenced from
+elsewhere (a Link field), served at its own route, and survives when the content
+that mentions it is deleted.
+_Avoid_: entry, item, node
+
+**Block**:
+A collection of fields embedded inside a record's Modular Content or Structured
+Text field. The block _type_ is shared — it lives in the Blocks Library and can be
+used by many models — but a block _instance_ has no independent existence: it
+cannot be referenced by a Link field, and it is deleted with its parent record.
+_Avoid_: component, module, widget
+
 **Page**:
 An editorial content page rendered from CMS content, served at its root slug.
 _Avoid_: landing page, static page
