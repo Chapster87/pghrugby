@@ -143,6 +143,32 @@ export function toContentBlock(record: DatoBlockRecord): ContentBlock | null {
 }
 
 /**
+ * Map a Modular Content field to canonical blocks.
+ *
+ * Modular Content is the other container a block can live in: an ordered list
+ * with no surrounding document, which is what makes a page-builder layout
+ * possible. The blocks are the same canonical blocks a Structured Text document
+ * embeds, so the components and the registry are shared — only the entry point
+ * differs.
+ *
+ * Unrenderable blocks are dropped rather than stored as nulls, matching
+ * `toRichText`, so a caller never has to filter the result.
+ *
+ * @param records - The field's block records, in author order, or null when the
+ *   field is empty.
+ * @returns The canonical blocks, in the same order.
+ */
+export function toContentBlocks(
+  records: readonly DatoBlockRecord[] | null | undefined
+): ContentBlock[] {
+  if (!records?.length) return []
+
+  return records
+    .map(toContentBlock)
+    .filter((block): block is ContentBlock => block !== null)
+}
+
+/**
  * Map a DatoCMS Structured Text field to canonical rich text.
  *
  * The document is passed through untouched — the renderer hands it to

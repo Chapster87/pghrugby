@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { toContentBlock, toRichText } from "./adapter"
+import { toContentBlock, toContentBlocks, toRichText } from "./adapter"
 import type { DatoAsset, DatoBlockRecord } from "./types"
 
 /**
@@ -288,6 +288,36 @@ describe("toContentBlock — link button", () => {
       size: null,
       openInNewTab: false,
     })
+  })
+})
+
+describe("toContentBlocks", () => {
+  it("returns an empty list for a missing or empty field", () => {
+    expect(toContentBlocks(null)).toEqual([])
+    expect(toContentBlocks(undefined)).toEqual([])
+    expect(toContentBlocks([])).toEqual([])
+  })
+
+  it("maps every block in author order", () => {
+    const blocks = toContentBlocks([
+      {
+        __typename: "VideoBlockRecord",
+        id: "clip",
+        asset: asset({ url: "https://example.test/clip.mp4" }),
+      },
+      { __typename: "ImageBlockRecord", id: "still", asset: asset() },
+    ])
+
+    expect(blocks.map((block) => block.id)).toEqual(["clip", "still"])
+  })
+
+  it("drops unrenderable blocks rather than storing nulls", () => {
+    const blocks = toContentBlocks([
+      { __typename: "ImageBlockRecord", id: "empty" },
+      { __typename: "ImageBlockRecord", id: "still", asset: asset() },
+    ])
+
+    expect(blocks.map((block) => block.id)).toEqual(["still"])
   })
 })
 
