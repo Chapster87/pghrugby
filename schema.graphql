@@ -3056,7 +3056,9 @@ type LinkButtonRecord implements RecordInterface {
   _updatedAt: DateTime!
   classname: String
   customProps: JsonField
+  href: String
   id: ItemId!
+  label: String
   openInNewTab: BooleanType!
   size: String
   testField: JsonField

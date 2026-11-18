@@ -56,6 +56,15 @@ export const blocksFragment = graphql(
           ...FileFieldFragment
         }
       }
+      ... on LinkButtonRecord {
+        id
+        __typename
+        label
+        href
+        variant
+        size
+        openInNewTab
+      }
     }
   `,
   [fileFieldFragment]
