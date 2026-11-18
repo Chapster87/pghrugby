@@ -144,7 +144,7 @@ function GalleryMedia({
 
   // The optimizer requires both dimensions and throws without them, which would
   // take the whole page down. A Cloudinary object that carries neither — or a
-  // zero — is served as-is instead, the same degradation `CloudinaryImageRenderer`
+  // zero — is served as-is instead, the same degradation the shared image block
   // documents: Cloudinary already delivers its own optimized variants, so only
   // the responsive `srcset` is lost.
   if (!isSized(desktop)) {
