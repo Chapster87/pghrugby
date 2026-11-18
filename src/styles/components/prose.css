@@ -110,6 +110,14 @@
         color: var(--color-grey-800);
         text-decoration: none;
       }
+
+      .dark & {
+        color: var(--color-gold);
+
+        &:hover {
+          color: var(--color-gold-400);
+        }
+      }
     }
 
     img,
