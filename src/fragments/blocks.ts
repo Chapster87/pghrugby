@@ -34,6 +34,12 @@ export const blocksFragment = graphql(
         __typename
         url
         cloudinary
+        caption
+        alignment
+        width
+        linkUrl
+        openInNewTab
+        alt
       }
       ... on ImageBlockRecord {
         id
@@ -41,6 +47,12 @@ export const blocksFragment = graphql(
         asset {
           ...FileFieldFragment
         }
+        caption
+        alignment
+        width
+        linkUrl
+        openInNewTab
+        alt
       }
       ... on ImageGalleryBlockRecord {
         id
