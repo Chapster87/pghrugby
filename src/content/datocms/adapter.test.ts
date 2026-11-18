@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest"
 
-import { toContentBlock, toContentBlocks, toRichText } from "./adapter"
+import {
+  toContentBlock,
+  toContentBlocks,
+  toMetaImageUrl,
+  toRichText,
+} from "./adapter"
 import type { DatoAsset, DatoBlockRecord } from "./types"
 
 /**
@@ -379,5 +384,25 @@ describe("toContentBlock — unknown record", () => {
     } as unknown as DatoBlockRecord
 
     expect(toContentBlock(unknown)).toBeNull()
+  })
+})
+
+describe("toMetaImageUrl", () => {
+  it("reads the first image's URL", () => {
+    expect(
+      toMetaImageUrl([
+        { url: "https://example.test/meta.jpg" },
+        { url: "https://example.test/second.jpg" },
+      ])
+    ).toBe("https://example.test/meta.jpg")
+  })
+
+  it("returns null for an empty or malformed field", () => {
+    expect(toMetaImageUrl(null)).toBeNull()
+    expect(toMetaImageUrl(undefined)).toBeNull()
+    expect(toMetaImageUrl([])).toBeNull()
+    expect(toMetaImageUrl("not-an-array")).toBeNull()
+    expect(toMetaImageUrl([{}])).toBeNull()
+    expect(toMetaImageUrl([{ url: 42 }])).toBeNull()
   })
 })

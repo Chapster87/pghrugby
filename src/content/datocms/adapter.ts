@@ -194,3 +194,23 @@ export function toRichText(
 
   return { document: field, blocks }
 }
+
+/**
+ * Read the first meta image's URL from the `metaImage` JSON field.
+ *
+ * The field is a `JsonField`, so its shape is unverified at the type level; the
+ * site's convention is an array of uploads. Only the URL is read — metadata and
+ * JSON-LD need nothing else from it.
+ *
+ * @param value - The raw `metaImage` JSON field.
+ * @returns The URL, or null when the field is empty or malformed.
+ */
+export function toMetaImageUrl(value: unknown): string | null {
+  if (!Array.isArray(value)) return null
+
+  const first = value[0]
+  if (typeof first !== "object" || first === null) return null
+
+  const url = (first as { url?: unknown }).url
+  return typeof url === "string" ? url : null
+}
