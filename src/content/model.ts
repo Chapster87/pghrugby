@@ -24,12 +24,39 @@ export type ContentImage = {
   height: number | null
 }
 
-/** A single image in the flow of a record body. */
-export type ImageBlock = {
-  kind: "image"
+/** How an inline image sits in the prose. */
+export type InlineImageAlignment = "left" | "center" | "right"
+
+/** How wide an inline image renders. */
+export type InlineImageWidth = "normal" | "wide" | "full"
+
+/** A link wrapped around an inline image. */
+export type InlineImageLink = {
+  /** Absolute or site-relative URL. */
+  href: string
+  /** Whether the link opens in a new tab. */
+  openInNewTab: boolean
+}
+
+/**
+ * A single image in the flow of a record body.
+ *
+ * The caption is a string field, so a draft read carries stega in it; the
+ * renderer must not trim or normalize it.
+ */
+export type InlineImageBlock = {
+  kind: "inlineImage"
   /** The source record's id, stable across renders. */
   id: string
   image: ContentImage
+  /** The caption, or null when the source carries none. */
+  caption: string | null
+  /** How the image sits in the prose. */
+  alignment: InlineImageAlignment
+  /** How wide the image renders. */
+  width: InlineImageWidth
+  /** The link wrapped around the image, or null when it has none. */
+  link: InlineImageLink | null
 }
 
 /** A set of images rendered together. */
@@ -65,7 +92,7 @@ export type LinkButtonBlock = {
 
 /** Any block embedded in a record's structured text. */
 export type ContentBlock =
-  | ImageBlock
+  | InlineImageBlock
   | ImageGalleryBlock
   | VideoBlock
   | LinkButtonBlock

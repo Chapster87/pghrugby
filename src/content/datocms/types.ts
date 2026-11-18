@@ -18,8 +18,18 @@ export type DatoAsset = {
   title?: string | null
 }
 
+/** The authoring fields both image block types share. */
+type DatoInlineImageFields = {
+  caption?: string | null
+  alignment?: string | null
+  width?: string | null
+  linkUrl?: string | null
+  openInNewTab?: boolean | null
+  alt?: string | null
+}
+
 /** The `external_image_block` record. */
-export type DatoExternalImageBlock = {
+export type DatoExternalImageBlock = DatoInlineImageFields & {
   __typename: "ExternalImageBlockRecord"
   id: string
   /** A Cloudinary upload serialized into a JSON field. */
@@ -29,7 +39,7 @@ export type DatoExternalImageBlock = {
 }
 
 /** The `image_block` record. */
-export type DatoImageBlock = {
+export type DatoImageBlock = DatoInlineImageFields & {
   __typename: "ImageBlockRecord"
   id: string
   asset?: DatoAsset | null

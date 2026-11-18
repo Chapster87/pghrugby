@@ -2,7 +2,7 @@ import type { ComponentType, ReactElement } from "react"
 
 import type { ContentBlock, ContentBlockKind } from "@/content/model"
 
-import ImageBlockView from "./_components/image"
+import InlineImageBlockView from "./_components/inline-image"
 import ImageGalleryBlockView from "./_components/image-gallery"
 import LinkButtonBlockView from "./_components/link-button"
 import VideoBlockView from "./_components/video"
@@ -20,7 +20,7 @@ type BlockRenderer<K extends ContentBlockKind> = ComponentType<{
  * behind the model. This is the one place that has to know the full set.
  */
 const blockRegistry: { [K in ContentBlockKind]: BlockRenderer<K> } = {
-  image: ImageBlockView,
+  inlineImage: InlineImageBlockView,
   imageGallery: ImageGalleryBlockView,
   video: VideoBlockView,
   linkButton: LinkButtonBlockView,

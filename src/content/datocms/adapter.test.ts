@@ -37,7 +37,7 @@ describe("toContentBlock — external image", () => {
     })
 
     expect(block).toEqual({
-      kind: "image",
+      kind: "inlineImage",
       id: "block-1",
       image: {
         src: "https://res.cloudinary.com/demo/image/upload/crest.png",
@@ -45,6 +45,10 @@ describe("toContentBlock — external image", () => {
         width: 300,
         height: 300,
       },
+      caption: null,
+      alignment: "center",
+      width: "normal",
+      link: null,
     })
   })
 
@@ -56,7 +60,7 @@ describe("toContentBlock — external image", () => {
     })
 
     expect(block).toEqual({
-      kind: "image",
+      kind: "inlineImage",
       id: "block-1",
       image: {
         src: "https://res.cloudinary.com/demo/image/upload/crest.png",
@@ -64,6 +68,10 @@ describe("toContentBlock — external image", () => {
         width: null,
         height: null,
       },
+      caption: null,
+      alignment: "center",
+      width: "normal",
+      link: null,
     })
   })
 
@@ -121,7 +129,7 @@ describe("toContentBlock — image", () => {
         asset: asset(),
       })
     ).toEqual({
-      kind: "image",
+      kind: "inlineImage",
       id: "block-2",
       image: {
         src: "https://example.test/image.jpg",
@@ -129,6 +137,10 @@ describe("toContentBlock — image", () => {
         width: 800,
         height: 600,
       },
+      caption: null,
+      alignment: "center",
+      width: "normal",
+      link: null,
     })
   })
 
@@ -156,6 +168,78 @@ describe("toContentBlock — image", () => {
         asset: asset({ url: "" }),
       })
     ).toBeNull()
+  })
+})
+
+describe("toContentBlock — inline image fields", () => {
+  it("maps the caption, alignment, width and link", () => {
+    const block = toContentBlock({
+      __typename: "ImageBlockRecord",
+      id: "block-2",
+      asset: asset(),
+      caption: "A caption",
+      alignment: "left",
+      width: "wide",
+      linkUrl: "/membership",
+      openInNewTab: true,
+    })
+
+    expect(block).toMatchObject({
+      caption: "A caption",
+      alignment: "left",
+      width: "wide",
+      link: { href: "/membership", openInNewTab: true },
+    })
+  })
+
+  it("defaults an unknown alignment and width", () => {
+    const block = toContentBlock({
+      __typename: "ImageBlockRecord",
+      id: "block-2",
+      asset: asset(),
+      alignment: "diagonal",
+      width: "enormous",
+    })
+
+    expect(block).toMatchObject({ alignment: "center", width: "normal" })
+  })
+
+  it("defaults openInNewTab to false when a link is present", () => {
+    const block = toContentBlock({
+      __typename: "ImageBlockRecord",
+      id: "block-2",
+      asset: asset(),
+      linkUrl: "/membership",
+    })
+
+    expect(block).toMatchObject({
+      link: { href: "/membership", openInNewTab: false },
+    })
+  })
+
+  it("prefers the alt override over the asset's alt", () => {
+    const block = toContentBlock({
+      __typename: "ImageBlockRecord",
+      id: "block-2",
+      asset: asset({ alt: "Asset alt" }),
+      alt: "Override alt",
+    })
+
+    expect(block).toMatchObject({ image: { alt: "Override alt" } })
+  })
+
+  it("prefers the alt override over a Cloudinary public_id", () => {
+    const block = toContentBlock({
+      __typename: "ExternalImageBlockRecord",
+      id: "block-1",
+      cloudinary: {
+        secure_url: "https://res.cloudinary.com/demo/image/upload/crest.png",
+        public_id: "Crest/Crest",
+      },
+      alt: "Override alt",
+    })
+
+    expect(block).toMatchObject({ image: { alt: "Override alt" } })
   })
 })
 
@@ -348,7 +432,7 @@ describe("toRichText", () => {
       ],
     })
 
-    expect(richText?.blocks["block-2"]).toMatchObject({ kind: "image" })
+    expect(richText?.blocks["block-2"]).toMatchObject({ kind: "inlineImage" })
   })
 
   it("drops unrenderable blocks rather than storing nulls", () => {

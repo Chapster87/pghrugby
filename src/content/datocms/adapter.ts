@@ -1,4 +1,11 @@
-import type { ContentBlock, ContentImage, RichText } from "@/content/model"
+import type {
+  ContentBlock,
+  ContentImage,
+  InlineImageAlignment,
+  InlineImageBlock,
+  InlineImageWidth,
+  RichText,
+} from "@/content/model"
 
 import type { DatoAsset, DatoBlockRecord, DatoStructuredText } from "./types"
 
@@ -40,7 +47,10 @@ function readCloudinaryUpload(value: unknown): CloudinaryUpload | null {
  * @param value - The raw `cloudinary` JSON field.
  * @returns The image, or null when the upload carries no usable URL.
  */
-function cloudinaryImage(value: unknown): ContentImage | null {
+function cloudinaryImage(
+  value: unknown,
+  altOverride?: string | null
+): ContentImage | null {
   const upload = readCloudinaryUpload(value)
   if (!upload) return null
 
@@ -51,7 +61,9 @@ function cloudinaryImage(value: unknown): ContentImage | null {
     src,
     // @TODO: `public_id` is a filename, not alt text. Replace with real alt text
     // once editors can supply it for external images.
-    alt: typeof upload.public_id === "string" ? upload.public_id : "",
+    alt:
+      altOverride ??
+      (typeof upload.public_id === "string" ? upload.public_id : ""),
     width: typeof upload.width === "number" ? upload.width : null,
     height: typeof upload.height === "number" ? upload.height : null,
   }
@@ -63,14 +75,76 @@ function cloudinaryImage(value: unknown): ContentImage | null {
  * @param asset - The upload, or null/undefined when the field is empty.
  * @returns The image, or null when the upload carries no URL.
  */
-function assetImage(asset: DatoAsset | null | undefined): ContentImage | null {
+function assetImage(
+  asset: DatoAsset | null | undefined,
+  altOverride?: string | null
+): ContentImage | null {
   if (!asset?.url) return null
 
   return {
     src: asset.url,
-    alt: asset.alt ?? "",
+    alt: altOverride ?? asset.alt ?? "",
     width: asset.width ?? null,
     height: asset.height ?? null,
+  }
+}
+
+/** The authoring fields both image block types share. */
+type InlineImageFields = {
+  id: string
+  caption?: string | null
+  alignment?: string | null
+  width?: string | null
+  linkUrl?: string | null
+  openInNewTab?: boolean | null
+}
+
+/**
+ * Narrow a source-supplied alignment to one the renderer understands.
+ *
+ * The canonical model keeps the vocabulary closed; an unknown value falls back
+ * to `center` rather than reaching the component and producing no class.
+ *
+ * @param value - The source-supplied value, or null.
+ * @returns A value the component accepts.
+ */
+function narrowAlignment(
+  value: string | null | undefined
+): InlineImageAlignment {
+  return value === "left" || value === "right" ? value : "center"
+}
+
+/**
+ * Narrow a source-supplied width to one the renderer understands.
+ *
+ * @param value - The source-supplied value, or null.
+ * @returns A value the component accepts.
+ */
+function narrowWidth(value: string | null | undefined): InlineImageWidth {
+  return value === "wide" || value === "full" ? value : "normal"
+}
+
+/**
+ * Map an image record's authoring fields onto the canonical inline image.
+ *
+ * @param record - The block record's shared fields.
+ * @param image - The resolved image.
+ * @returns The canonical inline image block.
+ */
+function toInlineImage(
+  record: InlineImageFields,
+  image: ContentImage
+): InlineImageBlock {
+  return {
+    kind: "inlineImage",
+    id: record.id,
+    image,
+    caption: record.caption ?? null,
+    alignment: narrowAlignment(record.alignment),
+    width: narrowWidth(record.width),
+    link: record.linkUrl
+      ? { href: record.linkUrl, openInNewTab: record.openInNewTab ?? false }
+      : null,
   }
 }
 
@@ -92,22 +166,27 @@ export function toContentBlock(record: DatoBlockRecord): ContentBlock | null {
       // dimensions, which the image component renders responsively. The URL is
       // never parsed — see `cloudinaryImage`.
       const image =
-        cloudinaryImage(record.cloudinary) ??
+        cloudinaryImage(record.cloudinary, record.alt) ??
         (record.url
-          ? { src: record.url, alt: "", width: null, height: null }
+          ? {
+              src: record.url,
+              alt: record.alt ?? "",
+              width: null,
+              height: null,
+            }
           : null)
 
-      return image ? { kind: "image", id: record.id, image } : null
+      return image ? toInlineImage(record, image) : null
     }
 
     case "ImageBlockRecord": {
-      const image = assetImage(record.asset)
-      return image ? { kind: "image", id: record.id, image } : null
+      const image = assetImage(record.asset, record.alt)
+      return image ? toInlineImage(record, image) : null
     }
 
     case "ImageGalleryBlockRecord": {
       const images = record.assets
-        .map(assetImage)
+        .map((asset) => assetImage(asset))
         .filter((image): image is ContentImage => image !== null)
 
       return images.length > 0

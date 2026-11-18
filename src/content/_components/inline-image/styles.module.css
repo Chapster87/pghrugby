@@ -1,0 +1,66 @@
+.figure {
+  margin: 0;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--color-grey-200);
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.link {
+  display: block;
+}
+
+.caption {
+  margin-top: 8px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--color-grey-700);
+  text-align: center;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.left,
+.right {
+  @media (--viewport-md-up) {
+    width: 50%;
+  }
+}
+
+.left {
+  @media (--viewport-md-up) {
+    float: left;
+    margin-right: 24px;
+  }
+}
+
+.right {
+  @media (--viewport-md-up) {
+    float: right;
+    margin-left: 24px;
+  }
+}
+
+/* Width applies to centered images only; the component omits the class for floats. */
+.normal {
+  max-width: 100%;
+}
+
+.wide {
+  width: 100cqw;
+  margin-left: calc((100cqw - 100%) / -2);
+}
+
+.full {
+  width: calc(100cqw + 32px);
+  margin-left: calc((100cqw - 100%) / -2 - 16px);
+}

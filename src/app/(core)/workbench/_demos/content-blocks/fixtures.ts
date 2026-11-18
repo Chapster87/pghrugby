@@ -32,9 +32,13 @@ const linen: ContentImage = {
 /** Every canonical block kind, in the order a page body would carry them. */
 export const contentBlocks: ContentBlock[] = [
   {
-    kind: "image",
+    kind: "inlineImage",
     id: "fixture-image",
     image: crest,
+    caption: null,
+    alignment: "center",
+    width: "normal",
+    link: null,
   },
   {
     kind: "imageGallery",
