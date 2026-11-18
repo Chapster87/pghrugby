@@ -1,5 +1,6 @@
 import Image from "next/image"
 
+import { toImageProps } from "@/content/formatters/image"
 import type { ImageGalleryBlock } from "@/content/model"
 
 import s from "./styles.module.css"
@@ -21,23 +22,27 @@ export default function ImageGalleryBlockView({
 }) {
   return (
     <ul className={s.gallery}>
-      {block.images.map((image, index) => (
-        <li key={`${image.src}-${index}`} className={s.galleryItem}>
-          {image.width && image.height ? (
-            <Image
-              src={image.src}
-              alt={image.alt}
-              width={image.width}
-              height={image.height}
-              className={s.image}
-            />
-          ) : (
-            // Intentionally a raw <img>: see `../image` for why.
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={image.src} alt={image.alt} className={s.image} />
-          )}
-        </li>
-      ))}
+      {block.images.map((source, index) => {
+        const image = toImageProps(source)
+
+        return (
+          <li key={`${image.src}-${index}`} className={s.galleryItem}>
+            {image.kind === "sized" ? (
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                className={s.image}
+              />
+            ) : (
+              // Intentionally a raw <img>: see `../image` for why.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={image.src} alt={image.alt} className={s.image} />
+            )}
+          </li>
+        )
+      })}
     </ul>
   )
 }

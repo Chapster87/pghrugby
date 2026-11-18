@@ -1,5 +1,6 @@
 import Image from "next/image"
 
+import { toImageProps } from "@/content/formatters/image"
 import type { ImageBlock } from "@/content/model"
 
 import s from "./styles.module.css"
@@ -17,22 +18,22 @@ import s from "./styles.module.css"
  * @returns The image, wrapped in a figure.
  */
 export default function ImageBlockView({ block }: { block: ImageBlock }) {
-  const { src, alt, width, height } = block.image
+  const image = toImageProps(block.image)
 
   return (
     <figure className={s.figure}>
-      {width && height ? (
+      {image.kind === "sized" ? (
         <Image
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
+          src={image.src}
+          alt={image.alt}
+          width={image.width}
+          height={image.height}
           className={s.image}
         />
       ) : (
         // Intentionally a raw <img>: the JSDoc above states why the rule is off.
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={alt} className={s.image} />
+        <img src={image.src} alt={image.alt} className={s.image} />
       )}
     </figure>
   )

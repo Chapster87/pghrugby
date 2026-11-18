@@ -11,15 +11,6 @@
       }
     }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      line-height: 1.2;
-    }
-
     h1 {
       margin-bottom: 24px;
 
@@ -118,14 +109,6 @@
       &:hover {
         color: var(--color-grey-800);
         text-decoration: none;
-      }
-
-      .light & {
-        color: var(--color-gold);
-
-        &:hover {
-          color: var(--color-gold-400);
-        }
       }
     }
 

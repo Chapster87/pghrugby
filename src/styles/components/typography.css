@@ -53,6 +53,18 @@
     letter-spacing: 1px;
   }
 
+  .smallText {
+    font-size: 0.875rem;
+  }
+
+  .defaultText {
+    font-size: 1rem;
+  }
+
+  .largeText {
+    font-size: 1.125rem;
+  }
+
   p {
     margin-top: 0;
   }

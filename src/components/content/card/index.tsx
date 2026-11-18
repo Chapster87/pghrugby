@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { urlBuilder } from "@/lib/util/url"
+import { urlBuilder } from "@/content/formatters/url"
 import s from "./styles.module.css"
 
 export type ContentCard = {
