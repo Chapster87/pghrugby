@@ -596,9 +596,15 @@ type ExternalImageBlockRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  alignment: String
+  alt: String
+  caption: String
   cloudinary: JsonField
   id: ItemId!
+  linkUrl: String
+  openInNewTab: BooleanType!
   url: String
+  width: String
 }
 
 enum FaviconType {
@@ -996,8 +1002,14 @@ type ImageBlockRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  alignment: String
+  alt: String
   asset: FileField
+  caption: String
   id: ItemId!
+  linkUrl: String
+  openInNewTab: BooleanType!
+  width: String
 }
 
 """Block of type 🎠 Image Gallery (image_gallery_block)"""
