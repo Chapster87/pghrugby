@@ -241,6 +241,38 @@ describe("toContentBlock — inline image fields", () => {
 
     expect(block).toMatchObject({ image: { alt: "Override alt" } })
   })
+
+  it("ignores stega in the alignment, width and link fields", () => {
+    // A draft read rewrites every string, including enums and URLs. An
+    // alignment compared raw to "left" would silently fall back to the default.
+    const block = toContentBlock({
+      __typename: "ImageBlockRecord",
+      id: "block-2",
+      asset: asset(),
+      alignment: "left\u200B\u200C",
+      width: "wide\u200B",
+      linkUrl: "/membership\u200B",
+    })
+
+    expect(block).toMatchObject({
+      alignment: "left",
+      width: "wide",
+      link: { href: "/membership", openInNewTab: false },
+    })
+  })
+
+  it("leaves stega in the caption untouched", () => {
+    // Captions are editorial text: the stega is what makes click-to-edit work.
+    const caption = "A caption\u200B"
+    const block = toContentBlock({
+      __typename: "ImageBlockRecord",
+      id: "block-2",
+      asset: asset(),
+      caption,
+    })
+
+    expect(block).toMatchObject({ caption })
+  })
 })
 
 describe("toContentBlock — gallery", () => {

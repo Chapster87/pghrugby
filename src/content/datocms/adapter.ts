@@ -100,6 +100,29 @@ type InlineImageFields = {
 }
 
 /**
+ * Content-Link stega characters.
+ *
+ * A draft read rewrites every string with invisible metadata. The enum and URL
+ * fields are functional, not editorial: an alignment compared raw to `"left"`
+ * silently falls back to the default, and a stega-laden href does not navigate.
+ * Text content (`caption`, `alt`) is left untouched so click-to-edit still works.
+ *
+ * The set mirrors the encoding `@datocms/content-link` bundles from
+ * `@vercel/stega`: U+200B–U+200D, U+2060–U+2063, U+FEFF and U+1D173–U+1D17A.
+ */
+const STEGA = /[\u200B-\u200D\u2060-\u2063\uFEFF\u{1D173}-\u{1D17A}]/gu
+
+/**
+ * Remove stega from a functional field before comparing or using it.
+ *
+ * @param value - The source-supplied value, possibly carrying stega.
+ * @returns The clean value.
+ */
+function stripStega(value: string): string {
+  return value.replace(STEGA, "")
+}
+
+/**
  * Narrow a source-supplied alignment to one the renderer understands.
  *
  * The canonical model keeps the vocabulary closed; an unknown value falls back
@@ -111,7 +134,8 @@ type InlineImageFields = {
 function narrowAlignment(
   value: string | null | undefined
 ): InlineImageAlignment {
-  return value === "left" || value === "right" ? value : "center"
+  const plain = value ? stripStega(value) : value
+  return plain === "left" || plain === "right" ? plain : "center"
 }
 
 /**
@@ -121,7 +145,8 @@ function narrowAlignment(
  * @returns A value the component accepts.
  */
 function narrowWidth(value: string | null | undefined): InlineImageWidth {
-  return value === "wide" || value === "full" ? value : "normal"
+  const plain = value ? stripStega(value) : value
+  return plain === "wide" || plain === "full" ? plain : "normal"
 }
 
 /**
@@ -143,7 +168,10 @@ function toInlineImage(
     alignment: narrowAlignment(record.alignment),
     width: narrowWidth(record.width),
     link: record.linkUrl
-      ? { href: record.linkUrl, openInNewTab: record.openInNewTab ?? false }
+      ? {
+          href: stripStega(record.linkUrl),
+          openInNewTab: record.openInNewTab ?? false,
+        }
       : null,
   }
 }
