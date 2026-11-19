@@ -1,4 +1,8 @@
-import type { ContentBlock, ContentImage } from "@/content/model"
+import type {
+  ContentBlock,
+  ContentImage,
+  InlineImageBlock,
+} from "@/content/model"
 
 /**
  * Canonical fixtures for the content-block demo.
@@ -29,17 +33,46 @@ const linen: ContentImage = {
   height: 256,
 }
 
-/** Every canonical block kind, in the order a page body would carry them. */
-export const contentBlocks: ContentBlock[] = [
-  {
+const caption = "The Forge pack sets for a scrum in the 2026 season."
+
+/** One inline image variant, with the defaults filled in. */
+function inlineImage(
+  id: string,
+  overrides: Partial<Omit<InlineImageBlock, "kind" | "id">> = {}
+): InlineImageBlock {
+  return {
     kind: "inlineImage",
-    id: "fixture-image",
-    image: crest,
+    id,
+    image: blast,
     caption: null,
     alignment: "center",
     width: "normal",
     link: null,
-  },
+    ...overrides,
+  }
+}
+
+/** Every inline-image variant the component supports, for comparison. */
+export const inlineImageVariants = {
+  left: inlineImage("variant-left", { alignment: "left", caption }),
+  center: inlineImage("variant-center", { alignment: "center", caption }),
+  right: inlineImage("variant-right", { alignment: "right", caption }),
+  normal: inlineImage("variant-normal", { width: "normal" }),
+  wide: inlineImage("variant-wide", { width: "wide" }),
+  full: inlineImage("variant-full", { width: "full" }),
+  captioned: inlineImage("variant-captioned", { caption }),
+  linked: inlineImage("variant-linked", {
+    caption: "A linked image opens the membership page.",
+    link: { href: "/membership", openInNewTab: true },
+  }),
+  altOverride: inlineImage("variant-alt", {
+    image: { ...crest, alt: "Override alt text" },
+  }),
+} satisfies Record<string, InlineImageBlock>
+
+/** Every canonical block kind, in the order a page body would carry them. */
+export const contentBlocks: ContentBlock[] = [
+  inlineImage("fixture-image"),
   {
     kind: "imageGallery",
     id: "fixture-gallery",
