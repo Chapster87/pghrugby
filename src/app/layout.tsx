@@ -22,8 +22,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`light ${lemonMilk.variable} ${notoSans.variable} ${oswald.variable}`}
-      style={{ colorScheme: "light" }}
+      className={`${lemonMilk.variable} ${notoSans.variable} ${oswald.variable}`}
+      suppressHydrationWarning
     >
       <body>{children}</body>
     </html>

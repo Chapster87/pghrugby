@@ -23,6 +23,19 @@
   flex-grow: 1;
 }
 
+/* Both dimensions auto so the logo keeps its aspect ratio; the caps preserve the
+   intended 100x50 slot. */
+.logoSlot {
+  position: relative;
+  display: block;
+  width: 100px;
+  height: 50px;
+}
+
+.logo {
+  object-fit: contain;
+}
+
 .sponsorRowContainer {
   composes: siteContainer from "@/styles/content.module.css";
 }
