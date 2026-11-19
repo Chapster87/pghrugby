@@ -1,8 +1,5 @@
 @layer base {
   .prose {
-    max-width: 72ch;
-    margin-left: auto;
-    margin-right: auto;
     line-height: 1.6;
 
     p {

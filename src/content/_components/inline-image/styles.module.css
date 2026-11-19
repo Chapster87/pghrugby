@@ -1,5 +1,6 @@
 .figure {
-  margin: 0;
+  margin-top: 16px;
+  margin-bottom: 16px;
   padding: 8px;
   border-radius: 4px;
   background-color: var(--color-grey-200);
@@ -33,6 +34,9 @@
 .right {
   @media (--viewport-md-up) {
     width: 50%;
+    /* A float sits inline with the text, so its top aligns with the text's top
+       line; the preceding paragraph already supplies the separation above. */
+    margin-top: 0;
   }
 }
 
@@ -50,17 +54,15 @@
   }
 }
 
-/* Width applies to centered images only; the component omits the class for floats. */
+/* The body fills the card, so `normal` is the card's inner width. `wide` and
+   `full` both break out to the card's edges; they are the same until the layout
+   gains a wider container to distinguish them. */
 .normal {
   max-width: 100%;
 }
 
-.wide {
-  width: 100cqw;
-  margin-left: calc((100cqw - 100%) / -2);
-}
-
+.wide,
 .full {
-  width: calc(100cqw + 32px);
-  margin-left: calc((100cqw - 100%) / -2 - 16px);
+  width: calc(100% + 32px);
+  margin-left: -16px;
 }
