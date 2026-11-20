@@ -2,6 +2,7 @@ import type { ComponentType, ReactElement } from "react"
 
 import type { ContentBlock, ContentBlockKind } from "@/content/model"
 
+import ColumnsBlockView from "./_components/columns"
 import InlineImageBlockView from "./_components/inline-image"
 import ImageGalleryBlockView from "./_components/image-gallery"
 import LinkButtonBlockView from "./_components/link-button"
@@ -24,6 +25,7 @@ const blockRegistry: { [K in ContentBlockKind]: BlockRenderer<K> } = {
   imageGallery: ImageGalleryBlockView,
   video: VideoBlockView,
   linkButton: LinkButtonBlockView,
+  columns: ColumnsBlockView,
 }
 
 /**

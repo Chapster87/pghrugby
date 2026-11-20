@@ -79,6 +79,24 @@ export type DatoLinkButtonBlock = {
   openInNewTab?: boolean | null
 }
 
+/** The `columns_block` record. */
+export type DatoColumnsBlock = {
+  __typename: "ColumnsBlockRecord"
+  id: string
+  /** A split preset key, or null when the field is empty. */
+  split?: string | null
+  /** A gap preset key, or null when the field is empty. */
+  gap?: string | null
+  /** A vertical-alignment key, or null when the field is empty. */
+  alignment?: string | null
+  /** The anchor id for the section, or null when the field is empty. */
+  sectionId?: string | null
+  /** The first column's document, or null when it was left empty. */
+  columnOne?: DatoStructuredText | null
+  /** The second column's document, or null when it was left empty. */
+  columnTwo?: DatoStructuredText | null
+}
+
 /** Any block record a content union can carry. */
 export type DatoBlockRecord =
   | DatoExternalImageBlock
@@ -86,6 +104,7 @@ export type DatoBlockRecord =
   | DatoImageGalleryBlock
   | DatoVideoBlock
   | DatoLinkButtonBlock
+  | DatoColumnsBlock
 
 /** A DatoCMS Structured Text field, as the queries select it. */
 export type DatoStructuredText = {

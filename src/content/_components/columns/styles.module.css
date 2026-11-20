@@ -1,0 +1,73 @@
+.columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+/* The split presets are fractions rather than percentages so the gap comes out
+   of the track sizes instead of overflowing the pair. Below this breakpoint the
+   single column above wins: stacking ignores the ratio, which is what keeps the
+   content readable on a phone. */
+@media (--viewport-md-up) {
+  .columns {
+    grid-template-columns: 50fr 50fr;
+  }
+
+  .split5050 {
+    grid-template-columns: 50fr 50fr;
+  }
+
+  .split6040 {
+    grid-template-columns: 60fr 40fr;
+  }
+
+  .split4060 {
+    grid-template-columns: 40fr 60fr;
+  }
+
+  .split6535 {
+    grid-template-columns: 65fr 35fr;
+  }
+
+  .split3565 {
+    grid-template-columns: 35fr 65fr;
+  }
+}
+
+/* Declared after the media block so an equal-specificity gap class wins over the
+   base rule; the presets apply in both orientations. */
+.gapNone {
+  gap: 0;
+}
+
+.gapSmall {
+  gap: 16px;
+}
+
+.gapMedium {
+  gap: 24px;
+}
+
+.gapLarge {
+  gap: 40px;
+}
+
+.column {
+  /* A grid item defaults to min-width: auto, which lets a long word or a wide
+     image push the track past its fraction. */
+  min-width: 0;
+}
+
+/* Declared after the base rule so an equal-specificity alignment wins. The
+   default in `.columns` is `start`, which is what `alignTop` restates. */
+.alignTop {
+  align-items: start;
+}
+
+.alignMiddle {
+  align-items: center;
+}
+
+.alignBottom {
+  align-items: end;
+}

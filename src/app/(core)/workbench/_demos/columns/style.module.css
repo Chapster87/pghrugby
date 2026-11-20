@@ -1,0 +1,22 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.groupTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-grey-800);
+}
+
+.note {
+  max-width: 60ch;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-grey-600);
+}
+
+.stage {
+  margin-top: 8px;
+}

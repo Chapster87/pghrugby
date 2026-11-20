@@ -490,6 +490,114 @@ describe("toRichText", () => {
   })
 })
 
+describe("toContentBlock — columns", () => {
+  const document = { value: { schema: "dast" }, blocks: [] }
+
+  it("maps both columns and keeps a null slot for an empty one", () => {
+    const block = toContentBlock({
+      __typename: "ColumnsBlockRecord",
+      id: "block-6",
+      split: "60/40",
+      gap: "large",
+      columnOne: document,
+    })
+
+    if (block?.kind !== "columns") throw new Error("expected a columns block")
+
+    expect(block).toMatchObject({ split: "60/40", gap: "large" })
+    expect(block.columns).toHaveLength(2)
+    expect(block.columns[0]).not.toBeNull()
+    expect(block.columns[1]).toBeNull()
+  })
+
+  it("keeps the document untouched so the renderer can resolve its embeds", () => {
+    const block = toContentBlock({
+      __typename: "ColumnsBlockRecord",
+      id: "block-6",
+      columnOne: document,
+    })
+
+    if (block?.kind !== "columns") throw new Error("expected a columns block")
+
+    expect(block.columns[0]?.document).toBe(document)
+  })
+
+  it("defaults a missing split, gap and alignment", () => {
+    expect(
+      toContentBlock({ __typename: "ColumnsBlockRecord", id: "block-6" })
+    ).toMatchObject({ split: "50/50", gap: "medium", alignment: "top" })
+  })
+
+  it("maps the vertical alignment, stripping stega first", () => {
+    expect(
+      toContentBlock({
+        __typename: "ColumnsBlockRecord",
+        id: "block-6",
+        alignment: "\u200Bmiddle\u200B",
+      })
+    ).toMatchObject({ alignment: "middle" })
+
+    expect(
+      toContentBlock({
+        __typename: "ColumnsBlockRecord",
+        id: "block-6",
+        alignment: "bottom",
+      })
+    ).toMatchObject({ alignment: "bottom" })
+  })
+
+  it("strips stega from split and gap before narrowing", () => {
+    // A draft read rewrites every string; a raw comparison would miss the stega
+    // and silently fall back to the default ratio.
+    expect(
+      toContentBlock({
+        __typename: "ColumnsBlockRecord",
+        id: "block-6",
+        split: "\u200B40/60\u200B",
+        gap: "\u200Bsmall\u200B",
+      })
+    ).toMatchObject({ split: "40/60", gap: "small" })
+  })
+
+  it("carries the section id, stripped of stega", () => {
+    // The id lands in the DOM and is what an anchor points at, so a draft read's
+    // invisible characters must not survive.
+    expect(
+      toContentBlock({
+        __typename: "ColumnsBlockRecord",
+        id: "block-6",
+        sectionId: "\u200Bscholarships\u200B",
+      })
+    ).toMatchObject({ sectionId: "scholarships" })
+  })
+
+  it("has no section id when the field is absent or blank", () => {
+    expect(
+      toContentBlock({ __typename: "ColumnsBlockRecord", id: "block-6" })
+    ).toMatchObject({ sectionId: null })
+
+    expect(
+      toContentBlock({
+        __typename: "ColumnsBlockRecord",
+        id: "block-6",
+        sectionId: "   ",
+      })
+    ).toMatchObject({ sectionId: null })
+  })
+
+  it("falls back to the defaults for values the renderer does not know", () => {
+    expect(
+      toContentBlock({
+        __typename: "ColumnsBlockRecord",
+        id: "block-6",
+        split: "33/67",
+        gap: "huge",
+        alignment: "sideways",
+      })
+    ).toMatchObject({ split: "50/50", gap: "medium", alignment: "top" })
+  })
+})
+
 describe("toContentBlock — unknown record", () => {
   it("returns null for a block type the adapter does not know", () => {
     // The registry and the adapter must both tolerate a type arriving before a

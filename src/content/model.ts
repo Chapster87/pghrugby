@@ -90,12 +90,53 @@ export type LinkButtonBlock = {
   openInNewTab: boolean
 }
 
+/** How a columns block divides its width between two columns. */
+export type ColumnsSplit = "50/50" | "60/40" | "40/60" | "65/35" | "35/65"
+
+/** The space between columns, in both the side-by-side and stacked layouts. */
+export type ColumnsGap = "none" | "small" | "medium" | "large"
+
+/** Where a column's content sits when the other column is taller. */
+export type ColumnsAlignment = "top" | "middle" | "bottom"
+
+/**
+ * Two pieces of content placed side by side.
+ *
+ * `columns` is a list even though the source supplies exactly two: the shape is
+ * the layout, and a third column later must not change the model. Each column is
+ * a whole rich-text document, so an image with a caption and a paragraph are the
+ * same kind of thing here — which is why one block covers both cases.
+ *
+ * A column may be null. An empty column keeps its cell, because the layout is
+ * why the block exists; only a block with every column empty renders nothing.
+ */
+export type ColumnsBlock = {
+  kind: "columns"
+  id: string
+  /**
+   * An anchor id for the section, or null when the editor left it empty.
+   *
+   * Functional, not editorial: it lands in the DOM as `id`, so the adapter
+   * strips stega from it. The source normalises it to a slug before it arrives.
+   */
+  sectionId: string | null
+  /** How the available width is divided. */
+  split: ColumnsSplit
+  /** The gap between cells, also used when the columns stack. */
+  gap: ColumnsGap
+  /** Where a cell's content sits against the row's height. */
+  alignment: ColumnsAlignment
+  /** The columns in page order; null for an empty column. */
+  columns: (RichText | null)[]
+}
+
 /** Any block embedded in a record's structured text. */
 export type ContentBlock =
   | InlineImageBlock
   | ImageGalleryBlock
   | VideoBlock
   | LinkButtonBlock
+  | ColumnsBlock
 
 /** The discriminant every block carries. */
 export type ContentBlockKind = ContentBlock["kind"]

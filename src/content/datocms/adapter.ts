@@ -1,4 +1,7 @@
 import type {
+  ColumnsAlignment,
+  ColumnsGap,
+  ColumnsSplit,
   ContentBlock,
   ContentImage,
   InlineImageAlignment,
@@ -150,6 +153,85 @@ function narrowWidth(value: string | null | undefined): InlineImageWidth {
 }
 
 /**
+ * Narrow a source-supplied split to one the renderer understands.
+ *
+ * The canonical model keeps the vocabulary closed, so an unknown value falls
+ * back to `50/50` rather than reaching the component and producing no class.
+ *
+ * @param value - The source-supplied value, or null.
+ * @returns A value the component accepts.
+ */
+function narrowSplit(value: string | null | undefined): ColumnsSplit {
+  const plain = value ? stripStega(value) : value
+
+  switch (plain) {
+    case "60/40":
+    case "40/60":
+    case "65/35":
+    case "35/65":
+      return plain
+    default:
+      return "50/50"
+  }
+}
+
+/**
+ * Narrow a source-supplied gap to one the renderer understands.
+ *
+ * @param value - The source-supplied value, or null.
+ * @returns A value the component accepts.
+ */
+function narrowGap(value: string | null | undefined): ColumnsGap {
+  const plain = value ? stripStega(value) : value
+
+  switch (plain) {
+    case "none":
+    case "small":
+    case "large":
+      return plain
+    default:
+      return "medium"
+  }
+}
+
+/**
+ * Narrow a source-supplied vertical alignment to one the renderer understands.
+ *
+ * @param value - The source-supplied value, or null.
+ * @returns A value the component accepts.
+ */
+function narrowColumnsAlignment(
+  value: string | null | undefined
+): ColumnsAlignment {
+  const plain = value ? stripStega(value) : value
+
+  switch (plain) {
+    case "middle":
+    case "bottom":
+      return plain
+    default:
+      return "top"
+  }
+}
+
+/**
+ * Read a section id, or null when the field is empty.
+ *
+ * The id is functional: it becomes the block's `id` attribute and the target of
+ * an anchor link, so stega is stripped — a draft read would otherwise produce
+ * an id no `#fragment` could match. Whitespace alone counts as empty.
+ *
+ * @param value - The source-supplied value, or null.
+ * @returns The id, or null.
+ */
+function readSectionId(value: string | null | undefined): string | null {
+  if (!value) return null
+
+  const plain = stripStega(value).trim()
+  return plain.length > 0 ? plain : null
+}
+
+/**
  * Map an image record's authoring fields onto the canonical inline image.
  *
  * @param record - The block record's shared fields.
@@ -241,6 +323,21 @@ export function toContentBlock(record: DatoBlockRecord): ContentBlock | null {
         variant: record.variant ?? null,
         size: record.size ?? null,
         openInNewTab: record.openInNewTab ?? false,
+      }
+    }
+
+    case "ColumnsBlockRecord": {
+      // Both columns are mapped, empty or not: an empty column must reach the
+      // renderer as null so it can hold its cell. A block whose columns are all
+      // empty is the renderer's call to drop, not the mapper's to guess.
+      return {
+        kind: "columns",
+        id: record.id,
+        sectionId: readSectionId(record.sectionId),
+        split: narrowSplit(record.split),
+        gap: narrowGap(record.gap),
+        alignment: narrowColumnsAlignment(record.alignment),
+        columns: [toRichText(record.columnOne), toRichText(record.columnTwo)],
       }
     }
 

@@ -1,4 +1,5 @@
 import buttonDemo from "./button"
+import columnsDemo from "./columns"
 import contentBlocksDemo from "./content-blocks"
 import dialogDemo from "./dialog"
 import formControlsDemo from "./form-controls"
@@ -15,6 +16,7 @@ export const demos: Demo[] = [
   formControlsDemo,
   dialogDemo,
   contentBlocksDemo,
+  columnsDemo,
 ]
 
 /**
