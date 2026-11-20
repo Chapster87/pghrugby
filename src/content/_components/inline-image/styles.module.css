@@ -66,3 +66,38 @@
   width: calc(100% + 32px);
   margin-left: -16px;
 }
+
+/* A column is its own measure. The breakout above is written against the content
+   card, so inside a columns block it would run under the neighbouring column;
+   there, `wide` and `full` render at the cell's width instead. */
+[data-column] .wide,
+[data-column] .full {
+  width: 100%;
+  margin-left: 0;
+}
+
+/* A figure that opens or closes a column sits flush with the cell. The 16px
+   rhythm above belongs between one block and the next, and the neighbouring
+   column's text carries none of it — left in, the image would start lower than
+   the text beside it. `.prose`'s first/last-child rule says the same thing, but
+   it is layered and loses to this module's unlayered margin. */
+[data-column] .figure:first-child {
+  margin-top: 0;
+}
+
+[data-column] .figure:last-child {
+  margin-bottom: 0;
+}
+
+/* A float exists to let text wrap around the image; a column usually holds the
+   image on its own, so the 50% the float reserves is simply empty space. Inside
+   a column the image takes the cell instead, and the column's split is what
+   makes it narrower. Written unconditionally: below the breakpoint the float
+   rules above do not apply, and zeroing the side margins is harmless there. */
+[data-column] .left,
+[data-column] .right {
+  width: 100%;
+  float: none;
+  margin-left: 0;
+  margin-right: 0;
+}
