@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react"
 import clsx from "clsx"
 
-import type { Decision, Status, WorkbenchRow } from "@/lib/audit/types"
+import type { Decision, Source, Status, WorkbenchRow } from "@/lib/audit/types"
 
 import s from "../style.module.css"
 
@@ -82,6 +82,19 @@ const sectionOf = (row: WorkbenchRow): Section => {
       return "product"
     default:
       return "other"
+  }
+}
+
+const sourceClass = (source: Source) => {
+  switch (source) {
+    case "datocms":
+      return s.sourceDatocms
+    case "forgecms":
+      return s.sourceForgecms
+    case "wordpress":
+      return s.sourceWordpress
+    default:
+      return s.sourceNextjs
   }
 }
 
@@ -275,8 +288,8 @@ export default function AuditTable({
         <table className={s.table}>
           <thead>
             <tr>
-              <th>Side</th>
               <th>Source</th>
+              <th>Side</th>
               <th>Stack</th>
               <th>URL</th>
               <th>Title</th>
@@ -299,9 +312,13 @@ export default function AuditTable({
                   )}
                 >
                   <td>
-                    <span className={s.sideTag}>{row.side}</span>
+                    <span
+                      className={clsx(s.sourceBadge, sourceClass(row.source))}
+                    >
+                      {row.source}
+                    </span>
                   </td>
-                  <td>{row.source}</td>
+                  <td>{row.side}</td>
                   <td>{sectionOf(row)}</td>
                   <td className={s.url}>{row.url}</td>
                   <td>{row.title}</td>

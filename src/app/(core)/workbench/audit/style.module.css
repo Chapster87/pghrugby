@@ -143,14 +143,32 @@
   color: var(--color-grey-500);
 }
 
-.sideTag {
+.sourceBadge {
   display: inline-block;
   padding: 2px 8px;
   border-radius: 999px;
-  background: var(--proto-surface-2);
-  color: var(--color-grey-800);
   font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+.sourceDatocms {
+  background: #f97316;
+  color: #fff;
+}
+
+.sourceForgecms {
+  background: var(--color-gold-500);
+  color: var(--color-grey-900);
+}
+
+.sourceWordpress {
+  background: var(--color-blue);
+  color: #fff;
+}
+
+.sourceNextjs {
+  background: var(--proto-surface-2);
+  color: var(--color-grey-800);
 }

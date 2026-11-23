@@ -218,7 +218,7 @@ function buildNewSiteRows(datocms) {
     rows.push({
       id: `new:pdp:${pdp.slug}`,
       side: "new",
-      source: "pdp",
+      source: "datocms",
       type: "pdp",
       url: `/${pdp.slug}`,
       title: pdp.title,
@@ -241,7 +241,7 @@ function buildNewSiteRows(datocms) {
     rows.push({
       id: `new:static:${route.url}`,
       side: "new",
-      source: "static",
+      source: "nextjs",
       type: "static",
       url: route.url,
       title: route.title,
@@ -519,9 +519,8 @@ async function main() {
     generatedAt: new Date().toISOString(),
     sources: {
       datocms: newSiteRows.filter((r) => r.source === "datocms").length,
-      pdp: newSiteRows.filter((r) => r.source === "pdp").length,
       forgecms: newSiteRows.filter((r) => r.source === "forgecms").length,
-      static: newSiteRows.filter((r) => r.source === "static").length,
+      nextjs: newSiteRows.filter((r) => r.source === "nextjs").length,
       wordpress: wpRows.length,
     },
     redirects,

@@ -1,10 +1,9 @@
 {
-  "generatedAt": "2026-11-23T14:00:42.593Z",
+  "generatedAt": "2026-11-23T14:33:36.554Z",
   "sources": {
-    "datocms": 83,
-    "pdp": 9,
+    "datocms": 92,
     "forgecms": 6,
-    "static": 9,
+    "nextjs": 9,
     "wordpress": 431
   },
   "redirects": [
@@ -90,7 +89,7 @@
     {
       "id": "new:static:/contact",
       "side": "new",
-      "source": "static",
+      "source": "nextjs",
       "type": "static",
       "url": "/contact",
       "title": "Contact Us",
@@ -987,7 +986,7 @@
     {
       "id": "new:pdp:steel-city-7s",
       "side": "new",
-      "source": "pdp",
+      "source": "datocms",
       "type": "pdp",
       "url": "/steel-city-7s",
       "title": "Steel City 7s",
@@ -998,7 +997,7 @@
     {
       "id": "new:pdp:golf-outing-sponsorship",
       "side": "new",
-      "source": "pdp",
+      "source": "datocms",
       "type": "pdp",
       "url": "/golf-outing-sponsorship",
       "title": "Golf Outing Sponsorship",
@@ -1009,7 +1008,7 @@
     {
       "id": "new:pdp:dues",
       "side": "new",
-      "source": "pdp",
+      "source": "datocms",
       "type": "pdp",
       "url": "/dues",
       "title": "Season Dues",
@@ -1020,7 +1019,7 @@
     {
       "id": "new:pdp:ballpark",
       "side": "new",
-      "source": "pdp",
+      "source": "datocms",
       "type": "pdp",
       "url": "/ballpark",
       "title": "Forge Day at the Ballpark",
@@ -1031,7 +1030,7 @@
     {
       "id": "new:pdp:survivor-pool",
       "side": "new",
-      "source": "pdp",
+      "source": "datocms",
       "type": "pdp",
       "url": "/survivor-pool",
       "title": "NFL Survivor Pool",
@@ -1042,7 +1041,7 @@
     {
       "id": "new:pdp:bar-crawl",
       "side": "new",
-      "source": "pdp",
+      "source": "datocms",
       "type": "pdp",
       "url": "/bar-crawl",
       "title": "Steel City 7s Bar Crawl",
@@ -1053,7 +1052,7 @@
     {
       "id": "new:pdp:pig-roast",
       "side": "new",
-      "source": "pdp",
+      "source": "datocms",
       "type": "pdp",
       "url": "/pig-roast",
       "title": "Annual Forge Pig Roast",
@@ -1064,7 +1063,7 @@
     {
       "id": "new:pdp:donate",
       "side": "new",
-      "source": "pdp",
+      "source": "datocms",
       "type": "pdp",
       "url": "/donate",
       "title": "\"Pass the Hat\" Donation",
@@ -1075,7 +1074,7 @@
     {
       "id": "new:pdp:golf-outing",
       "side": "new",
-      "source": "pdp",
+      "source": "datocms",
       "type": "pdp",
       "url": "/golf-outing",
       "title": "Golf Outing",
@@ -1086,7 +1085,7 @@
     {
       "id": "new:static:/",
       "side": "new",
-      "source": "static",
+      "source": "nextjs",
       "type": "static",
       "url": "/",
       "title": "Home",
@@ -1096,7 +1095,7 @@
     {
       "id": "new:static:/cart",
       "side": "new",
-      "source": "static",
+      "source": "nextjs",
       "type": "static",
       "url": "/cart",
       "title": "Cart",
@@ -1106,7 +1105,7 @@
     {
       "id": "new:static:/links",
       "side": "new",
-      "source": "static",
+      "source": "nextjs",
       "type": "static",
       "url": "/links",
       "title": "Links",
@@ -1116,7 +1115,7 @@
     {
       "id": "new:static:/membership",
       "side": "new",
-      "source": "static",
+      "source": "nextjs",
       "type": "static",
       "url": "/membership",
       "title": "Club Membership",
@@ -1126,7 +1125,7 @@
     {
       "id": "new:static:/sitemap",
       "side": "new",
-      "source": "static",
+      "source": "nextjs",
       "type": "static",
       "url": "/sitemap",
       "title": "Sitemap",
@@ -1136,7 +1135,7 @@
     {
       "id": "new:static:/styleguide",
       "side": "new",
-      "source": "static",
+      "source": "nextjs",
       "type": "static",
       "url": "/styleguide",
       "title": "Style Guide",
@@ -1146,7 +1145,7 @@
     {
       "id": "new:static:/checkout",
       "side": "new",
-      "source": "static",
+      "source": "nextjs",
       "type": "static",
       "url": "/checkout",
       "title": "Checkout",
@@ -1156,7 +1155,7 @@
     {
       "id": "new:static:/checkout/success",
       "side": "new",
-      "source": "static",
+      "source": "nextjs",
       "type": "static",
       "url": "/checkout/success",
       "title": "Checkout Success"

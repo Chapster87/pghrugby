@@ -1,7 +1,7 @@
 // Shared types for the page-audit workbench. See #178, #179, #180.
 
 export type Side = "new" | "wordpress"
-export type Source = "datocms" | "forgecms" | "static" | "pdp" | "wordpress"
+export type Source = "datocms" | "forgecms" | "nextjs" | "wordpress"
 export type Decision = "keep" | "redirect" | "new-page" | "404" | "undecided"
 export type Status = "todo" | "in-review" | "done" | "won't-migrate"
 
