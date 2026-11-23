@@ -34,10 +34,40 @@ const statusClass = (status: Status) => {
   }
 }
 
-type Section = "page" | "post" | "product" | "other"
+type Section =
+  | "page"
+  | "post"
+  | "product"
+  | "competition"
+  | "calendar"
+  | "other"
+
+const COMPETITION_TYPES = new Set([
+  "event",
+  "table",
+  "team",
+  "player",
+  "staff",
+  "venue",
+  "league",
+  "season",
+])
 
 /** The part of the site a row belongs to, for working through sections. */
 const sectionOf = (row: WorkbenchRow): Section => {
+  if (row.type === "calendar" || row.url.startsWith("/calendar")) {
+    return "calendar"
+  }
+  if (
+    COMPETITION_TYPES.has(row.type) ||
+    row.url.startsWith("/matches") ||
+    row.url.startsWith("/mens-schedule") ||
+    row.url.startsWith("/womens-schedule") ||
+    row.url.startsWith("/mens-standings") ||
+    row.url.startsWith("/womens-standings")
+  ) {
+    return "competition"
+  }
   switch (row.type) {
     case "page":
     case "static":
@@ -203,6 +233,8 @@ export default function AuditTable({
           <option value="page">page</option>
           <option value="post">post</option>
           <option value="product">product</option>
+          <option value="competition">competition</option>
+          <option value="calendar">calendar</option>
           <option value="other">other</option>
         </select>
         <select
