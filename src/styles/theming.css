@@ -1,5 +1,12 @@
-@layer base {
-  .dark {
-    color: var(--color-white);
-  }
+/* The root theme sets text only. A background on <html> stops the body's
+   background propagating to the canvas, which hides the fixed background video
+   behind the body's opaque background. */
+html.dark {
+  color: var(--color-foreground-dark);
+}
+
+/* A dark content block sets its own background and text. */
+.dark:not(html) {
+  background-color: var(--color-background-dark);
+  color: var(--color-foreground-dark);
 }

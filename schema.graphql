@@ -1,4 +1,4 @@
-union ArticleModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+union ArticleModelContentBlocksField = ColumnsBlockRecord | ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
 
 type ArticleModelContentField {
   blocks: [ArticleModelContentBlocksField!]!
@@ -237,6 +237,54 @@ type ColorField {
   red: IntType!
 }
 
+union ColumnsBlockModelColumnOneBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | LinkButtonRecord | VideoBlockRecord
+
+type ColumnsBlockModelColumnOneField {
+  blocks: [ColumnsBlockModelColumnOneBlocksField!]!
+  inlineBlocks: [String!]!
+  links: [PageRecord!]!
+  value: JsonField!
+}
+
+union ColumnsBlockModelColumnTwoBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | LinkButtonRecord | VideoBlockRecord
+
+type ColumnsBlockModelColumnTwoField {
+  blocks: [ColumnsBlockModelColumnTwoBlocksField!]!
+  inlineBlocks: [String!]!
+  links: [PageRecord!]!
+  value: JsonField!
+}
+
+"""Block of type 🏛️ Columns (columns_block)"""
+type ColumnsBlockRecord implements RecordInterface {
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  alignment: String
+  columnOne: ColumnsBlockModelColumnOneField
+  columnTwo: ColumnsBlockModelColumnTwoField
+  gap: String
+  id: ItemId!
+  sectionId: String
+  split: String
+  title: String
+}
+
 """Specifies how to filter by creation datetime"""
 input CreatedAtFilter {
   """
@@ -342,7 +390,7 @@ type DataCollectorRecord implements RecordInterface {
   title: String
 }
 
-"""Block of type Checkbox field (data_field_checkbox)"""
+"""Block of type ☑️ Checkbox field (data_field_checkbox)"""
 type DataFieldCheckboxRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -368,7 +416,7 @@ type DataFieldCheckboxRecord implements RecordInterface {
   required: BooleanType!
 }
 
-"""Block of type Email field (data_field_email)"""
+"""Block of type 📧 Email field (data_field_email)"""
 type DataFieldEmailRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -397,7 +445,7 @@ type DataFieldEmailRecord implements RecordInterface {
   required: BooleanType!
 }
 
-"""Block of type Choice option (data_field_option)"""
+"""Block of type ⚖️ Choice option (data_field_option)"""
 type DataFieldOptionRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -421,7 +469,7 @@ type DataFieldOptionRecord implements RecordInterface {
   label: String
 }
 
-"""Block of type Radio field (data_field_radio)"""
+"""Block of type 🔘 Radio field (data_field_radio)"""
 type DataFieldRadioRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -449,7 +497,7 @@ type DataFieldRadioRecord implements RecordInterface {
   required: BooleanType!
 }
 
-"""Block of type Select field (data_field_select)"""
+"""Block of type 📜 Select field (data_field_select)"""
 type DataFieldSelectRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -477,7 +525,7 @@ type DataFieldSelectRecord implements RecordInterface {
   required: BooleanType!
 }
 
-"""Block of type Text field (data_field_text)"""
+"""Block of type 📄 Text field (data_field_text)"""
 type DataFieldTextRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -506,7 +554,7 @@ type DataFieldTextRecord implements RecordInterface {
   required: BooleanType!
 }
 
-"""Block of type Text area field (data_field_textarea)"""
+"""Block of type 📓 Text area field (data_field_textarea)"""
 type DataFieldTextareaRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -596,9 +644,15 @@ type ExternalImageBlockRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  alignment: String
+  alt: String
+  caption: String
   cloudinary: JsonField
   id: ItemId!
+  linkUrl: String
+  openInNewTab: BooleanType!
   url: String
+  width: String
 }
 
 enum FaviconType {
@@ -834,7 +888,7 @@ Represents signed double-precision fractional values as specified by [IEEE 754](
 """
 scalar FloatType
 
-"""Block of type Gallery Item (gallery_item_block)"""
+"""Block of type 🎠 Gallery Item (gallery_item_block)"""
 type GalleryItemBlockRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -868,7 +922,7 @@ type GlobalSeoField {
   twitterAccount: String
 }
 
-union HomepageModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | LinkButtonRecord | VideoBlockRecord
+union HomepageModelContentBlocksField = ColumnsBlockRecord | ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | LinkButtonRecord | VideoBlockRecord
 
 type HomepageModelContentField {
   blocks: [HomepageModelContentBlocksField!]!
@@ -996,8 +1050,14 @@ type ImageBlockRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  alignment: String
+  alt: String
   asset: FileField
+  caption: String
   id: ItemId!
+  linkUrl: String
+  openInNewTab: BooleanType!
+  width: String
 }
 
 """Block of type 🎠 Image Gallery (image_gallery_block)"""
@@ -3056,7 +3116,9 @@ type LinkButtonRecord implements RecordInterface {
   _updatedAt: DateTime!
   classname: String
   customProps: JsonField
+  href: String
   id: ItemId!
+  label: String
   openInNewTab: BooleanType!
   size: String
   testField: JsonField
@@ -3115,7 +3177,7 @@ input LinksFilter {
   exists: BooleanType
 }
 
-union MembershipModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | LinkButtonRecord | VideoBlockRecord
+union MembershipModelContentBlocksField = ColumnsBlockRecord | ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | LinkButtonRecord | VideoBlockRecord
 
 type MembershipModelContentField {
   blocks: [MembershipModelContentBlocksField!]!
@@ -3209,7 +3271,7 @@ input OrientationFilter {
   neq: UploadOrientation
 }
 
-union PageModelContentBlocksField = ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+union PageModelContentBlocksField = ColumnsBlockRecord | ExternalImageBlockRecord | ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
 
 type PageModelContentField {
   blocks: [PageModelContentBlocksField!]!
@@ -4475,7 +4537,7 @@ type TabDescModelContentField {
   value: JsonField!
 }
 
-"""Block of type Description tab (tab_desc)"""
+"""Block of type 📑 Description tab (tab_desc)"""
 type TabDescRecord implements RecordInterface {
   _createdAt: DateTime!
 
@@ -4509,7 +4571,7 @@ type TabModelContentField {
   value: JsonField!
 }
 
-"""Block of type Content tab (tab)"""
+"""Block of type 📃 Content tab (tab)"""
 type TabRecord implements RecordInterface {
   _createdAt: DateTime!
 

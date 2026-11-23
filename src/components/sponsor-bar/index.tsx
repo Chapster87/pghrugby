@@ -27,7 +27,15 @@ export default async function SponsorBar() {
           const logoUrl = sponsor.logo?.url
           if (!logoUrl) return null
           const image = (
-            <Image src={logoUrl} alt={sponsor.name} width={100} height={50} />
+            <span className={s.logoSlot}>
+              <Image
+                src={logoUrl}
+                alt={sponsor.name}
+                fill
+                sizes="100px"
+                className={s.logo}
+              />
+            </span>
           )
           // sponsor_url is a free-form string in ForgeCMS and is currently
           // unpopulated; render the logo (non-link) until a URL is set.

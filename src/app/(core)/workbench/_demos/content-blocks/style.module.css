@@ -1,0 +1,33 @@
+.sequence {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.groupTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-grey-800);
+}
+
+.variants {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.variant {
+  display: flow-root;
+}
+
+.variant p {
+  margin: 0;
+}

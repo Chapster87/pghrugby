@@ -5,14 +5,14 @@
 
 .homepageHero {
   max-width: 1200px;
-  background-color: rgb(from var(--color-black) r g b / 0.6);
+  background-color: rgba(0, 0, 0, 0.6);
   text-align: center;
   display: grid;
   gap: 16px;
   padding: 24px;
 
   :global(.dark) & {
-    background-color: rgb(from var(--color-black) r g b / 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
   }
 
   @media (--viewport-md-up) {

@@ -1,26 +1,21 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
-import { isDatocmsPreviewEnabled } from "@/lib/cms-preview"
-import SidebarLayout from "@/layouts/sidebar"
-import Image from "next/image"
-import { executeQuery } from "@/lib/datocms/executeQuery"
-import { StructuredText } from "react-datocms"
-import { pageSlugs, pageQuery } from "./pages.query"
+
 import ShareBar from "@/components/share-bar"
 import Heading from "@/components/typography/heading"
 import Text from "@/components/typography/text"
-import CloudinaryImageRenderer from "@/components/cloudinary-image-renderer"
-import { ResultOf, readFragment } from "@/lib/datocms/graphql"
-import { getCloudinaryImageProps } from "@/utils/cloudinary"
-import { fileFieldFragment } from "@fragments/blocks"
-import { StructuredArticleData } from "@/types/structured-data"
+import { toMetaImageUrl, toRichText } from "@/content/datocms/adapter"
+import { formatDate, toIsoDate } from "@/content/formatters/date"
+import { toPlainText } from "@/content/formatters/plain-text"
+import { articleStructuredData } from "@/content/formatters/structured-data"
+import RenderContent from "@/content/render-content"
+import SidebarLayout from "@/layouts/sidebar"
+import { isDatocmsPreviewEnabled } from "@/lib/cms-preview"
+import { executeQuery } from "@/lib/datocms/executeQuery"
+import { pageSlugs, pageQuery } from "./pages.query"
 
 import contentStyles from "@/styles/content.module.css"
 import s from "./styles.module.css"
-
-type PageContentBlocks = NonNullable<
-  NonNullable<ResultOf<typeof pageQuery>["page"]>["content"]
->["blocks"][number]
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -62,14 +57,21 @@ export async function generateMetadata(
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
   url.pathname = `/${slug}`
 
-  const publishDate = page.creationDate
-    ? new Date(page.creationDate).toISOString()
-    : undefined
-  const modifiedDate = page._updatedAt
-    ? new Date(page._updatedAt).toISOString()
-    : undefined
+  const imageUrl = toMetaImageUrl(page.metaImage)
+  const description = page.metaDescription || toPlainText(page.wpexcerpt)
 
-  const structuredData = generateStructuredData(page, slug)
+  const structuredData = articleStructuredData({
+    title: page.title,
+    metaTitle: page.metaTitle,
+    metaDescription: page.metaDescription,
+    excerpt: page.wpexcerpt,
+    imageUrl,
+    canonicalUrl: page.canonicalUrl,
+    publishedAt: page.creationDate,
+    updatedAt: page._updatedAt,
+    authorName: page.author?.name,
+    path: `/${slug}`,
+  })
 
   return {
     title: page.metaTitle || `${page.title} | Pittsburgh Forge Rugby Club`,
@@ -79,88 +81,23 @@ export async function generateMetadata(
     },
     openGraph: {
       title: page.metaTitle || page.title || undefined,
-      description: page.metaDescription || page.wpexcerpt || undefined,
+      description: description || undefined,
       url: page.canonicalUrl || url.toString(),
-      images:
-        page.metaImage &&
-        Array.isArray(page.metaImage) &&
-        page.metaImage[0]?.url
-          ? [{ url: page.metaImage[0].url }]
-          : undefined,
+      images: imageUrl ? [{ url: imageUrl }] : undefined,
       type: "article",
-      publishedTime: publishDate,
-      modifiedTime: modifiedDate,
+      publishedTime: toIsoDate(page.creationDate) || undefined,
+      modifiedTime: toIsoDate(page._updatedAt) || undefined,
       authors: page.author?.name ? [page.author.name] : [],
     },
     twitter: {
       title: page.metaTitle || page.title || undefined,
-      description: page.metaDescription || page.wpexcerpt || undefined,
-      images:
-        page.metaImage &&
-        Array.isArray(page.metaImage) &&
-        page.metaImage[0]?.url
-          ? [{ url: page.metaImage[0].url }]
-          : undefined,
+      description: description || undefined,
+      images: imageUrl ? [{ url: imageUrl }] : undefined,
     },
     other: {
       "application/ld+json": JSON.stringify(structuredData),
     },
   } satisfies Metadata
-}
-
-// JSON-LD schema.org structured data
-function generateStructuredData(
-  page: any,
-  slug: string
-): StructuredArticleData {
-  const imageUrl =
-    (page.metaImage &&
-      Array.isArray(page.metaImage) &&
-      page.metaImage.length > 0 &&
-      page.metaImage[0].url) ||
-    "https://pghrugby.com/logo.png"
-
-  const publishDate = page.creationDate
-    ? new Date(page.creationDate).toISOString()
-    : ""
-  const modifiedDate = page._updatedAt
-    ? new Date(page._updatedAt).toISOString()
-    : ""
-
-  const headline =
-    page.metaTitle ||
-    (page.title ? `${page.title} | Pittsburgh Forge Rugby Club` : "")
-  const description =
-    page.metaDescription ||
-    (page.wpexcerpt ? page.wpexcerpt.replace(/<[^>]*>/g, "") : "")
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline,
-    description,
-    image: imageUrl,
-    datePublished: publishDate,
-    dateModified: modifiedDate,
-    author: page.author?.name
-      ? {
-          "@type": "Person",
-          name: page.author.name,
-        }
-      : undefined,
-    publisher: {
-      "@type": "Organization",
-      name: "Pittsburgh Forge Rugby Club",
-      logo: {
-        "@type": "ImageObject",
-        url: imageUrl,
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": page.canonicalUrl || `https://pghrugby.com/${slug}`,
-    },
-  }
 }
 
 export default async function Page({ params }: PageProps) {
@@ -205,18 +142,17 @@ export default async function Page({ params }: PageProps) {
 
             <div className={s.meta}>
               {page.creationDate && (
-                <time dateTime={new Date(page.creationDate).toISOString()}>
+                <time dateTime={toIsoDate(page.creationDate)}>
                   <Text variant="span" size="sm">
-                    Published:{" "}
-                    {new Date(page.creationDate).toLocaleDateString()}
+                    Published: {formatDate(page.creationDate)}
                   </Text>
                 </time>
               )}
 
               {page._updatedAt && page.creationDate && (
-                <time dateTime={new Date(page._updatedAt).toISOString()}>
+                <time dateTime={toIsoDate(page._updatedAt)}>
                   <Text variant="span" size="sm">
-                    Updated: {new Date(page._updatedAt).toLocaleDateString()}
+                    Updated: {formatDate(page._updatedAt)}
                   </Text>
                 </time>
               )}
@@ -231,78 +167,7 @@ export default async function Page({ params }: PageProps) {
             </div>
           </header>
 
-          <div className="">
-            {page.content && (
-              <StructuredText
-                data={page.content}
-                renderBlock={({ record }) => {
-                  const typedRecord = record as PageContentBlocks
-                  switch (typedRecord.__typename) {
-                    case "ExternalImageBlockRecord":
-                      if (typedRecord.cloudinary) {
-                        const image = typedRecord.cloudinary as any
-                        return CloudinaryImageRenderer({
-                          src: image.secure_url,
-                          alt: image.public_id,
-                          width: image.width,
-                          height: image.height,
-                        })
-                      } else if (typedRecord.url) {
-                        const image = getCloudinaryImageProps(typedRecord.url)
-                        return CloudinaryImageRenderer({
-                          src: image.url,
-                          alt: "",
-                          width: image.width,
-                          height: image.height,
-                        })
-                      }
-
-                      return null
-                    case "ImageBlockRecord":
-                      if (typedRecord.asset) {
-                        const asset = readFragment(
-                          fileFieldFragment,
-                          typedRecord.asset
-                        )
-                        return <Image src={asset.url} alt={asset.alt || ""} />
-                      }
-                      return null
-                    case "ImageGalleryBlockRecord":
-                      return (
-                        <div>
-                          {typedRecord.assets.map((maskedAsset) => {
-                            const asset = readFragment(
-                              fileFieldFragment,
-                              maskedAsset
-                            )
-                            return (
-                              <Image
-                                key={asset.id}
-                                src={asset.url}
-                                alt={asset.alt || ""}
-                              />
-                            )
-                          })}
-                        </div>
-                      )
-                    case "VideoBlockRecord":
-                      if (typedRecord.asset) {
-                        const asset = readFragment(
-                          fileFieldFragment,
-                          typedRecord.asset
-                        )
-                        // For videos, you might want a video player component
-                        // For now, returning a link to the video
-                        return <video controls src={asset.url}></video>
-                      }
-                      return null
-                    default:
-                      return null
-                  }
-                }}
-              />
-            )}
-          </div>
+          <RenderContent content={toRichText(page.content)} />
 
           <ShareBar url={shareUrl} title={shareTitle} />
         </div>

@@ -1,24 +1,17 @@
 import type { Metadata, ResolvingMetadata } from "next"
-import Image from "next/image"
+
+import { toMetaImageUrl, toRichText } from "@/content/datocms/adapter"
+import { toIsoDate } from "@/content/formatters/date"
+import { toPlainText } from "@/content/formatters/plain-text"
+import { articleStructuredData } from "@/content/formatters/structured-data"
+import RenderContent from "@/content/render-content"
 import { isDatocmsPreviewEnabled } from "@/lib/cms-preview"
 import { executeQuery } from "@/lib/datocms/executeQuery"
-import { StructuredText } from "react-datocms"
-import { membershipQuery } from "./membership.query"
 import TierTable from "./_components/tier-table"
-import { CloudinaryImage } from "@/types/datocms"
-import { ResultOf, readFragment } from "@/lib/datocms/graphql"
-import { getCloudinaryImageProps } from "@/utils/cloudinary"
-import { fileFieldFragment } from "@fragments/blocks"
-import { StructuredArticleData } from "@/types/structured-data"
+import { membershipQuery } from "./membership.query"
 
 import contentStyles from "@/styles/content.module.css"
 import s from "./style.module.css"
-
-type MembershipQueryResult = ResultOf<typeof membershipQuery>["membership"]
-
-type MembershipContentBlocks = NonNullable<
-  NonNullable<MembershipQueryResult>["content"]
->["blocks"][number]
 
 /**
  * Generate metadata for the page.
@@ -42,14 +35,21 @@ export async function generateMetadata(
   const url = new URL((await parent).metadataBase || "https://pghrugby.com")
   url.pathname = `/membership`
 
-  const publishDate = page.creationDate
-    ? new Date(page.creationDate).toISOString()
-    : undefined
-  const modifiedDate = page._updatedAt
-    ? new Date(page._updatedAt).toISOString()
-    : undefined
+  const imageUrl = toMetaImageUrl(page.metaImage)
+  const description = page.metaDescription || toPlainText(page.wpexcerpt)
 
-  const structuredData = generateStructuredData(page)
+  const structuredData = articleStructuredData({
+    title: page.title,
+    metaTitle: page.metaTitle,
+    metaDescription: page.metaDescription,
+    excerpt: page.wpexcerpt,
+    imageUrl,
+    canonicalUrl: page.canonicalUrl,
+    publishedAt: page.creationDate,
+    updatedAt: page._updatedAt,
+    authorName: page.author?.name,
+    path: "/membership",
+  })
 
   return {
     title: page.metaTitle || `${page.title} | Pittsburgh Forge Rugby Club`,
@@ -59,87 +59,23 @@ export async function generateMetadata(
     },
     openGraph: {
       title: page.metaTitle || page.title || undefined,
-      description: page.metaDescription || page.wpexcerpt || undefined,
+      description: description || undefined,
       url: page.canonicalUrl || url.toString(),
-      images:
-        page.metaImage &&
-        Array.isArray(page.metaImage) &&
-        page.metaImage[0]?.url
-          ? [{ url: page.metaImage[0].url }]
-          : undefined,
+      images: imageUrl ? [{ url: imageUrl }] : undefined,
       type: "article",
-      publishedTime: publishDate,
-      modifiedTime: modifiedDate,
+      publishedTime: toIsoDate(page.creationDate) || undefined,
+      modifiedTime: toIsoDate(page._updatedAt) || undefined,
       authors: page.author?.name ? [page.author.name] : [],
     },
     twitter: {
       title: page.metaTitle || page.title || undefined,
-      description: page.metaDescription || page.wpexcerpt || undefined,
-      images:
-        page.metaImage &&
-        Array.isArray(page.metaImage) &&
-        page.metaImage[0]?.url
-          ? [{ url: page.metaImage[0].url }]
-          : undefined,
+      description: description || undefined,
+      images: imageUrl ? [{ url: imageUrl }] : undefined,
     },
     other: {
       "application/ld+json": JSON.stringify(structuredData),
     },
   } satisfies Metadata
-}
-
-// JSON-LD schema.org structured data
-function generateStructuredData(
-  page: NonNullable<MembershipQueryResult>
-): StructuredArticleData {
-  const imageUrl =
-    (page.metaImage &&
-      Array.isArray(page.metaImage) &&
-      page.metaImage.length > 0 &&
-      page.metaImage[0].url) ||
-    "https://pghrugby.com/logo.png"
-
-  const publishDate = page.creationDate
-    ? new Date(page.creationDate).toISOString()
-    : ""
-  const modifiedDate = page._updatedAt
-    ? new Date(page._updatedAt).toISOString()
-    : ""
-
-  const headline =
-    page.metaTitle ||
-    (page.title ? `${page.title} | Pittsburgh Forge Rugby Club` : "")
-  const description =
-    page.metaDescription ||
-    (page.wpexcerpt ? page.wpexcerpt.replace(/<[^>]*>/g, "") : "")
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline,
-    description,
-    image: imageUrl,
-    datePublished: publishDate,
-    dateModified: modifiedDate,
-    author: page.author?.name
-      ? {
-          "@type": "Person",
-          name: page.author.name,
-        }
-      : undefined,
-    publisher: {
-      "@type": "Organization",
-      name: "Pittsburgh Forge Rugby Club",
-      logo: {
-        "@type": "ImageObject",
-        url: imageUrl,
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": page.canonicalUrl || `https://pghrugby.com/membership`,
-    },
-  }
 }
 
 export default async function Membership() {
@@ -159,80 +95,7 @@ export default async function Membership() {
     <div className={`${contentStyles.contentBlock} ${s.membershipPage}`}>
       <div className="prose">
         <h1 className={s.pageTitle}>{page.title}</h1>
-        {page.content && (
-          <StructuredText
-            data={page.content}
-            renderBlock={({ record }) => {
-              const typedRecord = record as MembershipContentBlocks
-              switch (typedRecord.__typename) {
-                case "ExternalImageBlockRecord":
-                  if (typedRecord.cloudinary) {
-                    const image = typedRecord.cloudinary as CloudinaryImage
-                    return (
-                      <Image
-                        src={image.secure_url}
-                        alt={image.public_id}
-                        width={image.width ?? undefined}
-                        height={image.height ?? undefined}
-                      />
-                    )
-                  } else if (typedRecord.url) {
-                    const image = getCloudinaryImageProps(typedRecord.url)
-                    return (
-                      <Image
-                        src={image.url}
-                        alt=""
-                        width={image.width ?? undefined}
-                        height={image.height ?? undefined}
-                      />
-                    )
-                  }
-
-                  return null
-                case "ImageBlockRecord":
-                  if (typedRecord.asset) {
-                    const asset = readFragment(
-                      fileFieldFragment,
-                      typedRecord.asset
-                    )
-                    return <Image src={asset.url} alt={asset.alt || ""} />
-                  }
-                  return null
-                case "ImageGalleryBlockRecord":
-                  return (
-                    <div>
-                      {typedRecord.assets.map((maskedAsset: any) => {
-                        const asset = readFragment(
-                          fileFieldFragment,
-                          maskedAsset
-                        )
-                        return (
-                          <Image
-                            key={asset.id}
-                            src={asset.url}
-                            alt={asset.alt || ""}
-                          />
-                        )
-                      })}
-                    </div>
-                  )
-                case "VideoBlockRecord":
-                  if (typedRecord.asset) {
-                    const asset = readFragment(
-                      fileFieldFragment,
-                      typedRecord.asset
-                    )
-                    // For videos, you might want a video player component
-                    // For now, returning a link to the video
-                    return <video controls src={asset.url}></video>
-                  }
-                  return null
-                default:
-                  return null
-              }
-            }}
-          />
-        )}
+        <RenderContent content={toRichText(page.content)} />
       </div>
 
       <div className={s.membershipDetails}>

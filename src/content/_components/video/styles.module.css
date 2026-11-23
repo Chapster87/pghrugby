@@ -1,0 +1,9 @@
+.figure {
+  margin: 0;
+}
+
+.video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

@@ -21,3 +21,15 @@
 .h6 {
   composes: h6 from global;
 }
+
+.smallText {
+  composes: smallText from global;
+}
+
+.defaultText {
+  composes: defaultText from global;
+}
+
+.largeText {
+  composes: largeText from global;
+}
