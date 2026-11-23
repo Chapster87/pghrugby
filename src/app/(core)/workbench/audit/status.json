@@ -1,0 +1,1620 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-23T14:00:42.595Z",
+  "rows": {
+    "new:datocms:page:womens-club": {
+      "status": "todo"
+    },
+    "new:datocms:page:about": {
+      "status": "todo"
+    },
+    "new:static:/contact": {
+      "status": "todo"
+    },
+    "new:datocms:page:home": {
+      "status": "todo"
+    },
+    "new:datocms:page:mens-club": {
+      "status": "todo"
+    },
+    "new:datocms:page:sponsors": {
+      "status": "todo"
+    },
+    "new:datocms:page:club-bylaws": {
+      "status": "todo"
+    },
+    "new:datocms:page:covid-19-rtp-plan": {
+      "status": "todo"
+    },
+    "new:datocms:page:brendel-scholarship": {
+      "status": "todo"
+    },
+    "new:datocms:page:player": {
+      "status": "todo"
+    },
+    "new:datocms:page:mens-player": {
+      "status": "todo"
+    },
+    "new:datocms:page:womens-player": {
+      "status": "todo"
+    },
+    "new:datocms:page:womens-standing-archive": {
+      "status": "todo"
+    },
+    "new:datocms:page:minutes": {
+      "status": "todo"
+    },
+    "new:datocms:page:merchandise": {
+      "status": "todo"
+    },
+    "new:datocms:page:inclusivity": {
+      "status": "todo"
+    },
+    "new:datocms:page:womens-schedules-archive": {
+      "status": "todo"
+    },
+    "new:datocms:page:style-guide": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-rugby-announces-2026-scholarship-winners": {
+      "status": "todo"
+    },
+    "new:datocms:post:pittsburgh-forge": {
+      "status": "todo"
+    },
+    "new:datocms:post:pittsburgh-forge-women-announce-jason-edsall-as-head-coach": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-announce-steve-walsh-as-head-d2-coach": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-announce-allan-murray-as-assistant-d3-coach": {
+      "status": "todo"
+    },
+    "new:datocms:post:pittsburgh-celebrates-forge-day": {
+      "status": "todo"
+    },
+    "new:datocms:post:pittsburgh-forge-partners-with-essmc": {
+      "status": "todo"
+    },
+    "new:datocms:post:dugan-associates-supports-pittsburghs-rugby-club": {
+      "status": "todo"
+    },
+    "new:datocms:post:mhk-supports-the-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "new:datocms:post:steel-city-7s-recap": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-at-entertain-crowd-at-highmark-stadium": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-impressive-in-first-match": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-continue-preseason-work-at-wju": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-look-forward-to-first-league-season": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-dominate-in-week-one": {
+      "status": "todo"
+    },
+    "new:datocms:post:pittsburgh-forge-women-debut-in-columbus-with-a-strong-win": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-d3-stumble-against-presque-isle": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-d2-win-big-in-south-buffalo": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-women-earn-first-win-over-south-buffalo": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-d2-drop-heartbreaker-in-cleveland": {
+      "status": "todo"
+    },
+    "new:datocms:post:d3-men-make-statement-against-south-pitt": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-women-stand-over-iron-maidens": {
+      "status": "todo"
+    },
+    "new:datocms:post:d2-men-drop-close-match-again": {
+      "status": "todo"
+    },
+    "new:datocms:post:d3-men-continue-to-roll-against-greensburg": {
+      "status": "todo"
+    },
+    "new:datocms:post:d3-exact-revenge-on-presque-isle": {
+      "status": "todo"
+    },
+    "new:datocms:post:d2-men-rebound-against-league-best-buffalo": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-women-defend-undefeated-record-with-win-over-buffalo": {
+      "status": "todo"
+    },
+    "new:datocms:post:men-split-results-on-forge-day": {
+      "status": "todo"
+    },
+    "new:datocms:post:d2-men-keep-playoff-hopes-alive-at-home": {
+      "status": "todo"
+    },
+    "new:datocms:post:d3-men-drop-wild-game-in-cleveland": {
+      "status": "todo"
+    },
+    "new:datocms:post:help-the-forge-go-to-playoffs": {
+      "status": "todo"
+    },
+    "new:datocms:post:the-forge-elects-inaugural-board-of-directors": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-play-up-to-d1-competition-this-spring": {
+      "status": "todo"
+    },
+    "new:datocms:post:d2-men-upset-scioto-valley-in-obetz": {
+      "status": "todo"
+    },
+    "new:datocms:post:club-member-spotlight-jaime-filipek": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-offers-free-summer-fitness-touch": {
+      "status": "todo"
+    },
+    "new:datocms:post:club-member-spotlight-brittany-marnell": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-offers-summer-youth-rugby-at-bgcwpa-carnegie": {
+      "status": "todo"
+    },
+    "new:datocms:post:club-member-spotlight-angela-smarto": {
+      "status": "todo"
+    },
+    "new:datocms:post:club-member-spotlight-derek-neubauer": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-announce-3rd-side-for-fall-2019": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-women-open-season-against-philadelphia": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-excited-for-fall-2019-season": {
+      "status": "todo"
+    },
+    "new:datocms:post:d2-men-secure-top-seed-in-midwest-eastern-conference": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-women-earn-consecutive-midwest-playoff-berths": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-partner-with-iron-city-beer": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-welcomes-new-directors": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-announce-qualifying-7s-program": {
+      "status": "todo"
+    },
+    "new:datocms:post:mens-top-side-promoted-to-d1": {
+      "status": "todo"
+    },
+    "new:datocms:post:todd-fabec-appointed-womens-side-head-coach": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-elects-new-board-of-directors": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-bolster-coaching-staff-for-fall-2021": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-women-division-1-playoffs-2021": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-form-u23-academy": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-rugby-announces-2022-scholarship-winners": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-mens-u23-announces-fall-2022-fixture": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-men-announce-u23-academy-programming-for-spring-2023": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-rugby-announces-2023-scholarship-winners": {
+      "status": "todo"
+    },
+    "new:datocms:post:pittsburgh-forge-looking-to-hire-assistant-coaches": {
+      "status": "todo"
+    },
+    "new:datocms:post:pittsburgh-forge-rugby-announces-seth-erwin-as-mens-7s-rugby-coach": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-rugby-announces-2024-scholarship-winners": {
+      "status": "todo"
+    },
+    "new:datocms:post:pittsburgh-forge-womens-rugby-team-the-road-to-nationals-2024": {
+      "status": "todo"
+    },
+    "new:datocms:post:scholarship-recipients-for-2025-announced-by-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "new:datocms:post:seeking-coaches": {
+      "status": "todo"
+    },
+    "new:datocms:post:pittsburgh-forge-partners-with-blackwell-law-firm": {
+      "status": "todo"
+    },
+    "new:datocms:post:forge-2026-uk-tour": {
+      "status": "todo"
+    },
+    "new:pdp:steel-city-7s": {
+      "status": "todo"
+    },
+    "new:pdp:golf-outing-sponsorship": {
+      "status": "todo"
+    },
+    "new:pdp:dues": {
+      "status": "todo"
+    },
+    "new:pdp:ballpark": {
+      "status": "todo"
+    },
+    "new:pdp:survivor-pool": {
+      "status": "todo"
+    },
+    "new:pdp:bar-crawl": {
+      "status": "todo"
+    },
+    "new:pdp:pig-roast": {
+      "status": "todo"
+    },
+    "new:pdp:donate": {
+      "status": "todo"
+    },
+    "new:pdp:golf-outing": {
+      "status": "todo"
+    },
+    "new:static:/": {
+      "status": "todo"
+    },
+    "new:static:/cart": {
+      "status": "todo"
+    },
+    "new:static:/links": {
+      "status": "todo"
+    },
+    "new:static:/membership": {
+      "status": "todo"
+    },
+    "new:static:/sitemap": {
+      "status": "todo"
+    },
+    "new:static:/styleguide": {
+      "status": "todo"
+    },
+    "new:static:/checkout": {
+      "status": "todo"
+    },
+    "new:static:/checkout/success": {
+      "status": "todo"
+    },
+    "new:forgecms:/matches/all": {
+      "status": "todo"
+    },
+    "new:forgecms:/mens-schedule": {
+      "status": "todo"
+    },
+    "new:forgecms:/womens-schedule": {
+      "status": "todo"
+    },
+    "new:forgecms:/mens-standings": {
+      "status": "todo"
+    },
+    "new:forgecms:/womens-standings": {
+      "status": "todo"
+    },
+    "new:forgecms:/calendar": {
+      "status": "todo"
+    },
+    "wp:page:/style-guide": {
+      "status": "todo"
+    },
+    "wp:page:/womens-schedule/womens-schedules-archive": {
+      "status": "todo"
+    },
+    "wp:page:/inclusivity": {
+      "status": "todo"
+    },
+    "wp:page:/mens-schedule/mens-schedules-archive": {
+      "status": "todo"
+    },
+    "wp:page:/merchandise": {
+      "status": "todo"
+    },
+    "wp:page:/minutes": {
+      "status": "todo"
+    },
+    "wp:page:/womens-standings/womens-standing-archive": {
+      "status": "todo"
+    },
+    "wp:page:/mens-standings/mens-standings-archive": {
+      "status": "todo"
+    },
+    "wp:page:/player/womens-player": {
+      "status": "todo"
+    },
+    "wp:page:/player/mens-player": {
+      "status": "todo"
+    },
+    "wp:page:/player": {
+      "status": "todo"
+    },
+    "wp:page:/brendel-scholarship": {
+      "status": "todo"
+    },
+    "wp:page:/thank-you-donation": {
+      "status": "todo"
+    },
+    "wp:page:/covid-19-rtp-plan": {
+      "status": "todo"
+    },
+    "wp:page:/social-links": {
+      "status": "todo"
+    },
+    "wp:page:/thank-you-site-order": {
+      "status": "todo"
+    },
+    "wp:page:/womens-standings": {
+      "status": "todo"
+    },
+    "wp:page:/mens-standings": {
+      "status": "todo"
+    },
+    "wp:page:/womens-schedule": {
+      "status": "todo"
+    },
+    "wp:page:/mens-schedule": {
+      "status": "todo"
+    },
+    "wp:page:/thank-you-tournament-entry": {
+      "status": "todo"
+    },
+    "wp:page:/calendar": {
+      "status": "todo"
+    },
+    "wp:page:/checkout": {
+      "status": "todo"
+    },
+    "wp:page:/cart": {
+      "status": "todo"
+    },
+    "wp:page:/shop": {
+      "status": "todo"
+    },
+    "wp:page:/club-bylaws": {
+      "status": "todo"
+    },
+    "wp:page:/sponsors": {
+      "status": "todo"
+    },
+    "wp:page:/mens-club": {
+      "status": "todo"
+    },
+    "wp:page:/womens-club": {
+      "status": "todo"
+    },
+    "wp:page:/": {
+      "status": "todo"
+    },
+    "wp:page:/blog": {
+      "status": "todo"
+    },
+    "wp:page:/membership": {
+      "status": "todo"
+    },
+    "wp:page:/contact": {
+      "status": "todo"
+    },
+    "wp:page:/about": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2026/06/29/seeking-coaches": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2026/05/14/forge-rugby-announces-2026-scholarship-winners": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2026/03/13/forge-2026-uk-tour": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2026/03/13/pittsburgh-forge-partners-with-blackwell-law-firm": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2025/05/31/scholarship-recipients-for-2025-announced-by-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2024/07/31/pittsburgh-forge-womens-rugby-team-the-road-to-nationals-2024": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2024/07/13/forge-rugby-announces-2024-scholarship-winners": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2024/05/05/pittsburgh-forge-rugby-announces-seth-erwin-as-mens-7s-rugby-coach": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2023/07/03/pittsburgh-forge-looking-to-hire-assistant-coaches": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2023/05/14/forge-rugby-announces-2023-scholarship-winners": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2023/02/21/forge-men-announce-u23-academy-programming-for-spring-2023": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2022/09/30/forge-mens-u23-announces-fall-2022-fixture": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2022/08/05/forge-rugby-announces-2022-scholarship-winners": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2022/01/31/forge-men-form-u23-academy": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2021/11/02/forge-women-division-1-playoffs-2021": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2021/09/08/forge-men-bolster-coaching-staff-for-fall-2021": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2021/02/04/forge-elects-new-board-of-directors": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2021/01/04/todd-fabec-appointed-womens-side-head-coach": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2020/03/30/mens-top-side-promoted-to-d1": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2020/02/17/forge-men-announce-qualifying-7s-program": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2020/01/28/forge-welcomes-new-directors": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2020/01/27/forge-partner-with-iron-city-beer": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/10/23/forge-women-earn-consecutive-midwest-playoff-berths": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/10/22/d2-men-secure-top-seed-in-midwest-eastern-conference": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/09/06/forge-men-excited-for-fall-2019-season": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/09/06/forge-women-open-season-against-philadelphia": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/07/09/forge-men-announce-3rd-side-for-fall-2019": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/07/01/club-member-spotlight-derek-neubauer": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/06/18/club-member-spotlight-angela-smarto": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/06/11/forge-offers-summer-youth-rugby-at-bgcwpa-carnegie": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/06/10/club-member-spotlight-brittany-marnell": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/06/04/forge-offers-free-summer-fitness-touch": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/06/03/club-member-spotlight-jaime-filipek": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/04/10/d2-men-upset-scioto-valley-in-obetz": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/02/11/forge-men-play-up-to-d1-competition-this-spring": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2019/01/29/the-forge-elects-inaugural-board-of-directors": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/10/29/help-the-forge-go-to-playoffs": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/10/25/d3-men-drop-wild-game-in-cleveland": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/10/25/d2-men-keep-playoff-hopes-alive-at-home": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/10/15/men-split-results-on-forge-day": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/10/05/forge-women-defend-undefeated-record-with-win-over-buffalo": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/10/05/d2-men-rebound-against-league-best-buffalo": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/10/05/d3-exact-revenge-on-presque-isle": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/09/26/d3-men-continue-to-roll-against-greensburg": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/09/26/d2-men-drop-close-match-again": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/09/21/forge-women-stand-over-iron-maidens": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/09/18/d3-men-make-statement-against-south-pitt": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/09/18/forge-d2-drop-heartbreaker-in-cleveland": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/09/12/forge-women-earn-first-win-over-south-buffalo": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/09/11/forge-men-d2-win-big-in-south-buffalo": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/09/11/forge-d3-stumble-against-presque-isle": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/08/27/pittsburgh-forge-women-debut-in-columbus-with-a-strong-win": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/08/27/forge-men-dominate-in-week-one": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/08/24/forge-men-look-forward-to-first-league-season": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/08/21/forge-men-continue-preseason-work-at-wju": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/08/14/forge-men-impressive-in-first-match": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/08/06/forge-men-at-entertain-crowd-at-highmark-stadium": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/07/24/steel-city-7s-recap": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/06/14/mhk-supports-the-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/05/31/dugan-associates-supports-pittsburghs-rugby-club": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/05/30/pittsburgh-forge-partners-with-essmc": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/05/23/pittsburgh-celebrates-forge-day": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/05/08/forge-men-announce-allan-murray-as-assistant-d3-coach": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/05/04/forge-men-announce-steve-walsh-as-head-d2-coach": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/05/04/pittsburgh-forge-women-announce-jason-edsall-as-head-coach": {
+      "status": "todo"
+    },
+    "wp:post:/blog/2018/04/09/pittsburgh-forge": {
+      "status": "todo"
+    },
+    "wp:product:/product/steelers-raffle": {
+      "status": "todo"
+    },
+    "wp:product:/product/dues-spring": {
+      "status": "todo"
+    },
+    "wp:product:/product/dues-fall": {
+      "status": "todo"
+    },
+    "wp:product:/product/sc7s-mens-social-division": {
+      "status": "todo"
+    },
+    "wp:product:/product/sc7s-womens-additional-side": {
+      "status": "todo"
+    },
+    "wp:product:/product/sc7s-mens-additional-side": {
+      "status": "todo"
+    },
+    "wp:product:/product/sc7s-mens-super-social-division": {
+      "status": "todo"
+    },
+    "wp:product:/product/sc7s-mens-open-division": {
+      "status": "todo"
+    },
+    "wp:product:/product/sc7s-womens-open-division": {
+      "status": "todo"
+    },
+    "wp:product:/product/sc7s-womens-social-division": {
+      "status": "todo"
+    },
+    "wp:product:/product/gala-ticket-non-member": {
+      "status": "todo"
+    },
+    "wp:product:/product/gala-ticket-club-member": {
+      "status": "todo"
+    },
+    "wp:product:/product/gala-tickets": {
+      "status": "todo"
+    },
+    "wp:product:/product/tailgate": {
+      "status": "todo"
+    },
+    "wp:product:/product/5k": {
+      "status": "todo"
+    },
+    "wp:product:/product/5k-kid": {
+      "status": "todo"
+    },
+    "wp:product:/product/5k-virtual": {
+      "status": "todo"
+    },
+    "wp:product:/product/5k-in-person": {
+      "status": "todo"
+    },
+    "wp:product:/product/ballpark-ticket-16-under": {
+      "status": "todo"
+    },
+    "wp:product:/product/ballpark-day-adult": {
+      "status": "todo"
+    },
+    "wp:product:/product/ballpark-day": {
+      "status": "todo"
+    },
+    "wp:product:/product/schools-out-7s": {
+      "status": "todo"
+    },
+    "wp:product:/product/pr7s": {
+      "status": "todo"
+    },
+    "wp:product:/product/nfl-survivor-pool-insurance": {
+      "status": "todo"
+    },
+    "wp:product:/product/nfl-survivor-pool-ticket": {
+      "status": "todo"
+    },
+    "wp:product:/product/steel-city-7s-bar-crawl": {
+      "status": "todo"
+    },
+    "wp:product:/product/pass-the-hat": {
+      "status": "todo"
+    },
+    "wp:product:/product/dues": {
+      "status": "todo"
+    },
+    "wp:product:/product/alumni-match-jersey": {
+      "status": "todo"
+    },
+    "wp:product:/product/golf-outing-all-you-can-drink": {
+      "status": "todo"
+    },
+    "wp:product:/product/annual-forge-pig-roast": {
+      "status": "todo"
+    },
+    "wp:product:/product/golf-outing-registration": {
+      "status": "todo"
+    },
+    "wp:product:/product/mulligan": {
+      "status": "todo"
+    },
+    "wp:product:/product/steel-city-7s-registration": {
+      "status": "todo"
+    },
+    "wp:product:/product/march-madness-square-pool": {
+      "status": "todo"
+    },
+    "wp:product:/product/winter-flag-league-entry": {
+      "status": "todo"
+    },
+    "wp:product:/product/club-donation": {
+      "status": "todo"
+    },
+    "wp:product:/product/survivor-pool": {
+      "status": "todo"
+    },
+    "wp:product:/product/golf-outing-ticket": {
+      "status": "todo"
+    },
+    "wp:product:/product/golf-outing-sponsorship": {
+      "status": "todo"
+    },
+    "wp:product:/product/supporter-dues": {
+      "status": "todo"
+    },
+    "wp:product:/product/team-dues": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/11/15/forge-women-d1-vs-chicago-north-shore": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/11/08/forge-women-d1-vs-metropolis-valkyries-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/25/forge-men-d1-vs-detroit-tradesmen-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/25/buffalo-rugby-club-vs-forge-women-d2-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/18/indianapolis-impalas-d1-vs-forge-men-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/18/grand-rapids-growlers-vs-forge-women-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/18/cincinnati-kelts-vs-forge-men-d3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/11/forge-men-d3-vs-canton-rugby-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/11/forge-men-d1-vs-cincinnati-wolfhounds-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/11/forge-women-d1-vs-columbus-womens-rugby-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/11/akron-rfc-vs-forge-women-d2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/04/forge-men-d4-vs-columbus-coyotes": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/04/forge-men-d3-vs-greensburg-rfc-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/04/forge-women-d1-vs-detroit-rfc-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/10/04/forge-women-d2-vs-cleveland-iron-maidens": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/27/chicago-griffins-vs-forge-men-d1-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/27/marysville-vs-forge-men-d4": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/27/columbus-womens-rugby-vs-forge-women-d1-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/27/columbus-womens-rugby-vs-forge-women-d2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/20/detroit-tradesmen-vs-forge-men-d1-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/20/cleveland-rovers-vs-forge-men-d3-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/13/cincinnati-wolfhounds-vs-forge-men-d1-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/13/erie-rugby-vs-forge-men-d3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/13/forge-women-d1-vs-cincinnati-kelts-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/13/forge-women-d2-vs-dayton-area-rc": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/06/forge-men-d1-vs-indianapolis-impalas-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/06/forge-men-d4-vs-south-pittsburgh-hooligans-rfc-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/06/forge-men-d3-vs-cleveland-crusaders-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/09/06/forge-women-d1-vs-growlers": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/08/30/pittsburgh-harlequins-vs-forge-men-d4": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/08/30/detroit-rfc-vs-forge-women-d1-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/08/23/forge-men-d1-vs-chicago-griffins-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/08/23/forge-men-d4-vs-findlay-rfc": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2025/08/23/cincinnati-kelts-vs-forge-women-d1-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/11/02/forge-women-d1-vs-metropolis-valkyries": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/10/26/st-louis-bombers-vs-forge-men-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/10/19/forge-women-d1-vs-cincinnati-kelts-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/10/12/chicago-griffins-vs-forge-men-d1-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/10/12/canton-rugby-vs-forge-men-d3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/10/12/columbus-womens-rugby-vs-forge-women-d1-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/10/12/buffalo-rugby-club-vs-forge-women-d2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/10/05/forge-men-d4-vs-columbus-castaways": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/10/05/forge-men-d1-vs-detroit-tradesmen-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/10/05/forge-women-d1-vs-detroit-rfc-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/28/ypsilanti-rugby-club-vs-forge-men-d4": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/28/forge-men-d3-vs-presque-isle-rfc": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/28/south-buffalo-rugby-vs-forge-women-d2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/28/cincinnati-wolfhounds-vs-forge-men-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/28/cincinnati-kelts-vs-forge-women-d1-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/21/forge-men-d1-vs-chicago-griffins-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/21/forge-men-d3-vs-cleveland-rovers": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/21/forge-women-d2-vs-uticuse-rugby-club": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/14/detroit-tradesmen-vs-forge-men-d1-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/14/forge-women-d2-vs-north-buffalo": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/14/greensburg-rfc-vs-forge-men-d3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/14/forge-women-d1-vs-columbus-womens-rugby-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/07/forge-men-d1-vs-cincinnati-wolfhounds-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/07/findlay-rfc-vs-forge-men-d4": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/07/detroit-rfc-vs-forge-women-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/09/07/rochester-renegades-vs-forge-women": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/08/31/forge-men-d3-vs-south-pittsburgh-hooligans-rfc": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/08/31/forge-men-d4-vs-south-pittsburgh-hooligans-rfc": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/08/24/cleveland-crusaders-vs-forge-men-d3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2024/05/17/forge-women-d1-vs-utah-vipers": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/11/11/forge-women-d1-vs-columbus-womens-rugby": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/11/04/forge-women-d1-vs-chicago-lions": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/28/ucwrfc-vs-forge-women-gold": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/28/westside-outcasts-vs-forge-men-d4": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/28/cincinnati-kelts-vs-forge-women-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/21/chicago-griffins-vs-forge-men-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/21/forge-men-d4-vs-detroit-rfc-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/21/forge-women-d1-vs-buffalo-rugby-club": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/14/forge-men-d4-vs-columbus-castaways-d4": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/14/forge-men-d1-vs-detroit-tradesmen": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/14/columbus-womens-rugby-vs-forge-women-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/14/columbus-womens-rugby-vs-forge-women-gold": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/14/forge-men-d3-vs-canton-rugby": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/07/forge-men-d1-vs-cincinnati-wolfhounds": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/07/dayton-area-rc-vs-forge-men-d4": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/10/07/forge-women-d1-vs-detroit-rfc": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/30/cleveland-crusaders-vs-forge-men-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/30/presque-isle-rfc-vs-forge-men-d3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/23/cleveland-rovers-vs-forge-men-d4": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/23/cleveland-rovers-vs-forge-men-d3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/23/forge-women-d1-vs-cincinnati-kelts": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/16/forge-men-d1-vs-chicago-griffins": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/16/forge-men-d4-vs-detroit-rfc": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/16/buffalo-rugby-club-vs-forge-women-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/16/forge-men-d3-vs-greensburg-rfc": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/09/forge-women-gold-vs-columbus-womens-rugby": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/09/detroit-tradesmen-vs-forge-men-d1": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/09/south-pittsburgh-hooligans-rfc-vs-forge-men-d3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/09/pittsburgh-forge-women-d1-vs-columbus-womens-rugby-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/02/cincinnati-wolfhounds-vs-pittsburgh-forge-men-d1-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/02/detroit-rfc-vs-pittsburgh-forge-women-d12": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/09/02/columbus-in-vs-forge-men-d4": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/08/26/pittsburgh-forge-men-d3-vs-cleveland-crusaders-3": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/08/26/pittsburgh-forge-men-d1-vs-cleveland-crusaders-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2023/08/26/pittsburgh-forge-men-d4-vs-marysville": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/11/05/pittsburgh-forge-vs-chicago-lions-2": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/11/05/pittsburgh-forge-vs-detroit-tradesmen": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/29/chicago-rugby-club-vs-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/29/columbus-rugby-club-vs-pittsburgh-forge-d2-men": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/22/pittsburgh-forge-vs-cleveland-crusaders": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/22/pittsburgh-forge-vs-indianapolis-impalas": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/15/cincinnati-wolfhounds-vs-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/15/queen-city-rugby-club-vs-pittsburgh-forge-d2-men": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/15/buffalo-womens-rugby-club-vs-pittsburgh-forge-women": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/08/pittsburgh-forge-vs-chicago-lions": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/08/pittsburgh-forge-vs-columbus-womens-rugby": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/08/pittsburgh-forge-d2-men-vs-akron-rfc": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/10/08/pittsburgh-forge-vs-harrisburg-rugby-club": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/24/detroit-tradesmen-vs-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/24/detroit-rfc-vs-pittsburgh-forge-gold": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/24/indianapolis-impalas-vs-pittsburgh-forge-d2-men": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/24/detroit-rfc-vs-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/17/pittsburgh-forge-vs-chicago-griffins": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/17/pittsburgh-forge-d2-men-vs-columbus-rugby-club": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/17/pittsburgh-forge-gold-vs-kent-state-womens-rugby-club": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/10/cleveland-crusaders-d1-vs-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/10/akron-rfc-vs-pittsburgh-forge-d2-men": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/10/pittsburgh-forge-gold-vs-cincinnati-kelts-b": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/10/pittsburgh-forge-vs-cincinnati-kelts": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/03/pittsburgh-forge-vs-cincinnati-wolfhounds": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/09/03/pittsburgh-forge-d2-men-vs-queen-city-rugby-club": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/08/27/chicago-lions-vs-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "wp:event:/blog/event/2022/08/27/cleveland-iron-maidens-vs-pittsburgh-forge": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-womens-d2-fall-2025": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-premiership-d1-women-fall-2025": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-womens-d2-fall-2024": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-premiership-d1-women-fall-2024": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-premiership-d1-women-fall-2023": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-premiership-mens-d1-fall-2025": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-mens-d3-fall-2025": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-mens-d4-fall-2025": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-mens-d4-fall-2024": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-mens-d3-fall-2024": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-premiership-mens-d1-fall-2024": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-mens-d3-fall-2023": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-mens-d4-fall-2023": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-premiership-mens-d1-fall-2023": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-mens-d3-fall-2022": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-mens-d2-fall-2022": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-premiership-mens-d1-fall-2022": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/midwest-womens-d1-d2-hybrid-fall-2022": {
+      "status": "todo"
+    },
+    "wp:table:/blog/table/league-table": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/chicago-north-shore": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/columbus-coyotes": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/pittsburgh-harlequins": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/grand-rapids-growlers": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/metropolis-valkyries": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/st-louis-bombers": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/ypsilanti-rugby-club": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/south-buffalo-rugby": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/uticuse-rugby-club": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/north-buffalo-ninjas": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/rochester-renegades": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/utah-vipers": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/tbd": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/findlay-rfc": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/canton-rugby": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/westside-outcasts": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/columbus-castaways-d4": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/dayton-area-rugby-club-women": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/dayton-area-rugby-club": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/columbus-in-rfc": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/marysville-rfc": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/greensburg-rfc": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/cleveland-rovers-rfc-d4": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/cleveland-rovers-rfc-d3": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/south-pittsburgh-hooligans-rfc-d4": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/south-pittsburgh-hooligans-rfc-d3": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/erie-rfc": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/presque-isle-rfc": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/akron-rfc": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/columbus-rugby-club": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/queen-city-rugby-club": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/kent-state-womens-rugby-club": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/cleveland-iron-maidens": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/harrisburg-rugby-club/harrisburg-rugby-club-men-women": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/harrisburg-rugby-club/harrisburg-rugby-club-men": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/harrisburg-rugby-club": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/detroit-tradesmen-d3": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/detroit-tradesmen-d1": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/cincinnati-wolfhounds": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/chicago-lions/chicago-lions-women-d1": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/chicago-lions/chicago-lions-men-d1": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/detroit-rugby-football-club-men-d4": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/detroit-rugby-football-club-womens": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/cincinnati-kelts": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/cincinnati-kelts-womens-rugby": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/columbus-womens-rugby": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/chicago-rugby-club": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/pittsburgh-forge-d2-women": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/ucwrfc": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/pittsburgh-forge-women-gold": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/buffalo-womens-rugby-club": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/pittsburgh-forge-d4-men": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/pittsburgh-forge-d3-men": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/pittsburgh-forge-d1-women": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/pittsburgh-forge-d2-men": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/indianapolis-impalas-d1": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/indianapolis-impalas-d4": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/indianapolis-impalas-d2": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/pittsburgh-forge-d1-men": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/cleveland-crusaders-d3": {
+      "status": "todo"
+    },
+    "wp:team:/blog/team/cleveland-crusaders-d1": {
+      "status": "todo"
+    },
+    "wp:player:/blog/player/billy-gordon": {
+      "status": "todo"
+    },
+    "wp:player:/blog/player/kyle-franklin": {
+      "status": "todo"
+    },
+    "wp:player:/blog/player/andy-chapman": {
+      "status": "todo"
+    },
+    "wp:staff:/blog/staff/steve-walsh": {
+      "status": "todo"
+    },
+    "wp:venue:/blog/venue/phillip-murray-field": {
+      "status": "todo"
+    },
+    "wp:venue:/blog/venue/red-lobster-stadium": {
+      "status": "todo"
+    },
+    "wp:venue:/blog/venue/round-rock-multipurpose-complex": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-playoffs-men-d1": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-mens-d2": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-mens-d3": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-playoffs-men-d3": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-mens-d4": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-playoffs-men-d4": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-premiership-men": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-premiership-women": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-womens-d1-d2-hybrid": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-playoffs-women-d1": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-womens-d2": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/midwest-womens-d2-playoffs": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/nationals-womens-d1": {
+      "status": "todo"
+    },
+    "wp:league:/blog/league/womens-friendly": {
+      "status": "todo"
+    },
+    "wp:season:/blog/season/2022-fall": {
+      "status": "todo"
+    },
+    "wp:season:/blog/season/2023-fall": {
+      "status": "todo"
+    },
+    "wp:season:/blog/season/2024-fall": {
+      "status": "todo"
+    },
+    "wp:season:/blog/season/2024-spring": {
+      "status": "todo"
+    },
+    "wp:season:/blog/season/2025-fall": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/pittsburgh-forge-mens-rugby-schedule": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/pittsburgh-forge-womens-rugby-schedule": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d4-mens-schedule-fall-2025": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d3-mens-schedule-fall-2025": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d2-womens-schedule-fall-2025": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d1-mens-schedule-fall-2025": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/womens-schedule-fall-2025": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d4-mens-schedule-fall-2024": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d3-mens-schedule-fall-2024": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d2-womens-schedule-fall-2024": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/womens-schedule-fall-2024": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d1-mens-schedule-fall-2024": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d3-mens-schedule-fall-2023": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d4-mens-schedule-fall-2023": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/womens-schedule-fall-2023": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d1-mens-schedule-fall-2023": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d3-mens-schedule-fall-2022": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d2-mens-schedule-fall-2022": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/d1-mens-schedule-fall-2022": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/womens-schedule-fall-2022": {
+      "status": "todo"
+    },
+    "wp:calendar:/blog/calendar/calendar": {
+      "status": "todo"
+    },
+    "wp:other:/sitemap.html": {
+      "status": "todo"
+    },
+    "wp:other:/calendar/events": {
+      "status": "todo"
+    },
+    "wp:other:/calendar/tournaments": {
+      "status": "todo"
+    },
+    "wp:other:/calendar/mens-competition": {
+      "status": "todo"
+    },
+    "wp:other:/calendar/womens-competition": {
+      "status": "todo"
+    },
+    "wp:other:/calendar/alumni-events": {
+      "status": "todo"
+    },
+    "wp:other:/calendar/fundraising-events": {
+      "status": "todo"
+    },
+    "wp:other:/calendar/social-events": {
+      "status": "todo"
+    },
+    "wp:other:/calendar/training-schedule": {
+      "status": "todo"
+    },
+    "wp:other:/calendar/union-events": {
+      "status": "todo"
+    },
+    "wp:other:/calendar/youth-events": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/uncategorized": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/events/5k-walk-run": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/alumni": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/events/ballpark-day": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/donation": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/events": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/events/gala": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/events/golf-outing": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/events/golf-outing/golf-outing-sponsorship": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/membership": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/events/pig-roast": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/events/pr7s": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/events/schools-out-7s": {
+      "status": "todo"
+    },
+    "wp:other:/product-category/steel-city-7s": {
+      "status": "todo"
+    },
+    "wp:other:/product-tag/7s-rugby": {
+      "status": "todo"
+    },
+    "wp:other:/product-tag/pittsburgh": {
+      "status": "todo"
+    },
+    "wp:other:/product-tag/pittsburgh-brewing-company": {
+      "status": "todo"
+    },
+    "wp:other:/product-tag/pittsburgh-forge-rugby": {
+      "status": "todo"
+    },
+    "wp:other:/product-tag/pittsburgh-rugby": {
+      "status": "todo"
+    },
+    "wp:other:/product-tag/pittsburgh-sports": {
+      "status": "todo"
+    },
+    "wp:other:/product-tag/premier-rugby-sevens": {
+      "status": "todo"
+    },
+    "wp:other:/product-tag/rugby": {
+      "status": "todo"
+    },
+    "wp:other:/product-tag/sports": {
+      "status": "todo"
+    },
+    "wp:other:/product-tag/tournament": {
+      "status": "todo"
+    }
+  }
+}

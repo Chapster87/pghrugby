@@ -20,6 +20,7 @@
     "provision:stripe:webhook": "node ./scripts/provision-stripe-webhook.mjs",
     "provision:stripe:webhook:apply": "node ./scripts/provision-stripe-webhook.mjs --apply",
     "scan:woocommerce": "node ./scripts/scan-woocommerce.mjs",
+    "audit:snapshot": "node ./scripts/audit/generate-snapshot.mjs",
     "competition:extract": "node ./scripts/competition-migration/extract.mjs",
     "competition:reconcile": "node --env-file=.env.local scripts/competition-migration/reconcile.mjs",
     "competition:insert": "node --env-file=.env.local scripts/competition-migration/insert.mjs",
