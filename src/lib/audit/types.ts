@@ -44,3 +44,17 @@ export type StatusFile = {
   updatedAt: string
   rows: Record<string, StatusEntry>
 }
+
+/** A snapshot row merged with its status entry, as the workbench renders it. */
+export type WorkbenchRow = {
+  id: string
+  side: Side
+  source: Source
+  type: string
+  url: string
+  title: string
+  decision?: Decision
+  target?: string
+  status: Status
+  note?: string
+}
