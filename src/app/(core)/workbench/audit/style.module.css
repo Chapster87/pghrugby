@@ -169,6 +169,6 @@
 }
 
 .sourceNextjs {
-  background: var(--proto-surface-2);
-  color: var(--color-grey-800);
+  background: var(--color-black);
+  color: var(--color-white);
 }

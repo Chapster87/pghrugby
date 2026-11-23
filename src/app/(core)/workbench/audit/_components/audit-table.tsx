@@ -113,16 +113,18 @@ export default function AuditTable({
   generatedAtLabel,
 }: AuditTableProps) {
   const [rows, setRows] = useState<WorkbenchRow[]>(initialRows)
+  const [source, setSource] = useState<"all" | Source>("all")
   const [side, setSide] = useState<"all" | "new" | "wordpress">("all")
+  const [section, setSection] = useState<"all" | Section>("all")
   const [decision, setDecision] = useState<"all" | Decision>("all")
   const [status, setStatus] = useState<"all" | Status>("all")
-  const [section, setSection] = useState<"all" | Section>("all")
   const [query, setQuery] = useState("")
   const [hideCompleted, setHideCompleted] = useState(false)
 
   const filtered = useMemo(
     () =>
       rows.filter((row) => {
+        if (source !== "all" && row.source !== source) return false
         if (side !== "all" && row.side !== side) return false
         if (section !== "all" && sectionOf(row) !== section) return false
         if (decision !== "all" && row.decision !== decision) return false
@@ -141,7 +143,7 @@ export default function AuditTable({
         }
         return true
       }),
-    [rows, side, section, decision, status, query, hideCompleted]
+    [rows, source, side, section, decision, status, query, hideCompleted]
   )
 
   // Group mates: sort by the resolved URL, new-site row first.
@@ -228,6 +230,17 @@ export default function AuditTable({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
+        <select
+          className={s.select}
+          value={source}
+          onChange={(e) => setSource(e.target.value as typeof source)}
+        >
+          <option value="all">All sources</option>
+          <option value="datocms">datocms</option>
+          <option value="forgecms">forgecms</option>
+          <option value="nextjs">nextjs</option>
+          <option value="wordpress">wordpress</option>
+        </select>
         <select
           className={s.select}
           value={side}
