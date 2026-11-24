@@ -49,7 +49,7 @@
 
   .mainNav {
     @media (--viewport-md-up) {
-      padding-left: 230px;
+      padding-left: 260px;
     }
   }
 }
@@ -168,12 +168,13 @@
 }
 
 .mainNav {
-  transform: padding 0.3s ease-in-out;
+  transition: padding-left 0.3s ease-in-out;
+
   @media (--viewport-md-up) {
     padding-left: 180px;
 
     .stuck & {
-      padding-left: 120px;
+      padding-left: 130px;
     }
   }
 }
