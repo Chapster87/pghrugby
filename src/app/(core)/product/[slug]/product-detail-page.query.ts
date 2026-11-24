@@ -185,7 +185,7 @@ export const productDetailPageQuery = graphql(
 
 export const productDetailPageSlugs = graphql(`
   query ProductDetailPageSlugsQuery {
-    allProductDetailPages(filter: { _status: { eq: published } }) {
+    allProductDetailPages(filter: { _status: { eq: published } }, first: 100) {
       slug
     }
   }

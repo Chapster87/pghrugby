@@ -3,7 +3,11 @@ import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
 
 export const postSlugs = graphql(`
   query PostSlugsQuery {
-    allArticles(filter: { _status: { eq: published } }, orderBy: [_updatedAt_DESC]) {
+    allArticles(
+      filter: { _status: { eq: published } }
+      orderBy: [_updatedAt_DESC]
+      first: 100
+    ) {
       slug
     }
   }

@@ -53,7 +53,11 @@ const storefrontRoutes = [
 
 const allArticlesSlugs = graphql(`
   query SitemapArticlesQuery {
-    allArticles(filter: { _status: { eq: published } }, orderBy: [_updatedAt_DESC]) {
+    allArticles(
+      filter: { _status: { eq: published } }
+      orderBy: [_updatedAt_DESC]
+      first: 100
+    ) {
       slug
       title
     }
@@ -62,7 +66,11 @@ const allArticlesSlugs = graphql(`
 
 const allPagesSlugs = graphql(`
   query SitemapPagesQuery {
-    allPages(filter: { _status: { eq: published } }, orderBy: [_updatedAt_DESC]) {
+    allPages(
+      filter: { _status: { eq: published } }
+      orderBy: [_updatedAt_DESC]
+      first: 100
+    ) {
       slug
       title
     }

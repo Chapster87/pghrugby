@@ -3,7 +3,7 @@ import { blocksFragment, fileFieldFragment } from "@fragments/blocks"
 
 export const pageSlugs = graphql(`
   query PageSlugsQuery {
-    allPages(filter: { _status: { eq: published } }) {
+    allPages(filter: { _status: { eq: published } }, first: 100) {
       slug
     }
   }
