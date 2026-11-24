@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T14:33:36.555Z",
+  "updatedAt": "2026-11-24T15:18:09.833Z",
   "rows": {
     "new:datocms:page:womens-club": {
       "status": "todo"
@@ -21,7 +21,7 @@
       "status": "todo"
     },
     "new:datocms:page:club-bylaws": {
-      "status": "todo"
+      "status": "done"
     },
     "new:datocms:page:covid-19-rtp-plan": {
       "status": "todo"
@@ -255,31 +255,31 @@
       "status": "todo"
     },
     "new:pdp:steel-city-7s": {
-      "status": "todo"
+      "status": "done"
     },
     "new:pdp:golf-outing-sponsorship": {
-      "status": "todo"
+      "status": "done"
     },
     "new:pdp:dues": {
-      "status": "todo"
+      "status": "done"
     },
     "new:pdp:ballpark": {
-      "status": "todo"
+      "status": "done"
     },
     "new:pdp:survivor-pool": {
-      "status": "todo"
+      "status": "done"
     },
     "new:pdp:bar-crawl": {
-      "status": "todo"
+      "status": "done"
     },
     "new:pdp:pig-roast": {
-      "status": "todo"
+      "status": "done"
     },
     "new:pdp:donate": {
-      "status": "todo"
+      "status": "done"
     },
     "new:pdp:golf-outing": {
-      "status": "todo"
+      "status": "done"
     },
     "new:static:/": {
       "status": "todo"
@@ -321,7 +321,7 @@
       "status": "todo"
     },
     "new:forgecms:/calendar": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:page:/style-guide": {
       "status": "todo"
@@ -387,7 +387,8 @@
       "status": "todo"
     },
     "wp:page:/calendar": {
-      "status": "todo"
+      "status": "done",
+      "decision": "new-page"
     },
     "wp:page:/checkout": {
       "status": "todo"
@@ -399,7 +400,8 @@
       "status": "todo"
     },
     "wp:page:/club-bylaws": {
-      "status": "todo"
+      "status": "done",
+      "decision": "new-page"
     },
     "wp:page:/sponsors": {
       "status": "todo"
@@ -624,130 +626,154 @@
       "status": "todo"
     },
     "wp:product:/product/steelers-raffle": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/dues-spring": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/dues-fall": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/sc7s-mens-social-division": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/sc7s-womens-additional-side": {
-      "status": "todo"
+      "status": "done",
+      "decision": "redirect"
     },
     "wp:product:/product/sc7s-mens-additional-side": {
-      "status": "todo"
+      "status": "done",
+      "decision": "redirect"
     },
     "wp:product:/product/sc7s-mens-super-social-division": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/sc7s-mens-open-division": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/sc7s-womens-open-division": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/sc7s-womens-social-division": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/gala-ticket-non-member": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/gala-ticket-club-member": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/gala-tickets": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/tailgate": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/5k": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/5k-kid": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/5k-virtual": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/5k-in-person": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/ballpark-ticket-16-under": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/ballpark-day-adult": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/ballpark-day": {
-      "status": "todo"
+      "status": "done",
+      "decision": "redirect"
     },
     "wp:product:/product/schools-out-7s": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/pr7s": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/nfl-survivor-pool-insurance": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/nfl-survivor-pool-ticket": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/steel-city-7s-bar-crawl": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/pass-the-hat": {
-      "status": "todo"
+      "status": "done",
+      "decision": "redirect"
     },
     "wp:product:/product/dues": {
-      "status": "todo"
+      "status": "done",
+      "decision": "redirect"
     },
     "wp:product:/product/alumni-match-jersey": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/golf-outing-all-you-can-drink": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/annual-forge-pig-roast": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/golf-outing-registration": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/mulligan": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/steel-city-7s-registration": {
-      "status": "todo"
+      "status": "done",
+      "decision": "redirect"
     },
     "wp:product:/product/march-madness-square-pool": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/winter-flag-league-entry": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:product:/product/club-donation": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/survivor-pool": {
-      "status": "todo"
+      "status": "done",
+      "decision": "redirect"
     },
     "wp:product:/product/golf-outing-ticket": {
-      "status": "todo"
+      "status": "done",
+      "decision": "redirect"
     },
     "wp:product:/product/golf-outing-sponsorship": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:product:/product/supporter-dues": {
-      "status": "todo"
+      "status": "done",
+      "decision": "redirect"
     },
     "wp:product:/product/team-dues": {
-      "status": "todo"
+      "status": "done",
+      "decision": "redirect"
     },
     "wp:event:/blog/event/2025/11/15/forge-women-d1-vs-chicago-north-shore": {
       "status": "todo"
