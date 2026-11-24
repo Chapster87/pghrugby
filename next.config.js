@@ -1,4 +1,5 @@
 const checkEnvVariables = require("./check-env-variables")
+const getRedirects = require("./redirects").getRedirects
 
 checkEnvVariables()
 
@@ -67,26 +68,11 @@ const nextConfig = {
       })),
     ]
   },
-  // Permanent (308): legacy in-app product URLs -> clean URLs. Every other
-  // /product/* falls through to the storefront route and 404s (no page).
+  // Permanent (308): legacy in-app product URLs -> clean URLs, legacy
+  // WooCommerce product URLs -> their PDP, plus the two legacy aliases. The
+  // table lives in `redirects.js`.
   async redirects() {
-    return [
-      ...pdpSlugs.map((slug) => ({
-        source: `/product/${slug}`,
-        destination: `/${slug}`,
-        permanent: true,
-      })),
-      {
-        source: "/social-links",
-        destination: "/links",
-        permanent: true,
-      },
-      {
-        source: "/style-guide",
-        destination: "/styleguide",
-        permanent: true,
-      },
-    ]
+    return getRedirects(storefrontCatalog)
   },
   // Keep a non-production deploy out of search results. See `siteNoindex` above
   // for why this lives here rather than in `netlify.toml`.

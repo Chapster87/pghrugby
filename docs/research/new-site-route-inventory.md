@@ -221,7 +221,8 @@ Source: `src/lib/forgecms/competition.query.ts` (`MatchesQuery`) and the
 
 ## Redirects and rewrites
 
-Source: `next.config.js`.
+Source: `next.config.js` (rewrites) and `redirects.js` (redirect table, imported
+by `next.config.js`).
 
 ### Rewrites (PDP clean URLs → internal route)
 
@@ -236,13 +237,17 @@ route and win over it.
 
 ### Redirects (308 permanent)
 
-| Source                 | Destination   | Reason                              |
-| ---------------------- | ------------- | ----------------------------------- |
-| `/product/{slug}` (×9) | `/{slug}`     | Legacy internal PDP URL → clean URL |
-| `/social-links`        | `/links`      | Legacy alias                        |
-| `/style-guide`         | `/styleguide` | Legacy alias                        |
+| Source                    | Destination   | Reason                                    |
+| ------------------------- | ------------- | ----------------------------------------- |
+| `/product/{slug}` (×9)    | `/{slug}`     | Legacy internal PDP URL → clean URL       |
+| `/product/{wcSlug}` (×17) | `/{pdp}`      | Retired WooCommerce product URL → its PDP |
+| `/social-links`           | `/links`      | Legacy alias                              |
+| `/style-guide`            | `/styleguide` | Legacy alias                              |
 
-Total: 11 redirects (9 PDP + 2 aliases).
+Total: 28 redirects (9 PDP + 17 retired WooCommerce + 2 aliases). The
+WooCommerce rows are a static, hand-maintained map in `redirects.js`
+(`LEGACY_PRODUCT_REDIRECTS`) — a migration artifact, deliberately not derived
+from the catalog or the audit snapshot.
 
 ## Dynamic routes and how they expand
 

@@ -16,8 +16,14 @@
  *   node scripts/audit/generate-snapshot.mjs
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
+import { createRequire } from "node:module"
 import { dirname, resolve } from "node:path"
 import { decode } from "html-entities"
+
+const require = createRequire(import.meta.url)
+// The redirect table `next.config.js` serves — imported rather than restated so
+// the snapshot can't drift from the redirects actually in effect.
+const { getRedirects } = require("../../redirects.js")
 
 const ROOT = resolve(import.meta.dirname, "../..")
 const SNAPSHOT_PATH = resolve(
@@ -505,15 +511,7 @@ async function main() {
       "utf8"
     )
   )
-  const redirects = [
-    ...catalog.flows.map((flow) => ({
-      source: `/product/${flow.slug}`,
-      destination: `/${flow.slug}`,
-      permanent: true,
-    })),
-    { source: "/social-links", destination: "/links", permanent: true },
-    { source: "/style-guide", destination: "/styleguide", permanent: true },
-  ]
+  const redirects = getRedirects(catalog)
 
   const snapshot = {
     generatedAt: new Date().toISOString(),
