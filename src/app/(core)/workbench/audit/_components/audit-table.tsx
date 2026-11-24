@@ -1,6 +1,7 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import clsx from "clsx"
 
 import type { Decision, Source, Status, WorkbenchRow } from "@/lib/audit/types"
@@ -15,6 +16,16 @@ const DECISIONS: Decision[] = [
   "404",
   "undecided",
 ]
+const SOURCES: Source[] = ["datocms", "forgecms", "nextjs", "wordpress"]
+const SIDES: ("new" | "wordpress")[] = ["new", "wordpress"]
+
+/** A URL param, validated against the values the filter accepts. */
+const paramOr = <T extends string>(
+  value: string | null,
+  allowed: readonly T[],
+  fallback: T
+): T =>
+  value !== null && allowed.includes(value as T) ? (value as T) : fallback
 
 /** The URL a row resolves to: a WordPress redirect target, or its own URL. */
 const resolvedUrl = (row: WorkbenchRow) =>
@@ -112,14 +123,54 @@ export default function AuditTable({
   rows: initialRows,
   generatedAtLabel,
 }: AuditTableProps) {
+  // Filters live in the query string, so a refresh (or a shared link) keeps the
+  // view you were looking at. `useSearchParams` is SSR-safe; writes go through
+  // `history.replaceState` below so typing in the search box doesn't trigger a
+  // server navigation on every keystroke.
+  const searchParams = useSearchParams()
+
   const [rows, setRows] = useState<WorkbenchRow[]>(initialRows)
-  const [source, setSource] = useState<"all" | Source>("all")
-  const [side, setSide] = useState<"all" | "new" | "wordpress">("all")
-  const [section, setSection] = useState<"all" | Section>("all")
-  const [decision, setDecision] = useState<"all" | Decision>("all")
-  const [status, setStatus] = useState<"all" | Status>("all")
-  const [query, setQuery] = useState("")
-  const [hideCompleted, setHideCompleted] = useState(false)
+  const [source, setSource] = useState<"all" | Source>(() =>
+    paramOr(searchParams.get("source"), ["all", ...SOURCES], "all")
+  )
+  const [side, setSide] = useState<"all" | "new" | "wordpress">(() =>
+    paramOr(searchParams.get("side"), ["all", ...SIDES], "all")
+  )
+  const [section, setSection] = useState<"all" | Section>(() =>
+    paramOr(
+      searchParams.get("section"),
+      ["all", "page", "post", "product", "competition", "calendar", "other"],
+      "all"
+    )
+  )
+  const [decision, setDecision] = useState<"all" | Decision>(() =>
+    paramOr(searchParams.get("decision"), ["all", ...DECISIONS], "all")
+  )
+  const [status, setStatus] = useState<"all" | Status>(() =>
+    paramOr(searchParams.get("status"), ["all", ...STATUSES], "all")
+  )
+  const [query, setQuery] = useState(() => searchParams.get("q") ?? "")
+  const [hideCompleted, setHideCompleted] = useState(
+    () => searchParams.get("hide") === "1"
+  )
+
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (source !== "all") params.set("source", source)
+    if (side !== "all") params.set("side", side)
+    if (section !== "all") params.set("section", section)
+    if (decision !== "all") params.set("decision", decision)
+    if (status !== "all") params.set("status", status)
+    if (query) params.set("q", query)
+    if (hideCompleted) params.set("hide", "1")
+
+    const search = params.toString()
+    window.history.replaceState(
+      null,
+      "",
+      search ? `?${search}` : window.location.pathname
+    )
+  }, [source, side, section, decision, status, query, hideCompleted])
 
   const filtered = useMemo(
     () =>
@@ -333,7 +384,19 @@ export default function AuditTable({
                   </td>
                   <td>{row.side}</td>
                   <td>{sectionOf(row)}</td>
-                  <td className={s.url}>{row.url}</td>
+                  <td className={s.url}>
+                    {/* Relative on purpose: the point is to watch this site's
+                        redirects and 404s, so a WordPress row's legacy path is
+                        opened against the current origin too. */}
+                    <a
+                      className={s.urlLink}
+                      href={row.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {row.url}
+                    </a>
+                  </td>
                   <td>{row.title}</td>
                   <td>
                     {row.side === "wordpress" ? (

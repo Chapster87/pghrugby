@@ -139,6 +139,16 @@
   word-break: break-all;
 }
 
+.urlLink {
+  color: var(--color-blue);
+  text-decoration: none;
+}
+
+.urlLink:hover,
+.urlLink:focus-visible {
+  text-decoration: underline;
+}
+
 .muted {
   color: var(--color-grey-500);
 }
