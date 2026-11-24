@@ -49,7 +49,7 @@
 
   .mainNav {
     @media (--viewport-md-up) {
-      padding-left: 230px;
+      padding-left: 260px;
     }
   }
 }
@@ -67,25 +67,43 @@
 }
 
 .navLink {
+  position: relative;
   display: flex;
   font-size: 18px;
   font-weight: 600;
-  padding: 20px 12px;
+  padding: 16px 0;
   color: var(--color-white);
   text-decoration: none;
+  overflow: hidden;
 
   @media (prefers-color-scheme: light) {
     color: var(--color-black);
   }
 }
 
+.navLink::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: 0;
+  height: 3px;
+  background: var(--color-gold);
+  animation: line-hover-out 0.3s forwards;
+}
+
+.navLink:hover::after {
+  animation: line-hover 0.3s forwards;
+}
+
 /* The Cart control: the nav-link treatment as a button (it opens the flyout in
    place rather than navigating). */
 .cartButton {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 20px 12px;
+  padding: 16px 0;
   border: none;
   background: none;
   color: var(--color-white);
@@ -93,18 +111,48 @@
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
+  overflow: hidden;
 
   @media (prefers-color-scheme: light) {
     color: var(--color-black);
   }
 
-  &:hover {
-    color: var(--color-gold);
-  }
-
   &:focus-visible {
     outline: 2px solid var(--color-gold);
     outline-offset: -2px;
+  }
+}
+
+.cartButton::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: 0;
+  height: 3px;
+  background: var(--color-gold);
+  animation: line-hover-out 0.3s forwards;
+}
+
+.cartButton:hover::after {
+  animation: line-hover 0.3s forwards;
+}
+
+@keyframes line-hover {
+  0% {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes line-hover-out {
+  0% {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
   }
 }
 
@@ -120,12 +168,13 @@
 }
 
 .mainNav {
-  transform: padding 0.3s ease-in-out;
+  transition: padding-left 0.3s ease-in-out;
+
   @media (--viewport-md-up) {
     padding-left: 180px;
 
     .stuck & {
-      padding-left: 120px;
+      padding-left: 130px;
     }
   }
 }
@@ -133,7 +182,7 @@
 .accountSection {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 40px;
 }
 
 .accountLinkHiddenLg {

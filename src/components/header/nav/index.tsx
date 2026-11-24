@@ -44,25 +44,39 @@ export function MainNav({ formattedNavData }: NavProps) {
                   </span>
                 </NavigationMenu.Trigger>
                 <NavigationMenu.Content className={s.navContent}>
-                  <ul className={s.subNavList}>
-                    {item.submenu.map((sub, subIdx) => {
-                      const subKey = `${sub.label}-${subIdx}`
-                      return (
-                        <li key={subKey} className={s.navSubItem}>
-                          <Link
-                            href={cleanUrl(sub.route || sub.url)}
-                            className={s.navSubLink}
-                          >
-                            {sub.label}
-                          </Link>
-                        </li>
-                      )
-                    })}
-                  </ul>
+                  <div className={s.dropdown}>
+                    {/* Group heading placeholder — not derivable from CMS yet.
+                    <div className={s.groupHeading}>{item.label}</div>
+                    */}
+                    <ul className={s.subNavList}>
+                      {item.submenu.map((sub, subIdx) => {
+                        const subKey = `${sub.label}-${subIdx}`
+                        return (
+                          <li key={subKey} className={s.navSubItem}>
+                            <Link
+                              href={cleanUrl(sub.route || sub.url)}
+                              className={s.navSubLink}
+                            >
+                              {sub.label}
+                            </Link>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                    {/* Featured content placeholder — not derivable from CMS yet.
+                    <div className={s.featured}>
+                      <div className={s.featuredTitle}>Featured</div>
+                      <p className={s.featuredText}>…</p>
+                      <Link href="/membership" className={s.featuredLink}>
+                        Join the club →
+                      </Link>
+                    </div>
+                    */}
+                  </div>
                 </NavigationMenu.Content>
               </NavigationMenu.Item>
             ) : (
-              <NavigationMenu.Item key={itemKey}>
+              <NavigationMenu.Item key={itemKey} className={s.navItem}>
                 <NavigationMenu.Link asChild>
                   <Link
                     href={cleanUrl(item.route || item.url)}
