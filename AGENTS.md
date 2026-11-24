@@ -61,7 +61,7 @@ Two operational consequences:
   blank line between third-party and local groups; CSS imports always last.
 - **Styling**: CSS Modules (`style.module.css`, aliased `s`) for component
   styles; CSS variables for colors/fonts (see `src/styles/variables.css`);
-  px units for layout, rem for font sizes; 8px grid spacing; global styles in
+  px units for layout and font sizes; 8px grid spacing; global styles in
   `src/styles` used sparingly; nested media queries for mobile-first, using
   the custom-media vars in `src/styles/custom-media.css`.
 - **Types**: global types in `src/types`.

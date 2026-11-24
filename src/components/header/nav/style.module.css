@@ -1,9 +1,9 @@
 .navList {
   display: flex;
-  gap: 16px;
+  gap: 40px;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 8px 0;
 }
 
 .navItem {
@@ -11,42 +11,78 @@
 }
 
 .navLink {
+  position: relative;
   display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 0;
   font-size: 18px;
   font-weight: 600;
-  padding: 20px 12px;
   color: var(--color-white);
   text-decoration: none;
-  transition: color 0.3s ease;
+  overflow: hidden;
 
   @media (prefers-color-scheme: light) {
     color: var(--color-black);
   }
+}
 
-  &:hover {
-    color: var(--color-gold);
+/* The live site's hover: a 3px gold line that slides in from the left and
+   out to the right. */
+.navLink::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: 0;
+  height: 3px;
+  background: var(--color-gold);
+  animation: line-hover-out 0.3s forwards;
+}
+
+.navLink:hover::after,
+.navLink[data-state="open"]::after {
+  animation: line-hover 0.3s forwards;
+}
+
+@keyframes line-hover {
+  0% {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes line-hover-out {
+  0% {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
   }
 }
 
 .subNavList {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   list-style: none;
   margin: 0;
-  padding: 16px;
+  padding: 20px;
 }
 
 .navSubLink {
   display: flex;
-  font-size: 18px;
-  color: var(--color-white);
+  font-size: 15px;
+  color: var(--color-grey-100);
   width: 100%;
+  padding: 4px 0;
   text-decoration: none;
   transition: color 0.3s ease;
 
   @media (prefers-color-scheme: light) {
-    color: var(--color-black);
+    color: var(--color-grey-900);
   }
 
   &:hover {
@@ -55,31 +91,94 @@
 }
 
 .navContent {
-  background-color: black;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  margin-top: 8px;
-  min-width: 180px;
   position: absolute;
   left: 0;
   top: 100%;
+  margin-top: 12px;
+  min-width: 260px;
+  background: var(--color-grey-900);
+  border: 1px solid var(--color-grey-700);
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  z-index: 50;
+}
+
+.dropdown {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* Placeholder: group heading above the links. Not derivable from CMS yet. */
+.groupHeading {
+  padding: 20px 20px 0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
+}
+
+/* Placeholder: featured card beside the links. Not derivable from CMS yet. */
+.featured {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--color-grey-800);
+  border: 1px solid var(--color-grey-700);
+}
+
+.featuredTitle {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
+}
+
+.featuredText {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-grey-300);
+  line-height: 1.4;
+}
+
+.featuredLink {
+  margin-top: auto;
+  color: var(--color-gold);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.featuredLink:hover {
+  text-decoration: underline;
 }
 
 .mobileNavButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--color-white);
   padding: 8px;
   border-radius: 4px;
   outline: none;
+  cursor: pointer;
 
   @media (prefers-color-scheme: light) {
     color: var(--color-black);
+  }
+
+  &:hover {
+    color: var(--color-gold);
   }
 }
 
 .mobileNavOverlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   z-index: 100;
 }
 
@@ -91,9 +190,9 @@
   height: 100%;
   background-color: var(--color-grey-900);
   color: var(--color-white);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 16px;
+  padding: 16px 24px 32px;
   outline: none;
+  overflow-y: auto;
   z-index: 101;
 
   @media (prefers-color-scheme: light) {
@@ -116,10 +215,14 @@
 .mobileNavList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.mobileNavList > li {
+  border-bottom: 1px solid var(--color-grey-700);
 }
 
 .mobileNavItem {
@@ -129,32 +232,77 @@
 .mobileNavSummary {
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-white);
+  text-align: left;
   cursor: pointer;
   user-select: none;
+
+  @media (prefers-color-scheme: light) {
+    color: var(--color-black);
+  }
+
+  &:hover {
+    color: var(--color-gold);
+  }
+}
+
+.mobileNavSummaryIcon {
+  transition: transform 0.2s ease;
+  width: 20px;
+  height: 20px;
+  color: var(--color-gold);
+}
+
+.mobileNavSummaryIconRotate {
+  transform: rotate(180deg);
 }
 
 .mobileNavSubList {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   list-style: none;
-  margin: 0;
-  padding: 0;
-  padding-left: 16px;
-  margin-top: 8px;
+  margin: 0 0 16px;
+  padding: 0 0 0 16px;
 }
 
 .mobileNavLink {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: 8px 12px;
-  border-radius: 4px;
+  padding: 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-white);
   text-decoration: none;
+
+  @media (prefers-color-scheme: light) {
+    color: var(--color-black);
+  }
+
+  &:hover {
+    color: var(--color-gold);
+  }
 }
 
-.mobileNavLink:hover {
-  background-color: #f3f4f6;
+.mobileNavSubList .mobileNavLink {
+  padding: 8px 0;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--color-grey-100);
+
+  @media (prefers-color-scheme: light) {
+    color: var(--color-grey-900);
+  }
+
+  &:hover {
+    color: var(--color-gold);
+  }
 }
 
 .mainNavRoot {
@@ -176,7 +324,7 @@
 
 .navTriggerIcon {
   transition: transform 0.2s ease; /* transition-transform duration-200 */
-  margin-left: 4px; /* ml-1 */
+  margin-left: 2px; /* ml-1 */
   width: 16px; /* w-4 */
   height: 16px; /* h-4 */
 }
