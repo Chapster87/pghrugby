@@ -1,9 +1,4 @@
-import { CartProvider } from "@/components/cart"
-import BreakpointIndicator from "@/components/breakpoint-indicator"
-import Footer from "@/components/footer"
-import Header from "@/components/header"
-
-import { Providers } from "../providers"
+import SiteChrome from "@/layouts/site-chrome"
 
 // ISR floor for the group: the ceiling on how stale CDA-backed content (chrome,
 // standings, schedule) is served. An on-demand purge from the publish signal
@@ -15,28 +10,14 @@ export const revalidate = 3600
 
 /**
  * Layout for the `(core)` route group — the main public site. No <html>/<body>
- * here: the root layout owns the document shell. This wrapper keeps the site's
- * providers, breakpoint indicator, and header/footer chrome under it.
- *
- * `CartProvider` wraps the chrome as well as the page: the header's Cart trigger
- * and every PDP act on one browser-held cart, and the provider renders the
- * minicart flyout itself so it is mounted once for the whole group.
+ * here: the root layout owns the document shell. The chrome (providers, cart,
+ * header/footer) lives in `SiteChrome` so the root `not-found` can reuse it for
+ * unmatched URLs.
  */
 export default function CoreLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <Providers>
-      <CartProvider>
-        <BreakpointIndicator />
-        <div className="siteMain">
-          <Header />
-          {children}
-          <Footer />
-        </div>
-      </CartProvider>
-    </Providers>
-  )
+  return <SiteChrome>{children}</SiteChrome>
 }
