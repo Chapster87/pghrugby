@@ -1,24 +1,23 @@
-import { ArrowUpRight } from "lucide-react"
 import { Metadata } from "next"
-import Link from "next/link"
-import s from "./not-found.module.css"
+
+import NotFoundContent from "@/components/not-found"
+import SiteChrome from "@/layouts/site-chrome"
 
 export const metadata: Metadata = {
   title: "404",
   description: "Something went wrong",
 }
 
+/**
+ * Root 404 — rendered for URLs that match no route at all. No route-group
+ * layout wraps it, so it composes `SiteChrome` itself to keep the header and
+ * footer. A `notFound()` call inside a group renders that group's boundary
+ * instead (see `(core)/not-found.tsx`).
+ */
 export default function NotFound() {
   return (
-    <div className={s.wrapper}>
-      <h1 className={s.heading}>Page not found</h1>
-      <p className={s.description}>
-        The page you tried to access does not exist.
-      </p>
-      <Link className={s.link} href="/">
-        <span className={s.linkText}>Go to frontpage</span>
-        <ArrowUpRight className={s.arrowIcon} aria-hidden />
-      </Link>
-    </div>
+    <SiteChrome>
+      <NotFoundContent />
+    </SiteChrome>
   )
 }
