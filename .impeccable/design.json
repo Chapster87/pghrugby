@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-24T00:00:00.000Z",
+  "title": "Design System: Pittsburgh Forge Rugby Club",
+  "extensions": {
+    "colorMeta": {
+      "stadium-gold": {
+        "role": "primary",
+        "displayName": "Stadium Gold",
+        "canonical": "#ffb81c",
+        "tonalRamp": ["#3d2a00", "#6b4a00", "#9a6b00", "#c98c00", "#f0a800", "#ffb81c", "#ffd75e", "#fff0c2"]
+      },
+      "stadium-gold-light": {
+        "role": "primary",
+        "displayName": "Stadium Gold Light",
+        "canonical": "#ffd75e",
+        "tonalRamp": ["#4a3600", "#7a5900", "#ab7d00", "#d9a000", "#ffc22e", "#ffd75e", "#ffe49b", "#fff4d6"]
+      },
+      "anvil-black": {
+        "role": "secondary",
+        "displayName": "Anvil Black",
+        "canonical": "#222222",
+        "tonalRamp": ["#000000", "#111111", "#222222", "#3a3a3a", "#555555", "#757575", "#9a9a9a", "#c4c4c4"]
+      },
+      "signal-red": {
+        "role": "tertiary",
+        "displayName": "Signal Red",
+        "canonical": "#c60c30",
+        "tonalRamp": ["#3d0009", "#6b0016", "#99001f", "#c60c30", "#e0334f", "#f06a80", "#f7a3b0", "#fdd7dd"]
+      },
+      "forge-grey-800": {
+        "role": "secondary",
+        "displayName": "Forge Grey 800",
+        "canonical": "#343a40",
+        "tonalRamp": ["#0d0f11", "#1a1e22", "#272c31", "#343a40", "#4b5563", "#6c757d", "#adb5bd", "#dee2e6"]
+      },
+      "chalk-white": {
+        "role": "neutral",
+        "displayName": "Chalk White",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#1a1a1a", "#3d3d3d", "#666666", "#8f8f8f", "#b8b8b8", "#d9d9d9", "#f0f0f0", "#ffffff"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page and hero headlines." },
+      "headline": { "displayName": "Headline", "purpose": "Section headings." },
+      "title": { "displayName": "Title", "purpose": "Card and subsection titles." },
+      "body": { "displayName": "Body", "purpose": "Prose, forms, and UI copy." },
+      "label": { "displayName": "Label", "purpose": "Group headings and eyebrow labels." }
+    },
+    "shadows": [
+      { "name": "floating-menu", "value": "0 12px 32px rgba(0, 0, 0, 0.45)", "purpose": "Navigation dropdowns and overlays." },
+      { "name": "badge-rest", "value": "0 2px 8px rgba(0, 0, 0, 0.08)", "purpose": "Inline badges." }
+    ],
+    "motion": [
+      { "name": "transition-fast", "value": "0.2s ease", "purpose": "Button background and field border transitions." },
+      { "name": "transition-base", "value": "0.3s ease", "purpose": "Link color and nav underline transitions." },
+      { "name": "nav-underline", "value": "0.3s forwards", "purpose": "Gold underline sliding in from the left on nav hover." }
+    ],
+    "breakpoints": [
+      { "name": "xxs", "value": "320px" },
+      { "name": "xs", "value": "480px" },
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid gold action button for the primary task on a surface.",
+      "html": "<button class=\"ds-btn-primary\">Buy Dues</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-noto-sans, \"Noto Sans\", Helvetica, Arial, sans-serif); font-weight: 600; font-size: 1rem; padding: 10px 16px; border: 0; border-radius: 4px; background-color: var(--color-gold, #ffb81c); color: var(--color-black, #000); cursor: pointer; text-decoration: none; transition: background-color 0.2s ease; } .ds-btn-primary:hover { background-color: var(--color-gold-400, #ffd75e); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-gold, #ffb81c); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Dark grey button for secondary actions beside a primary.",
+      "html": "<button class=\"ds-btn-secondary\">View Schedule</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-noto-sans, \"Noto Sans\", Helvetica, Arial, sans-serif); font-weight: 600; font-size: 1rem; padding: 10px 16px; border: 0; border-radius: 4px; background-color: var(--color-grey-800, #343a40); color: var(--color-white, #fff); cursor: pointer; text-decoration: none; transition: background-color 0.2s ease; } .ds-btn-secondary:hover { background-color: #4b5563; } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-gold, #ffb81c); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "field-control",
+      "description": "Labelled text input with a gold focus ring and red invalid state.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Email</span><input class=\"ds-field-control\" type=\"email\" placeholder=\"you@example.com\" /></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 8px; font-family: var(--font-noto-sans, \"Noto Sans\", Helvetica, Arial, sans-serif); } .ds-field-label { font-size: 1rem; font-weight: 600; color: var(--color-grey-900, #222); } .ds-field-control { width: 100%; max-width: 420px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; background-color: var(--color-white, #fff); color: var(--color-grey-900, #222); font-size: 1rem; line-height: 1.5; transition: border-color 0.2s; } .ds-field-control::placeholder { color: var(--color-grey-600, #6c757d); } .ds-field-control:focus { outline: 1px solid var(--color-gold, #ffb81c); border-color: var(--color-gold, #ffb81c); } .ds-field-control[aria-invalid=\"true\"] { border-color: var(--color-red, #c60c30); }"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Inline status or label chip with a soft resting shadow.",
+      "html": "<span class=\"ds-badge\">New</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 12px; font-family: var(--font-noto-sans, \"Noto Sans\", Helvetica, Arial, sans-serif); font-size: 1rem; font-weight: 500; background: var(--color-white, #fff); color: var(--color-grey-900, #222); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Header link whose gold underline slides in from the left on hover.",
+      "html": "<a class=\"ds-nav-link\" href=\"#\">Matches</a>",
+      "css": ".ds-nav-link { position: relative; display: flex; font-family: var(--font-noto-sans, \"Noto Sans\", Helvetica, Arial, sans-serif); font-size: 18px; font-weight: 600; padding: 16px 0; color: var(--color-white, #fff); text-decoration: none; overflow: hidden; } .ds-nav-link::after { content: \"\"; position: absolute; left: -1px; right: -1px; bottom: 0; height: 3px; background: var(--color-gold, #ffb81c); transform: translateX(-100%); transition: transform 0.3s ease; } .ds-nav-link:hover::after, .ds-nav-link:focus-visible::after { transform: translateX(0); }"
+    },
+    {
+      "name": "Dropdown Panel",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Floating navigation panel with the system's one heavy shadow.",
+      "html": "<div class=\"ds-nav-panel\"><a class=\"ds-nav-panel-link\" href=\"#\">Schedule</a><a class=\"ds-nav-panel-link\" href=\"#\">Standings</a></div>",
+      "css": ".ds-nav-panel { min-width: 260px; padding: 20px; background: var(--color-grey-900, #222); border: 1px solid var(--color-grey-700, #495057); border-radius: 8px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45); display: flex; flex-direction: column; gap: 6px; } .ds-nav-panel-link { font-family: var(--font-noto-sans, \"Noto Sans\", Helvetica, Arial, sans-serif); font-size: 15px; color: var(--color-grey-100, #f8f9fa); text-decoration: none; padding: 4px 0; transition: color 0.3s ease; } .ds-nav-panel-link:hover { color: var(--color-gold, #ffb81c); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Forged Steel",
+    "overview": "The system is built on Pittsburgh's black-and-gold sports grammar: a near-black field, a single hot gold that behaves like stadium light, and condensed Oswald headlines that read like a matchday program. It is not a generic rugby template and not a polished SaaS product — it is a club that has been around, competes, and fields both a women's and a men's side. The ambition is split by surface. Marketing surfaces lean gritty and proud: bold type, strong black/gold blocks, real photography, a gold rule that slides under a nav link like a scoreboard light. Data and commerce surfaces lean sharp and modern: tight radii, high contrast, legible forms, and no decoration competing with the task. Depth is deliberately flat. The page is a printed program, not a stack of floating cards; shadows appear only where something genuinely floats above the page or responds to state.",
+    "keyCharacteristics": [
+      "Black-and-gold palette with one red reserved for error and required states.",
+      "Oswald for headings, Noto Sans for body and UI.",
+      "Tight radii (4px controls, 8px panels, 12px badges).",
+      "Flat surfaces; shadows only for floating elements and state.",
+      "8px spacing grid, 1536px max container."
+    ],
+    "rules": [
+      { "name": "The Black-and-Gold Rule", "body": "Gold marks action and identity — primary buttons, the nav underline, links on dark. It is not a decorative wash; keep it to accents and primary actions.", "section": "colors" },
+      { "name": "The Signal Red Rule", "body": "Red means something is wrong or required. Never use it for emphasis, brand, or decoration.", "section": "colors" },
+      { "name": "The Oswald-For-Headings Rule", "body": "Headings are Oswald; body and UI are Noto Sans. Never set body copy in Oswald.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. Shadows appear only on floating elements and in response to state.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use Stadium Gold for primary actions and the nav underline.",
+      "Do set headings in Oswald and body/UI in Noto Sans.",
+      "Do keep radii tight: 4px controls, 8px panels, 12px badges.",
+      "Do space on the 8px grid.",
+      "Do keep surfaces flat at rest and reserve shadows for floating elements and state."
+    ],
+    "donts": [
+      "Don't use Signal Red for emphasis, brand, or decoration.",
+      "Don't introduce pill shapes or large corner radii.",
+      "Don't add ambient shadows to resting cards.",
+      "Don't set body copy in Oswald.",
+      "Don't apply Lemon Milk casually; it is reserved for brand/display moments."
+    ]
+  }
+}
