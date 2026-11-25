@@ -32,6 +32,11 @@ function getRedirects(catalog) {
     })),
     ...legacyProductRedirects,
     {
+      source: "/home",
+      destination: "/",
+      permanent: true,
+    },
+    {
       source: "/club-donation",
       destination: "/donate",
       permanent: true,

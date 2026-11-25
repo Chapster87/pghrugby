@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T15:18:09.833Z",
+  "updatedAt": "2026-11-25T05:52:21.915Z",
   "rows": {
     "new:datocms:page:womens-club": {
       "status": "todo"
@@ -12,7 +12,7 @@
       "status": "todo"
     },
     "new:datocms:page:home": {
-      "status": "todo"
+      "status": "done"
     },
     "new:datocms:page:mens-club": {
       "status": "todo"
@@ -24,7 +24,7 @@
       "status": "done"
     },
     "new:datocms:page:covid-19-rtp-plan": {
-      "status": "todo"
+      "status": "done"
     },
     "new:datocms:page:brendel-scholarship": {
       "status": "todo"
@@ -42,7 +42,7 @@
       "status": "todo"
     },
     "new:datocms:page:minutes": {
-      "status": "todo"
+      "status": "won't-migrate"
     },
     "new:datocms:page:merchandise": {
       "status": "todo"
@@ -54,7 +54,7 @@
       "status": "todo"
     },
     "new:datocms:page:style-guide": {
-      "status": "todo"
+      "status": "done"
     },
     "new:datocms:post:forge-rugby-announces-2026-scholarship-winners": {
       "status": "todo"
@@ -288,7 +288,7 @@
       "status": "todo"
     },
     "new:static:/links": {
-      "status": "todo"
+      "status": "done"
     },
     "new:static:/membership": {
       "status": "todo"
@@ -297,13 +297,13 @@
       "status": "todo"
     },
     "new:static:/styleguide": {
-      "status": "todo"
+      "status": "done"
     },
     "new:static:/checkout": {
       "status": "todo"
     },
     "new:static:/checkout/success": {
-      "status": "todo"
+      "status": "done"
     },
     "new:forgecms:/matches/all": {
       "status": "todo"
@@ -324,7 +324,7 @@
       "status": "done"
     },
     "wp:page:/style-guide": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:page:/womens-schedule/womens-schedules-archive": {
       "status": "todo"
@@ -339,7 +339,8 @@
       "status": "todo"
     },
     "wp:page:/minutes": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:page:/womens-standings/womens-standing-archive": {
       "status": "todo"
@@ -360,16 +361,18 @@
       "status": "todo"
     },
     "wp:page:/thank-you-donation": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:page:/covid-19-rtp-plan": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:page:/social-links": {
-      "status": "todo"
+      "status": "done"
     },
     "wp:page:/thank-you-site-order": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:page:/womens-standings": {
       "status": "todo"
@@ -384,7 +387,8 @@
       "status": "todo"
     },
     "wp:page:/thank-you-tournament-entry": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:page:/calendar": {
       "status": "done",
@@ -1475,100 +1479,131 @@
       "status": "todo"
     },
     "wp:calendar:/blog/calendar/pittsburgh-forge-mens-rugby-schedule": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/pittsburgh-forge-womens-rugby-schedule": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d4-mens-schedule-fall-2025": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d3-mens-schedule-fall-2025": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d2-womens-schedule-fall-2025": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d1-mens-schedule-fall-2025": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/womens-schedule-fall-2025": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d4-mens-schedule-fall-2024": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d3-mens-schedule-fall-2024": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d2-womens-schedule-fall-2024": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/womens-schedule-fall-2024": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d1-mens-schedule-fall-2024": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d3-mens-schedule-fall-2023": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d4-mens-schedule-fall-2023": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/womens-schedule-fall-2023": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d1-mens-schedule-fall-2023": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d3-mens-schedule-fall-2022": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d2-mens-schedule-fall-2022": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/d1-mens-schedule-fall-2022": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/womens-schedule-fall-2022": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:calendar:/blog/calendar/calendar": {
-      "status": "todo"
+      "status": "done",
+      "decision": "404"
     },
     "wp:other:/sitemap.html": {
       "status": "todo"
     },
     "wp:other:/calendar/events": {
-      "status": "todo"
+      "status": "todo",
+      "decision": "new-page"
     },
     "wp:other:/calendar/tournaments": {
-      "status": "todo"
+      "status": "todo",
+      "decision": "new-page"
     },
     "wp:other:/calendar/mens-competition": {
-      "status": "todo"
+      "status": "todo",
+      "decision": "new-page"
     },
     "wp:other:/calendar/womens-competition": {
-      "status": "todo"
+      "status": "todo",
+      "decision": "new-page"
     },
     "wp:other:/calendar/alumni-events": {
-      "status": "todo"
+      "status": "todo",
+      "decision": "new-page"
     },
     "wp:other:/calendar/fundraising-events": {
-      "status": "todo"
+      "status": "todo",
+      "decision": "new-page"
     },
     "wp:other:/calendar/social-events": {
-      "status": "todo"
+      "status": "todo",
+      "decision": "new-page"
     },
     "wp:other:/calendar/training-schedule": {
-      "status": "todo"
+      "status": "todo",
+      "decision": "new-page"
     },
     "wp:other:/calendar/union-events": {
-      "status": "todo"
+      "status": "todo",
+      "decision": "new-page"
     },
     "wp:other:/calendar/youth-events": {
-      "status": "todo"
+      "status": "todo",
+      "decision": "new-page"
     },
     "wp:other:/product-category/uncategorized": {
       "status": "todo"
