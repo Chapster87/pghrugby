@@ -123,4 +123,72 @@
   blockquote {
     margin: 0 0 1rem;
   }
+
+  /* Marketing heading ladder. These are the display sizes used on marketing
+     surfaces (home, matchday, campaigns). They are deliberately larger than the
+     prose ladder above, which stays the default for documents and app UI. */
+  .marketing-display {
+    font-family: var(--font-oswald);
+    font-weight: 500;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+  }
+
+  .marketing-h1 {
+    font-family: var(--font-oswald);
+    font-weight: 500;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+  }
+
+  .marketing-h2 {
+    font-family: var(--font-oswald);
+    font-weight: 500;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.05;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+  }
+
+  .marketing-h3 {
+    font-family: var(--font-oswald);
+    font-weight: 500;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.1;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+  }
+
+  .marketing-h4 {
+    font-family: var(--font-oswald);
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+  }
+
+  .marketing-h5 {
+    font-family: var(--font-oswald);
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+  }
+
+  .marketing-h6 {
+    font-family: var(--font-oswald);
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+  }
 }

@@ -33,3 +33,31 @@
 .largeText {
   composes: largeText from global;
 }
+
+.marketingDisplay {
+  composes: marketing-display from global;
+}
+
+.marketingH1 {
+  composes: marketing-h1 from global;
+}
+
+.marketingH2 {
+  composes: marketing-h2 from global;
+}
+
+.marketingH3 {
+  composes: marketing-h3 from global;
+}
+
+.marketingH4 {
+  composes: marketing-h4 from global;
+}
+
+.marketingH5 {
+  composes: marketing-h5 from global;
+}
+
+.marketingH6 {
+  composes: marketing-h6 from global;
+}

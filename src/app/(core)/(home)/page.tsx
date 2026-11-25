@@ -9,6 +9,8 @@ import { sportsOrganizationStructuredData } from "@/content/formatters/structure
 import RenderContent from "@/content/render-content"
 import { isDatocmsPreviewEnabled } from "@/lib/cms-preview"
 import { executeQuery } from "@/lib/datocms/executeQuery"
+import { getAllMatches } from "@/lib/forgecms/competition.query"
+import { NewHomeContent } from "./_content"
 import { homeQuery, latestContentQuery } from "./homepage.query"
 import VideoBg from "./video-bg"
 
@@ -125,22 +127,28 @@ export default async function Home() {
     }
   )
 
+  const matches = await getAllMatches().catch(() => [])
+
   const contentSliderData = formatContentSliderData(latestArticles || [])
 
   return (
-    <div className={`${s.homepage}`}>
-      {/* Background Video Component */}
-      <VideoBg />
+    <>
+      <div className={`${s.homepage}`}>
+        {/* Background Video Component */}
+        <VideoBg />
 
-      <div className={`dark ${contentStyles.contentBlock} ${s.homepageHero}`}>
-        <RenderContent content={toRichText(page.content)} />
-      </div>
+        <div className={`dark ${contentStyles.contentBlock} ${s.homepageHero}`}>
+          <RenderContent content={toRichText(page.content)} />
+        </div>
 
-      <div className={`${contentStyles.siteContainer}`}>
-        <div className={`${s.contentSlider}`}>
-          <CardSlider data={contentSliderData} />
+        <div className={`${contentStyles.siteContainer}`}>
+          <div className={`${s.contentSlider}`}>
+            <CardSlider data={contentSliderData} />
+          </div>
         </div>
       </div>
-    </div>
+
+      <NewHomeContent articles={latestArticles ?? []} matches={matches} />
+    </>
   )
 }

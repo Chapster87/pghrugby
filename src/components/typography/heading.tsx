@@ -3,37 +3,57 @@ import clsx from "clsx"
 
 import s from "./typography.module.css"
 
+type HeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+type HeadingDisplay = "display" | HeadingLevel
+type HeadingVariant = "default" | "marketing"
+
 type HeadingProps = {
-  level: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
-  display?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+  /** The semantic element to render. */
+  level: HeadingLevel
+  /** The visual size. Defaults to `level`; `display` is the marketing hero size. */
+  display?: HeadingDisplay
+  /**
+   * The type ladder. `default` is the prose ladder for documents and app UI;
+   * `marketing` is the larger display ladder for marketing surfaces.
+   */
+  variant?: HeadingVariant
   children: React.ReactNode
   className?: string
 }
 
+const defaultClasses: Record<HeadingDisplay, string> = {
+  display: s.h1,
+  h1: s.h1,
+  h2: s.h2,
+  h3: s.h3,
+  h4: s.h4,
+  h5: s.h5,
+  h6: s.h6,
+}
+
+const marketingClasses: Record<HeadingDisplay, string> = {
+  display: s.marketingDisplay,
+  h1: s.marketingH1,
+  h2: s.marketingH2,
+  h3: s.marketingH3,
+  h4: s.marketingH4,
+  h5: s.marketingH5,
+  h6: s.marketingH6,
+}
+
 const Heading: React.FC<HeadingProps> = ({
   level,
-  display = level, // Default display to level if not defined
+  display = level,
+  variant = "default",
   children,
   className,
   ...props
 }) => {
   const Component = level
+  const classes = variant === "marketing" ? marketingClasses : defaultClasses
 
   return (
-    <Component
-      className={clsx(
-        {
-          [s.h1]: display === "h1",
-          [s.h2]: display === "h2",
-          [s.h3]: display === "h3",
-          [s.h4]: display === "h4",
-          [s.h5]: display === "h5",
-          [s.h6]: display === "h6",
-        },
-        className
-      )}
-      {...props}
-    >
+    <Component className={clsx(classes[display], className)} {...props}>
       {children}
     </Component>
   )
